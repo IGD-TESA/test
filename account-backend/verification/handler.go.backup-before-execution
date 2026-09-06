@@ -1,0 +1,181 @@
+package verification
+
+import (
+	"encoding/json"
+	"net/http"
+	"strings"
+)
+
+// Handler مسئول دریافت و پاسخ‌دهی به درخواست‌های HTTP مربوط به Verification است.
+type Handler struct {
+	service *Service
+}
+
+// NewHandler یک Verification Handler جدید ایجاد می‌کند.
+func NewHandler(service *Service) *Handler {
+	return &Handler{
+		service: service,
+	}
+}
+
+// GetVerification اطلاعات یک Verification را بر اساس ID برمی‌گرداند.
+func (h *Handler) GetVerification(
+	w http.ResponseWriter,
+	r *http.Request,
+) {
+	if r.Method != http.MethodGet {
+		writeJSONError(
+			w,
+			http.StatusMethodNotAllowed,
+			"method not allowed",
+		)
+		return
+	}
+
+	id := strings.TrimPrefix(r.URL.Path, "/api/v1/verifications/")
+
+	if id == "" {
+		writeJSONError(
+			w,
+			http.StatusBadRequest,
+			"verification id is required",
+		)
+		return
+	}
+
+	if h == nil || h.service == nil {
+		writeJSONError(
+			w,
+			http.StatusInternalServerError,
+			"verification service is unavailable",
+		)
+		return
+	}
+
+	verification, err := h.service.GetVerification(
+		r.Context(),
+		id,
+	)
+
+	if err != nil {
+		if err.Error() == "verification not found" {
+			writeJSONError(
+				w,
+				http.StatusNotFound,
+				"verification not found",
+			)
+			return
+		}
+
+		writeJSONError(
+			w,
+			http.StatusInternalServerError,
+			"failed to get verification",
+		)
+		return
+	}
+
+	writeJSON(
+		w,
+		http.StatusOK,
+		verification,
+	)
+}
+
+// CreateVerification یک Verification جدید ایجاد می‌کند.
+func (h *Handler) CreateVerification(
+	w http.ResponseWriter,
+	r *http.Request,
+) {
+	if r.Method != http.MethodPost {
+		writeJSONError(
+			w,
+			http.StatusMethodNotAllowed,
+			"method not allowed",
+		)
+		return
+	}
+
+	if h == nil || h.service == nil {
+		writeJSONError(
+			w,
+			http.StatusInternalServerError,
+			"verification service is unavailable",
+		)
+		return
+	}
+
+	var request CreateVerificationRequest
+
+	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
+		writeJSONError(
+			w,
+			http.StatusBadRequest,
+			"invalid request body",
+		)
+		return
+	}
+
+	verification := &Verification{
+		UserID:            request.UserID,
+		VerificationType:  request.VerificationType,
+		Provider:          request.Provider,
+		Status:            VerificationStatusPending,
+		ReferenceID:       request.ReferenceID,
+		VerificationLevel: request.VerificationLevel,
+	}
+
+	if err := h.service.CreateVerification(
+		r.Context(),
+		verification,
+	); err != nil {
+		writeJSONError(
+			w,
+			http.StatusBadRequest,
+			err.Error(),
+		)
+		return
+	}
+
+	writeJSON(
+		w,
+		http.StatusCreated,
+		verification,
+	)
+}
+
+// CreateVerificationRequest بدنه درخواست ایجاد Verification است.
+type CreateVerificationRequest struct {
+	UserID            string            `json:"user_id"`
+	VerificationType  VerificationType  `json:"verification_type"`
+	Provider          string            `json:"provider"`
+	ReferenceID       string            `json:"reference_id,omitempty"`
+	VerificationLevel VerificationLevel `json:"verification_level,omitempty"`
+}
+
+// writeJSON پاسخ JSON استاندارد ایجاد می‌کند.
+func writeJSON(
+	w http.ResponseWriter,
+	statusCode int,
+	data any,
+) {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(statusCode)
+
+	_ = json.NewEncoder(w).Encode(data)
+}
+
+// writeJSONError یک پاسخ خطای JSON ایجاد می‌کند.
+func writeJSONError(
+	w http.ResponseWriter,
+	statusCode int,
+	message string,
+) {
+	writeJSON(
+		w,
+		statusCode,
+		map[string]string{
+			"error": message,
+		},
+	)
+}
