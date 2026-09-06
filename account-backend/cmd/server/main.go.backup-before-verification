@@ -17,7 +17,6 @@ import (
 	"account-backend/infrastructure/postgres"
 	redisinfra "account-backend/infrastructure/redis"
 	"account-backend/internal/user"
-	"account-backend/internal/verification"
 )
 
 type Application struct {
@@ -153,39 +152,6 @@ func main() {
 	)
 	// Router
 	// =========================================================
-	// =========================================================
-	// Verification Module
-	// =========================================================
-
-	verificationRepository := verification.NewRepository(
-		postgresClient,
-	)
-
-	verificationProviders := verification.NewProviderManager()
-	testProvider := verification.NewTestProvider()
-
-	if err := verificationProviders.Register(
-		testProvider,
-	); err != nil {
-		log.Fatalf(
-			"Verification test provider registration error: %v",
-			err,
-		)
-	}
-
-	verificationCache := verification.NewCache(
-		redisWrapper,
-	)
-
-	verificationService := verification.NewService(
-		verificationRepository,
-		verificationProviders,
-		verificationCache,
-	)
-
-	verificationHandler := verification.NewHandler(
-		verificationService,
-	)
 
 	mux := http.NewServeMux()
 
@@ -200,22 +166,6 @@ func main() {
 	)
 
 	// Create User
-	// Verification
-	mux.HandleFunc(
-		"/api/v1/verifications",
-		verificationHandler.CreateVerification,
-	)
-
-	// Execute Verification
-	mux.HandleFunc(
-		"/api/v1/verifications/execute",
-		verificationHandler.ExecuteVerification,
-	)
-
-	mux.HandleFunc(
-		"/api/v1/verifications/",
-		verificationHandler.GetVerification,
-	)
 	mux.HandleFunc(
 		"/api/v1/users",
 		userHandler.CreateUser,

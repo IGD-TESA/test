@@ -162,16 +162,6 @@ func main() {
 	)
 
 	verificationProviders := verification.NewProviderManager()
-	testProvider := verification.NewTestProvider()
-
-	if err := verificationProviders.Register(
-		testProvider,
-	); err != nil {
-		log.Fatalf(
-			"Verification test provider registration error: %v",
-			err,
-		)
-	}
 
 	verificationCache := verification.NewCache(
 		redisWrapper,
@@ -204,12 +194,6 @@ func main() {
 	mux.HandleFunc(
 		"/api/v1/verifications",
 		verificationHandler.CreateVerification,
-	)
-
-	// Execute Verification
-	mux.HandleFunc(
-		"/api/v1/verifications/execute",
-		verificationHandler.ExecuteVerification,
 	)
 
 	mux.HandleFunc(

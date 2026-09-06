@@ -206,12 +206,6 @@ func main() {
 		verificationHandler.CreateVerification,
 	)
 
-	// Execute Verification
-	mux.HandleFunc(
-		"/api/v1/verifications/execute",
-		verificationHandler.ExecuteVerification,
-	)
-
 	mux.HandleFunc(
 		"/api/v1/verifications/",
 		verificationHandler.GetVerification,
