@@ -16,6 +16,7 @@ import (
 	"account-backend/config"
 	"account-backend/infrastructure/postgres"
 	redisinfra "account-backend/infrastructure/redis"
+	"account-backend/internal/auth"
 	"account-backend/internal/user"
 	"account-backend/internal/verification"
 )
@@ -151,6 +152,21 @@ func main() {
 	emailHandler := user.NewEmailHandler(
 		emailService,
 	)
+	// =========================================================
+	// Auth Module
+	// =========================================================
+
+	authRepository := auth.NewRepository(
+		postgresClient,
+	)
+
+	authService := auth.NewService(
+		authRepository,
+	)
+
+	authHandler := auth.NewHandler(
+		authService,
+	)
 	// Router
 	// =========================================================
 	// =========================================================
@@ -158,6 +174,10 @@ func main() {
 	// =========================================================
 
 	verificationRepository := verification.NewRepository(
+		postgresClient,
+	)
+
+	verificationAuditRepository := verification.NewAuditRepository(
 		postgresClient,
 	)
 
@@ -177,6 +197,10 @@ func main() {
 		redisWrapper,
 	)
 
+	verificationProtection := verification.NewProtection(
+		verificationCache,
+	)
+
 	verificationService := verification.NewService(
 		verificationRepository,
 		verificationProviders,
@@ -185,9 +209,15 @@ func main() {
 
 	verificationHandler := verification.NewHandler(
 		verificationService,
+		verificationProtection,
+		verificationAuditRepository,
 	)
 
 	mux := http.NewServeMux()
+	mux.HandleFunc(
+		"/api/v1/auth/register",
+		authHandler.Register,
+	)
 
 	mux.HandleFunc(
 		"/health",

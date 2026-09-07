@@ -103,3 +103,72 @@ func (c *Cache) GetJSON(
 
 	return json.Unmarshal([]byte(data), target)
 }
+
+func (c *Cache) SetNX(
+	ctx context.Context,
+	key string,
+	value string,
+	ttl time.Duration,
+) (bool, error) {
+	if c == nil || c.redis == nil || c.redis.Client == nil {
+		return false, errors.New("redis client is nil")
+	}
+
+	if key == "" {
+		return false, errors.New("cache key is empty")
+	}
+
+	if ttl <= 0 {
+		return false, errors.New(
+			"cache ttl must be greater than zero",
+		)
+	}
+
+	return c.redis.Client.SetNX(
+		ctx,
+		key,
+		value,
+		ttl,
+	).Result()
+}
+
+func (c *Cache) IncrementWithTTL(
+	ctx context.Context,
+	key string,
+	ttl time.Duration,
+) (int64, error) {
+	if c == nil || c.redis == nil || c.redis.Client == nil {
+		return 0, errors.New("redis client is nil")
+	}
+
+	if key == "" {
+		return 0, errors.New("cache key is empty")
+	}
+
+	if ttl <= 0 {
+		return 0, errors.New(
+			"cache ttl must be greater than zero",
+		)
+	}
+
+	count, err := c.redis.Client.Incr(
+		ctx,
+		key,
+	).Result()
+
+	if err != nil {
+		return 0, err
+	}
+
+	if count == 1 {
+		if err := c.redis.Client.Expire(
+			ctx,
+			key,
+			ttl,
+		).Err(); err != nil {
+			return 0, err
+		}
+	}
+
+	return count, nil
+}

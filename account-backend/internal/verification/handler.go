@@ -2,23 +2,29 @@ package verification
 
 import (
 	"encoding/json"
+	"net"
 	"net/http"
 	"strings"
 )
 
-// Handler Ù…Ø³Ø¦ÙˆÙ„ Ø¯Ø±ÛŒØ§ÙØª Ùˆ Ù¾Ø§Ø³Ø®â€ŒØ¯Ù‡ÛŒ Ø¨Ù‡ Ø¯Ø±Ø®ÙˆØ§Ø³Øªâ€ŒÙ‡Ø§ÛŒ HTTP Ù…Ø±Ø¨ÙˆØ· Ø¨Ù‡ Verification Ø§Ø³Øª.
 type Handler struct {
-	service *Service
+	service    *Service
+	protection *Protection
+	audit      *AuditRepository
 }
 
-// NewHandler ÛŒÚ© Verification Handler Ø¬Ø¯ÛŒØ¯ Ø§ÛŒØ¬Ø§Ø¯ Ù…ÛŒâ€ŒÚ©Ù†Ø¯.
-func NewHandler(service *Service) *Handler {
+func NewHandler(
+	service *Service,
+	protection *Protection,
+	audit *AuditRepository,
+) *Handler {
 	return &Handler{
-		service: service,
+		service:    service,
+		protection: protection,
+		audit:      audit,
 	}
 }
 
-// GetVerification Ø§Ø·Ù„Ø§Ø¹Ø§Øª ÛŒÚ© Verification Ø±Ø§ Ø¨Ø± Ø§Ø³Ø§Ø³ ID Ø¨Ø±Ù…ÛŒâ€ŒÚ¯Ø±Ø¯Ø§Ù†Ø¯.
 func (h *Handler) GetVerification(
 	w http.ResponseWriter,
 	r *http.Request,
@@ -32,22 +38,25 @@ func (h *Handler) GetVerification(
 		return
 	}
 
-	id := strings.TrimPrefix(r.URL.Path, "/api/v1/verifications/")
-
-	if id == "" {
-		writeJSONError(
-			w,
-			http.StatusBadRequest,
-			"verification id is required",
-		)
-		return
-	}
-
 	if h == nil || h.service == nil {
 		writeJSONError(
 			w,
 			http.StatusInternalServerError,
 			"verification service is unavailable",
+		)
+		return
+	}
+
+	id := strings.TrimPrefix(
+		r.URL.Path,
+		"/api/v1/verifications/",
+	)
+
+	if id == "" {
+		writeJSONError(
+			w,
+			http.StatusBadRequest,
+			"verification id is empty",
 		)
 		return
 	}
@@ -82,7 +91,6 @@ func (h *Handler) GetVerification(
 	)
 }
 
-// CreateVerification ÛŒÚ© Verification Ø¬Ø¯ÛŒØ¯ Ø§ÛŒØ¬Ø§Ø¯ Ù…ÛŒâ€ŒÚ©Ù†Ø¯.
 func (h *Handler) CreateVerification(
 	w http.ResponseWriter,
 	r *http.Request,
@@ -137,6 +145,14 @@ func (h *Handler) CreateVerification(
 		return
 	}
 
+	_ = h.recordAudit(
+		r,
+		verification,
+		"create",
+		"",
+		"",
+	)
+
 	writeJSON(
 		w,
 		http.StatusCreated,
@@ -144,7 +160,6 @@ func (h *Handler) CreateVerification(
 	)
 }
 
-// CreateVerificationRequest Ø¨Ø¯Ù†Ù‡ Ø¯Ø±Ø®ÙˆØ§Ø³Øª Ø§ÛŒØ¬Ø§Ø¯ Verification Ø§Ø³Øª.
 type CreateVerificationRequest struct {
 	UserID            string            `json:"user_id"`
 	VerificationType  VerificationType  `json:"verification_type"`
@@ -153,34 +168,13 @@ type CreateVerificationRequest struct {
 	VerificationLevel VerificationLevel `json:"verification_level,omitempty"`
 }
 
-// writeJSON Ù¾Ø§Ø³Ø® JSON Ø§Ø³ØªØ§Ù†Ø¯Ø§Ø±Ø¯ Ø§ÛŒØ¬Ø§Ø¯ Ù…ÛŒâ€ŒÚ©Ù†Ø¯.
-func writeJSON(
-	w http.ResponseWriter,
-	statusCode int,
-	data any,
-) {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(statusCode)
-
-	_ = json.NewEncoder(w).Encode(data)
+type ExecuteVerificationRequest struct {
+	UserID           string            `json:"user_id"`
+	VerificationType VerificationType  `json:"verification_type"`
+	Provider         string            `json:"provider"`
+	Data             map[string]string `json:"data,omitempty"`
 }
 
-// writeJSONError ÛŒÚ© Ù¾Ø§Ø³Ø® Ø®Ø·Ø§ÛŒ JSON Ø§ÛŒØ¬Ø§Ø¯ Ù…ÛŒâ€ŒÚ©Ù†Ø¯.
-func writeJSONError(
-	w http.ResponseWriter,
-	statusCode int,
-	message string,
-) {
-	writeJSON(
-		w,
-		statusCode,
-		map[string]string{
-			"error": message,
-		},
-	)
-}
-
-// ExecuteVerification ÛŒÚ© Ø¹Ù…Ù„ÛŒØ§Øª Verification Ø±Ø§ Ø§Ø¬Ø±Ø§ Ù…ÛŒâ€ŒÚ©Ù†Ø¯.
 func (h *Handler) ExecuteVerification(
 	w http.ResponseWriter,
 	r *http.Request,
@@ -214,6 +208,134 @@ func (h *Handler) ExecuteVerification(
 		return
 	}
 
+	idempotencyKey := strings.TrimSpace(
+		r.Header.Get("Idempotency-Key"),
+	)
+
+	ip := clientIP(r)
+
+	// ========================================================
+	// Rate limit
+	// ========================================================
+
+	if h.protection != nil {
+
+		if err := h.protection.CheckRateLimit(
+			r.Context(),
+			request.UserID,
+			ip,
+		); err != nil {
+
+			_ = h.recordAuditError(
+				r,
+				request,
+				idempotencyKey,
+				"rate_limit",
+				err,
+			)
+
+			writeJSONError(
+				w,
+				http.StatusTooManyRequests,
+				err.Error(),
+			)
+
+			return
+		}
+	}
+
+	// ========================================================
+	// Idempotency
+	// ========================================================
+
+	fingerprint := ""
+
+	if h.protection != nil {
+
+		var err error
+
+		fingerprint, err = BuildRequestFingerprint(
+			request.UserID,
+			request.VerificationType,
+			request.Provider,
+			request.Data,
+		)
+
+		if err != nil {
+			writeJSONError(
+				w,
+				http.StatusInternalServerError,
+				"failed to build request fingerprint",
+			)
+			return
+		}
+
+		existing, found, err := h.protection.GetIdempotency(
+			r.Context(),
+			idempotencyKey,
+			fingerprint,
+		)
+
+		if err != nil {
+			writeJSONError(
+				w,
+				http.StatusConflict,
+				err.Error(),
+			)
+			return
+		}
+
+		if found {
+
+			_ = h.recordAudit(
+				r,
+				existing,
+				"idempotency_replay",
+				idempotencyKey,
+				"",
+			)
+
+			writeJSON(
+				w,
+				http.StatusOK,
+				existing,
+			)
+
+			return
+		}
+
+		if idempotencyKey != "" {
+
+			reserved, err := h.protection.ReserveIdempotency(
+				r.Context(),
+				idempotencyKey,
+				fingerprint,
+			)
+
+			if err != nil {
+				writeJSONError(
+					w,
+					http.StatusInternalServerError,
+					err.Error(),
+				)
+				return
+			}
+
+			if !reserved {
+				writeJSONError(
+					w,
+					http.StatusConflict,
+					"idempotency request is already being processed",
+				)
+				return
+			}
+		}
+	}
+
+	// ========================================================
+	// Execute
+	// ========================================================
+
 	verification, err := h.service.ExecuteVerification(
 		r.Context(),
 		request.UserID,
@@ -223,13 +345,49 @@ func (h *Handler) ExecuteVerification(
 	)
 
 	if err != nil {
+
+		_ = h.recordAuditError(
+			r,
+			request,
+			idempotencyKey,
+			"execute_failed",
+			err,
+		)
+
 		writeJSONError(
 			w,
 			http.StatusBadRequest,
 			err.Error(),
 		)
+
 		return
 	}
+
+	// ========================================================
+	// Store idempotency result
+	// ========================================================
+
+	if h.protection != nil && idempotencyKey != "" {
+
+		_ = h.protection.StoreIdempotency(
+			r.Context(),
+			idempotencyKey,
+			fingerprint,
+			verification,
+		)
+	}
+
+	// ========================================================
+	// Audit
+	// ========================================================
+
+	_ = h.recordAudit(
+		r,
+		verification,
+		"execute",
+		idempotencyKey,
+		"",
+	)
 
 	writeJSON(
 		w,
@@ -238,10 +396,107 @@ func (h *Handler) ExecuteVerification(
 	)
 }
 
-// ExecuteVerificationRequest Ø¨Ø¯Ù†Ù‡ Ø¯Ø±Ø®ÙˆØ§Ø³Øª Ø§Ø¬Ø±Ø§ÛŒ Verification Ø§Ø³Øª.
-type ExecuteVerificationRequest struct {
-	UserID           string            `json:"user_id"`
-	VerificationType VerificationType  `json:"verification_type"`
-	Provider         string            `json:"provider"`
-	Data             map[string]string `json:"data,omitempty"`
+func (h *Handler) recordAudit(
+	r *http.Request,
+	verification *Verification,
+	operation string,
+	idempotencyKey string,
+	errorMessage string,
+) error {
+	if h == nil || h.audit == nil || verification == nil {
+		return nil
+	}
+
+	return h.audit.Create(
+		r.Context(),
+		&VerificationAudit{
+			UserID:           verification.UserID,
+			VerificationID:   verification.ID,
+			Operation:        operation,
+			VerificationType: string(verification.VerificationType),
+			Provider:         verification.Provider,
+			Status:           string(verification.Status),
+			IdempotencyKey:   idempotencyKey,
+			IPAddress:        clientIP(r),
+			UserAgent:        r.UserAgent(),
+			ErrorMessage:     errorMessage,
+		},
+	)
+}
+
+func (h *Handler) recordAuditError(
+	r *http.Request,
+	request ExecuteVerificationRequest,
+	idempotencyKey string,
+	operation string,
+	err error,
+) error {
+	if h == nil || h.audit == nil {
+		return nil
+	}
+
+	errorMessage := ""
+
+	if err != nil {
+		errorMessage = err.Error()
+	}
+
+	return h.audit.Create(
+		r.Context(),
+		&VerificationAudit{
+			UserID:           request.UserID,
+			Operation:        operation,
+			VerificationType: string(request.VerificationType),
+			Provider:         request.Provider,
+			IdempotencyKey:   idempotencyKey,
+			IPAddress:        clientIP(r),
+			UserAgent:        r.UserAgent(),
+			ErrorMessage:     errorMessage,
+		},
+	)
+}
+
+func clientIP(r *http.Request) string {
+	if r == nil {
+		return ""
+	}
+
+	host, _, err := net.SplitHostPort(
+		r.RemoteAddr,
+	)
+
+	if err == nil {
+		return host
+	}
+
+	return r.RemoteAddr
+}
+
+func writeJSON(
+	w http.ResponseWriter,
+	statusCode int,
+	data any,
+) {
+	w.Header().Set(
+		"Content-Type",
+		"application/json",
+	)
+
+	w.WriteHeader(statusCode)
+
+	_ = json.NewEncoder(w).Encode(data)
+}
+
+func writeJSONError(
+	w http.ResponseWriter,
+	statusCode int,
+	message string,
+) {
+	writeJSON(
+		w,
+		statusCode,
+		map[string]string{
+			"error": message,
+		},
+	)
 }
