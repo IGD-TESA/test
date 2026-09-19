@@ -17,6 +17,8 @@ import (
 	"account-backend/infrastructure/postgres"
 	redisinfra "account-backend/infrastructure/redis"
 	"account-backend/internal/auth"
+
+	"account-backend/internal/authorization"
 	"account-backend/internal/user"
 	"account-backend/internal/verification"
 )
@@ -164,9 +166,6 @@ func main() {
 		authRepository,
 	)
 
-	authHandler := auth.NewHandler(
-		authService,
-	)
 	// Router
 	// =========================================================
 	// =========================================================
@@ -207,6 +206,110 @@ func main() {
 		verificationCache,
 	)
 
+	// =========================================================
+	// Auth Login
+	// =========================================================
+
+	loginRepository := auth.NewLoginRepository(
+		postgresClient,
+	)
+
+	trustedDeviceRepository := auth.NewTrustedDeviceRepository(
+		postgresClient,
+	)
+
+	sessionRepository := auth.NewSessionRepository(
+		postgresClient,
+	)
+
+	sessionService := auth.NewSessionService(
+		sessionRepository,
+	)
+
+	// =========================================================
+	// Authorization Module
+	// =========================================================
+
+	authorizationRepository := authorization.NewRepository(
+		postgresClient,
+	)
+
+	authorizationService := authorization.NewAuthorizationService(
+		authorizationRepository,
+		authorizationRepository,
+		authorizationRepository,
+		authorizationRepository,
+		authorizationRepository,
+	)
+
+	authorizationMiddleware := authorization.NewMiddleware(
+		sessionService,
+		authorizationService,
+	)
+
+	authorizationHandler := authorization.NewHandler()
+
+	sessionHandler := auth.NewSessionHandler(
+		sessionService,
+	)
+
+	passwordRepository := auth.NewPasswordRepository(
+		postgresClient,
+	)
+
+	passwordService := auth.NewPasswordService(
+		passwordRepository,
+		sessionService,
+	)
+
+	passwordHandler := auth.NewPasswordHandler(
+		passwordService,
+	)
+
+	passwordResetRepository := auth.NewPasswordResetRepository(
+		postgresClient,
+	)
+
+	passwordResetService := auth.NewPasswordResetService(
+		passwordResetRepository,
+		passwordRepository,
+		sessionService,
+		trustedDeviceRepository,
+		verificationService,
+		"test-provider",
+	)
+
+	passwordResetHandler := auth.NewPasswordResetHandler(
+		passwordResetService,
+	)
+
+	trustedDeviceManagementService := auth.NewTrustedDeviceManagementService(
+		trustedDeviceRepository,
+		sessionService,
+	)
+
+	trustedDeviceManagementHandler := auth.NewTrustedDeviceManagementHandler(
+		trustedDeviceManagementService,
+	)
+
+	authAuditRepository := auth.NewAuthAuditRepository(
+		postgresClient,
+	)
+
+	loginService := auth.NewLoginService(
+		loginRepository,
+		verificationService,
+		trustedDeviceRepository,
+		sessionRepository,
+		authAuditRepository,
+		"test-provider",
+	)
+
+	authHandler := auth.NewHandler(
+		authService,
+		loginService,
+	)
+
 	verificationHandler := verification.NewHandler(
 		verificationService,
 		verificationProtection,
@@ -217,6 +320,66 @@ func main() {
 	mux.HandleFunc(
 		"/api/v1/auth/register",
 		authHandler.Register,
+	)
+
+	mux.HandleFunc(
+		"/api/v1/auth/login",
+		authHandler.Login,
+	)
+
+	mux.HandleFunc(
+		"/api/v1/auth/refresh",
+		sessionHandler.Refresh,
+	)
+
+	mux.HandleFunc(
+		"/api/v1/auth/logout",
+		sessionHandler.Logout,
+	)
+
+	mux.HandleFunc(
+		"/api/v1/auth/logout-all",
+		sessionHandler.LogoutAllDevices,
+	)
+
+	mux.Handle(
+		"/api/v1/auth/authorization/me",
+		authorizationMiddleware.RequireSelf(
+			authorization.PermissionUserRead,
+			http.HandlerFunc(
+				authorizationHandler.Me,
+			),
+		),
+	)
+
+	mux.HandleFunc(
+		"/api/v1/auth/devices",
+		trustedDeviceManagementHandler.List,
+	)
+
+	mux.HandleFunc(
+		"/api/v1/auth/devices/revoke-all",
+		trustedDeviceManagementHandler.RevokeAll,
+	)
+
+	mux.HandleFunc(
+		"/api/v1/auth/devices/",
+		trustedDeviceManagementHandler.HandleDevice,
+	)
+
+	mux.HandleFunc(
+		"/api/v1/auth/password/change",
+		passwordHandler.ChangePassword,
+	)
+
+	mux.HandleFunc(
+		"/api/v1/auth/password/forgot",
+		passwordResetHandler.ForgotPassword,
+	)
+
+	mux.HandleFunc(
+		"/api/v1/auth/password/reset",
+		passwordResetHandler.ResetPassword,
 	)
 
 	mux.HandleFunc(
