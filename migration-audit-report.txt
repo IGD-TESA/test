@@ -1,0 +1,1743 @@
+﻿IGD - MIGRATION AND DATABASE AUDIT REPORT
+Generated: 2026-10-22 13:33:23
+Repository: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\test
+Output: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\test\migration-audit-report.txt
+====================================================================================================
+
+### 1. GIT STATUS
+Git root: E:/╪┤╪▒┌⌐╪¬ ╪¬┘ê╪│╪╣┘ç ╪│╪¿╪▓ ╪º█î╪▒╪º┘å/┘╛┘ä╪¬┘ü╪▒┘à/┘╛┘ä╪¬┘ü╪▒┘à ╪ó█î ╪¼█î ╪»█î/test
+
+--- Current branch ---
+main
+
+--- Working tree status ---
+?? export-migrations-audit.ps1
+
+--- Latest 20 commits ---
+2558861 2026-10-22 Update account backend
+cefffba 2026-10-22 Update account backend
+ac491ad 2026-09-19 Complete authorization, scope hierarchy, and integration tests
+38d2150 2026-09-07 Sync latest account backend implementation
+95e49ba 2026-09-07 Complete account registration and verification updates
+2f1226a 2026-09-06 test: update verification protection implementation
+63b1666 2026-09-06 test: add verification status E2E coverage
+86880d4 2026-09-06 test: add verification status E2E coverage
+2222df8 2026-09-06 Initial account backend test source
+
+### 2. FILE DISCOVERY
+Total files in repository (excluding ignored directories): 120
+Migration/schema/database candidates: 19
+
+--- Candidate file inventory ---
+account-backend\migrations\001_create_users.sql | 611 bytes | SHA256: 1C171D80DD2B20C27663B502A5887C922E7DAB0DDE6DB0D0B098BB0C0C38FF26
+account-backend\migrations\002_create_user_profiles.sql | 452 bytes | SHA256: 5D9F65022D7983964C2601FBBD4F1EE4200105520C4D59CE614725181B345048
+account-backend\migrations\003_create_legal_entities.sql | 540 bytes | SHA256: 929CEE069A5B8317EEB91470F44672BA66267DB69424EF4A8805285173F4DA18
+account-backend\migrations\004_create_user_phones.sql | 785 bytes | SHA256: CED719C42658D9A0DB43CCDA06E73592A63EA19F11B9830D425A10C1D40BEA5E
+account-backend\migrations\005_create_user_emails.sql | 771 bytes | SHA256: F5D521B85031CBDC67DB1236CF11FA8A0E16C701E3D8AC6CB4AF43328946B8BC
+account-backend\migrations\006_create_verifications.sql | 1850 bytes | SHA256: 7F4885B55E5C1A4FAAFA867E6C0D0753E29D670C6327E8B780023840F2EA8CEE
+account-backend\migrations\007_create_verification_audits.sql | 1150 bytes | SHA256: 4FA55AB5B2A93D2E5227CC779A680C08BD3B0363F04F7DD47BB9FCFF388A20CF
+account-backend\migrations\008_extend_user_profiles_for_registration.sql | 505 bytes | SHA256: 1384AC029FF6B50A59B40D9FE7617402B830F5827530545327B9C1A97CF4C3E0
+account-backend\migrations\009_create_auth_credentials.sql | 537 bytes | SHA256: FFCFAC72C7ECE17644FCD83A68B4793A5E25B7B9CA5361609FB69D39162635D3
+account-backend\migrations\010_create_trusted_devices.sql | 799 bytes | SHA256: C8738F3A2B9BC3850BE9DBE66471E0744618F8DB52C6D53422956C983A52163E
+account-backend\migrations\011_create_auth_sessions.sql | 818 bytes | SHA256: F6C5DD5AE62E6385249E452E2186933528C138EED791AB3D23284C701BC92AFC
+account-backend\migrations\012_create_auth_audits.sql | 703 bytes | SHA256: D501ABAA35428BD7A64976947D10176021C4A1B5E86B770FB9AB05C7A7FD86BE
+account-backend\migrations\013_create_password_reset_tokens.sql | 842 bytes | SHA256: 4A415B139022515759574D76976731C336AB1D343D893CA1E680A6EA8A9C13B1
+account-backend\migrations\014_create_authorization_roles.sql | 5842 bytes | SHA256: 6D42B45B356C7CEEB0CB1B938858E9AB5A56125841E6CB3C6BC4D17BA6799554
+account-backend\migrations\015_create_authorization_permissions.sql | 9354 bytes | SHA256: B0B289C404B1CC6E9455EB55DFD87D9B269EE16DDAC261E545021ECE0EB02668
+account-backend\migrations\016_create_authorization_role_permissions.sql | 9997 bytes | SHA256: 0A018E8979B8EE0975CD3DD44FB36E9E8FDE44843346981C25504758A1E3C229
+account-backend\migrations\017_create_authorization_user_roles.sql | 1524 bytes | SHA256: 4CA7DAE691D1A8C73DD2E16972450BE1E70142AB1C8B6E90C543FF023236D150
+account-backend\migrations\018_create_authorization_user_permission_overrides.sql | 2127 bytes | SHA256: E33519BC049F82EC59F6B309008FE500A3C92AAF658DFEDAF9D452511D4A8843
+account-backend\migrations\019_create_authorization_scopes.sql | 3548 bytes | SHA256: E96E34A20A3A381E53145F34815F8025AFCF54FF774228C52D14562F0CBF6C3D
+
+### 3. STRUCTURAL KEYWORD INDEX
+Could not index E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\test\account-backend\migrations\001_create_users.sql: A hash table can only be added to another hash table.
+Could not index E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\test\account-backend\migrations\002_create_user_profiles.sql: A hash table can only be added to another hash table.
+Could not index E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\test\account-backend\migrations\003_create_legal_entities.sql: A hash table can only be added to another hash table.
+Could not index E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\test\account-backend\migrations\004_create_user_phones.sql: A hash table can only be added to another hash table.
+Could not index E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\test\account-backend\migrations\005_create_user_emails.sql: A hash table can only be added to another hash table.
+Could not index E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\test\account-backend\migrations\006_create_verifications.sql: A hash table can only be added to another hash table.
+Could not index E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\test\account-backend\migrations\007_create_verification_audits.sql: A hash table can only be added to another hash table.
+Could not index E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\test\account-backend\migrations\008_extend_user_profiles_for_registration.sql: A hash table can only be added to another hash table.
+Could not index E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\test\account-backend\migrations\009_create_auth_credentials.sql: A hash table can only be added to another hash table.
+Could not index E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\test\account-backend\migrations\010_create_trusted_devices.sql: A hash table can only be added to another hash table.
+Could not index E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\test\account-backend\migrations\011_create_auth_sessions.sql: A hash table can only be added to another hash table.
+Could not index E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\test\account-backend\migrations\012_create_auth_audits.sql: A hash table can only be added to another hash table.
+Could not index E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\test\account-backend\migrations\013_create_password_reset_tokens.sql: A hash table can only be added to another hash table.
+Could not index E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\test\account-backend\migrations\014_create_authorization_roles.sql: A hash table can only be added to another hash table.
+Could not index E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\test\account-backend\migrations\015_create_authorization_permissions.sql: A hash table can only be added to another hash table.
+Could not index E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\test\account-backend\migrations\016_create_authorization_role_permissions.sql: A hash table can only be added to another hash table.
+Could not index E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\test\account-backend\migrations\017_create_authorization_user_roles.sql: A hash table can only be added to another hash table.
+Could not index E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\test\account-backend\migrations\018_create_authorization_user_permission_overrides.sql: A hash table can only be added to another hash table.
+Could not index E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\test\account-backend\migrations\019_create_authorization_scopes.sql: A hash table can only be added to another hash table.
+
+### 4. FULL FILE CONTENTS
+Candidate files are included in full where readable.
+Binary or unreadable files are reported but not decoded.
+====================================================================================================
+
+
+FILE: account-backend\migrations\001_create_users.sql
+SIZE: 611 bytes
+----------------------------------------------------------------------------------------------------
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
+CREATE TABLE users (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    user_type VARCHAR(20) NOT NULL,
+
+    status VARCHAR(20) NOT NULL DEFAULT 'active',
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    CONSTRAINT users_user_type_check
+        CHECK (user_type IN ('individual', 'legal')),
+
+    CONSTRAINT users_status_check
+        CHECK (status IN (
+            'active',
+            'limited',
+            'suspended',
+            'blocked',
+            'closed'
+        ))
+);
+====================================================================================================
+
+
+FILE: account-backend\migrations\002_create_user_profiles.sql
+SIZE: 452 bytes
+----------------------------------------------------------------------------------------------------
+CREATE TABLE user_profiles (
+    user_id UUID PRIMARY KEY,
+
+    first_name VARCHAR(100) NOT NULL,
+
+    last_name VARCHAR(100) NOT NULL,
+
+    national_id VARCHAR(20) NOT NULL UNIQUE,
+
+    birth_date DATE,
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    CONSTRAINT user_profiles_user_fk
+        FOREIGN KEY (user_id)
+        REFERENCES users(id)
+        ON DELETE CASCADE
+);
+====================================================================================================
+
+
+FILE: account-backend\migrations\003_create_legal_entities.sql
+SIZE: 540 bytes
+----------------------------------------------------------------------------------------------------
+CREATE TABLE legal_entities (
+    user_id UUID PRIMARY KEY,
+
+    legal_name VARCHAR(255) NOT NULL,
+
+    national_id VARCHAR(20) NOT NULL UNIQUE,
+
+    registration_number VARCHAR(50) UNIQUE,
+
+    economic_code VARCHAR(50) UNIQUE,
+
+    legal_type VARCHAR(50),
+
+    registration_date DATE,
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    CONSTRAINT legal_entities_user_fk
+        FOREIGN KEY (user_id)
+        REFERENCES users(id)
+        ON DELETE CASCADE
+);
+====================================================================================================
+
+
+FILE: account-backend\migrations\004_create_user_phones.sql
+SIZE: 785 bytes
+----------------------------------------------------------------------------------------------------
+CREATE TABLE user_phones (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    user_id UUID NOT NULL,
+
+    phone_number VARCHAR(20) NOT NULL,
+
+    is_primary BOOLEAN NOT NULL DEFAULT FALSE,
+
+    is_verified BOOLEAN NOT NULL DEFAULT FALSE,
+
+    verified_at TIMESTAMPTZ,
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    CONSTRAINT user_phones_user_fk
+        FOREIGN KEY (user_id)
+        REFERENCES users(id)
+        ON DELETE CASCADE
+);
+
+CREATE INDEX idx_user_phones_user_id
+    ON user_phones(user_id);
+
+CREATE UNIQUE INDEX idx_user_phones_unique_number
+    ON user_phones(phone_number);
+
+CREATE UNIQUE INDEX idx_user_phones_primary
+    ON user_phones(user_id)
+    WHERE is_primary = TRUE;
+====================================================================================================
+
+
+FILE: account-backend\migrations\005_create_user_emails.sql
+SIZE: 771 bytes
+----------------------------------------------------------------------------------------------------
+CREATE TABLE user_emails (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    user_id UUID NOT NULL,
+
+    email VARCHAR(320) NOT NULL,
+
+    is_primary BOOLEAN NOT NULL DEFAULT FALSE,
+
+    is_verified BOOLEAN NOT NULL DEFAULT FALSE,
+
+    verified_at TIMESTAMPTZ,
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    CONSTRAINT user_emails_user_fk
+        FOREIGN KEY (user_id)
+        REFERENCES users(id)
+        ON DELETE CASCADE
+);
+
+CREATE INDEX idx_user_emails_user_id
+    ON user_emails(user_id);
+
+CREATE UNIQUE INDEX idx_user_emails_unique_email
+    ON user_emails(email);
+
+CREATE UNIQUE INDEX idx_user_emails_primary
+    ON user_emails(user_id)
+    WHERE is_primary = TRUE;
+====================================================================================================
+
+
+FILE: account-backend\migrations\006_create_verifications.sql
+SIZE: 1850 bytes
+----------------------------------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS verifications (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    user_id UUID NOT NULL
+        REFERENCES users(id)
+        ON DELETE CASCADE,
+
+    verification_type VARCHAR(50) NOT NULL,
+
+    provider VARCHAR(100) NOT NULL,
+
+    status VARCHAR(30) NOT NULL DEFAULT 'pending',
+
+    reference_id VARCHAR(255),
+
+    verification_level VARCHAR(30),
+
+    verified_at TIMESTAMPTZ,
+
+    expires_at TIMESTAMPTZ,
+
+    rejection_reason TEXT,
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    CONSTRAINT verifications_type_check
+        CHECK (
+            verification_type IN (
+                'identity',
+                'contact',
+                'bank',
+                'document',
+                'biometric',
+                'legal_entity',
+                'official_document'
+            )
+        ),
+
+    CONSTRAINT verifications_status_check
+        CHECK (
+            status IN (
+                'pending',
+                'verified',
+                'rejected',
+                'failed',
+                'expired',
+                'manual_review'
+            )
+        ),
+
+    CONSTRAINT verifications_level_check
+        CHECK (
+            verification_level IS NULL
+            OR verification_level IN (
+                'basic',
+                'standard',
+                'strong'
+            )
+        )
+);
+
+CREATE INDEX IF NOT EXISTS idx_verifications_user_id
+    ON verifications(user_id);
+
+CREATE INDEX IF NOT EXISTS idx_verifications_user_type
+    ON verifications(user_id, verification_type);
+
+CREATE INDEX IF NOT EXISTS idx_verifications_status
+    ON verifications(status);
+
+CREATE INDEX IF NOT EXISTS idx_verifications_reference_id
+    ON verifications(reference_id);
+====================================================================================================
+
+
+FILE: account-backend\migrations\007_create_verification_audits.sql
+SIZE: 1150 bytes
+----------------------------------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS verification_audits (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    user_id UUID NOT NULL
+        REFERENCES users(id)
+        ON DELETE CASCADE,
+
+    verification_id UUID
+        REFERENCES verifications(id)
+        ON DELETE SET NULL,
+
+    operation VARCHAR(50) NOT NULL,
+
+    verification_type VARCHAR(50),
+
+    provider VARCHAR(100),
+
+    status VARCHAR(30),
+
+    idempotency_key VARCHAR(255),
+
+    ip_address INET,
+
+    user_agent TEXT,
+
+    error_message TEXT,
+
+    metadata JSONB,
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_verification_audits_user_id
+    ON verification_audits(user_id);
+
+CREATE INDEX IF NOT EXISTS idx_verification_audits_verification_id
+    ON verification_audits(verification_id);
+
+CREATE INDEX IF NOT EXISTS idx_verification_audits_operation
+    ON verification_audits(operation);
+
+CREATE INDEX IF NOT EXISTS idx_verification_audits_created_at
+    ON verification_audits(created_at);
+
+CREATE INDEX IF NOT EXISTS idx_verification_audits_idempotency_key
+    ON verification_audits(idempotency_key);
+====================================================================================================
+
+
+FILE: account-backend\migrations\008_extend_user_profiles_for_registration.sql
+SIZE: 505 bytes
+----------------------------------------------------------------------------------------------------
+ALTER TABLE user_profiles
+    ADD COLUMN IF NOT EXISTS father_name VARCHAR(100);
+
+ALTER TABLE user_profiles
+    ADD COLUMN IF NOT EXISTS address TEXT;
+
+ALTER TABLE user_profiles
+    ADD COLUMN IF NOT EXISTS postal_code VARCHAR(10);
+
+CREATE INDEX IF NOT EXISTS idx_user_profiles_national_id
+    ON user_profiles(national_id);
+
+ALTER TABLE user_profiles
+    ADD CONSTRAINT user_profiles_postal_code_check
+    CHECK (
+        postal_code IS NULL
+        OR postal_code ~ '^[0-9]{10}$'
+    );
+====================================================================================================
+
+
+FILE: account-backend\migrations\009_create_auth_credentials.sql
+SIZE: 537 bytes
+----------------------------------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS auth_credentials (
+    user_id UUID PRIMARY KEY
+        REFERENCES users(id)
+        ON DELETE CASCADE,
+
+    password_hash TEXT NOT NULL,
+
+    password_changed_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    failed_login_attempts INTEGER NOT NULL DEFAULT 0,
+
+    locked_until TIMESTAMPTZ,
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_auth_credentials_locked_until
+    ON auth_credentials(locked_until);
+====================================================================================================
+
+
+FILE: account-backend\migrations\010_create_trusted_devices.sql
+SIZE: 799 bytes
+----------------------------------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS trusted_devices (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    user_id UUID NOT NULL
+        REFERENCES users(id)
+        ON DELETE CASCADE,
+
+    device_name VARCHAR(150),
+
+    token_hash TEXT NOT NULL UNIQUE,
+
+    expires_at TIMESTAMPTZ NOT NULL,
+
+    last_used_at TIMESTAMPTZ,
+
+    revoked_at TIMESTAMPTZ,
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_trusted_devices_user_id
+    ON trusted_devices(user_id);
+
+CREATE INDEX IF NOT EXISTS idx_trusted_devices_expires_at
+    ON trusted_devices(expires_at);
+
+CREATE INDEX IF NOT EXISTS idx_trusted_devices_active
+    ON trusted_devices(user_id, expires_at)
+    WHERE revoked_at IS NULL;
+
+====================================================================================================
+
+
+FILE: account-backend\migrations\011_create_auth_sessions.sql
+SIZE: 818 bytes
+----------------------------------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS auth_sessions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    user_id UUID NOT NULL
+        REFERENCES users(id)
+        ON DELETE CASCADE,
+
+    access_token_hash TEXT NOT NULL UNIQUE,
+
+    refresh_token_hash TEXT NOT NULL UNIQUE,
+
+    access_expires_at TIMESTAMPTZ NOT NULL,
+
+    refresh_expires_at TIMESTAMPTZ NOT NULL,
+
+    revoked_at TIMESTAMPTZ,
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_auth_sessions_user_id
+    ON auth_sessions(user_id);
+
+CREATE INDEX IF NOT EXISTS idx_auth_sessions_access_expires
+    ON auth_sessions(access_expires_at);
+
+CREATE INDEX IF NOT EXISTS idx_auth_sessions_refresh_expires
+    ON auth_sessions(refresh_expires_at);
+
+====================================================================================================
+
+
+FILE: account-backend\migrations\012_create_auth_audits.sql
+SIZE: 703 bytes
+----------------------------------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS auth_audits (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    user_id UUID
+        REFERENCES users(id)
+        ON DELETE SET NULL,
+
+    operation VARCHAR(100) NOT NULL,
+
+    status VARCHAR(50) NOT NULL,
+
+    ip_address INET,
+
+    user_agent TEXT,
+
+    error_code VARCHAR(100),
+
+    metadata JSONB NOT NULL DEFAULT '{}'::jsonb,
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_auth_audits_user_id
+    ON auth_audits(user_id);
+
+CREATE INDEX IF NOT EXISTS idx_auth_audits_operation
+    ON auth_audits(operation);
+
+CREATE INDEX IF NOT EXISTS idx_auth_audits_created_at
+    ON auth_audits(created_at);
+
+====================================================================================================
+
+
+FILE: account-backend\migrations\013_create_password_reset_tokens.sql
+SIZE: 842 bytes
+----------------------------------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS password_reset_tokens (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL,
+    token_hash TEXT NOT NULL UNIQUE,
+    expires_at TIMESTAMPTZ NOT NULL,
+    used_at TIMESTAMPTZ NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    CONSTRAINT password_reset_tokens_user_fk
+        FOREIGN KEY (user_id)
+        REFERENCES users(id)
+        ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_password_reset_tokens_user_id
+    ON password_reset_tokens(user_id);
+
+CREATE INDEX IF NOT EXISTS idx_password_reset_tokens_expires_at
+    ON password_reset_tokens(expires_at);
+
+CREATE INDEX IF NOT EXISTS idx_password_reset_tokens_active
+    ON password_reset_tokens(user_id, expires_at)
+    WHERE used_at IS NULL;
+
+====================================================================================================
+
+
+FILE: account-backend\migrations\014_create_authorization_roles.sql
+SIZE: 5842 bytes
+----------------------------------------------------------------------------------------------------
+-- ============================================================
+-- 014_create_authorization_roles.sql
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS authorization_roles (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    code VARCHAR(100) NOT NULL UNIQUE,
+
+    name VARCHAR(150) NOT NULL,
+
+    role_type VARCHAR(50) NOT NULL,
+
+    default_scope_type VARCHAR(50) NOT NULL,
+
+    description TEXT,
+
+    is_system_role BOOLEAN NOT NULL DEFAULT FALSE,
+
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    CONSTRAINT authorization_roles_role_type_check
+        CHECK (
+            role_type IN (
+                'management',
+                'operational',
+                'base',
+                'specialized',
+                'general',
+                'supervisory'
+            )
+        ),
+
+    CONSTRAINT authorization_roles_scope_type_check
+        CHECK (
+            default_scope_type IN (
+                'global',
+                'self',
+                'organization',
+                'project',
+                'asset',
+                'contract',
+                'custom'
+            )
+        )
+);
+
+CREATE INDEX IF NOT EXISTS idx_authorization_roles_role_type
+    ON authorization_roles(role_type);
+
+CREATE INDEX IF NOT EXISTS idx_authorization_roles_scope_type
+    ON authorization_roles(default_scope_type);
+
+CREATE INDEX IF NOT EXISTS idx_authorization_roles_active
+    ON authorization_roles(is_active);
+
+
+-- ============================================================
+-- Seed: System Roles
+-- ============================================================
+
+INSERT INTO authorization_roles
+(
+    code,
+    name,
+    role_type,
+    default_scope_type,
+    description,
+    is_system_role
+)
+VALUES
+(
+    'system_admin',
+    'Ù…Ø¯ÛŒØ± Ø³Ø§Ù…Ø§Ù†Ù‡',
+    'management',
+    'global',
+    'Ù…Ø¯ÛŒØ±ÛŒØª Ú©Ù„ Ø³Ø§Ù…Ø§Ù†Ù‡ Ùˆ Ú©Ù†ØªØ±Ù„ Ø¯Ø³ØªØ±Ø³ÛŒâ€ŒÙ‡Ø§',
+    TRUE
+),
+(
+    'project_manager',
+    'Ù…Ø¯ÛŒØ± Ù¾Ø±ÙˆÚ˜Ù‡',
+    'operational',
+    'project',
+    'Ù…Ø¯ÛŒØ±ÛŒØª Ù¾Ø±ÙˆÚ˜Ù‡ Ø¯Ø± Ù…Ø­Ø¯ÙˆØ¯Ù‡ Ù¾Ø±ÙˆÚ˜Ù‡â€ŒÙ‡Ø§ÛŒ ØªØ¹ÛŒÛŒÙ†â€ŒØ´Ø¯Ù‡',
+    TRUE
+),
+(
+    'user',
+    'Ú©Ø§Ø±Ø¨Ø±',
+    'base',
+    'self',
+    'Ú©Ø§Ø±Ø¨Ø± Ø§ØµÙ„ÛŒ Ø³Ø§Ù…Ø§Ù†Ù‡ Ùˆ Ø¯Ø§Ø±Ù†Ø¯Ù‡ Ø­Ù‚ÙˆÙ‚ Ù‚Ø±Ø§Ø±Ø¯Ø§Ø¯ÛŒ',
+    TRUE
+),
+(
+    'financial_manager',
+    'Ù…Ø¯ÛŒØ± Ù…Ø§Ù„ÛŒ',
+    'specialized',
+    'organization',
+    'Ù…Ø¯ÛŒØ±ÛŒØª Ø§Ù…ÙˆØ± Ù…Ø§Ù„ÛŒØŒ Ù…ÙˆØ¬ÙˆØ¯ÛŒØŒ Ù¾Ø±Ø¯Ø§Ø®Øª Ùˆ ØªØ³ÙˆÛŒÙ‡',
+    TRUE
+),
+(
+    'financial_specialist',
+    'Ú©Ø§Ø±Ø´Ù†Ø§Ø³ Ù…Ø§Ù„ÛŒ',
+    'specialized',
+    'custom',
+    'Ø§Ù†Ø¬Ø§Ù… Ø¹Ù…Ù„ÛŒØ§Øª Ø±ÙˆØ²Ù…Ø±Ù‡ Ù…Ø§Ù„ÛŒ Ø¯Ø± Ù…Ø­Ø¯ÙˆØ¯Ù‡ ØªØ¹ÛŒÛŒÙ†â€ŒØ´Ø¯Ù‡',
+    TRUE
+),
+(
+    'contract_manager',
+    'Ù…Ø¯ÛŒØ± Ù‚Ø±Ø§Ø±Ø¯Ø§Ø¯Ù‡Ø§',
+    'specialized',
+    'organization',
+    'Ù…Ø¯ÛŒØ±ÛŒØª Ù‚Ø±Ø§Ø±Ø¯Ø§Ø¯Ù‡Ø§ Ùˆ Ø­Ù‚ÙˆÙ‚ Ù‚Ø±Ø§Ø±Ø¯Ø§Ø¯ÛŒ',
+    TRUE
+),
+(
+    'contract_specialist',
+    'Ú©Ø§Ø±Ø´Ù†Ø§Ø³ Ù‚Ø±Ø§Ø±Ø¯Ø§Ø¯Ù‡Ø§',
+    'specialized',
+    'custom',
+    'Ø«Ø¨Øª Ùˆ Ø¨Ø±Ø±Ø³ÛŒ Ø¹Ù…Ù„ÛŒØ§Øª Ù‚Ø±Ø§Ø±Ø¯Ø§Ø¯ÛŒ Ø¯Ø± Ù…Ø­Ø¯ÙˆØ¯Ù‡ ØªØ¹ÛŒÛŒÙ†â€ŒØ´Ø¯Ù‡',
+    TRUE
+),
+(
+    'legal_supervisor',
+    'Ù†Ø§Ø¸Ø± Ø­Ù‚ÙˆÙ‚ÛŒ',
+    'supervisory',
+    'custom',
+    'Ù†Ø¸Ø§Ø±Øª Ø­Ù‚ÙˆÙ‚ÛŒ Ø¨Ø± Ù‚Ø±Ø§Ø±Ø¯Ø§Ø¯Ù‡Ø§ Ùˆ Ù¾Ø±ÙˆÚ˜Ù‡â€ŒÙ‡Ø§',
+    TRUE
+),
+(
+    'asset_manager',
+    'Ù…Ø¯ÛŒØ± Ø¯Ø§Ø±Ø§ÛŒÛŒ',
+    'specialized',
+    'asset',
+    'Ù…Ø¯ÛŒØ±ÛŒØª Ø¹Ù…Ù„ÛŒØ§ØªÛŒ Ø¯Ø§Ø±Ø§ÛŒÛŒâ€ŒÙ‡Ø§ Ø¯Ø± Ù…Ø­Ø¯ÙˆØ¯Ù‡ ØªØ¹ÛŒÛŒÙ†â€ŒØ´Ø¯Ù‡',
+    TRUE
+),
+(
+    'specialist',
+    'Ú©Ø§Ø±Ø´Ù†Ø§Ø³',
+    'general',
+    'custom',
+    'Ù†Ù‚Ø´ Ø¹Ù…ÙˆÙ…ÛŒ ØªØ®ØµØµÛŒ Ø¨Ø§ Ø¯Ø³ØªØ±Ø³ÛŒ ØªØ¹Ø±ÛŒÙâ€ŒØ´Ø¯Ù‡',
+    TRUE
+),
+(
+    'support',
+    'Ù¾Ø´ØªÛŒØ¨Ø§Ù†',
+    'operational',
+    'self',
+    'Ù¾Ø´ØªÛŒØ¨Ø§Ù†ÛŒ Ùˆ Ø±Ø³ÛŒØ¯Ú¯ÛŒ Ø¨Ù‡ Ø­Ø³Ø§Ø¨ Ú©Ø§Ø±Ø¨Ø±Ø§Ù†',
+    TRUE
+),
+(
+    'system_supervisor',
+    'Ù†Ø§Ø¸Ø± Ø³Ø§Ù…Ø§Ù†Ù‡',
+    'supervisory',
+    'global',
+    'Ù†Ø¸Ø§Ø±Øª Ø¹Ù…Ø¯ØªØ§Ù‹ Ù…Ø´Ø§Ù‡Ø¯Ù‡â€ŒØ§ÛŒ Ø¨Ø± Ø³Ø§Ù…Ø§Ù†Ù‡',
+    TRUE
+),
+(
+    'auditor',
+    'Ø­Ø³Ø§Ø¨Ø±Ø³',
+    'supervisory',
+    'custom',
+    'Ø¯Ø³ØªØ±Ø³ÛŒ Ù…Ø´Ø§Ù‡Ø¯Ù‡â€ŒØ§ÛŒ Ø¨Ù‡ Ø³ÙˆØ§Ø¨Ù‚ Ù…Ø§Ù„ÛŒ Ùˆ Ù‚Ø±Ø§Ø±Ø¯Ø§Ø¯ÛŒ',
+    TRUE
+),
+(
+    'inspector',
+    'Ø¨Ø§Ø²Ø±Ø³',
+    'supervisory',
+    'custom',
+    'Ù†Ø¸Ø§Ø±Øª Ùˆ Ø¨Ø§Ø²Ø±Ø³ÛŒ Ø¯Ø± Ù…Ø­Ø¯ÙˆØ¯Ù‡ ØªØ¹ÛŒÛŒÙ†â€ŒØ´Ø¯Ù‡',
+    TRUE
+)
+ON CONFLICT (code) DO NOTHING;
+
+====================================================================================================
+
+
+FILE: account-backend\migrations\015_create_authorization_permissions.sql
+SIZE: 9354 bytes
+----------------------------------------------------------------------------------------------------
+-- ============================================================
+-- 015_create_authorization_permissions.sql
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS authorization_permissions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    code VARCHAR(150) NOT NULL UNIQUE,
+
+    resource VARCHAR(100) NOT NULL,
+
+    action VARCHAR(100) NOT NULL,
+
+    name VARCHAR(150) NOT NULL,
+
+    description TEXT,
+
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    CONSTRAINT authorization_permissions_resource_action_unique
+        UNIQUE (resource, action)
+);
+
+CREATE INDEX IF NOT EXISTS idx_authorization_permissions_resource
+    ON authorization_permissions(resource);
+
+CREATE INDEX IF NOT EXISTS idx_authorization_permissions_action
+    ON authorization_permissions(action);
+
+CREATE INDEX IF NOT EXISTS idx_authorization_permissions_active
+    ON authorization_permissions(is_active);
+
+
+-- ============================================================
+-- Seed: Core Permissions
+-- ============================================================
+
+INSERT INTO authorization_permissions
+(
+    code,
+    resource,
+    action,
+    name,
+    description
+)
+VALUES
+
+-- User
+(
+    'user.read',
+    'user',
+    'read',
+    'Ù…Ø´Ø§Ù‡Ø¯Ù‡ Ú©Ø§Ø±Ø¨Ø±',
+    'Ù…Ø´Ø§Ù‡Ø¯Ù‡ Ø§Ø·Ù„Ø§Ø¹Ø§Øª Ú©Ø§Ø±Ø¨Ø±'
+),
+(
+    'user.update',
+    'user',
+    'update',
+    'ÙˆÛŒØ±Ø§ÛŒØ´ Ú©Ø§Ø±Ø¨Ø±',
+    'ÙˆÛŒØ±Ø§ÛŒØ´ Ø§Ø·Ù„Ø§Ø¹Ø§Øª Ú©Ø§Ø±Ø¨Ø±'
+),
+
+-- Profile
+(
+    'profile.read',
+    'profile',
+    'read',
+    'Ù…Ø´Ø§Ù‡Ø¯Ù‡ Ù…Ø´Ø®ØµØ§Øª',
+    'Ù…Ø´Ø§Ù‡Ø¯Ù‡ Ø§Ø·Ù„Ø§Ø¹Ø§Øª ØªÚ©Ù…ÛŒÙ„ÛŒ Ú©Ø§Ø±Ø¨Ø±'
+),
+(
+    'profile.update',
+    'profile',
+    'update',
+    'ÙˆÛŒØ±Ø§ÛŒØ´ Ù…Ø´Ø®ØµØ§Øª',
+    'ÙˆÛŒØ±Ø§ÛŒØ´ Ø§Ø·Ù„Ø§Ø¹Ø§Øª ØªÚ©Ù…ÛŒÙ„ÛŒ Ú©Ø§Ø±Ø¨Ø±'
+),
+
+-- Legal Entity
+(
+    'legal_entity.read',
+    'legal_entity',
+    'read',
+    'Ù…Ø´Ø§Ù‡Ø¯Ù‡ Ø´Ø®Øµ Ø­Ù‚ÙˆÙ‚ÛŒ',
+    'Ù…Ø´Ø§Ù‡Ø¯Ù‡ Ø§Ø·Ù„Ø§Ø¹Ø§Øª Ø´Ø®Øµ Ø­Ù‚ÙˆÙ‚ÛŒ'
+),
+(
+    'legal_entity.update',
+    'legal_entity',
+    'update',
+    'ÙˆÛŒØ±Ø§ÛŒØ´ Ø´Ø®Øµ Ø­Ù‚ÙˆÙ‚ÛŒ',
+    'ÙˆÛŒØ±Ø§ÛŒØ´ Ø§Ø·Ù„Ø§Ø¹Ø§Øª Ø´Ø®Øµ Ø­Ù‚ÙˆÙ‚ÛŒ'
+),
+
+-- Bank Account
+(
+    'bank_account.read',
+    'bank_account',
+    'read',
+    'Ù…Ø´Ø§Ù‡Ø¯Ù‡ Ø­Ø³Ø§Ø¨ Ø¨Ø§Ù†Ú©ÛŒ',
+    'Ù…Ø´Ø§Ù‡Ø¯Ù‡ Ø­Ø³Ø§Ø¨ Ø¨Ø§Ù†Ú©ÛŒ'
+),
+(
+    'bank_account.add',
+    'bank_account',
+    'add',
+    'Ø§ÙØ²ÙˆØ¯Ù† Ø­Ø³Ø§Ø¨ Ø¨Ø§Ù†Ú©ÛŒ',
+    'Ø§ÙØ²ÙˆØ¯Ù† Ø­Ø³Ø§Ø¨ Ø¨Ø§Ù†Ú©ÛŒ'
+),
+(
+    'bank_account.update',
+    'bank_account',
+    'update',
+    'ÙˆÛŒØ±Ø§ÛŒØ´ Ø­Ø³Ø§Ø¨ Ø¨Ø§Ù†Ú©ÛŒ',
+    'ÙˆÛŒØ±Ø§ÛŒØ´ Ø­Ø³Ø§Ø¨ Ø¨Ø§Ù†Ú©ÛŒ'
+),
+(
+    'bank_account.verify',
+    'bank_account',
+    'verify',
+    'ØªØ£ÛŒÛŒØ¯ Ø­Ø³Ø§Ø¨ Ø¨Ø§Ù†Ú©ÛŒ',
+    'ØªØ£ÛŒÛŒØ¯ Ùˆ Ø§Ø¹ØªØ¨Ø§Ø±Ø³Ù†Ø¬ÛŒ Ø­Ø³Ø§Ø¨ Ø¨Ø§Ù†Ú©ÛŒ'
+),
+
+-- Project
+(
+    'project.read',
+    'project',
+    'read',
+    'Ù…Ø´Ø§Ù‡Ø¯Ù‡ Ù¾Ø±ÙˆÚ˜Ù‡',
+    'Ù…Ø´Ø§Ù‡Ø¯Ù‡ Ø§Ø·Ù„Ø§Ø¹Ø§Øª Ù¾Ø±ÙˆÚ˜Ù‡'
+),
+(
+    'project.create',
+    'project',
+    'create',
+    'Ø§ÛŒØ¬Ø§Ø¯ Ù¾Ø±ÙˆÚ˜Ù‡',
+    'Ø§ÛŒØ¬Ø§Ø¯ Ù¾Ø±ÙˆÚ˜Ù‡ Ø¬Ø¯ÛŒØ¯'
+),
+(
+    'project.update',
+    'project',
+    'update',
+    'ÙˆÛŒØ±Ø§ÛŒØ´ Ù¾Ø±ÙˆÚ˜Ù‡',
+    'ÙˆÛŒØ±Ø§ÛŒØ´ Ù¾Ø±ÙˆÚ˜Ù‡'
+),
+(
+    'project.delete',
+    'project',
+    'delete',
+    'Ø­Ø°Ù Ù¾Ø±ÙˆÚ˜Ù‡',
+    'Ø­Ø°Ù Ù¾Ø±ÙˆÚ˜Ù‡'
+),
+
+-- Project Member
+(
+    'project_member.read',
+    'project_member',
+    'read',
+    'Ù…Ø´Ø§Ù‡Ø¯Ù‡ Ø§Ø¹Ø¶Ø§ÛŒ Ù¾Ø±ÙˆÚ˜Ù‡',
+    'Ù…Ø´Ø§Ù‡Ø¯Ù‡ Ø§Ø¹Ø¶Ø§ÛŒ Ù¾Ø±ÙˆÚ˜Ù‡'
+),
+(
+    'project_member.add',
+    'project_member',
+    'add',
+    'Ø§ÙØ²ÙˆØ¯Ù† Ø¹Ø¶Ùˆ Ù¾Ø±ÙˆÚ˜Ù‡',
+    'Ø§ÙØ²ÙˆØ¯Ù† Ø¹Ø¶Ùˆ Ø¨Ù‡ Ù¾Ø±ÙˆÚ˜Ù‡'
+),
+(
+    'project_member.update',
+    'project_member',
+    'update',
+    'ÙˆÛŒØ±Ø§ÛŒØ´ Ø¹Ø¶Ùˆ Ù¾Ø±ÙˆÚ˜Ù‡',
+    'ÙˆÛŒØ±Ø§ÛŒØ´ Ø¯Ø³ØªØ±Ø³ÛŒ ÛŒØ§ Ù…Ø´Ø®ØµØ§Øª Ø¹Ø¶Ùˆ Ù¾Ø±ÙˆÚ˜Ù‡'
+),
+(
+    'project_member.remove',
+    'project_member',
+    'remove',
+    'Ø­Ø°Ù Ø¹Ø¶Ùˆ Ù¾Ø±ÙˆÚ˜Ù‡',
+    'Ø­Ø°Ù Ø¹Ø¶Ùˆ Ø§Ø² Ù¾Ø±ÙˆÚ˜Ù‡'
+),
+
+-- Market
+(
+    'market.read',
+    'market',
+    'read',
+    'Ù…Ø´Ø§Ù‡Ø¯Ù‡ Ø¨Ø§Ø²Ø§Ø±',
+    'Ù…Ø´Ø§Ù‡Ø¯Ù‡ Ø¨Ø§Ø²Ø§Ø± Ú©Ù„ÛŒ'
+),
+
+-- Offer
+(
+    'offer.read',
+    'offer',
+    'read',
+    'Ù…Ø´Ø§Ù‡Ø¯Ù‡ Ø¹Ø±Ø¶Ù‡',
+    'Ù…Ø´Ø§Ù‡Ø¯Ù‡ Ø§Ø·Ù„Ø§Ø¹Ø§Øª Ø¹Ø±Ø¶Ù‡'
+),
+(
+    'offer.create',
+    'offer',
+    'create',
+    'Ø§ÛŒØ¬Ø§Ø¯ Ø¹Ø±Ø¶Ù‡',
+    'Ø§ÛŒØ¬Ø§Ø¯ Ø¹Ø±Ø¶Ù‡ Ø¬Ø¯ÛŒØ¯'
+),
+(
+    'offer.update',
+    'offer',
+    'update',
+    'ÙˆÛŒØ±Ø§ÛŒØ´ Ø¹Ø±Ø¶Ù‡',
+    'ÙˆÛŒØ±Ø§ÛŒØ´ Ø¹Ø±Ø¶Ù‡'
+),
+(
+    'offer.activate',
+    'offer',
+    'activate',
+    'ÙØ¹Ø§Ù„â€ŒØ³Ø§Ø²ÛŒ Ø¹Ø±Ø¶Ù‡',
+    'ÙØ¹Ø§Ù„ Ú©Ø±Ø¯Ù† Ø¹Ø±Ø¶Ù‡'
+),
+(
+    'offer.deactivate',
+    'offer',
+    'deactivate',
+    'ØºÛŒØ±ÙØ¹Ø§Ù„â€ŒØ³Ø§Ø²ÛŒ Ø¹Ø±Ø¶Ù‡',
+    'ØºÛŒØ±ÙØ¹Ø§Ù„ Ú©Ø±Ø¯Ù† Ø¹Ø±Ø¶Ù‡'
+),
+
+-- Order
+(
+    'order.read',
+    'order',
+    'read',
+    'Ù…Ø´Ø§Ù‡Ø¯Ù‡ Ø³ÙØ§Ø±Ø´',
+    'Ù…Ø´Ø§Ù‡Ø¯Ù‡ Ø³ÙØ§Ø±Ø´'
+),
+(
+    'order.create',
+    'order',
+    'create',
+    'Ø§ÛŒØ¬Ø§Ø¯ Ø³ÙØ§Ø±Ø´',
+    'Ø§ÛŒØ¬Ø§Ø¯ Ø³ÙØ§Ø±Ø´ Ø®Ø±ÛŒØ¯ ÛŒØ§ ÙØ±ÙˆØ´'
+),
+(
+    'order.cancel',
+    'order',
+    'cancel',
+    'Ù„ØºÙˆ Ø³ÙØ§Ø±Ø´',
+    'Ù„ØºÙˆ Ø³ÙØ§Ø±Ø´'
+),
+
+-- Contract
+(
+    'contract.read',
+    'contract',
+    'read',
+    'Ù…Ø´Ø§Ù‡Ø¯Ù‡ Ù‚Ø±Ø§Ø±Ø¯Ø§Ø¯',
+    'Ù…Ø´Ø§Ù‡Ø¯Ù‡ Ù‚Ø±Ø§Ø±Ø¯Ø§Ø¯'
+),
+(
+    'contract.sign',
+    'contract',
+    'sign',
+    'Ø§Ù…Ø¶Ø§ÛŒ Ù‚Ø±Ø§Ø±Ø¯Ø§Ø¯',
+    'Ø§Ù…Ø¶Ø§ÛŒ Ù‚Ø±Ø§Ø±Ø¯Ø§Ø¯'
+),
+
+-- Contractual Right
+(
+    'contractual_right.read',
+    'contractual_right',
+    'read',
+    'Ù…Ø´Ø§Ù‡Ø¯Ù‡ Ø­Ù‚ Ù‚Ø±Ø§Ø±Ø¯Ø§Ø¯ÛŒ',
+    'Ù…Ø´Ø§Ù‡Ø¯Ù‡ Ø­Ù‚ÙˆÙ‚ Ù‚Ø±Ø§Ø±Ø¯Ø§Ø¯ÛŒ'
+),
+(
+    'contractual_right.purchase',
+    'contractual_right',
+    'purchase',
+    'Ø®Ø±ÛŒØ¯ Ø­Ù‚ Ù‚Ø±Ø§Ø±Ø¯Ø§Ø¯ÛŒ',
+    'Ø®Ø±ÛŒØ¯ Ø­Ù‚ Ù‚Ø±Ø§Ø±Ø¯Ø§Ø¯ÛŒ'
+),
+(
+    'contractual_right.transfer',
+    'contractual_right',
+    'transfer',
+    'Ø§Ù†ØªÙ‚Ø§Ù„ Ø­Ù‚ Ù‚Ø±Ø§Ø±Ø¯Ø§Ø¯ÛŒ',
+    'Ø§Ù†ØªÙ‚Ø§Ù„ Ø­Ù‚ Ù‚Ø±Ø§Ø±Ø¯Ø§Ø¯ÛŒ'
+),
+
+-- Wallet
+(
+    'wallet.read',
+    'wallet',
+    'read',
+    'Ù…Ø´Ø§Ù‡Ø¯Ù‡ Ú©ÛŒÙ Ù¾ÙˆÙ„',
+    'Ù…Ø´Ø§Ù‡Ø¯Ù‡ Ù…ÙˆØ¬ÙˆØ¯ÛŒ Ùˆ ÙˆØ¶Ø¹ÛŒØª Ú©ÛŒÙ Ù¾ÙˆÙ„'
+),
+
+-- Payment
+(
+    'payment.read',
+    'payment',
+    'read',
+    'Ù…Ø´Ø§Ù‡Ø¯Ù‡ Ù¾Ø±Ø¯Ø§Ø®Øª',
+    'Ù…Ø´Ø§Ù‡Ø¯Ù‡ Ù¾Ø±Ø¯Ø§Ø®Øªâ€ŒÙ‡Ø§'
+),
+(
+    'payment.create',
+    'payment',
+    'create',
+    'Ø§ÛŒØ¬Ø§Ø¯ Ù¾Ø±Ø¯Ø§Ø®Øª',
+    'Ø§ÛŒØ¬Ø§Ø¯ Ø¯Ø±Ø®ÙˆØ§Ø³Øª Ù¾Ø±Ø¯Ø§Ø®Øª'
+),
+
+-- Transaction
+(
+    'transaction.read',
+    'transaction',
+    'read',
+    'Ù…Ø´Ø§Ù‡Ø¯Ù‡ ØªØ±Ø§Ú©Ù†Ø´',
+    'Ù…Ø´Ø§Ù‡Ø¯Ù‡ ØªØ±Ø§Ú©Ù†Ø´'
+),
+
+-- Verification
+(
+    'verification.read',
+    'verification',
+    'read',
+    'Ù…Ø´Ø§Ù‡Ø¯Ù‡ Ø§Ø­Ø±Ø§Ø²',
+    'Ù…Ø´Ø§Ù‡Ø¯Ù‡ ÙˆØ¶Ø¹ÛŒØª Ø§Ø­Ø±Ø§Ø²'
+),
+(
+    'verification.request',
+    'verification',
+    'request',
+    'Ø¯Ø±Ø®ÙˆØ§Ø³Øª Ø§Ø­Ø±Ø§Ø²',
+    'Ø§ÛŒØ¬Ø§Ø¯ Ø¯Ø±Ø®ÙˆØ§Ø³Øª Ø§Ø­Ø±Ø§Ø²'
+)
+
+ON CONFLICT (code) DO NOTHING;
+
+====================================================================================================
+
+
+FILE: account-backend\migrations\016_create_authorization_role_permissions.sql
+SIZE: 9997 bytes
+----------------------------------------------------------------------------------------------------
+-- ============================================================
+-- 016_create_authorization_role_permissions.sql
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS authorization_role_permissions (
+    role_id UUID NOT NULL
+        REFERENCES authorization_roles(id)
+        ON DELETE CASCADE,
+
+    permission_id UUID NOT NULL
+        REFERENCES authorization_permissions(id)
+        ON DELETE CASCADE,
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    PRIMARY KEY (role_id, permission_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_authorization_role_permissions_permission
+    ON authorization_role_permissions(permission_id);
+
+
+-- ============================================================
+-- Seed: User Role
+-- ============================================================
+
+INSERT INTO authorization_role_permissions (role_id, permission_id)
+SELECT r.id, p.id
+FROM authorization_roles r
+CROSS JOIN authorization_permissions p
+WHERE r.code = 'user'
+  AND p.code IN (
+      'user.read',
+      'user.update',
+      'profile.read',
+      'profile.update',
+      'bank_account.read',
+      'bank_account.add',
+      'bank_account.update',
+      'market.read',
+      'offer.read',
+      'order.read',
+      'order.create',
+      'order.cancel',
+      'contract.read',
+      'contract.sign',
+      'contractual_right.read',
+      'contractual_right.purchase',
+      'contractual_right.transfer',
+      'wallet.read',
+      'payment.read',
+      'payment.create',
+      'transaction.read',
+      'verification.read',
+      'verification.request'
+  )
+ON CONFLICT DO NOTHING;
+
+
+-- ============================================================
+-- Seed: Project Manager
+-- ============================================================
+
+INSERT INTO authorization_role_permissions (role_id, permission_id)
+SELECT r.id, p.id
+FROM authorization_roles r
+CROSS JOIN authorization_permissions p
+WHERE r.code = 'project_manager'
+  AND p.code IN (
+      'user.read',
+      'profile.read',
+      'market.read',
+
+      'project.read',
+      'project.create',
+      'project.update',
+      'project_member.read',
+      'project_member.add',
+      'project_member.update',
+      'project_member.remove',
+
+      'offer.read',
+      'offer.create',
+      'offer.update',
+      'offer.activate',
+      'offer.deactivate',
+
+      'contract.read',
+      'contractual_right.read',
+
+      'transaction.read',
+      'verification.read'
+  )
+ON CONFLICT DO NOTHING;
+
+
+-- ============================================================
+-- Seed: Financial Manager
+-- ============================================================
+
+INSERT INTO authorization_role_permissions (role_id, permission_id)
+SELECT r.id, p.id
+FROM authorization_roles r
+CROSS JOIN authorization_permissions p
+WHERE r.code = 'financial_manager'
+  AND p.code IN (
+      'user.read',
+      'profile.read',
+      'bank_account.read',
+      'bank_account.verify',
+      'wallet.read',
+      'payment.read',
+      'payment.create',
+      'transaction.read'
+  )
+ON CONFLICT DO NOTHING;
+
+
+-- ============================================================
+-- Seed: Financial Specialist
+-- ============================================================
+
+INSERT INTO authorization_role_permissions (role_id, permission_id)
+SELECT r.id, p.id
+FROM authorization_roles r
+CROSS JOIN authorization_permissions p
+WHERE r.code = 'financial_specialist'
+  AND p.code IN (
+      'user.read',
+      'profile.read',
+      'bank_account.read',
+      'wallet.read',
+      'payment.read',
+      'payment.create',
+      'transaction.read'
+  )
+ON CONFLICT DO NOTHING;
+
+
+-- ============================================================
+-- Seed: Contract Manager
+-- ============================================================
+
+INSERT INTO authorization_role_permissions (role_id, permission_id)
+SELECT r.id, p.id
+FROM authorization_roles r
+CROSS JOIN authorization_permissions p
+WHERE r.code = 'contract_manager'
+  AND p.code IN (
+      'user.read',
+      'profile.read',
+      'contract.read',
+      'contract.sign',
+      'contractual_right.read',
+      'contractual_right.transfer',
+      'transaction.read'
+  )
+ON CONFLICT DO NOTHING;
+
+
+-- ============================================================
+-- Seed: Contract Specialist
+-- ============================================================
+
+INSERT INTO authorization_role_permissions (role_id, permission_id)
+SELECT r.id, p.id
+FROM authorization_roles r
+CROSS JOIN authorization_permissions p
+WHERE r.code = 'contract_specialist'
+  AND p.code IN (
+      'user.read',
+      'profile.read',
+      'contract.read',
+      'contractual_right.read',
+      'transaction.read'
+  )
+ON CONFLICT DO NOTHING;
+
+
+-- ============================================================
+-- Seed: Legal Supervisor
+-- ============================================================
+
+INSERT INTO authorization_role_permissions (role_id, permission_id)
+SELECT r.id, p.id
+FROM authorization_roles r
+CROSS JOIN authorization_permissions p
+WHERE r.code = 'legal_supervisor'
+  AND p.code IN (
+      'project.read',
+      'offer.read',
+      'contract.read',
+      'contractual_right.read',
+      'transaction.read'
+  )
+ON CONFLICT DO NOTHING;
+
+
+-- ============================================================
+-- Seed: Asset Manager
+-- ============================================================
+
+INSERT INTO authorization_role_permissions (role_id, permission_id)
+SELECT r.id, p.id
+FROM authorization_roles r
+CROSS JOIN authorization_permissions p
+WHERE r.code = 'asset_manager'
+  AND p.code IN (
+      'project.read',
+      'project.update',
+      'offer.read',
+      'offer.update',
+      'contractual_right.read',
+      'transaction.read'
+  )
+ON CONFLICT DO NOTHING;
+
+
+-- ============================================================
+-- Seed: Specialist
+-- ============================================================
+
+INSERT INTO authorization_role_permissions (role_id, permission_id)
+SELECT r.id, p.id
+FROM authorization_roles r
+CROSS JOIN authorization_permissions p
+WHERE r.code = 'specialist'
+  AND p.code IN (
+      'user.read',
+      'profile.read',
+      'project.read',
+      'offer.read',
+      'contract.read',
+      'contractual_right.read',
+      'transaction.read',
+      'verification.read'
+  )
+ON CONFLICT DO NOTHING;
+
+
+-- ============================================================
+-- Seed: Support
+-- ============================================================
+
+INSERT INTO authorization_role_permissions (role_id, permission_id)
+SELECT r.id, p.id
+FROM authorization_roles r
+CROSS JOIN authorization_permissions p
+WHERE r.code = 'support'
+  AND p.code IN (
+      'user.read',
+      'profile.read',
+      'legal_entity.read',
+      'bank_account.read',
+      'verification.read',
+      'contract.read',
+      'order.read',
+      'transaction.read'
+  )
+ON CONFLICT DO NOTHING;
+
+
+-- ============================================================
+-- Seed: System Supervisor
+-- ============================================================
+
+INSERT INTO authorization_role_permissions (role_id, permission_id)
+SELECT r.id, p.id
+FROM authorization_roles r
+CROSS JOIN authorization_permissions p
+WHERE r.code = 'system_supervisor'
+  AND p.code IN (
+      'user.read',
+      'profile.read',
+      'legal_entity.read',
+      'bank_account.read',
+      'project.read',
+      'project_member.read',
+      'market.read',
+      'offer.read',
+      'order.read',
+      'contract.read',
+      'contractual_right.read',
+      'wallet.read',
+      'payment.read',
+      'transaction.read',
+      'verification.read'
+  )
+ON CONFLICT DO NOTHING;
+
+
+-- ============================================================
+-- Seed: Auditor
+-- ============================================================
+
+INSERT INTO authorization_role_permissions (role_id, permission_id)
+SELECT r.id, p.id
+FROM authorization_roles r
+CROSS JOIN authorization_permissions p
+WHERE r.code = 'auditor'
+  AND p.code IN (
+      'bank_account.read',
+      'wallet.read',
+      'payment.read',
+      'transaction.read',
+      'contract.read',
+      'contractual_right.read',
+      'order.read'
+  )
+ON CONFLICT DO NOTHING;
+
+
+-- ============================================================
+-- Seed: Inspector
+-- ============================================================
+
+INSERT INTO authorization_role_permissions (role_id, permission_id)
+SELECT r.id, p.id
+FROM authorization_roles r
+CROSS JOIN authorization_permissions p
+WHERE r.code = 'inspector'
+  AND p.code IN (
+      'user.read',
+      'profile.read',
+      'project.read',
+      'project_member.read',
+      'market.read',
+      'offer.read',
+      'order.read',
+      'contract.read',
+      'contractual_right.read',
+      'wallet.read',
+      'payment.read',
+      'transaction.read',
+      'verification.read'
+  )
+ON CONFLICT DO NOTHING;
+
+
+-- ============================================================
+-- Seed: System Admin
+-- ============================================================
+-- Ù…Ø¯ÛŒØ± Ø³Ø§Ù…Ø§Ù†Ù‡ Ù…Ø¬ÙˆØ²Ù‡Ø§ÛŒ ÙØ¹Ù„ÛŒ Ø±Ø§ Ø§Ø² Ù‡Ù…Ø§Ù† Ø³ÛŒØ³ØªÙ… Permission Ø¯Ø±ÛŒØ§ÙØª Ù…ÛŒâ€ŒÚ©Ù†Ø¯.
+-- Ø¯Ø± Ø§ÛŒÙ† Ù…Ø±Ø­Ù„Ù‡ ØªÙ…Ø§Ù… PermissionÙ‡Ø§ÛŒ ÙØ¹Ø§Ù„ Ø¨Ù‡ Ø¢Ù† Ø§Ø®ØªØµØ§Øµ Ø¯Ø§Ø¯Ù‡ Ù…ÛŒâ€ŒØ´ÙˆØ¯.
+
+INSERT INTO authorization_role_permissions (role_id, permission_id)
+SELECT r.id, p.id
+FROM authorization_roles r
+CROSS JOIN authorization_permissions p
+WHERE r.code = 'system_admin'
+  AND p.is_active = TRUE
+ON CONFLICT DO NOTHING;
+
+====================================================================================================
+
+
+FILE: account-backend\migrations\017_create_authorization_user_roles.sql
+SIZE: 1524 bytes
+----------------------------------------------------------------------------------------------------
+-- ============================================================
+-- 017_create_authorization_user_roles.sql
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS authorization_user_roles (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    user_id UUID NOT NULL
+        REFERENCES users(id)
+        ON DELETE CASCADE,
+
+    role_id UUID NOT NULL
+        REFERENCES authorization_roles(id)
+        ON DELETE CASCADE,
+
+    scope_id UUID,
+
+    assigned_by UUID
+        REFERENCES users(id)
+        ON DELETE SET NULL,
+
+    starts_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    expires_at TIMESTAMPTZ,
+
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    CONSTRAINT authorization_user_roles_dates_check
+        CHECK (
+            expires_at IS NULL
+            OR expires_at > starts_at
+        )
+);
+
+CREATE INDEX IF NOT EXISTS idx_authorization_user_roles_user
+    ON authorization_user_roles(user_id);
+
+CREATE INDEX IF NOT EXISTS idx_authorization_user_roles_role
+    ON authorization_user_roles(role_id);
+
+CREATE INDEX IF NOT EXISTS idx_authorization_user_roles_scope
+    ON authorization_user_roles(scope_id);
+
+CREATE INDEX IF NOT EXISTS idx_authorization_user_roles_active
+    ON authorization_user_roles(is_active);
+
+CREATE INDEX IF NOT EXISTS idx_authorization_user_roles_expires
+    ON authorization_user_roles(expires_at);
+
+====================================================================================================
+
+
+FILE: account-backend\migrations\018_create_authorization_user_permission_overrides.sql
+SIZE: 2127 bytes
+----------------------------------------------------------------------------------------------------
+-- ============================================================
+-- 018_create_authorization_user_permission_overrides.sql
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS authorization_user_permission_overrides (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    user_id UUID NOT NULL
+        REFERENCES users(id)
+        ON DELETE CASCADE,
+
+    permission_id UUID NOT NULL
+        REFERENCES authorization_permissions(id)
+        ON DELETE CASCADE,
+
+    effect VARCHAR(10) NOT NULL,
+
+    scope_id UUID,
+
+    assigned_by UUID
+        REFERENCES users(id)
+        ON DELETE SET NULL,
+
+    starts_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    expires_at TIMESTAMPTZ,
+
+    reason TEXT,
+
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    CONSTRAINT authorization_user_permission_overrides_effect_check
+        CHECK (
+            effect IN (
+                'allow',
+                'deny'
+            )
+        ),
+
+    CONSTRAINT authorization_user_permission_overrides_dates_check
+        CHECK (
+            expires_at IS NULL
+            OR expires_at > starts_at
+        )
+);
+
+CREATE INDEX IF NOT EXISTS idx_authorization_user_permission_overrides_user
+    ON authorization_user_permission_overrides(user_id);
+
+CREATE INDEX IF NOT EXISTS idx_authorization_user_permission_overrides_permission
+    ON authorization_user_permission_overrides(permission_id);
+
+CREATE INDEX IF NOT EXISTS idx_authorization_user_permission_overrides_scope
+    ON authorization_user_permission_overrides(scope_id);
+
+CREATE INDEX IF NOT EXISTS idx_authorization_user_permission_overrides_effect
+    ON authorization_user_permission_overrides(effect);
+
+CREATE INDEX IF NOT EXISTS idx_authorization_user_permission_overrides_active
+    ON authorization_user_permission_overrides(is_active);
+
+CREATE INDEX IF NOT EXISTS idx_authorization_user_permission_overrides_expires
+    ON authorization_user_permission_overrides(expires_at);
+
+====================================================================================================
+
+
+FILE: account-backend\migrations\019_create_authorization_scopes.sql
+SIZE: 3548 bytes
+----------------------------------------------------------------------------------------------------
+-- ============================================================
+-- 019_create_authorization_scopes.sql
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS authorization_scopes (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    scope_type VARCHAR(50) NOT NULL,
+
+    resource_type VARCHAR(100),
+
+    resource_id UUID,
+
+    parent_scope_id UUID
+        REFERENCES authorization_scopes(id)
+        ON DELETE CASCADE,
+
+    name VARCHAR(200),
+
+    description TEXT,
+
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    CONSTRAINT authorization_scopes_scope_type_check
+        CHECK (
+            scope_type IN (
+                'global',
+                'organization',
+                'project',
+                'asset',
+                'contract',
+                'self',
+                'custom'
+            )
+        ),
+
+    CONSTRAINT authorization_scopes_resource_pair_check
+        CHECK (
+            (
+                scope_type IN ('global', 'self')
+                AND resource_type IS NULL
+                AND resource_id IS NULL
+            )
+            OR
+            (
+                scope_type IN (
+                    'organization',
+                    'project',
+                    'asset',
+                    'contract',
+                    'custom'
+                )
+            )
+        )
+);
+
+CREATE INDEX IF NOT EXISTS idx_authorization_scopes_scope_type
+    ON authorization_scopes(scope_type);
+
+CREATE INDEX IF NOT EXISTS idx_authorization_scopes_resource
+    ON authorization_scopes(resource_type, resource_id);
+
+CREATE INDEX IF NOT EXISTS idx_authorization_scopes_parent
+    ON authorization_scopes(parent_scope_id);
+
+CREATE INDEX IF NOT EXISTS idx_authorization_scopes_active
+    ON authorization_scopes(is_active);
+
+
+-- ============================================================
+-- Foreign-key links to scopes
+-- ============================================================
+
+ALTER TABLE authorization_user_roles
+    ADD CONSTRAINT fk_authorization_user_roles_scope
+    FOREIGN KEY (scope_id)
+    REFERENCES authorization_scopes(id)
+    ON DELETE SET NULL;
+
+ALTER TABLE authorization_user_permission_overrides
+    ADD CONSTRAINT fk_authorization_user_permission_overrides_scope
+    FOREIGN KEY (scope_id)
+    REFERENCES authorization_scopes(id)
+    ON DELETE SET NULL;
+
+
+-- ============================================================
+-- Global Scope
+-- ============================================================
+
+INSERT INTO authorization_scopes
+(
+    scope_type,
+    name,
+    description
+)
+SELECT
+    'global',
+    'Ú©Ù„ Ø³Ø§Ù…Ø§Ù†Ù‡',
+    'Ù…Ø­Ø¯ÙˆØ¯Ù‡ Ú©Ø§Ù…Ù„ Ø³Ø§Ù…Ø§Ù†Ù‡'
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM authorization_scopes
+    WHERE scope_type = 'global'
+);
+
+
+-- ============================================================
+-- Self Scope
+-- ============================================================
+
+INSERT INTO authorization_scopes
+(
+    scope_type,
+    name,
+    description
+)
+SELECT
+    'self',
+    'Ù…Ù†Ø§Ø¨Ø¹ Ø®ÙˆØ¯ Ú©Ø§Ø±Ø¨Ø±',
+    'Ù…Ù†Ø§Ø¨Ø¹ Ù…ØªØ¹Ù„Ù‚ Ø¨Ù‡ Ø®ÙˆØ¯ Ú©Ø§Ø±Ø¨Ø±'
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM authorization_scopes
+    WHERE scope_type = 'self'
+);
+
+====================================================================================================
