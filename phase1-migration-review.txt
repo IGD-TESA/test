@@ -1,0 +1,603 @@
+GENERAL MARKET - MIGRATION REVIEW
+Generated: 2026-10-27 21:32:36
+Root: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\general-market-backend
+READ-ONLY REPORT - NO MIGRATIONS EXECUTED
+
+================================================================================
+FILE: go.mod
+================================================================================
+module github.com/igd-tesa/real-asset-management-platform/general-market-backend
+
+go 1.25.0
+
+require github.com/jackc/pgx/v5 v5.7.6
+
+require (
+	github.com/jackc/pgpassfile v1.0.0 // indirect
+	github.com/jackc/pgservicefile v0.0.0-20240606120523-5a60cdf6a761 // indirect
+	github.com/jackc/puddle/v2 v2.2.2 // indirect
+	golang.org/x/crypto v0.37.0 // indirect
+	golang.org/x/sync v0.13.0 // indirect
+	golang.org/x/text v0.24.0 // indirect
+)
+
+
+================================================================================
+FILE: migrations\migrations.go
+================================================================================
+package migrations
+
+import "embed"
+
+// Files contains the versioned SQL migration files.
+//
+//go:embed *.sql
+var Files embed.FS
+
+
+================================================================================
+FILE: migrations\000001_init.sql
+================================================================================
+[FILE NOT FOUND]
+
+================================================================================
+FILE: migrations\000002_market_domain_foundation.sql
+================================================================================
+-- General Market Backend
+-- Migration: 000002_market_domain_foundation.sql
+-- Additive, versioned and non-destructive.
+--
+-- Ownership boundaries:
+-- * No account credentials or authoritative role database.
+-- * No free-balance ledger or authoritative reservation ledger.
+-- * No official property ownership register.
+-- * No legal contract body owned by Contracts service.
+-- * No service-delivery records owned by Services.
+-- * No final settlement ledger owned by Settlement.
+--
+-- External identifiers are stored as references, not copied records.
+
+CREATE TABLE IF NOT EXISTS markets (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    code VARCHAR(80) NOT NULL UNIQUE,
+    name VARCHAR(200) NOT NULL,
+    description TEXT,
+    status VARCHAR(24) NOT NULL DEFAULT 'draft',
+    allowed_trade_methods JSONB NOT NULL DEFAULT '[]'::jsonb,
+    display_rules JSONB NOT NULL DEFAULT '{}'::jsonb,
+    created_by_user_id VARCHAR(160),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    CHECK (status IN ('draft', 'active', 'paused', 'closed'))
+);
+
+CREATE TABLE IF NOT EXISTS public_categories (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    parent_id UUID REFERENCES public_categories(id) ON DELETE RESTRICT,
+    code VARCHAR(100) NOT NULL UNIQUE,
+    name VARCHAR(200) NOT NULL,
+    description TEXT,
+    sort_order INTEGER NOT NULL DEFAULT 0,
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS specialized_classifications (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    code VARCHAR(120) NOT NULL UNIQUE,
+    name VARCHAR(240) NOT NULL,
+    description TEXT,
+    domain_code VARCHAR(100) NOT NULL,
+    version INTEGER NOT NULL DEFAULT 1,
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    CHECK (version > 0)
+);
+
+CREATE TABLE IF NOT EXISTS category_mappings (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    public_category_id UUID NOT NULL REFERENCES public_categories(id) ON DELETE RESTRICT,
+    specialized_classification_id UUID NOT NULL REFERENCES specialized_classifications(id) ON DELETE RESTRICT,
+    market_id UUID REFERENCES markets(id) ON DELETE RESTRICT,
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    valid_from TIMESTAMPTZ,
+    valid_until TIMESTAMPTZ,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    UNIQUE (public_category_id, specialized_classification_id, market_id),
+    CHECK (valid_until IS NULL OR valid_from IS NULL OR valid_until > valid_from)
+);
+
+CREATE TABLE IF NOT EXISTS parameter_definitions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    classification_id UUID NOT NULL REFERENCES specialized_classifications(id) ON DELETE RESTRICT,
+    code VARCHAR(120) NOT NULL,
+    name VARCHAR(240) NOT NULL,
+    data_type VARCHAR(24) NOT NULL,
+    unit_code VARCHAR(60),
+    is_required BOOLEAN NOT NULL DEFAULT FALSE,
+    validation_schema JSONB NOT NULL DEFAULT '{}'::jsonb,
+    sort_order INTEGER NOT NULL DEFAULT 0,
+    version INTEGER NOT NULL DEFAULT 1,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    UNIQUE (classification_id, code, version),
+    CHECK (data_type IN ('string', 'integer', 'decimal', 'boolean', 'date', 'datetime', 'enum', 'object', 'array')),
+    CHECK (version > 0)
+);
+
+CREATE TABLE IF NOT EXISTS offer_configurations (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    classification_id UUID NOT NULL REFERENCES specialized_classifications(id) ON DELETE RESTRICT,
+    code VARCHAR(120) NOT NULL UNIQUE,
+    name VARCHAR(240) NOT NULL,
+    status VARCHAR(24) NOT NULL DEFAULT 'draft',
+    current_version INTEGER,
+    created_by_user_id VARCHAR(160),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    CHECK (status IN ('draft', 'active', 'retired'))
+);
+
+CREATE TABLE IF NOT EXISTS offer_config_versions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    configuration_id UUID NOT NULL REFERENCES offer_configurations(id) ON DELETE RESTRICT,
+    version INTEGER NOT NULL,
+    status VARCHAR(24) NOT NULL DEFAULT 'draft',
+    rules_schema JSONB NOT NULL DEFAULT '{}'::jsonb,
+    calculation_schema JSONB NOT NULL DEFAULT '{}'::jsonb,
+    qualification_schema JSONB NOT NULL DEFAULT '{}'::jsonb,
+    document_schema JSONB NOT NULL DEFAULT '{}'::jsonb,
+    created_by_user_id VARCHAR(160),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    published_at TIMESTAMPTZ,
+    UNIQUE (configuration_id, version),
+    CHECK (version > 0),
+    CHECK (status IN ('draft', 'approved', 'published', 'retired'))
+);
+
+CREATE TABLE IF NOT EXISTS offer_config_parameters (
+    configuration_version_id UUID NOT NULL REFERENCES offer_config_versions(id) ON DELETE RESTRICT,
+    parameter_definition_id UUID NOT NULL REFERENCES parameter_definitions(id) ON DELETE RESTRICT,
+    is_required BOOLEAN NOT NULL DEFAULT FALSE,
+    overrides JSONB NOT NULL DEFAULT '{}'::jsonb,
+    PRIMARY KEY (configuration_version_id, parameter_definition_id)
+);
+
+CREATE TABLE IF NOT EXISTS offer_rules (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    configuration_version_id UUID NOT NULL REFERENCES offer_config_versions(id) ON DELETE RESTRICT,
+    code VARCHAR(120) NOT NULL,
+    rule_type VARCHAR(40) NOT NULL,
+    definition JSONB NOT NULL,
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    UNIQUE (configuration_version_id, code)
+);
+
+CREATE TABLE IF NOT EXISTS offer_documents (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    offer_id UUID,
+    configuration_version_id UUID REFERENCES offer_config_versions(id) ON DELETE RESTRICT,
+    document_type VARCHAR(100) NOT NULL,
+    external_document_ref VARCHAR(240),
+    status VARCHAR(24) NOT NULL DEFAULT 'required',
+    metadata JSONB NOT NULL DEFAULT '{}'::jsonb,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    CHECK (status IN ('required', 'submitted', 'verified', 'rejected', 'expired'))
+);
+
+CREATE TABLE IF NOT EXISTS company_qualifications (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    company_ref VARCHAR(160) NOT NULL,
+    classification_id UUID NOT NULL REFERENCES specialized_classifications(id) ON DELETE RESTRICT,
+    status VARCHAR(24) NOT NULL DEFAULT 'pending',
+    external_verification_ref VARCHAR(240),
+    valid_from TIMESTAMPTZ,
+    valid_until TIMESTAMPTZ,
+    metadata JSONB NOT NULL DEFAULT '{}'::jsonb,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    CHECK (status IN ('pending', 'approved', 'rejected', 'suspended', 'expired'))
+);
+
+CREATE TABLE IF NOT EXISTS offers (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    public_code VARCHAR(100) NOT NULL UNIQUE,
+    market_id UUID NOT NULL REFERENCES markets(id) ON DELETE RESTRICT,
+    public_category_id UUID REFERENCES public_categories(id) ON DELETE RESTRICT,
+    classification_id UUID NOT NULL REFERENCES specialized_classifications(id) ON DELETE RESTRICT,
+    configuration_version_id UUID REFERENCES offer_config_versions(id) ON DELETE RESTRICT,
+    owner_ref VARCHAR(160) NOT NULL,
+    title VARCHAR(300) NOT NULL,
+    summary TEXT,
+    offer_type VARCHAR(40) NOT NULL DEFAULT 'sale',
+    status VARCHAR(24) NOT NULL DEFAULT 'draft',
+    price_amount NUMERIC(24,8),
+    currency_code VARCHAR(12),
+    quantity_total NUMERIC(24,8),
+    quantity_unit VARCHAR(60),
+    attributes JSONB NOT NULL DEFAULT '{}'::jsonb,
+    valid_from TIMESTAMPTZ,
+    valid_until TIMESTAMPTZ,
+    submitted_at TIMESTAMPTZ,
+    approved_at TIMESTAMPTZ,
+    published_at TIMESTAMPTZ,
+    closed_at TIMESTAMPTZ,
+    created_by_user_id VARCHAR(160),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    CHECK (status IN ('draft', 'pending_review', 'approved', 'published', 'suspended', 'rejected', 'expired', 'closed')),
+    CHECK (offer_type IN ('sale', 'purchase', 'service', 'physical_commodity', 'real_asset')),
+    CHECK (price_amount IS NULL OR price_amount >= 0),
+    CHECK (quantity_total IS NULL OR quantity_total >= 0),
+    CHECK (valid_until IS NULL OR valid_from IS NULL OR valid_until > valid_from)
+);
+
+ALTER TABLE offer_documents
+    ADD CONSTRAINT fk_offer_documents_offer
+    FOREIGN KEY (offer_id) REFERENCES offers(id) ON DELETE RESTRICT;
+
+CREATE TABLE IF NOT EXISTS offer_versions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    offer_id UUID NOT NULL REFERENCES offers(id) ON DELETE RESTRICT,
+    version INTEGER NOT NULL,
+    snapshot JSONB NOT NULL,
+    changed_by_user_id VARCHAR(160),
+    change_reason TEXT,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    UNIQUE (offer_id, version),
+    CHECK (version > 0)
+);
+
+CREATE TABLE IF NOT EXISTS offer_approvals (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    offer_id UUID NOT NULL REFERENCES offers(id) ON DELETE RESTRICT,
+    configuration_version_id UUID REFERENCES offer_config_versions(id) ON DELETE RESTRICT,
+    reviewer_ref VARCHAR(160),
+    decision VARCHAR(24) NOT NULL,
+    reason TEXT,
+    rule_results JSONB NOT NULL DEFAULT '{}'::jsonb,
+    decided_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    CHECK (decision IN ('approved', 'rejected', 'changes_requested'))
+);
+
+CREATE TABLE IF NOT EXISTS supply_requests (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    request_code VARCHAR(100) NOT NULL UNIQUE,
+    requester_ref VARCHAR(160) NOT NULL,
+    market_id UUID REFERENCES markets(id) ON DELETE RESTRICT,
+    classification_id UUID REFERENCES specialized_classifications(id) ON DELETE RESTRICT,
+    title VARCHAR(300) NOT NULL,
+    description TEXT,
+    quantity NUMERIC(24,8),
+    quantity_unit VARCHAR(60),
+    target_price NUMERIC(24,8),
+    currency_code VARCHAR(12),
+    requirements JSONB NOT NULL DEFAULT '{}'::jsonb,
+    status VARCHAR(24) NOT NULL DEFAULT 'draft',
+    response_deadline TIMESTAMPTZ,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    CHECK (status IN ('draft', 'published', 'receiving_proposals', 'evaluating', 'awarded', 'cancelled', 'expired')),
+    CHECK (quantity IS NULL OR quantity > 0),
+    CHECK (target_price IS NULL OR target_price >= 0)
+);
+
+CREATE TABLE IF NOT EXISTS supply_proposals (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    request_id UUID NOT NULL REFERENCES supply_requests(id) ON DELETE RESTRICT,
+    proposer_ref VARCHAR(160) NOT NULL,
+    price_amount NUMERIC(24,8),
+    currency_code VARCHAR(12),
+    quantity NUMERIC(24,8),
+    delivery_terms JSONB NOT NULL DEFAULT '{}'::jsonb,
+    terms JSONB NOT NULL DEFAULT '{}'::jsonb,
+    status VARCHAR(24) NOT NULL DEFAULT 'submitted',
+    valid_until TIMESTAMPTZ,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    CHECK (status IN ('draft', 'submitted', 'under_review', 'accepted', 'rejected', 'withdrawn', 'expired')),
+    CHECK (price_amount IS NULL OR price_amount >= 0),
+    CHECK (quantity IS NULL OR quantity > 0)
+);
+
+CREATE TABLE IF NOT EXISTS orders (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    order_code VARCHAR(100) NOT NULL UNIQUE,
+    offer_id UUID NOT NULL REFERENCES offers(id) ON DELETE RESTRICT,
+    participant_ref VARCHAR(160) NOT NULL,
+    side VARCHAR(8) NOT NULL,
+    order_type VARCHAR(24) NOT NULL DEFAULT 'limit',
+    status VARCHAR(24) NOT NULL DEFAULT 'pending_checks',
+    price_amount NUMERIC(24,8),
+    currency_code VARCHAR(12),
+    quantity_original NUMERIC(24,8) NOT NULL,
+    quantity_remaining NUMERIC(24,8) NOT NULL,
+    quantity_filled NUMERIC(24,8) NOT NULL DEFAULT 0,
+    external_reservation_ref VARCHAR(240),
+    idempotency_key VARCHAR(160),
+    correlation_id VARCHAR(160),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    cancelled_at TIMESTAMPTZ,
+    CHECK (side IN ('buy', 'sell')),
+    CHECK (order_type IN ('limit', 'market', 'offer_directed')),
+    CHECK (status IN ('pending_checks', 'pending_reservation', 'open', 'partially_filled', 'filled', 'cancelled', 'rejected', 'expired', 'failed')),
+    CHECK (quantity_original > 0),
+    CHECK (quantity_remaining >= 0),
+    CHECK (quantity_filled >= 0),
+    CHECK (quantity_remaining + quantity_filled = quantity_original),
+    CHECK (price_amount IS NULL OR price_amount >= 0),
+    UNIQUE (participant_ref, idempotency_key)
+);
+
+CREATE TABLE IF NOT EXISTS order_matches (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    buy_order_id UUID NOT NULL REFERENCES orders(id) ON DELETE RESTRICT,
+    sell_order_id UUID NOT NULL REFERENCES orders(id) ON DELETE RESTRICT,
+    matched_quantity NUMERIC(24,8) NOT NULL,
+    matched_price NUMERIC(24,8) NOT NULL,
+    currency_code VARCHAR(12),
+    status VARCHAR(24) NOT NULL DEFAULT 'recorded',
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    CHECK (buy_order_id <> sell_order_id),
+    CHECK (matched_quantity > 0),
+    CHECK (matched_price >= 0),
+    CHECK (status IN ('recorded', 'accepted', 'rejected', 'trade_created', 'failed'))
+);
+
+CREATE TABLE IF NOT EXISTS trades (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    trade_code VARCHAR(100) NOT NULL UNIQUE,
+    match_id UUID NOT NULL UNIQUE REFERENCES order_matches(id) ON DELETE RESTRICT,
+    offer_id UUID NOT NULL REFERENCES offers(id) ON DELETE RESTRICT,
+    buy_order_id UUID NOT NULL REFERENCES orders(id) ON DELETE RESTRICT,
+    sell_order_id UUID NOT NULL REFERENCES orders(id) ON DELETE RESTRICT,
+    buyer_ref VARCHAR(160) NOT NULL,
+    seller_ref VARCHAR(160) NOT NULL,
+    quantity NUMERIC(24,8) NOT NULL,
+    price_amount NUMERIC(24,8) NOT NULL,
+    currency_code VARCHAR(12),
+    status VARCHAR(24) NOT NULL DEFAULT 'created',
+    execution_policy_version_id UUID,
+    correlation_id VARCHAR(160),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    CHECK (quantity > 0),
+    CHECK (price_amount >= 0),
+    CHECK (status IN ('created', 'in_execution', 'awaiting_contract', 'awaiting_services', 'awaiting_delivery', 'ready_for_settlement', 'settlement_pending', 'settled', 'cancelled', 'failed'))
+);
+
+CREATE TABLE IF NOT EXISTS execution_policies (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    code VARCHAR(120) NOT NULL UNIQUE,
+    name VARCHAR(240) NOT NULL,
+    market_id UUID REFERENCES markets(id) ON DELETE RESTRICT,
+    offer_type VARCHAR(40),
+    status VARCHAR(24) NOT NULL DEFAULT 'draft',
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    CHECK (status IN ('draft', 'active', 'retired'))
+);
+
+CREATE TABLE IF NOT EXISTS execution_policy_versions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    policy_id UUID NOT NULL REFERENCES execution_policies(id) ON DELETE RESTRICT,
+    version INTEGER NOT NULL,
+    steps JSONB NOT NULL,
+    conditions JSONB NOT NULL DEFAULT '{}'::jsonb,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    published_at TIMESTAMPTZ,
+    UNIQUE (policy_id, version),
+    CHECK (version > 0)
+);
+
+ALTER TABLE trades
+    ADD CONSTRAINT fk_trades_execution_policy_version
+    FOREIGN KEY (execution_policy_version_id)
+    REFERENCES execution_policy_versions(id) ON DELETE RESTRICT;
+
+CREATE TABLE IF NOT EXISTS trade_workflows (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    trade_id UUID NOT NULL REFERENCES trades(id) ON DELETE RESTRICT,
+    policy_version_id UUID NOT NULL REFERENCES execution_policy_versions(id) ON DELETE RESTRICT,
+    current_step_code VARCHAR(120),
+    status VARCHAR(24) NOT NULL DEFAULT 'pending',
+    started_at TIMESTAMPTZ,
+    completed_at TIMESTAMPTZ,
+    last_error_code VARCHAR(100),
+    last_error_at TIMESTAMPTZ,
+    retry_count INTEGER NOT NULL DEFAULT 0,
+    correlation_id VARCHAR(160),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    UNIQUE (trade_id),
+    CHECK (status IN ('pending', 'running', 'waiting_external', 'completed', 'failed', 'cancelled')),
+    CHECK (retry_count >= 0)
+);
+
+CREATE TABLE IF NOT EXISTS trade_state_history (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    trade_id UUID NOT NULL REFERENCES trades(id) ON DELETE RESTRICT,
+    state_domain VARCHAR(40) NOT NULL,
+    previous_state VARCHAR(40),
+    new_state VARCHAR(40) NOT NULL,
+    actor_ref VARCHAR(160),
+    reason TEXT,
+    correlation_id VARCHAR(160),
+    metadata JSONB NOT NULL DEFAULT '{}'::jsonb,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS integration_operations (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    service_code VARCHAR(80) NOT NULL,
+    operation_code VARCHAR(120) NOT NULL,
+    external_ref VARCHAR(240),
+    correlation_id VARCHAR(160) NOT NULL,
+    idempotency_key VARCHAR(160),
+    status VARCHAR(24) NOT NULL DEFAULT 'pending',
+    request_metadata JSONB NOT NULL DEFAULT '{}'::jsonb,
+    response_metadata JSONB NOT NULL DEFAULT '{}'::jsonb,
+    error_code VARCHAR(100),
+    attempt_count INTEGER NOT NULL DEFAULT 0,
+    next_retry_at TIMESTAMPTZ,
+    started_at TIMESTAMPTZ,
+    completed_at TIMESTAMPTZ,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    CHECK (status IN ('pending', 'running', 'succeeded', 'failed', 'retry_wait', 'cancelled')),
+    CHECK (attempt_count >= 0),
+    UNIQUE (service_code, operation_code, idempotency_key)
+);
+
+CREATE TABLE IF NOT EXISTS commodity_aggregation_jobs (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    job_code VARCHAR(120) NOT NULL UNIQUE,
+    commodity_classification_id UUID NOT NULL REFERENCES specialized_classifications(id) ON DELETE RESTRICT,
+    requested_quantity NUMERIC(24,8),
+    quantity_unit VARCHAR(60),
+    status VARCHAR(24) NOT NULL DEFAULT 'draft',
+    criteria JSONB NOT NULL DEFAULT '{}'::jsonb,
+    result_summary JSONB NOT NULL DEFAULT '{}'::jsonb,
+    created_by_user_id VARCHAR(160),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    CHECK (status IN ('draft', 'evaluating', 'proposed', 'accepted', 'cancelled', 'failed')),
+    CHECK (requested_quantity IS NULL OR requested_quantity > 0)
+);
+
+CREATE TABLE IF NOT EXISTS commodity_aggregation_items (
+    aggregation_job_id UUID NOT NULL REFERENCES commodity_aggregation_jobs(id) ON DELETE RESTRICT,
+    offer_id UUID NOT NULL REFERENCES offers(id) ON DELETE RESTRICT,
+    eligible_quantity NUMERIC(24,8) NOT NULL,
+    status VARCHAR(24) NOT NULL DEFAULT 'included',
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    PRIMARY KEY (aggregation_job_id, offer_id),
+    CHECK (eligible_quantity > 0),
+    CHECK (status IN ('included', 'excluded', 'reserved_externally', 'fulfilled'))
+);
+
+CREATE TABLE IF NOT EXISTS real_asset_workflows (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    workflow_code VARCHAR(120) NOT NULL UNIQUE,
+    trade_id UUID REFERENCES trades(id) ON DELETE RESTRICT,
+    offer_id UUID REFERENCES offers(id) ON DELETE RESTRICT,
+    external_asset_ref VARCHAR(240),
+    external_registry_ref VARCHAR(240),
+    status VARCHAR(24) NOT NULL DEFAULT 'pending',
+    platform_position_ref VARCHAR(240),
+    official_ownership_status VARCHAR(40) NOT NULL DEFAULT 'unknown',
+    metadata JSONB NOT NULL DEFAULT '{}'::jsonb,
+    correlation_id VARCHAR(160),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    CHECK (status IN ('pending', 'verification_pending', 'contract_pending', 'transfer_pending', 'completed', 'rejected', 'failed', 'cancelled')),
+    CHECK (official_ownership_status IN ('unknown', 'not_applicable', 'pending', 'confirmed', 'rejected'))
+);
+
+CREATE TABLE IF NOT EXISTS institutional_requests (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    institution_code VARCHAR(100) NOT NULL,
+    request_type VARCHAR(120) NOT NULL,
+    external_request_ref VARCHAR(240),
+    correlation_id VARCHAR(160) NOT NULL,
+    legal_basis_ref VARCHAR(240),
+    access_scope JSONB NOT NULL DEFAULT '{}'::jsonb,
+    status VARCHAR(24) NOT NULL DEFAULT 'pending',
+    response_metadata JSONB NOT NULL DEFAULT '{}'::jsonb,
+    requested_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    completed_at TIMESTAMPTZ,
+    CHECK (status IN ('pending', 'authorized', 'rejected', 'submitted', 'completed', 'failed', 'cancelled'))
+);
+
+CREATE TABLE IF NOT EXISTS audit_events (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    event_code VARCHAR(120) NOT NULL,
+    entity_type VARCHAR(80) NOT NULL,
+    entity_ref VARCHAR(160) NOT NULL,
+    actor_ref VARCHAR(160),
+    outcome VARCHAR(40) NOT NULL,
+    reason_code VARCHAR(100),
+    correlation_id VARCHAR(160),
+    rule_version_ref VARCHAR(160),
+    metadata JSONB NOT NULL DEFAULT '{}'::jsonb,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS idempotency_records (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    scope_code VARCHAR(120) NOT NULL,
+    idempotency_key VARCHAR(160) NOT NULL,
+    request_hash VARCHAR(128) NOT NULL,
+    status VARCHAR(24) NOT NULL DEFAULT 'in_progress',
+    response_status INTEGER,
+    response_body JSONB,
+    correlation_id VARCHAR(160),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    completed_at TIMESTAMPTZ,
+    UNIQUE (scope_code, idempotency_key),
+    CHECK (status IN ('in_progress', 'completed', 'failed'))
+);
+
+-- Indexes for public catalogue, lifecycle queues, matching and traceability.
+CREATE INDEX IF NOT EXISTS idx_offers_public_catalogue
+    ON offers (market_id, public_category_id, published_at DESC, id DESC)
+    WHERE status = 'published';
+
+CREATE INDEX IF NOT EXISTS idx_offers_classification_status
+    ON offers (classification_id, status, created_at DESC);
+
+CREATE INDEX IF NOT EXISTS idx_offers_validity
+    ON offers (valid_until)
+    WHERE status = 'published' AND valid_until IS NOT NULL;
+
+CREATE INDEX IF NOT EXISTS idx_category_mappings_public
+    ON category_mappings (public_category_id, is_active);
+
+CREATE INDEX IF NOT EXISTS idx_supply_requests_status_deadline
+    ON supply_requests (status, response_deadline);
+
+CREATE INDEX IF NOT EXISTS idx_supply_proposals_request_status
+    ON supply_proposals (request_id, status, created_at);
+
+CREATE INDEX IF NOT EXISTS idx_orders_offer_status
+    ON orders (offer_id, status, created_at);
+
+CREATE INDEX IF NOT EXISTS idx_orders_order_book
+    ON orders (offer_id, side, price_amount, created_at)
+    WHERE status IN ('open', 'partially_filled');
+
+CREATE INDEX IF NOT EXISTS idx_matches_buy_order
+    ON order_matches (buy_order_id, created_at);
+
+CREATE INDEX IF NOT EXISTS idx_matches_sell_order
+    ON order_matches (sell_order_id, created_at);
+
+CREATE INDEX IF NOT EXISTS idx_trades_status_created
+    ON trades (status, created_at);
+
+CREATE INDEX IF NOT EXISTS idx_trade_workflows_status
+    ON trade_workflows (status, updated_at);
+
+CREATE INDEX IF NOT EXISTS idx_trade_state_history_trade
+    ON trade_state_history (trade_id, created_at);
+
+CREATE INDEX IF NOT EXISTS idx_integration_operations_retry
+    ON integration_operations (status, next_retry_at)
+    WHERE status IN ('pending', 'retry_wait', 'failed');
+
+CREATE INDEX IF NOT EXISTS idx_real_asset_workflows_status
+    ON real_asset_workflows (status, updated_at);
+
+CREATE INDEX IF NOT EXISTS idx_institutional_requests_correlation
+    ON institutional_requests (correlation_id);
+
+CREATE INDEX IF NOT EXISTS idx_audit_events_entity
+    ON audit_events (entity_type, entity_ref, created_at DESC);
+
+CREATE INDEX IF NOT EXISTS idx_audit_events_correlation
+    ON audit_events (correlation_id)
+    WHERE correlation_id IS NOT NULL;
+
