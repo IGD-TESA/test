@@ -1,0 +1,916 @@
+MIGRATION RUNTIME AUDIT
+Generated: 2026-11-04 07:03:24
+Root: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\general-market-backend
+READ ONLY - NO DATABASE CONNECTION OR MIGRATION EXECUTION
+
+================================================================================
+FILE: migrations\000001_initial.sql
+================================================================================
+SQL file present; content omitted from this inventory.
+Bytes: 98
+
+================================================================================
+FILE: migrations\000002_market_domain_foundation.sql
+================================================================================
+SQL file present; content omitted from this inventory.
+Bytes: 24339
+
+================================================================================
+FILE: migrations\migrations.go
+================================================================================
+package migrations
+
+import "embed"
+
+// Files contains the versioned SQL migration files.
+//
+//go:embed *.sql
+var Files embed.FS
+
+
+================================================================================
+FILE: internal\catalogue\handler.go
+================================================================================
+package catalogue
+
+import (
+	"database/sql"
+	"encoding/json"
+	"errors"
+	"net/http"
+	"strconv"
+	"strings"
+	"time"
+)
+
+const (
+	defaultPageSize = 20
+	maxPageSize     = 100
+	maxSearchLength = 120
+)
+
+type Handler struct {
+	DB *sql.DB
+}
+
+type OfferSummary struct {
+	ID                 string          `json:"id"`
+	Code               string          `json:"code"`
+	MarketID           string          `json:"market_id"`
+	MarketName         string          `json:"market_name"`
+	PublicCategoryID   string          `json:"public_category_id,omitempty"`
+	PublicCategoryName string          `json:"public_category_name,omitempty"`
+	ClassificationID   string          `json:"classification_id"`
+	Title              string          `json:"title"`
+	Summary            string          `json:"summary,omitempty"`
+	OfferType          string          `json:"offer_type"`
+	PriceAmount        string          `json:"price_amount,omitempty"`
+	CurrencyCode       string          `json:"currency_code,omitempty"`
+	QuantityTotal      string          `json:"quantity_total,omitempty"`
+	QuantityUnit       string          `json:"quantity_unit,omitempty"`
+	Attributes         json.RawMessage `json:"attributes"`
+	PublishedAt        time.Time       `json:"published_at"`
+	ValidUntil         *time.Time      `json:"valid_until,omitempty"`
+}
+
+type ListResponse struct {
+	Data       []OfferSummary `json:"data"`
+	Page       int            `json:"page"`
+	PageSize   int            `json:"page_size"`
+	Total      int64          `json:"total"`
+	TotalPages int64          `json:"total_pages"`
+}
+
+type APIError struct {
+	Code    string `json:"code"`
+	Message string `json:"message"`
+}
+
+func (h Handler) Register(mux *http.ServeMux) {
+	mux.HandleFunc("GET /api/v1/catalogue/offers", h.ListOffers)
+	mux.HandleFunc("GET /api/v1/catalogue/offers/{id}", h.GetOffer)
+}
+
+func (h Handler) ListOffers(w http.ResponseWriter, r *http.Request) {
+	page, err := parsePositiveInt(r.URL.Query().Get("page"), 1, 1000000)
+	if err != nil {
+		writeError(w, http.StatusBadRequest, "invalid_page", "page must be a positive integer.")
+		return
+	}
+
+	pageSize, err := parsePositiveInt(r.URL.Query().Get("page_size"), defaultPageSize, maxPageSize)
+	if err != nil {
+		writeError(w, http.StatusBadRequest, "invalid_page_size", "page_size must be between 1 and 100.")
+		return
+	}
+
+	search := strings.TrimSpace(r.URL.Query().Get("q"))
+	if len(search) > maxSearchLength {
+		writeError(w, http.StatusBadRequest, "search_too_long", "q must not exceed 120 characters.")
+		return
+	}
+
+	categoryID := strings.TrimSpace(r.URL.Query().Get("category_id"))
+	marketID := strings.TrimSpace(r.URL.Query().Get("market_id"))
+
+	if h.DB == nil {
+		writeError(w, http.StatusServiceUnavailable, "database_unavailable", "Catalogue storage is unavailable.")
+		return
+	}
+
+	const filter = `
+		FROM offers o
+		INNER JOIN markets m ON m.id = o.market_id
+		LEFT JOIN public_categories pc ON pc.id = o.public_category_id
+		WHERE o.status = 'published'
+		  AND m.status = 'active'
+		  AND (o.valid_from IS NULL OR o.valid_from <= now())
+		  AND (o.valid_until IS NULL OR o.valid_until > now())
+		  AND ($1 = '' OR o.title ILIKE '%' || $1 || '%' OR COALESCE(o.summary, '') ILIKE '%' || $1 || '%')
+		  AND ($2 = '' OR o.public_category_id::text = $2)
+		  AND ($3 = '' OR o.market_id::text = $3)
+	`
+
+	var total int64
+	countQuery := "SELECT count(*) " + filter
+	if err := h.DB.QueryRowContext(r.Context(), countQuery, search, categoryID, marketID).Scan(&total); err != nil {
+		writeError(w, http.StatusInternalServerError, "catalogue_query_failed", "The catalogue could not be loaded.")
+		return
+	}
+
+	offset := (page - 1) * pageSize
+	const listSelect = `
+		SELECT
+			o.id::text,
+			o.public_code,
+			o.market_id::text,
+			m.name,
+			COALESCE(o.public_category_id::text, ''),
+			COALESCE(pc.name, ''),
+			o.classification_id::text,
+			o.title,
+			COALESCE(o.summary, ''),
+			o.offer_type,
+			COALESCE(o.price_amount::text, ''),
+			COALESCE(o.currency_code, ''),
+			COALESCE(o.quantity_total::text, ''),
+			COALESCE(o.quantity_unit, ''),
+			o.attributes,
+			o.published_at,
+			o.valid_until
+	`
+	rows, err := h.DB.QueryContext(
+		r.Context(),
+		listSelect+filter+`
+			ORDER BY o.published_at DESC, o.id DESC
+			LIMIT $4 OFFSET $5
+		`,
+		search, categoryID, marketID, pageSize, offset,
+	)
+	if err != nil {
+		writeError(w, http.StatusInternalServerError, "catalogue_query_failed", "The catalogue could not be loaded.")
+		return
+	}
+	defer rows.Close()
+
+	data := make([]OfferSummary, 0, pageSize)
+	for rows.Next() {
+		var item OfferSummary
+		var categoryIDValue string
+		var categoryName string
+		var validUntil sql.NullTime
+		var attributes []byte
+
+		if err := rows.Scan(
+			&item.ID,
+			&item.Code,
+			&item.MarketID,
+			&item.MarketName,
+			&categoryIDValue,
+			&categoryName,
+			&item.ClassificationID,
+			&item.Title,
+			&item.Summary,
+			&item.OfferType,
+			&item.PriceAmount,
+			&item.CurrencyCode,
+			&item.QuantityTotal,
+			&item.QuantityUnit,
+			&attributes,
+			&item.PublishedAt,
+			&validUntil,
+		); err != nil {
+			writeError(w, http.StatusInternalServerError, "catalogue_scan_failed", "A catalogue record could not be read.")
+			return
+		}
+
+		item.PublicCategoryID = categoryIDValue
+		item.PublicCategoryName = categoryName
+		if validUntil.Valid {
+			value := validUntil.Time
+			item.ValidUntil = &value
+		}
+		if len(attributes) == 0 {
+			item.Attributes = json.RawMessage(`{}`)
+		} else if json.Valid(attributes) {
+			item.Attributes = json.RawMessage(append([]byte(nil), attributes...))
+		} else {
+			writeError(w, http.StatusInternalServerError, "invalid_catalogue_data", "A catalogue record contains invalid attributes.")
+			return
+		}
+		data = append(data, item)
+	}
+	if err := rows.Err(); err != nil {
+		writeError(w, http.StatusInternalServerError, "catalogue_read_failed", "The catalogue could not be read completely.")
+		return
+	}
+
+	totalPages := int64(0)
+	if total > 0 {
+		totalPages = (total + int64(pageSize) - 1) / int64(pageSize)
+	}
+
+	writeJSON(w, http.StatusOK, ListResponse{
+		Data:       data,
+		Page:       page,
+		PageSize:   pageSize,
+		Total:      total,
+		TotalPages: totalPages,
+	})
+}
+
+func (h Handler) GetOffer(w http.ResponseWriter, r *http.Request) {
+	if h.DB == nil {
+		writeError(w, http.StatusServiceUnavailable, "database_unavailable", "Catalogue storage is unavailable.")
+		return
+	}
+
+	id := strings.TrimSpace(r.PathValue("id"))
+	if id == "" || len(id) > 64 {
+		writeError(w, http.StatusBadRequest, "invalid_offer_id", "A valid offer ID is required.")
+		return
+	}
+
+	const query = `
+		SELECT
+			o.id::text,
+			o.public_code,
+			o.market_id::text,
+			m.name,
+			COALESCE(o.public_category_id::text, ''),
+			COALESCE(pc.name, ''),
+			o.classification_id::text,
+			o.title,
+			COALESCE(o.summary, ''),
+			o.offer_type,
+			COALESCE(o.price_amount::text, ''),
+			COALESCE(o.currency_code, ''),
+			COALESCE(o.quantity_total::text, ''),
+			COALESCE(o.quantity_unit, ''),
+			o.attributes,
+			o.published_at,
+			o.valid_until
+		FROM offers o
+		INNER JOIN markets m ON m.id = o.market_id
+		LEFT JOIN public_categories pc ON pc.id = o.public_category_id
+		WHERE o.id::text = $1
+		  AND o.status = 'published'
+		  AND m.status = 'active'
+		  AND (o.valid_from IS NULL OR o.valid_from <= now())
+		  AND (o.valid_until IS NULL OR o.valid_until > now())
+	`
+
+	var item OfferSummary
+	var categoryIDValue string
+	var categoryName string
+	var validUntil sql.NullTime
+	var attributes []byte
+
+	err := h.DB.QueryRowContext(r.Context(), query, id).Scan(
+		&item.ID,
+		&item.Code,
+		&item.MarketID,
+		&item.MarketName,
+		&categoryIDValue,
+		&categoryName,
+		&item.ClassificationID,
+		&item.Title,
+		&item.Summary,
+		&item.OfferType,
+		&item.PriceAmount,
+		&item.CurrencyCode,
+		&item.QuantityTotal,
+		&item.QuantityUnit,
+		&attributes,
+		&item.PublishedAt,
+		&validUntil,
+	)
+
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			writeError(w, http.StatusNotFound, "offer_not_found", "The published offer was not found.")
+			return
+		}
+		writeError(w, http.StatusInternalServerError, "catalogue_query_failed", "The offer could not be loaded.")
+		return
+	}
+
+	item.PublicCategoryID = categoryIDValue
+	item.PublicCategoryName = categoryName
+	if validUntil.Valid {
+		value := validUntil.Time
+		item.ValidUntil = &value
+	}
+	if len(attributes) == 0 {
+		item.Attributes = json.RawMessage(`{}`)
+	} else if json.Valid(attributes) {
+		item.Attributes = json.RawMessage(append([]byte(nil), attributes...))
+	} else {
+		writeError(w, http.StatusInternalServerError, "invalid_catalogue_data", "The offer contains invalid attributes.")
+		return
+	}
+
+	writeJSON(w, http.StatusOK, item)
+}
+
+func parsePositiveInt(raw string, fallback, maximum int) (int, error) {
+	if raw == "" {
+		return fallback, nil
+	}
+	value, err := strconv.Atoi(raw)
+	if err != nil || value < 1 || value > maximum {
+		return 0, errors.New("out of range")
+	}
+	return value, nil
+}
+
+func writeError(w http.ResponseWriter, status int, code, message string) {
+	writeJSON(w, status, APIError{Code: code, Message: message})
+}
+
+func writeJSON(w http.ResponseWriter, status int, value any) {
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.Header().Set("X-Content-Type-Options", "nosniff")
+	w.WriteHeader(status)
+	_ = json.NewEncoder(w).Encode(value)
+}
+
+
+================================================================================
+FILE: internal\catalogue\handler_test.go
+================================================================================
+package catalogue
+
+import (
+	"net/http"
+	"net/http/httptest"
+	"testing"
+)
+
+func TestListOffersRejectsInvalidPage(t *testing.T) {
+	handler := Handler{}
+	mux := http.NewServeMux()
+	handler.Register(mux)
+
+	request := httptest.NewRequest(http.MethodGet, "/api/v1/catalogue/offers?page=0", nil)
+	response := httptest.NewRecorder()
+	mux.ServeHTTP(response, request)
+
+	if response.Code != http.StatusBadRequest {
+		t.Fatalf("expected status %d, got %d", http.StatusBadRequest, response.Code)
+	}
+}
+
+func TestListOffersRejectsOversizedPageSize(t *testing.T) {
+	handler := Handler{}
+	mux := http.NewServeMux()
+	handler.Register(mux)
+
+	request := httptest.NewRequest(http.MethodGet, "/api/v1/catalogue/offers?page_size=101", nil)
+	response := httptest.NewRecorder()
+	mux.ServeHTTP(response, request)
+
+	if response.Code != http.StatusBadRequest {
+		t.Fatalf("expected status %d, got %d", http.StatusBadRequest, response.Code)
+	}
+}
+
+func TestListOffersRejectsLongSearch(t *testing.T) {
+	handler := Handler{}
+	mux := http.NewServeMux()
+	handler.Register(mux)
+
+	longSearch := make([]byte, 121)
+	for i := range longSearch {
+		longSearch[i] = 'a'
+	}
+
+	request := httptest.NewRequest(
+		http.MethodGet,
+		"/api/v1/catalogue/offers?q="+string(longSearch),
+		nil,
+	)
+	response := httptest.NewRecorder()
+	mux.ServeHTTP(response, request)
+
+	if response.Code != http.StatusBadRequest {
+		t.Fatalf("expected status %d, got %d", http.StatusBadRequest, response.Code)
+	}
+}
+
+func TestListOffersReportsUnavailableDatabase(t *testing.T) {
+	handler := Handler{}
+	mux := http.NewServeMux()
+	handler.Register(mux)
+
+	request := httptest.NewRequest(http.MethodGet, "/api/v1/catalogue/offers", nil)
+	response := httptest.NewRecorder()
+	mux.ServeHTTP(response, request)
+
+	if response.Code != http.StatusServiceUnavailable {
+		t.Fatalf("expected status %d, got %d", http.StatusServiceUnavailable, response.Code)
+	}
+}
+
+
+================================================================================
+FILE: internal\database\database.go
+================================================================================
+package database
+
+import (
+	"context"
+	"database/sql"
+	"fmt"
+	"time"
+
+	_ "github.com/jackc/pgx/v5/stdlib"
+)
+
+type Config struct {
+	URL             string
+	MaxOpenConns    int
+	MaxIdleConns    int
+	ConnMaxLifetime time.Duration
+}
+
+func Open(ctx context.Context, cfg Config) (*sql.DB, error) {
+	if cfg.URL == "" {
+		return nil, nil
+	}
+
+	db, err := sql.Open("pgx", cfg.URL)
+	if err != nil {
+		return nil, fmt.Errorf("open database: %w", err)
+	}
+
+	db.SetMaxOpenConns(cfg.MaxOpenConns)
+	db.SetMaxIdleConns(cfg.MaxIdleConns)
+	db.SetConnMaxLifetime(cfg.ConnMaxLifetime)
+
+	pingCtx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
+	if err := db.PingContext(pingCtx); err != nil {
+		_ = db.Close()
+		return nil, fmt.Errorf("connect to database: %w", err)
+	}
+
+	if err := Migrate(ctx, db); err != nil {
+		_ = db.Close()
+		return nil, fmt.Errorf("run migrations: %w", err)
+	}
+
+	return db, nil
+}
+
+
+================================================================================
+FILE: internal\database\migrate.go
+================================================================================
+package database
+
+import (
+	"context"
+	"database/sql"
+	"fmt"
+	"io/fs"
+	"sort"
+	"strings"
+
+	"github.com/igd-tesa/real-asset-management-platform/general-market-backend/migrations"
+)
+
+func Migrate(ctx context.Context, db *sql.DB) error {
+	if db == nil {
+		return fmt.Errorf("database is not configured")
+	}
+
+	_, err := db.ExecContext(ctx, `
+		CREATE TABLE IF NOT EXISTS schema_migrations (
+			version TEXT PRIMARY KEY,
+			applied_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+		)
+	`)
+	if err != nil {
+		return fmt.Errorf("initialize migration tracking: %w", err)
+	}
+
+	files, err := fs.Glob(migrations.Files, "*.sql")
+	if err != nil {
+		return fmt.Errorf("list migration files: %w", err)
+	}
+
+	sort.Strings(files)
+
+	for _, file := range files {
+		version := strings.TrimSuffix(file, ".sql")
+
+		var exists bool
+		err := db.QueryRowContext(
+			ctx,
+			`SELECT EXISTS (
+				SELECT 1 FROM schema_migrations WHERE version = $1
+			)`,
+			version,
+		).Scan(&exists)
+		if err != nil {
+			return fmt.Errorf("check migration %s: %w", version, err)
+		}
+
+		if exists {
+			continue
+		}
+
+		content, err := migrations.Files.ReadFile(file)
+		if err != nil {
+			return fmt.Errorf("read migration %s: %w", version, err)
+		}
+
+		tx, err := db.BeginTx(ctx, nil)
+		if err != nil {
+			return fmt.Errorf("begin migration %s: %w", version, err)
+		}
+
+		if _, err = tx.ExecContext(ctx, string(content)); err == nil {
+			_, err = tx.ExecContext(
+				ctx,
+				`INSERT INTO schema_migrations (version) VALUES ($1)`,
+				version,
+			)
+		}
+
+		if err != nil {
+			_ = tx.Rollback()
+			return fmt.Errorf("apply migration %s: %w", version, err)
+		}
+
+		if err := tx.Commit(); err != nil {
+			return fmt.Errorf("commit migration %s: %w", version, err)
+		}
+	}
+
+	return nil
+}
+
+
+================================================================================
+FILE: internal\health\health.go
+================================================================================
+package health
+
+import (
+	"context"
+	"database/sql"
+	"encoding/json"
+	"net/http"
+	"time"
+)
+
+type Handler struct {
+	DB *sql.DB
+}
+
+func (h Handler) Liveness(w http.ResponseWriter, r *http.Request) {
+	writeJSON(w, http.StatusOK, map[string]string{
+		"status": "ok",
+	})
+}
+
+func (h Handler) Readiness(w http.ResponseWriter, r *http.Request) {
+	if h.DB == nil {
+		writeJSON(w, http.StatusServiceUnavailable, map[string]string{
+			"status": "not_ready",
+			"reason": "database_not_configured",
+		})
+		return
+	}
+
+	ctx, cancel := context.WithTimeout(r.Context(), 2*time.Second)
+	defer cancel()
+
+	if err := h.DB.PingContext(ctx); err != nil {
+		writeJSON(w, http.StatusServiceUnavailable, map[string]string{
+			"status": "not_ready",
+			"reason": "database_unavailable",
+		})
+		return
+	}
+
+	writeJSON(w, http.StatusOK, map[string]string{
+		"status": "ready",
+	})
+}
+
+func writeJSON(w http.ResponseWriter, status int, value any) {
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(status)
+	_ = json.NewEncoder(w).Encode(value)
+}
+
+
+================================================================================
+FILE: internal\health\health_test.go
+================================================================================
+package health
+
+import (
+	"net/http"
+	"net/http/httptest"
+	"testing"
+)
+
+func TestLiveness(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/healthz", nil)
+	rec := httptest.NewRecorder()
+
+	Handler{}.Liveness(rec, req)
+
+	if rec.Code != http.StatusOK {
+		t.Fatalf("expected %d, got %d", http.StatusOK, rec.Code)
+	}
+}
+
+func TestReadinessWithoutDatabase(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/readyz", nil)
+	rec := httptest.NewRecorder()
+
+	Handler{}.Readiness(rec, req)
+
+	if rec.Code != http.StatusServiceUnavailable {
+		t.Fatalf("expected %d, got %d", http.StatusServiceUnavailable, rec.Code)
+	}
+}
+
+
+================================================================================
+FILE: internal\httpapi\router.go
+================================================================================
+package httpapi
+
+import (
+	"context"
+	"database/sql"
+	"encoding/json"
+	"net/http"
+	"time"
+
+	"github.com/igd-tesa/real-asset-management-platform/general-market-backend/internal/catalogue"
+)
+
+func New(db *sql.DB) http.Handler {
+	mux := http.NewServeMux()
+
+	mux.HandleFunc("GET /health/live", func(w http.ResponseWriter, r *http.Request) {
+		writeHealthJSON(w, http.StatusOK, map[string]string{
+			"status": "alive",
+		})
+	})
+
+	mux.HandleFunc("GET /health/ready", func(w http.ResponseWriter, r *http.Request) {
+		if db == nil {
+			writeHealthJSON(w, http.StatusServiceUnavailable, map[string]string{
+				"status": "not_ready",
+				"reason": "database_unavailable",
+			})
+			return
+		}
+
+		ctx, cancel := timeouts(r)
+		defer cancel()
+
+		if err := db.PingContext(ctx); err != nil {
+			writeHealthJSON(w, http.StatusServiceUnavailable, map[string]string{
+				"status": "not_ready",
+				"reason": "database_unavailable",
+			})
+			return
+		}
+
+		writeHealthJSON(w, http.StatusOK, map[string]string{
+			"status": "ready",
+		})
+	})
+
+	catalogue.Handler{DB: db}.Register(mux)
+
+	return securityHeaders(mux)
+}
+
+func timeouts(r *http.Request) (context.Context, context.CancelFunc) {
+	return context.WithTimeout(r.Context(), 2*time.Second)
+}
+
+func writeHealthJSON(w http.ResponseWriter, status int, body any) {
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.Header().Set("X-Content-Type-Options", "nosniff")
+	w.WriteHeader(status)
+	_ = json.NewEncoder(w).Encode(body)
+}
+
+func securityHeaders(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("X-Content-Type-Options", "nosniff")
+		w.Header().Set("X-Frame-Options", "DENY")
+		w.Header().Set("Referrer-Policy", "no-referrer")
+		w.Header().Set("Cache-Control", "no-store")
+		next.ServeHTTP(w, r)
+	})
+}
+
+
+================================================================================
+FILE: cmd\server\main.go
+================================================================================
+package main
+
+import (
+	"context"
+	"errors"
+	"log/slog"
+	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
+
+	"github.com/igd-tesa/real-asset-management-platform/general-market-backend/config"
+	"github.com/igd-tesa/real-asset-management-platform/general-market-backend/internal/database"
+	"github.com/igd-tesa/real-asset-management-platform/general-market-backend/internal/httpapi"
+)
+
+func main() {
+	logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
+	slog.SetDefault(logger)
+
+	cfg, err := config.Load()
+	if err != nil {
+		logger.Error("invalid configuration", "error", err)
+		os.Exit(1)
+	}
+
+	startupCtx, startupCancel := context.WithTimeout(
+		context.Background(), 10*time.Second,
+	)
+
+	db, err := database.Open(startupCtx, database.Config{
+		URL:             cfg.DatabaseURL,
+		MaxOpenConns:    cfg.DBMaxOpenConns,
+		MaxIdleConns:    cfg.DBMaxIdleConns,
+		ConnMaxLifetime: cfg.DBConnMaxLifetime,
+	})
+	startupCancel()
+
+	if err != nil {
+		logger.Error("database initialization failed", "error", err)
+		os.Exit(1)
+	}
+
+	if db != nil {
+		defer db.Close()
+	}
+
+	server := &http.Server{
+		Addr:              cfg.HTTPAddr,
+		Handler:           httpapi.New(db),
+		ReadHeaderTimeout: 5 * time.Second,
+		IdleTimeout:       60 * time.Second,
+	}
+
+	serverErrors := make(chan error, 1)
+
+	go func() {
+		logger.Info("HTTP server starting", "address", cfg.HTTPAddr)
+		serverErrors <- server.ListenAndServe()
+	}()
+
+	signalCtx, stop := signal.NotifyContext(
+		context.Background(), os.Interrupt, syscall.SIGTERM,
+	)
+	defer stop()
+
+	select {
+	case err := <-serverErrors:
+		if !errors.Is(err, http.ErrServerClosed) {
+			logger.Error("HTTP server stopped unexpectedly", "error", err)
+			os.Exit(1)
+		}
+
+	case <-signalCtx.Done():
+		shutdownCtx, cancel := context.WithTimeout(
+			context.Background(), 10*time.Second,
+		)
+		defer cancel()
+
+		if err := server.Shutdown(shutdownCtx); err != nil {
+			logger.Error("graceful shutdown failed", "error", err)
+			_ = server.Close()
+		}
+	}
+}
+
+
+================================================================================
+FILE: config\config.go
+================================================================================
+package config
+
+import (
+	"fmt"
+	"os"
+	"strconv"
+	"time"
+)
+
+type Config struct {
+	HTTPAddr          string
+	DatabaseURL       string
+	DBMaxOpenConns    int
+	DBMaxIdleConns    int
+	DBConnMaxLifetime time.Duration
+}
+
+func Load() (Config, error) {
+	cfg := Config{
+		HTTPAddr:          env("HTTP_ADDR", ":8080"),
+		DatabaseURL:       os.Getenv("DATABASE_URL"),
+		DBMaxOpenConns:    10,
+		DBMaxIdleConns:    5,
+		DBConnMaxLifetime: 5 * time.Minute,
+	}
+
+	var err error
+
+	cfg.DBMaxOpenConns, err = intEnv("DB_MAX_OPEN_CONNS", 10)
+	if err != nil {
+		return Config{}, err
+	}
+
+	cfg.DBMaxIdleConns, err = intEnv("DB_MAX_IDLE_CONNS", 5)
+	if err != nil {
+		return Config{}, err
+	}
+
+	if cfg.DBMaxOpenConns < 1 ||
+		cfg.DBMaxIdleConns < 0 ||
+		cfg.DBMaxIdleConns > cfg.DBMaxOpenConns {
+		return Config{}, fmt.Errorf("invalid database connection pool settings")
+	}
+
+	if value := os.Getenv("DB_CONN_MAX_LIFETIME"); value != "" {
+		cfg.DBConnMaxLifetime, err = time.ParseDuration(value)
+		if err != nil || cfg.DBConnMaxLifetime <= 0 {
+			return Config{}, fmt.Errorf("invalid DB_CONN_MAX_LIFETIME")
+		}
+	}
+
+	return cfg, nil
+}
+
+func env(key, fallback string) string {
+	if value := os.Getenv(key); value != "" {
+		return value
+	}
+	return fallback
+}
+
+func intEnv(key string, fallback int) (int, error) {
+	value := os.Getenv(key)
+	if value == "" {
+		return fallback, nil
+	}
+
+	n, err := strconv.Atoi(value)
+	if err != nil {
+		return 0, fmt.Errorf("invalid %s: %w", key, err)
+	}
+
+	return n, nil
+}
+
+
+================================================================================
+ALL SQL FILES IN MIGRATIONS DIRECTORY
+================================================================================
+migrations\000001_initial.sql | 98 bytes
+migrations\000002_market_domain_foundation.sql | 24339 bytes
