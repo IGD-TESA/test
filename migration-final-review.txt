@@ -1,0 +1,1253 @@
+﻿GENERAL MARKET - MIGRATION FINAL REVIEW
+Generated: 2026-11-04 07:26:46
+Root: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\general-market-backend
+READ ONLY - NO DATABASE CHANGES
+
+GIT ROOT
+E:/╪┤╪▒┌⌐╪¬ ╪¬┘ê╪│╪╣┘ç ╪│╪¿╪▓ ╪º█î╪▒╪º┘å/┘╛┘ä╪¬┘ü╪▒┘à/┘╛┘ä╪¬┘ü╪▒┘à ╪ó█î ╪¼█î ╪»█î/Real-Asset-Management-Platform
+
+GIT STATUS
+ M ../account-backend/docker-compose.yml
+ M .gitignore
+ M internal/database/database.go
+ M internal/database/migrate.go
+?? ../account-backend/docker-compose.yml.backup-20261103-102238
+?? .backups/migration-hardening-20261104-072348/
+?? cmd/migrate/
+?? docker-compose.yml
+?? docker/
+?? migration-hardening-review.txt
+?? migrations/000003_integrity_hardening.sql
+?? scripts/Apply-MigrationHardening.ps1
+?? "../\333\214\330\250\333\214\330\250"
+
+
+GIT DIFF
+
+==========================================================================================
+FILE: migrations\000001_initial.sql
+==========================================================================================
+-- Initial infrastructure migration.
+-- No business tables are created at this stage.
+SELECT 1;
+
+
+==========================================================================================
+FILE: migrations\000002_market_domain_foundation.sql
+==========================================================================================
+-- General Market Backend
+-- Migration: 000002_market_domain_foundation.sql
+-- Additive, versioned and non-destructive.
+--
+-- Ownership boundaries:
+-- * No account credentials or authoritative role database.
+-- * No free-balance ledger or authoritative reservation ledger.
+-- * No official property ownership register.
+-- * No legal contract body owned by Contracts service.
+-- * No service-delivery records owned by Services.
+-- * No final settlement ledger owned by Settlement.
+--
+-- External identifiers are stored as references, not copied records.
+
+CREATE TABLE IF NOT EXISTS markets (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    code VARCHAR(80) NOT NULL UNIQUE,
+    name VARCHAR(200) NOT NULL,
+    description TEXT,
+    status VARCHAR(24) NOT NULL DEFAULT 'draft',
+    allowed_trade_methods JSONB NOT NULL DEFAULT '[]'::jsonb,
+    display_rules JSONB NOT NULL DEFAULT '{}'::jsonb,
+    created_by_user_id VARCHAR(160),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    CHECK (status IN ('draft', 'active', 'paused', 'closed'))
+);
+
+CREATE TABLE IF NOT EXISTS public_categories (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    parent_id UUID REFERENCES public_categories(id) ON DELETE RESTRICT,
+    code VARCHAR(100) NOT NULL UNIQUE,
+    name VARCHAR(200) NOT NULL,
+    description TEXT,
+    sort_order INTEGER NOT NULL DEFAULT 0,
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS specialized_classifications (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    code VARCHAR(120) NOT NULL UNIQUE,
+    name VARCHAR(240) NOT NULL,
+    description TEXT,
+    domain_code VARCHAR(100) NOT NULL,
+    version INTEGER NOT NULL DEFAULT 1,
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    CHECK (version > 0)
+);
+
+CREATE TABLE IF NOT EXISTS category_mappings (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    public_category_id UUID NOT NULL REFERENCES public_categories(id) ON DELETE RESTRICT,
+    specialized_classification_id UUID NOT NULL REFERENCES specialized_classifications(id) ON DELETE RESTRICT,
+    market_id UUID REFERENCES markets(id) ON DELETE RESTRICT,
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    valid_from TIMESTAMPTZ,
+    valid_until TIMESTAMPTZ,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    UNIQUE (public_category_id, specialized_classification_id, market_id),
+    CHECK (valid_until IS NULL OR valid_from IS NULL OR valid_until > valid_from)
+);
+
+CREATE TABLE IF NOT EXISTS parameter_definitions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    classification_id UUID NOT NULL REFERENCES specialized_classifications(id) ON DELETE RESTRICT,
+    code VARCHAR(120) NOT NULL,
+    name VARCHAR(240) NOT NULL,
+    data_type VARCHAR(24) NOT NULL,
+    unit_code VARCHAR(60),
+    is_required BOOLEAN NOT NULL DEFAULT FALSE,
+    validation_schema JSONB NOT NULL DEFAULT '{}'::jsonb,
+    sort_order INTEGER NOT NULL DEFAULT 0,
+    version INTEGER NOT NULL DEFAULT 1,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    UNIQUE (classification_id, code, version),
+    CHECK (data_type IN ('string', 'integer', 'decimal', 'boolean', 'date', 'datetime', 'enum', 'object', 'array')),
+    CHECK (version > 0)
+);
+
+CREATE TABLE IF NOT EXISTS offer_configurations (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    classification_id UUID NOT NULL REFERENCES specialized_classifications(id) ON DELETE RESTRICT,
+    code VARCHAR(120) NOT NULL UNIQUE,
+    name VARCHAR(240) NOT NULL,
+    status VARCHAR(24) NOT NULL DEFAULT 'draft',
+    current_version INTEGER,
+    created_by_user_id VARCHAR(160),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    CHECK (status IN ('draft', 'active', 'retired'))
+);
+
+CREATE TABLE IF NOT EXISTS offer_config_versions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    configuration_id UUID NOT NULL REFERENCES offer_configurations(id) ON DELETE RESTRICT,
+    version INTEGER NOT NULL,
+    status VARCHAR(24) NOT NULL DEFAULT 'draft',
+    rules_schema JSONB NOT NULL DEFAULT '{}'::jsonb,
+    calculation_schema JSONB NOT NULL DEFAULT '{}'::jsonb,
+    qualification_schema JSONB NOT NULL DEFAULT '{}'::jsonb,
+    document_schema JSONB NOT NULL DEFAULT '{}'::jsonb,
+    created_by_user_id VARCHAR(160),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    published_at TIMESTAMPTZ,
+    UNIQUE (configuration_id, version),
+    CHECK (version > 0),
+    CHECK (status IN ('draft', 'approved', 'published', 'retired'))
+);
+
+CREATE TABLE IF NOT EXISTS offer_config_parameters (
+    configuration_version_id UUID NOT NULL REFERENCES offer_config_versions(id) ON DELETE RESTRICT,
+    parameter_definition_id UUID NOT NULL REFERENCES parameter_definitions(id) ON DELETE RESTRICT,
+    is_required BOOLEAN NOT NULL DEFAULT FALSE,
+    overrides JSONB NOT NULL DEFAULT '{}'::jsonb,
+    PRIMARY KEY (configuration_version_id, parameter_definition_id)
+);
+
+CREATE TABLE IF NOT EXISTS offer_rules (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    configuration_version_id UUID NOT NULL REFERENCES offer_config_versions(id) ON DELETE RESTRICT,
+    code VARCHAR(120) NOT NULL,
+    rule_type VARCHAR(40) NOT NULL,
+    definition JSONB NOT NULL,
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    UNIQUE (configuration_version_id, code)
+);
+
+CREATE TABLE IF NOT EXISTS offer_documents (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    offer_id UUID,
+    configuration_version_id UUID REFERENCES offer_config_versions(id) ON DELETE RESTRICT,
+    document_type VARCHAR(100) NOT NULL,
+    external_document_ref VARCHAR(240),
+    status VARCHAR(24) NOT NULL DEFAULT 'required',
+    metadata JSONB NOT NULL DEFAULT '{}'::jsonb,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    CHECK (status IN ('required', 'submitted', 'verified', 'rejected', 'expired'))
+);
+
+CREATE TABLE IF NOT EXISTS company_qualifications (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    company_ref VARCHAR(160) NOT NULL,
+    classification_id UUID NOT NULL REFERENCES specialized_classifications(id) ON DELETE RESTRICT,
+    status VARCHAR(24) NOT NULL DEFAULT 'pending',
+    external_verification_ref VARCHAR(240),
+    valid_from TIMESTAMPTZ,
+    valid_until TIMESTAMPTZ,
+    metadata JSONB NOT NULL DEFAULT '{}'::jsonb,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    CHECK (status IN ('pending', 'approved', 'rejected', 'suspended', 'expired'))
+);
+
+CREATE TABLE IF NOT EXISTS offers (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    public_code VARCHAR(100) NOT NULL UNIQUE,
+    market_id UUID NOT NULL REFERENCES markets(id) ON DELETE RESTRICT,
+    public_category_id UUID REFERENCES public_categories(id) ON DELETE RESTRICT,
+    classification_id UUID NOT NULL REFERENCES specialized_classifications(id) ON DELETE RESTRICT,
+    configuration_version_id UUID REFERENCES offer_config_versions(id) ON DELETE RESTRICT,
+    owner_ref VARCHAR(160) NOT NULL,
+    title VARCHAR(300) NOT NULL,
+    summary TEXT,
+    offer_type VARCHAR(40) NOT NULL DEFAULT 'sale',
+    status VARCHAR(24) NOT NULL DEFAULT 'draft',
+    price_amount NUMERIC(24,8),
+    currency_code VARCHAR(12),
+    quantity_total NUMERIC(24,8),
+    quantity_unit VARCHAR(60),
+    attributes JSONB NOT NULL DEFAULT '{}'::jsonb,
+    valid_from TIMESTAMPTZ,
+    valid_until TIMESTAMPTZ,
+    submitted_at TIMESTAMPTZ,
+    approved_at TIMESTAMPTZ,
+    published_at TIMESTAMPTZ,
+    closed_at TIMESTAMPTZ,
+    created_by_user_id VARCHAR(160),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    CHECK (status IN ('draft', 'pending_review', 'approved', 'published', 'suspended', 'rejected', 'expired', 'closed')),
+    CHECK (offer_type IN ('sale', 'purchase', 'service', 'physical_commodity', 'real_asset')),
+    CHECK (price_amount IS NULL OR price_amount >= 0),
+    CHECK (quantity_total IS NULL OR quantity_total >= 0),
+    CHECK (valid_until IS NULL OR valid_from IS NULL OR valid_until > valid_from)
+);
+
+ALTER TABLE offer_documents
+    ADD CONSTRAINT fk_offer_documents_offer
+    FOREIGN KEY (offer_id) REFERENCES offers(id) ON DELETE RESTRICT;
+
+CREATE TABLE IF NOT EXISTS offer_versions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    offer_id UUID NOT NULL REFERENCES offers(id) ON DELETE RESTRICT,
+    version INTEGER NOT NULL,
+    snapshot JSONB NOT NULL,
+    changed_by_user_id VARCHAR(160),
+    change_reason TEXT,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    UNIQUE (offer_id, version),
+    CHECK (version > 0)
+);
+
+CREATE TABLE IF NOT EXISTS offer_approvals (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    offer_id UUID NOT NULL REFERENCES offers(id) ON DELETE RESTRICT,
+    configuration_version_id UUID REFERENCES offer_config_versions(id) ON DELETE RESTRICT,
+    reviewer_ref VARCHAR(160),
+    decision VARCHAR(24) NOT NULL,
+    reason TEXT,
+    rule_results JSONB NOT NULL DEFAULT '{}'::jsonb,
+    decided_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    CHECK (decision IN ('approved', 'rejected', 'changes_requested'))
+);
+
+CREATE TABLE IF NOT EXISTS supply_requests (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    request_code VARCHAR(100) NOT NULL UNIQUE,
+    requester_ref VARCHAR(160) NOT NULL,
+    market_id UUID REFERENCES markets(id) ON DELETE RESTRICT,
+    classification_id UUID REFERENCES specialized_classifications(id) ON DELETE RESTRICT,
+    title VARCHAR(300) NOT NULL,
+    description TEXT,
+    quantity NUMERIC(24,8),
+    quantity_unit VARCHAR(60),
+    target_price NUMERIC(24,8),
+    currency_code VARCHAR(12),
+    requirements JSONB NOT NULL DEFAULT '{}'::jsonb,
+    status VARCHAR(24) NOT NULL DEFAULT 'draft',
+    response_deadline TIMESTAMPTZ,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    CHECK (status IN ('draft', 'published', 'receiving_proposals', 'evaluating', 'awarded', 'cancelled', 'expired')),
+    CHECK (quantity IS NULL OR quantity > 0),
+    CHECK (target_price IS NULL OR target_price >= 0)
+);
+
+CREATE TABLE IF NOT EXISTS supply_proposals (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    request_id UUID NOT NULL REFERENCES supply_requests(id) ON DELETE RESTRICT,
+    proposer_ref VARCHAR(160) NOT NULL,
+    price_amount NUMERIC(24,8),
+    currency_code VARCHAR(12),
+    quantity NUMERIC(24,8),
+    delivery_terms JSONB NOT NULL DEFAULT '{}'::jsonb,
+    terms JSONB NOT NULL DEFAULT '{}'::jsonb,
+    status VARCHAR(24) NOT NULL DEFAULT 'submitted',
+    valid_until TIMESTAMPTZ,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    CHECK (status IN ('draft', 'submitted', 'under_review', 'accepted', 'rejected', 'withdrawn', 'expired')),
+    CHECK (price_amount IS NULL OR price_amount >= 0),
+    CHECK (quantity IS NULL OR quantity > 0)
+);
+
+CREATE TABLE IF NOT EXISTS orders (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    order_code VARCHAR(100) NOT NULL UNIQUE,
+    offer_id UUID NOT NULL REFERENCES offers(id) ON DELETE RESTRICT,
+    participant_ref VARCHAR(160) NOT NULL,
+    side VARCHAR(8) NOT NULL,
+    order_type VARCHAR(24) NOT NULL DEFAULT 'limit',
+    status VARCHAR(24) NOT NULL DEFAULT 'pending_checks',
+    price_amount NUMERIC(24,8),
+    currency_code VARCHAR(12),
+    quantity_original NUMERIC(24,8) NOT NULL,
+    quantity_remaining NUMERIC(24,8) NOT NULL,
+    quantity_filled NUMERIC(24,8) NOT NULL DEFAULT 0,
+    external_reservation_ref VARCHAR(240),
+    idempotency_key VARCHAR(160),
+    correlation_id VARCHAR(160),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    cancelled_at TIMESTAMPTZ,
+    CHECK (side IN ('buy', 'sell')),
+    CHECK (order_type IN ('limit', 'market', 'offer_directed')),
+    CHECK (status IN ('pending_checks', 'pending_reservation', 'open', 'partially_filled', 'filled', 'cancelled', 'rejected', 'expired', 'failed')),
+    CHECK (quantity_original > 0),
+    CHECK (quantity_remaining >= 0),
+    CHECK (quantity_filled >= 0),
+    CHECK (quantity_remaining + quantity_filled = quantity_original),
+    CHECK (price_amount IS NULL OR price_amount >= 0),
+    UNIQUE (participant_ref, idempotency_key)
+);
+
+CREATE TABLE IF NOT EXISTS order_matches (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    buy_order_id UUID NOT NULL REFERENCES orders(id) ON DELETE RESTRICT,
+    sell_order_id UUID NOT NULL REFERENCES orders(id) ON DELETE RESTRICT,
+    matched_quantity NUMERIC(24,8) NOT NULL,
+    matched_price NUMERIC(24,8) NOT NULL,
+    currency_code VARCHAR(12),
+    status VARCHAR(24) NOT NULL DEFAULT 'recorded',
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    CHECK (buy_order_id <> sell_order_id),
+    CHECK (matched_quantity > 0),
+    CHECK (matched_price >= 0),
+    CHECK (status IN ('recorded', 'accepted', 'rejected', 'trade_created', 'failed'))
+);
+
+CREATE TABLE IF NOT EXISTS trades (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    trade_code VARCHAR(100) NOT NULL UNIQUE,
+    match_id UUID NOT NULL UNIQUE REFERENCES order_matches(id) ON DELETE RESTRICT,
+    offer_id UUID NOT NULL REFERENCES offers(id) ON DELETE RESTRICT,
+    buy_order_id UUID NOT NULL REFERENCES orders(id) ON DELETE RESTRICT,
+    sell_order_id UUID NOT NULL REFERENCES orders(id) ON DELETE RESTRICT,
+    buyer_ref VARCHAR(160) NOT NULL,
+    seller_ref VARCHAR(160) NOT NULL,
+    quantity NUMERIC(24,8) NOT NULL,
+    price_amount NUMERIC(24,8) NOT NULL,
+    currency_code VARCHAR(12),
+    status VARCHAR(24) NOT NULL DEFAULT 'created',
+    execution_policy_version_id UUID,
+    correlation_id VARCHAR(160),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    CHECK (quantity > 0),
+    CHECK (price_amount >= 0),
+    CHECK (status IN ('created', 'in_execution', 'awaiting_contract', 'awaiting_services', 'awaiting_delivery', 'ready_for_settlement', 'settlement_pending', 'settled', 'cancelled', 'failed'))
+);
+
+CREATE TABLE IF NOT EXISTS execution_policies (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    code VARCHAR(120) NOT NULL UNIQUE,
+    name VARCHAR(240) NOT NULL,
+    market_id UUID REFERENCES markets(id) ON DELETE RESTRICT,
+    offer_type VARCHAR(40),
+    status VARCHAR(24) NOT NULL DEFAULT 'draft',
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    CHECK (status IN ('draft', 'active', 'retired'))
+);
+
+CREATE TABLE IF NOT EXISTS execution_policy_versions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    policy_id UUID NOT NULL REFERENCES execution_policies(id) ON DELETE RESTRICT,
+    version INTEGER NOT NULL,
+    steps JSONB NOT NULL,
+    conditions JSONB NOT NULL DEFAULT '{}'::jsonb,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    published_at TIMESTAMPTZ,
+    UNIQUE (policy_id, version),
+    CHECK (version > 0)
+);
+
+ALTER TABLE trades
+    ADD CONSTRAINT fk_trades_execution_policy_version
+    FOREIGN KEY (execution_policy_version_id)
+    REFERENCES execution_policy_versions(id) ON DELETE RESTRICT;
+
+CREATE TABLE IF NOT EXISTS trade_workflows (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    trade_id UUID NOT NULL REFERENCES trades(id) ON DELETE RESTRICT,
+    policy_version_id UUID NOT NULL REFERENCES execution_policy_versions(id) ON DELETE RESTRICT,
+    current_step_code VARCHAR(120),
+    status VARCHAR(24) NOT NULL DEFAULT 'pending',
+    started_at TIMESTAMPTZ,
+    completed_at TIMESTAMPTZ,
+    last_error_code VARCHAR(100),
+    last_error_at TIMESTAMPTZ,
+    retry_count INTEGER NOT NULL DEFAULT 0,
+    correlation_id VARCHAR(160),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    UNIQUE (trade_id),
+    CHECK (status IN ('pending', 'running', 'waiting_external', 'completed', 'failed', 'cancelled')),
+    CHECK (retry_count >= 0)
+);
+
+CREATE TABLE IF NOT EXISTS trade_state_history (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    trade_id UUID NOT NULL REFERENCES trades(id) ON DELETE RESTRICT,
+    state_domain VARCHAR(40) NOT NULL,
+    previous_state VARCHAR(40),
+    new_state VARCHAR(40) NOT NULL,
+    actor_ref VARCHAR(160),
+    reason TEXT,
+    correlation_id VARCHAR(160),
+    metadata JSONB NOT NULL DEFAULT '{}'::jsonb,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS integration_operations (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    service_code VARCHAR(80) NOT NULL,
+    operation_code VARCHAR(120) NOT NULL,
+    external_ref VARCHAR(240),
+    correlation_id VARCHAR(160) NOT NULL,
+    idempotency_key VARCHAR(160),
+    status VARCHAR(24) NOT NULL DEFAULT 'pending',
+    request_metadata JSONB NOT NULL DEFAULT '{}'::jsonb,
+    response_metadata JSONB NOT NULL DEFAULT '{}'::jsonb,
+    error_code VARCHAR(100),
+    attempt_count INTEGER NOT NULL DEFAULT 0,
+    next_retry_at TIMESTAMPTZ,
+    started_at TIMESTAMPTZ,
+    completed_at TIMESTAMPTZ,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    CHECK (status IN ('pending', 'running', 'succeeded', 'failed', 'retry_wait', 'cancelled')),
+    CHECK (attempt_count >= 0),
+    UNIQUE (service_code, operation_code, idempotency_key)
+);
+
+CREATE TABLE IF NOT EXISTS commodity_aggregation_jobs (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    job_code VARCHAR(120) NOT NULL UNIQUE,
+    commodity_classification_id UUID NOT NULL REFERENCES specialized_classifications(id) ON DELETE RESTRICT,
+    requested_quantity NUMERIC(24,8),
+    quantity_unit VARCHAR(60),
+    status VARCHAR(24) NOT NULL DEFAULT 'draft',
+    criteria JSONB NOT NULL DEFAULT '{}'::jsonb,
+    result_summary JSONB NOT NULL DEFAULT '{}'::jsonb,
+    created_by_user_id VARCHAR(160),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    CHECK (status IN ('draft', 'evaluating', 'proposed', 'accepted', 'cancelled', 'failed')),
+    CHECK (requested_quantity IS NULL OR requested_quantity > 0)
+);
+
+CREATE TABLE IF NOT EXISTS commodity_aggregation_items (
+    aggregation_job_id UUID NOT NULL REFERENCES commodity_aggregation_jobs(id) ON DELETE RESTRICT,
+    offer_id UUID NOT NULL REFERENCES offers(id) ON DELETE RESTRICT,
+    eligible_quantity NUMERIC(24,8) NOT NULL,
+    status VARCHAR(24) NOT NULL DEFAULT 'included',
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    PRIMARY KEY (aggregation_job_id, offer_id),
+    CHECK (eligible_quantity > 0),
+    CHECK (status IN ('included', 'excluded', 'reserved_externally', 'fulfilled'))
+);
+
+CREATE TABLE IF NOT EXISTS real_asset_workflows (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    workflow_code VARCHAR(120) NOT NULL UNIQUE,
+    trade_id UUID REFERENCES trades(id) ON DELETE RESTRICT,
+    offer_id UUID REFERENCES offers(id) ON DELETE RESTRICT,
+    external_asset_ref VARCHAR(240),
+    external_registry_ref VARCHAR(240),
+    status VARCHAR(24) NOT NULL DEFAULT 'pending',
+    platform_position_ref VARCHAR(240),
+    official_ownership_status VARCHAR(40) NOT NULL DEFAULT 'unknown',
+    metadata JSONB NOT NULL DEFAULT '{}'::jsonb,
+    correlation_id VARCHAR(160),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    CHECK (status IN ('pending', 'verification_pending', 'contract_pending', 'transfer_pending', 'completed', 'rejected', 'failed', 'cancelled')),
+    CHECK (official_ownership_status IN ('unknown', 'not_applicable', 'pending', 'confirmed', 'rejected'))
+);
+
+CREATE TABLE IF NOT EXISTS institutional_requests (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    institution_code VARCHAR(100) NOT NULL,
+    request_type VARCHAR(120) NOT NULL,
+    external_request_ref VARCHAR(240),
+    correlation_id VARCHAR(160) NOT NULL,
+    legal_basis_ref VARCHAR(240),
+    access_scope JSONB NOT NULL DEFAULT '{}'::jsonb,
+    status VARCHAR(24) NOT NULL DEFAULT 'pending',
+    response_metadata JSONB NOT NULL DEFAULT '{}'::jsonb,
+    requested_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    completed_at TIMESTAMPTZ,
+    CHECK (status IN ('pending', 'authorized', 'rejected', 'submitted', 'completed', 'failed', 'cancelled'))
+);
+
+CREATE TABLE IF NOT EXISTS audit_events (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    event_code VARCHAR(120) NOT NULL,
+    entity_type VARCHAR(80) NOT NULL,
+    entity_ref VARCHAR(160) NOT NULL,
+    actor_ref VARCHAR(160),
+    outcome VARCHAR(40) NOT NULL,
+    reason_code VARCHAR(100),
+    correlation_id VARCHAR(160),
+    rule_version_ref VARCHAR(160),
+    metadata JSONB NOT NULL DEFAULT '{}'::jsonb,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS idempotency_records (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    scope_code VARCHAR(120) NOT NULL,
+    idempotency_key VARCHAR(160) NOT NULL,
+    request_hash VARCHAR(128) NOT NULL,
+    status VARCHAR(24) NOT NULL DEFAULT 'in_progress',
+    response_status INTEGER,
+    response_body JSONB,
+    correlation_id VARCHAR(160),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    completed_at TIMESTAMPTZ,
+    UNIQUE (scope_code, idempotency_key),
+    CHECK (status IN ('in_progress', 'completed', 'failed'))
+);
+
+-- Indexes for public catalogue, lifecycle queues, matching and traceability.
+CREATE INDEX IF NOT EXISTS idx_offers_public_catalogue
+    ON offers (market_id, public_category_id, published_at DESC, id DESC)
+    WHERE status = 'published';
+
+CREATE INDEX IF NOT EXISTS idx_offers_classification_status
+    ON offers (classification_id, status, created_at DESC);
+
+CREATE INDEX IF NOT EXISTS idx_offers_validity
+    ON offers (valid_until)
+    WHERE status = 'published' AND valid_until IS NOT NULL;
+
+CREATE INDEX IF NOT EXISTS idx_category_mappings_public
+    ON category_mappings (public_category_id, is_active);
+
+CREATE INDEX IF NOT EXISTS idx_supply_requests_status_deadline
+    ON supply_requests (status, response_deadline);
+
+CREATE INDEX IF NOT EXISTS idx_supply_proposals_request_status
+    ON supply_proposals (request_id, status, created_at);
+
+CREATE INDEX IF NOT EXISTS idx_orders_offer_status
+    ON orders (offer_id, status, created_at);
+
+CREATE INDEX IF NOT EXISTS idx_orders_order_book
+    ON orders (offer_id, side, price_amount, created_at)
+    WHERE status IN ('open', 'partially_filled');
+
+CREATE INDEX IF NOT EXISTS idx_matches_buy_order
+    ON order_matches (buy_order_id, created_at);
+
+CREATE INDEX IF NOT EXISTS idx_matches_sell_order
+    ON order_matches (sell_order_id, created_at);
+
+CREATE INDEX IF NOT EXISTS idx_trades_status_created
+    ON trades (status, created_at);
+
+CREATE INDEX IF NOT EXISTS idx_trade_workflows_status
+    ON trade_workflows (status, updated_at);
+
+CREATE INDEX IF NOT EXISTS idx_trade_state_history_trade
+    ON trade_state_history (trade_id, created_at);
+
+CREATE INDEX IF NOT EXISTS idx_integration_operations_retry
+    ON integration_operations (status, next_retry_at)
+    WHERE status IN ('pending', 'retry_wait', 'failed');
+
+CREATE INDEX IF NOT EXISTS idx_real_asset_workflows_status
+    ON real_asset_workflows (status, updated_at);
+
+CREATE INDEX IF NOT EXISTS idx_institutional_requests_correlation
+    ON institutional_requests (correlation_id);
+
+CREATE INDEX IF NOT EXISTS idx_audit_events_entity
+    ON audit_events (entity_type, entity_ref, created_at DESC);
+
+CREATE INDEX IF NOT EXISTS idx_audit_events_correlation
+    ON audit_events (correlation_id)
+    WHERE correlation_id IS NOT NULL;
+
+==========================================================================================
+FILE: migrations\000003_integrity_hardening.sql
+==========================================================================================
+-- General Market migration 000003.
+-- Integrity hardening. Additive and transactional.
+-- This file must never replace or modify an earlier migration.
+
+-- 1. Specialized classification versioning.
+ALTER TABLE specialized_classifications
+    DROP CONSTRAINT IF EXISTS specialized_classifications_code_key;
+
+CREATE UNIQUE INDEX IF NOT EXISTS uq_specialized_classifications_code_version
+    ON specialized_classifications (code, version);
+
+CREATE UNIQUE INDEX IF NOT EXISTS uq_specialized_classifications_one_active_code
+    ON specialized_classifications (code)
+    WHERE is_active = TRUE;
+
+-- 2. Global category mappings.
+-- The original UNIQUE constraint already protects non-NULL market_id rows.
+-- This partial index closes PostgreSQL's NULL uniqueness gap.
+CREATE UNIQUE INDEX IF NOT EXISTS uq_category_mappings_global
+    ON category_mappings (public_category_id, specialized_classification_id)
+    WHERE market_id IS NULL;
+
+-- 3. Store the offer identity on each match.
+ALTER TABLE order_matches
+    ADD COLUMN IF NOT EXISTS offer_id UUID;
+
+UPDATE order_matches AS om
+SET offer_id = buy_order.offer_id
+FROM orders AS buy_order
+WHERE om.buy_order_id = buy_order.id
+  AND om.offer_id IS NULL;
+
+DO $$
+BEGIN
+    IF EXISTS (
+        SELECT 1
+        FROM order_matches AS om
+        JOIN orders AS buy_order ON buy_order.id = om.buy_order_id
+        JOIN orders AS sell_order ON sell_order.id = om.sell_order_id
+        WHERE buy_order.offer_id <> sell_order.offer_id
+           OR om.offer_id IS NULL
+           OR om.offer_id <> buy_order.offer_id
+    ) THEN
+        RAISE EXCEPTION
+            'Migration 000003 stopped: an order match references inconsistent offers';
+    END IF;
+END
+$$;
+
+ALTER TABLE order_matches
+    ALTER COLUMN offer_id SET NOT NULL;
+
+-- 4. Composite unique keys used by referential integrity constraints.
+CREATE UNIQUE INDEX IF NOT EXISTS uq_orders_id_offer_id
+    ON orders (id, offer_id);
+
+CREATE UNIQUE INDEX IF NOT EXISTS uq_order_matches_identity
+    ON order_matches (id, buy_order_id, sell_order_id, offer_id);
+
+-- 5. Each side of a match must belong to the same offer recorded by the match.
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_constraint
+        WHERE conrelid = 'order_matches'::regclass
+          AND conname = 'fk_match_buy_order_offer'
+    ) THEN
+        ALTER TABLE order_matches
+            ADD CONSTRAINT fk_match_buy_order_offer
+            FOREIGN KEY (buy_order_id, offer_id)
+            REFERENCES orders (id, offer_id)
+            ON DELETE RESTRICT;
+    END IF;
+
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_constraint
+        WHERE conrelid = 'order_matches'::regclass
+          AND conname = 'fk_match_sell_order_offer'
+    ) THEN
+        ALTER TABLE order_matches
+            ADD CONSTRAINT fk_match_sell_order_offer
+            FOREIGN KEY (sell_order_id, offer_id)
+            REFERENCES orders (id, offer_id)
+            ON DELETE RESTRICT;
+    END IF;
+END
+$$;
+
+-- 6. A trade must reference the exact match and exact two orders.
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_constraint
+        WHERE conrelid = 'trades'::regclass
+          AND conname = 'fk_trade_match_order_pair'
+    ) THEN
+        ALTER TABLE trades
+            ADD CONSTRAINT fk_trade_match_order_pair
+            FOREIGN KEY (match_id, buy_order_id, sell_order_id, offer_id)
+            REFERENCES order_matches (id, buy_order_id, sell_order_id, offer_id)
+            ON DELETE RESTRICT;
+    END IF;
+
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_constraint
+        WHERE conrelid = 'trades'::regclass
+          AND conname = 'fk_trade_buy_order_offer'
+    ) THEN
+        ALTER TABLE trades
+            ADD CONSTRAINT fk_trade_buy_order_offer
+            FOREIGN KEY (buy_order_id, offer_id)
+            REFERENCES orders (id, offer_id)
+            ON DELETE RESTRICT;
+    END IF;
+
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_constraint
+        WHERE conrelid = 'trades'::regclass
+          AND conname = 'fk_trade_sell_order_offer'
+    ) THEN
+        ALTER TABLE trades
+            ADD CONSTRAINT fk_trade_sell_order_offer
+            FOREIGN KEY (sell_order_id, offer_id)
+            REFERENCES orders (id, offer_id)
+            ON DELETE RESTRICT;
+    END IF;
+END
+$$;
+
+==========================================================================================
+FILE: internal\database\database.go
+==========================================================================================
+package database
+
+import (
+	"context"
+	"database/sql"
+	"fmt"
+	"time"
+
+	_ "github.com/jackc/pgx/v5/stdlib"
+)
+
+type Config struct {
+	URL             string
+	MaxOpenConns    int
+	MaxIdleConns    int
+	ConnMaxLifetime time.Duration
+}
+
+func Open(ctx context.Context, cfg Config) (*sql.DB, error) {
+	if cfg.URL == "" {
+		return nil, nil
+	}
+
+	db, err := sql.Open("pgx", cfg.URL)
+	if err != nil {
+		return nil, fmt.Errorf("open database: %w", err)
+	}
+
+	if cfg.MaxOpenConns > 0 {
+		db.SetMaxOpenConns(cfg.MaxOpenConns)
+	}
+	if cfg.MaxIdleConns >= 0 {
+		db.SetMaxIdleConns(cfg.MaxIdleConns)
+	}
+	if cfg.ConnMaxLifetime > 0 {
+		db.SetConnMaxLifetime(cfg.ConnMaxLifetime)
+	}
+
+	pingCtx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
+	if err := db.PingContext(pingCtx); err != nil {
+		_ = db.Close()
+		return nil, fmt.Errorf("connect to database: %w", err)
+	}
+
+	return db, nil
+}
+
+
+==========================================================================================
+FILE: internal\database\migrate.go
+==========================================================================================
+package database
+
+import (
+	"context"
+	"crypto/sha256"
+	"database/sql"
+	"encoding/hex"
+	"fmt"
+	"io/fs"
+	"sort"
+	"strings"
+	"time"
+
+	"github.com/igd-tesa/real-asset-management-platform/general-market-backend/migrations"
+)
+
+const migrationLockID int64 = 5270645408566230100
+
+func Migrate(ctx context.Context, db *sql.DB) error {
+	if db == nil {
+		return fmt.Errorf("database is not configured")
+	}
+
+	conn, err := db.Conn(ctx)
+	if err != nil {
+		return fmt.Errorf("acquire migration connection: %w", err)
+	}
+	defer conn.Close()
+
+	if _, err := conn.ExecContext(
+		ctx,
+		"SELECT pg_advisory_lock($1)",
+		migrationLockID,
+	); err != nil {
+		return fmt.Errorf("acquire migration advisory lock: %w", err)
+	}
+
+	defer func() {
+		unlockCtx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+		defer cancel()
+		_, _ = conn.ExecContext(
+			unlockCtx,
+			"SELECT pg_advisory_unlock($1)",
+			migrationLockID,
+		)
+	}()
+
+	_, err = conn.ExecContext(ctx, `
+		CREATE TABLE IF NOT EXISTS schema_migrations (
+			version TEXT PRIMARY KEY,
+			checksum TEXT,
+			applied_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+		)
+	`)
+	if err != nil {
+		return fmt.Errorf("initialize migration tracking: %w", err)
+	}
+
+	_, err = conn.ExecContext(ctx, `
+		ALTER TABLE schema_migrations
+		ADD COLUMN IF NOT EXISTS checksum TEXT
+	`)
+	if err != nil {
+		return fmt.Errorf("upgrade migration tracking: %w", err)
+	}
+
+	files, err := fs.Glob(migrations.Files, "*.sql")
+	if err != nil {
+		return fmt.Errorf("list migration files: %w", err)
+	}
+	sort.Strings(files)
+
+	for _, file := range files {
+		if strings.Contains(file, "..") {
+			return fmt.Errorf("invalid migration path: %s", file)
+		}
+
+		content, err := migrations.Files.ReadFile(file)
+		if err != nil {
+			return fmt.Errorf("read migration %s: %w", file, err)
+		}
+
+		version := strings.TrimSuffix(file, ".sql")
+		sum := sha256.Sum256(content)
+		checksum := hex.EncodeToString(sum[:])
+
+		var stored sql.NullString
+		err = conn.QueryRowContext(
+			ctx,
+			`SELECT checksum FROM schema_migrations WHERE version = $1`,
+			version,
+		).Scan(&stored)
+
+		if err == nil {
+			if !stored.Valid || stored.String == "" {
+				// Existing installations created before checksum support:
+				// adopt the currently deployed migration as the baseline.
+				_, err = conn.ExecContext(
+					ctx,
+					`UPDATE schema_migrations
+					 SET checksum = $1
+					 WHERE version = $2 AND checksum IS NULL`,
+					checksum,
+					version,
+				)
+				if err != nil {
+					return fmt.Errorf("adopt legacy checksum for %s: %w", version, err)
+				}
+				continue
+			}
+
+			if stored.String != checksum {
+				return fmt.Errorf(
+					"migration checksum mismatch for %s: applied migration file was modified; restore the original file or create a new migration",
+					version,
+				)
+			}
+			continue
+		}
+
+		if err != sql.ErrNoRows {
+			return fmt.Errorf("check migration %s: %w", version, err)
+		}
+
+		tx, err := conn.BeginTx(ctx, nil)
+		if err != nil {
+			return fmt.Errorf("begin migration %s: %w", version, err)
+		}
+
+		if _, err = tx.ExecContext(ctx, string(content)); err == nil {
+			_, err = tx.ExecContext(
+				ctx,
+				`INSERT INTO schema_migrations (version, checksum)
+				 VALUES ($1, $2)`,
+				version,
+				checksum,
+			)
+		}
+
+		if err != nil {
+			_ = tx.Rollback()
+			return fmt.Errorf("apply migration %s: %w", version, err)
+		}
+
+		if err := tx.Commit(); err != nil {
+			return fmt.Errorf("commit migration %s: %w", version, err)
+		}
+	}
+
+	return nil
+}
+
+
+==========================================================================================
+FILE: cmd\migrate\main.go
+==========================================================================================
+package main
+
+import (
+	"context"
+	"log"
+	"os"
+	"time"
+
+	"github.com/igd-tesa/real-asset-management-platform/general-market-backend/config"
+	"github.com/igd-tesa/real-asset-management-platform/general-market-backend/internal/database"
+)
+
+func main() {
+	cfg, err := config.Load()
+	if err != nil {
+		log.Fatalf("invalid configuration: %v", err)
+	}
+
+	if cfg.DatabaseURL == "" {
+		log.Fatal("DATABASE_URL is required for migration execution")
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Minute)
+	defer cancel()
+
+	db, err := database.Open(ctx, database.Config{
+		URL:             cfg.DatabaseURL,
+		MaxOpenConns:    cfg.DBMaxOpenConns,
+		MaxIdleConns:    cfg.DBMaxIdleConns,
+		ConnMaxLifetime: cfg.DBConnMaxLifetime,
+	})
+	if err != nil {
+		log.Fatalf("database connection failed: %v", err)
+	}
+	defer db.Close()
+
+	if err := database.Migrate(ctx, db); err != nil {
+		log.Fatalf("migration failed: %v", err)
+	}
+
+	log.Print("Database migrations completed successfully.")
+	os.Exit(0)
+}
+
+
+==========================================================================================
+FILE: cmd\server\main.go
+==========================================================================================
+package main
+
+import (
+	"context"
+	"errors"
+	"log/slog"
+	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
+
+	"github.com/igd-tesa/real-asset-management-platform/general-market-backend/config"
+	"github.com/igd-tesa/real-asset-management-platform/general-market-backend/internal/database"
+	"github.com/igd-tesa/real-asset-management-platform/general-market-backend/internal/httpapi"
+)
+
+func main() {
+	logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
+	slog.SetDefault(logger)
+
+	cfg, err := config.Load()
+	if err != nil {
+		logger.Error("invalid configuration", "error", err)
+		os.Exit(1)
+	}
+
+	startupCtx, startupCancel := context.WithTimeout(
+		context.Background(), 10*time.Second,
+	)
+
+	db, err := database.Open(startupCtx, database.Config{
+		URL:             cfg.DatabaseURL,
+		MaxOpenConns:    cfg.DBMaxOpenConns,
+		MaxIdleConns:    cfg.DBMaxIdleConns,
+		ConnMaxLifetime: cfg.DBConnMaxLifetime,
+	})
+	startupCancel()
+
+	if err != nil {
+		logger.Error("database initialization failed", "error", err)
+		os.Exit(1)
+	}
+
+	if db != nil {
+		defer db.Close()
+	}
+
+	server := &http.Server{
+		Addr:              cfg.HTTPAddr,
+		Handler:           httpapi.New(db),
+		ReadHeaderTimeout: 5 * time.Second,
+		IdleTimeout:       60 * time.Second,
+	}
+
+	serverErrors := make(chan error, 1)
+
+	go func() {
+		logger.Info("HTTP server starting", "address", cfg.HTTPAddr)
+		serverErrors <- server.ListenAndServe()
+	}()
+
+	signalCtx, stop := signal.NotifyContext(
+		context.Background(), os.Interrupt, syscall.SIGTERM,
+	)
+	defer stop()
+
+	select {
+	case err := <-serverErrors:
+		if !errors.Is(err, http.ErrServerClosed) {
+			logger.Error("HTTP server stopped unexpectedly", "error", err)
+			os.Exit(1)
+		}
+
+	case <-signalCtx.Done():
+		shutdownCtx, cancel := context.WithTimeout(
+			context.Background(), 10*time.Second,
+		)
+		defer cancel()
+
+		if err := server.Shutdown(shutdownCtx); err != nil {
+			logger.Error("graceful shutdown failed", "error", err)
+			_ = server.Close()
+		}
+	}
+}
+
+
+==========================================================================================
+FILE: config\config.go
+==========================================================================================
+package config
+
+import (
+	"fmt"
+	"os"
+	"strconv"
+	"time"
+)
+
+type Config struct {
+	HTTPAddr          string
+	DatabaseURL       string
+	DBMaxOpenConns    int
+	DBMaxIdleConns    int
+	DBConnMaxLifetime time.Duration
+}
+
+func Load() (Config, error) {
+	cfg := Config{
+		HTTPAddr:          env("HTTP_ADDR", ":8080"),
+		DatabaseURL:       os.Getenv("DATABASE_URL"),
+		DBMaxOpenConns:    10,
+		DBMaxIdleConns:    5,
+		DBConnMaxLifetime: 5 * time.Minute,
+	}
+
+	var err error
+
+	cfg.DBMaxOpenConns, err = intEnv("DB_MAX_OPEN_CONNS", 10)
+	if err != nil {
+		return Config{}, err
+	}
+
+	cfg.DBMaxIdleConns, err = intEnv("DB_MAX_IDLE_CONNS", 5)
+	if err != nil {
+		return Config{}, err
+	}
+
+	if cfg.DBMaxOpenConns < 1 ||
+		cfg.DBMaxIdleConns < 0 ||
+		cfg.DBMaxIdleConns > cfg.DBMaxOpenConns {
+		return Config{}, fmt.Errorf("invalid database connection pool settings")
+	}
+
+	if value := os.Getenv("DB_CONN_MAX_LIFETIME"); value != "" {
+		cfg.DBConnMaxLifetime, err = time.ParseDuration(value)
+		if err != nil || cfg.DBConnMaxLifetime <= 0 {
+			return Config{}, fmt.Errorf("invalid DB_CONN_MAX_LIFETIME")
+		}
+	}
+
+	return cfg, nil
+}
+
+func env(key, fallback string) string {
+	if value := os.Getenv(key); value != "" {
+		return value
+	}
+	return fallback
+}
+
+func intEnv(key string, fallback int) (int, error) {
+	value := os.Getenv(key)
+	if value == "" {
+		return fallback, nil
+	}
+
+	n, err := strconv.Atoi(value)
+	if err != nil {
+		return 0, fmt.Errorf("invalid %s: %w", key, err)
+	}
+
+	return n, nil
+}
+
+
+==========================================================================================
+MIGRATION AND DATABASE REFERENCES
+==========================================================================================
+
+cmd\migrate\main.go:26:	db, err := database.Open(ctx, database.Config{
+cmd\migrate\main.go:37:	if err := database.Migrate(ctx, db); err != nil {
+cmd\server\main.go:32:	db, err := database.Open(startupCtx, database.Config{
+internal\catalogue\handler.go:217:		writeError(w, http.StatusBadRequest, "invalid_offer_id", "A valid offer ID is required.")
+internal\database\migrate.go:19:func Migrate(ctx context.Context, db *sql.DB) error {
+internal\database\migrate.go:32:		"SELECT pg_advisory_lock($1)",
+internal\database\migrate.go:49:		CREATE TABLE IF NOT EXISTS schema_migrations (
+internal\database\migrate.go:60:		ALTER TABLE schema_migrations
+internal\database\migrate.go:90:			`SELECT checksum FROM schema_migrations WHERE version = $1`,
+internal\database\migrate.go:100:					`UPDATE schema_migrations
+internal\database\migrate.go:133:				`INSERT INTO schema_migrations (version, checksum)
+migrations\000002_market_domain_foundation.sql:36:    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+migrations\000002_market_domain_foundation.sql:41:CREATE TABLE IF NOT EXISTS specialized_classifications (
+migrations\000002_market_domain_foundation.sql:48:    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+migrations\000002_market_domain_foundation.sql:57:    specialized_classification_id UUID NOT NULL REFERENCES specialized_classifications(id) ON DELETE 
+RESTRICT,
+migrations\000002_market_domain_foundation.sql:59:    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+migrations\000002_market_domain_foundation.sql:69:    classification_id UUID NOT NULL REFERENCES specialized_classifications(id) ON DELETE RESTRICT,
+migrations\000002_market_domain_foundation.sql:86:    classification_id UUID NOT NULL REFERENCES specialized_classifications(id) ON DELETE RESTRICT,
+migrations\000002_market_domain_foundation.sql:128:    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+migrations\000002_market_domain_foundation.sql:135:    offer_id UUID,
+migrations\000002_market_domain_foundation.sql:148:    classification_id UUID NOT NULL REFERENCES specialized_classifications(id) ON DELETE RESTRICT,
+migrations\000002_market_domain_foundation.sql:164:    classification_id UUID NOT NULL REFERENCES specialized_classifications(id) ON DELETE RESTRICT,
+migrations\000002_market_domain_foundation.sql:194:    FOREIGN KEY (offer_id) REFERENCES offers(id) ON DELETE RESTRICT;
+migrations\000002_market_domain_foundation.sql:198:    offer_id UUID NOT NULL REFERENCES offers(id) ON DELETE RESTRICT,
+migrations\000002_market_domain_foundation.sql:204:    UNIQUE (offer_id, version),
+migrations\000002_market_domain_foundation.sql:210:    offer_id UUID NOT NULL REFERENCES offers(id) ON DELETE RESTRICT,
+migrations\000002_market_domain_foundation.sql:225:    classification_id UUID REFERENCES specialized_classifications(id) ON DELETE RESTRICT,
+migrations\000002_market_domain_foundation.sql:263:    offer_id UUID NOT NULL REFERENCES offers(id) ON DELETE RESTRICT,
+migrations\000002_market_domain_foundation.sql:290:CREATE TABLE IF NOT EXISTS order_matches (
+migrations\000002_market_domain_foundation.sql:305:CREATE TABLE IF NOT EXISTS trades (
+migrations\000002_market_domain_foundation.sql:308:    match_id UUID NOT NULL UNIQUE REFERENCES order_matches(id) ON DELETE RESTRICT,
+migrations\000002_market_domain_foundation.sql:309:    offer_id UUID NOT NULL REFERENCES offers(id) ON DELETE RESTRICT,
+migrations\000002_market_domain_foundation.sql:351:ALTER TABLE trades
+migrations\000002_market_domain_foundation.sql:352:    ADD CONSTRAINT fk_trades_execution_policy_version
+migrations\000002_market_domain_foundation.sql:358:    trade_id UUID NOT NULL REFERENCES trades(id) ON DELETE RESTRICT,
+migrations\000002_market_domain_foundation.sql:377:    trade_id UUID NOT NULL REFERENCES trades(id) ON DELETE RESTRICT,
+migrations\000002_market_domain_foundation.sql:413:    commodity_classification_id UUID NOT NULL REFERENCES specialized_classifications(id) ON DELETE 
+RESTRICT,
+migrations\000002_market_domain_foundation.sql:428:    offer_id UUID NOT NULL REFERENCES offers(id) ON DELETE RESTRICT,
+migrations\000002_market_domain_foundation.sql:432:    PRIMARY KEY (aggregation_job_id, offer_id),
+migrations\000002_market_domain_foundation.sql:440:    trade_id UUID REFERENCES trades(id) ON DELETE RESTRICT,
+migrations\000002_market_domain_foundation.sql:441:    offer_id UUID REFERENCES offers(id) ON DELETE RESTRICT,
+migrations\000002_market_domain_foundation.sql:512:    ON category_mappings (public_category_id, is_active);
+migrations\000002_market_domain_foundation.sql:521:    ON orders (offer_id, status, created_at);
+migrations\000002_market_domain_foundation.sql:524:    ON orders (offer_id, side, price_amount, created_at)
+migrations\000002_market_domain_foundation.sql:528:    ON order_matches (buy_order_id, created_at);
+migrations\000002_market_domain_foundation.sql:531:    ON order_matches (sell_order_id, created_at);
+migrations\000002_market_domain_foundation.sql:533:CREATE INDEX IF NOT EXISTS idx_trades_status_created
+migrations\000002_market_domain_foundation.sql:534:    ON trades (status, created_at);
+migrations\000003_integrity_hardening.sql:6:ALTER TABLE specialized_classifications
+migrations\000003_integrity_hardening.sql:7:    DROP CONSTRAINT IF EXISTS specialized_classifications_code_key;
+migrations\000003_integrity_hardening.sql:9:CREATE UNIQUE INDEX IF NOT EXISTS uq_specialized_classifications_code_version
+migrations\000003_integrity_hardening.sql:10:    ON specialized_classifications (code, version);
+migrations\000003_integrity_hardening.sql:12:CREATE UNIQUE INDEX IF NOT EXISTS uq_specialized_classifications_one_active_code
+migrations\000003_integrity_hardening.sql:13:    ON specialized_classifications (code)
+migrations\000003_integrity_hardening.sql:14:    WHERE is_active = TRUE;
+migrations\000003_integrity_hardening.sql:24:ALTER TABLE order_matches
+migrations\000003_integrity_hardening.sql:25:    ADD COLUMN IF NOT EXISTS offer_id UUID;
+migrations\000003_integrity_hardening.sql:27:UPDATE order_matches AS om
+migrations\000003_integrity_hardening.sql:28:SET offer_id = buy_order.offer_id
+migrations\000003_integrity_hardening.sql:31:  AND om.offer_id IS NULL;
+migrations\000003_integrity_hardening.sql:37:        FROM order_matches AS om
+migrations\000003_integrity_hardening.sql:40:        WHERE buy_order.offer_id <> sell_order.offer_id
+migrations\000003_integrity_hardening.sql:41:           OR om.offer_id IS NULL
+migrations\000003_integrity_hardening.sql:42:           OR om.offer_id <> buy_order.offer_id
+migrations\000003_integrity_hardening.sql:50:ALTER TABLE order_matches
+migrations\000003_integrity_hardening.sql:51:    ALTER COLUMN offer_id SET NOT NULL;
+migrations\000003_integrity_hardening.sql:54:CREATE UNIQUE INDEX IF NOT EXISTS uq_orders_id_offer_id
+migrations\000003_integrity_hardening.sql:55:    ON orders (id, offer_id);
+migrations\000003_integrity_hardening.sql:57:CREATE UNIQUE INDEX IF NOT EXISTS uq_order_matches_identity
+migrations\000003_integrity_hardening.sql:58:    ON order_matches (id, buy_order_id, sell_order_id, offer_id);
+migrations\000003_integrity_hardening.sql:65:        WHERE conrelid = 'order_matches'::regclass
+migrations\000003_integrity_hardening.sql:68:        ALTER TABLE order_matches
+migrations\000003_integrity_hardening.sql:70:            FOREIGN KEY (buy_order_id, offer_id)
+migrations\000003_integrity_hardening.sql:71:            REFERENCES orders (id, offer_id)
+migrations\000003_integrity_hardening.sql:77:        WHERE conrelid = 'order_matches'::regclass
+migrations\000003_integrity_hardening.sql:80:        ALTER TABLE order_matches
+migrations\000003_integrity_hardening.sql:82:            FOREIGN KEY (sell_order_id, offer_id)
+migrations\000003_integrity_hardening.sql:83:            REFERENCES orders (id, offer_id)
+migrations\000003_integrity_hardening.sql:94:        WHERE conrelid = 'trades'::regclass
+migrations\000003_integrity_hardening.sql:97:        ALTER TABLE trades
+migrations\000003_integrity_hardening.sql:99:            FOREIGN KEY (match_id, buy_order_id, sell_order_id, offer_id)
+migrations\000003_integrity_hardening.sql:100:            REFERENCES order_matches (id, buy_order_id, sell_order_id, offer_id)
+migrations\000003_integrity_hardening.sql:106:        WHERE conrelid = 'trades'::regclass
+migrations\000003_integrity_hardening.sql:109:        ALTER TABLE trades
+migrations\000003_integrity_hardening.sql:111:            FOREIGN KEY (buy_order_id, offer_id)
+migrations\000003_integrity_hardening.sql:112:            REFERENCES orders (id, offer_id)
+migrations\000003_integrity_hardening.sql:118:        WHERE conrelid = 'trades'::regclass
+migrations\000003_integrity_hardening.sql:121:        ALTER TABLE trades
+migrations\000003_integrity_hardening.sql:123:            FOREIGN KEY (sell_order_id, offer_id)
+migrations\000003_integrity_hardening.sql:124:            REFERENCES orders (id, offer_id)
+
+
+
