@@ -1,0 +1,1040 @@
+﻿
+==========================================================================================
+PROJECT INFORMATION
+==========================================================================================
+Project root: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\general-market-backend
+Generated at: 2026-11-04 08:13:15
+
+----- go.mod -----
+module github.com/igd-tesa/real-asset-management-platform/general-market-backend
+
+go 1.25.0
+
+require github.com/jackc/pgx/v5 v5.7.6
+
+require (
+	github.com/jackc/pgpassfile v1.0.0 // indirect
+	github.com/jackc/pgservicefile v0.0.0-20240606120523-5a60cdf6a761 // indirect
+	github.com/jackc/puddle/v2 v2.2.2 // indirect
+	golang.org/x/crypto v0.37.0 // indirect
+	golang.org/x/sync v0.13.0 // indirect
+	golang.org/x/text v0.24.0 // indirect
+)
+
+
+==========================================================================================
+SOURCE FILE: internal/market/domain/market.go
+==========================================================================================
+package domain
+
+import (
+	"errors"
+	"fmt"
+	"strings"
+	"time"
+)
+
+var (
+	ErrInvalidMarketID       = errors.New("invalid market id")
+	ErrInvalidMarketCode     = errors.New("invalid market code")
+	ErrInvalidMarketName     = errors.New("invalid market name")
+	ErrInvalidMarketTimezone = errors.New("invalid market timezone")
+	ErrInvalidTimestamp      = errors.New("invalid timestamp")
+	ErrInvalidMarketState    = errors.New("invalid market state")
+	ErrMarketClosed          = errors.New("market is closed")
+)
+
+type MarketID string
+
+type MarketStatus string
+
+const (
+	MarketStatusDraft     MarketStatus = "draft"
+	MarketStatusActive    MarketStatus = "active"
+	MarketStatusSuspended MarketStatus = "suspended"
+	MarketStatusClosed    MarketStatus = "closed"
+)
+
+func (s MarketStatus) IsValid() bool {
+	switch s {
+	case MarketStatusDraft,
+		MarketStatusActive,
+		MarketStatusSuspended,
+		MarketStatusClosed:
+		return true
+	default:
+		return false
+	}
+}
+
+type CreateMarketInput struct {
+	ID          MarketID
+	Code        string
+	Name        string
+	Description string
+	Timezone    string
+}
+
+type Market struct {
+	id          MarketID
+	code        string
+	name        string
+	description string
+	timezone    string
+
+	status    MarketStatus
+	version   uint64
+	createdAt time.Time
+	updatedAt time.Time
+}
+
+func NewMarket(input CreateMarketInput, now time.Time) (*Market, error) {
+	if strings.TrimSpace(string(input.ID)) == "" {
+		return nil, ErrInvalidMarketID
+	}
+
+	code := normalizeMarketCode(input.Code)
+	if !isValidMarketCode(code) {
+		return nil, ErrInvalidMarketCode
+	}
+
+	name := strings.TrimSpace(input.Name)
+	if name == "" || len([]rune(name)) > 160 {
+		return nil, ErrInvalidMarketName
+	}
+
+	if now.IsZero() {
+		return nil, ErrInvalidTimestamp
+	}
+
+	timezone := strings.TrimSpace(input.Timezone)
+	if timezone == "" {
+		timezone = "UTC"
+	}
+
+	if _, err := time.LoadLocation(timezone); err != nil {
+		return nil, fmt.Errorf("%w: %s", ErrInvalidMarketTimezone, timezone)
+	}
+
+	return &Market{
+		id:          input.ID,
+		code:        code,
+		name:        name,
+		description: strings.TrimSpace(input.Description),
+		timezone:    timezone,
+		status:      MarketStatusDraft,
+		version:     1,
+		createdAt:   now.UTC(),
+		updatedAt:   now.UTC(),
+	}, nil
+}
+
+func normalizeMarketCode(value string) string {
+	return strings.ToUpper(strings.TrimSpace(value))
+}
+
+func isValidMarketCode(value string) bool {
+	if len(value) < 2 || len(value) > 32 {
+		return false
+	}
+
+	for _, r := range value {
+		valid := (r >= 'A' && r <= 'Z') ||
+			(r >= '0' && r <= '9') ||
+			r == '-' ||
+			r == '_'
+
+		if !valid {
+			return false
+		}
+	}
+
+	return true
+}
+
+func (m *Market) ID() MarketID {
+	return m.id
+}
+
+func (m *Market) Code() string {
+	return m.code
+}
+
+func (m *Market) Name() string {
+	return m.name
+}
+
+func (m *Market) Description() string {
+	return m.description
+}
+
+func (m *Market) Timezone() string {
+	return m.timezone
+}
+
+func (m *Market) Status() MarketStatus {
+	return m.status
+}
+
+func (m *Market) Version() uint64 {
+	return m.version
+}
+
+func (m *Market) CreatedAt() time.Time {
+	return m.createdAt
+}
+
+func (m *Market) UpdatedAt() time.Time {
+	return m.updatedAt
+}
+
+func (m *Market) UpdateDetails(
+	name string,
+	description string,
+	timezone string,
+	now time.Time,
+) error {
+	if m.status == MarketStatusClosed {
+		return ErrMarketClosed
+	}
+
+	name = strings.TrimSpace(name)
+	if name == "" || len([]rune(name)) > 160 {
+		return ErrInvalidMarketName
+	}
+
+	timezone = strings.TrimSpace(timezone)
+	if timezone == "" {
+		timezone = "UTC"
+	}
+
+	if _, err := time.LoadLocation(timezone); err != nil {
+		return fmt.Errorf("%w: %s", ErrInvalidMarketTimezone, timezone)
+	}
+
+	if err := m.validateTimestamp(now); err != nil {
+		return err
+	}
+
+	m.name = name
+	m.description = strings.TrimSpace(description)
+	m.timezone = timezone
+	m.touch(now)
+
+	return nil
+}
+
+func (m *Market) Activate(now time.Time) error {
+	switch m.status {
+	case MarketStatusDraft, MarketStatusSuspended:
+		if err := m.validateTimestamp(now); err != nil {
+			return err
+		}
+
+		m.status = MarketStatusActive
+		m.touch(now)
+		return nil
+
+	case MarketStatusActive:
+		return ErrInvalidMarketState
+
+	case MarketStatusClosed:
+		return ErrMarketClosed
+
+	default:
+		return ErrInvalidMarketState
+	}
+}
+
+func (m *Market) Suspend(now time.Time) error {
+	if m.status != MarketStatusActive {
+		return ErrInvalidMarketState
+	}
+
+	if err := m.validateTimestamp(now); err != nil {
+		return err
+	}
+
+	m.status = MarketStatusSuspended
+	m.touch(now)
+
+	return nil
+}
+
+func (m *Market) Close(now time.Time) error {
+	if m.status == MarketStatusClosed {
+		return ErrInvalidMarketState
+	}
+
+	if err := m.validateTimestamp(now); err != nil {
+		return err
+	}
+
+	m.status = MarketStatusClosed
+	m.touch(now)
+
+	return nil
+}
+
+func (m *Market) IsOperational() bool {
+	return m.status == MarketStatusActive
+}
+
+func (m *Market) validateTimestamp(now time.Time) error {
+	if now.IsZero() {
+		return ErrInvalidTimestamp
+	}
+
+	if now.Before(m.updatedAt) {
+		return ErrInvalidTimestamp
+	}
+
+	return nil
+}
+
+func (m *Market) touch(now time.Time) {
+	m.updatedAt = now.UTC()
+	m.version++
+}
+
+
+==========================================================================================
+SOURCE FILE: internal/catalogue/domain/category.go
+==========================================================================================
+package domain
+
+import (
+	"errors"
+	"strings"
+	"time"
+)
+
+var (
+	ErrInvalidCategoryID       = errors.New("invalid category id")
+	ErrInvalidCategoryCode     = errors.New("invalid category code")
+	ErrInvalidCategoryName     = errors.New("invalid category name")
+	ErrInvalidCategoryKind     = errors.New("invalid category kind")
+	ErrInvalidCategoryStatus   = errors.New("invalid category status")
+	ErrInvalidParentCategory   = errors.New("invalid parent category")
+	ErrCategoryArchived        = errors.New("category is archived")
+	ErrInvalidCategoryMutation = errors.New("invalid category mutation")
+)
+
+type CategoryID string
+
+type CategoryKind string
+
+type CategoryStatus string
+
+const (
+	CategoryKindGeneral     CategoryKind = "general"
+	CategoryKindSpecialized CategoryKind = "specialized"
+)
+
+const (
+	CategoryStatusDraft    CategoryStatus = "draft"
+	CategoryStatusActive   CategoryStatus = "active"
+	CategoryStatusArchived CategoryStatus = "archived"
+)
+
+func (k CategoryKind) IsValid() bool {
+	return k == CategoryKindGeneral || k == CategoryKindSpecialized
+}
+
+func (s CategoryStatus) IsValid() bool {
+	return s == CategoryStatusDraft ||
+		s == CategoryStatusActive ||
+		s == CategoryStatusArchived
+}
+
+type CreateCategoryInput struct {
+	ID        CategoryID
+	Code      string
+	Name      string
+	Kind      CategoryKind
+	ParentID  CategoryID
+	SortOrder int
+}
+
+type Category struct {
+	id        CategoryID
+	code      string
+	name      string
+	kind      CategoryKind
+	parentID  CategoryID
+	sortOrder int
+
+	status    CategoryStatus
+	version   uint64
+	createdAt time.Time
+	updatedAt time.Time
+}
+
+func NewCategory(input CreateCategoryInput, now time.Time) (*Category, error) {
+	if strings.TrimSpace(string(input.ID)) == "" {
+		return nil, ErrInvalidCategoryID
+	}
+
+	code := normalizeCategoryCode(input.Code)
+	if !isValidCategoryCode(code) {
+		return nil, ErrInvalidCategoryCode
+	}
+
+	name := strings.TrimSpace(input.Name)
+	if name == "" || len([]rune(name)) > 160 {
+		return nil, ErrInvalidCategoryName
+	}
+
+	if !input.Kind.IsValid() {
+		return nil, ErrInvalidCategoryKind
+	}
+
+	if input.ParentID != "" && input.ParentID == input.ID {
+		return nil, ErrInvalidParentCategory
+	}
+
+	if now.IsZero() {
+		return nil, ErrInvalidTimestamp
+	}
+
+	return &Category{
+		id:        input.ID,
+		code:      code,
+		name:      name,
+		kind:      input.Kind,
+		parentID:  input.ParentID,
+		sortOrder: input.SortOrder,
+		status:    CategoryStatusDraft,
+		version:   1,
+		createdAt: now.UTC(),
+		updatedAt: now.UTC(),
+	}, nil
+}
+
+func normalizeCategoryCode(value string) string {
+	return strings.ToUpper(strings.TrimSpace(value))
+}
+
+func isValidCategoryCode(value string) bool {
+	if len(value) < 2 || len(value) > 64 {
+		return false
+	}
+
+	for _, r := range value {
+		valid := (r >= 'A' && r <= 'Z') ||
+			(r >= '0' && r <= '9') ||
+			r == '-' ||
+			r == '_' ||
+			r == '.'
+
+		if !valid {
+			return false
+		}
+	}
+
+	return true
+}
+
+func (c *Category) ID() CategoryID {
+	return c.id
+}
+
+func (c *Category) Code() string {
+	return c.code
+}
+
+func (c *Category) Name() string {
+	return c.name
+}
+
+func (c *Category) Kind() CategoryKind {
+	return c.kind
+}
+
+func (c *Category) ParentID() CategoryID {
+	return c.parentID
+}
+
+func (c *Category) SortOrder() int {
+	return c.sortOrder
+}
+
+func (c *Category) Status() CategoryStatus {
+	return c.status
+}
+
+func (c *Category) Version() uint64 {
+	return c.version
+}
+
+func (c *Category) CreatedAt() time.Time {
+	return c.createdAt
+}
+
+func (c *Category) UpdatedAt() time.Time {
+	return c.updatedAt
+}
+
+func (c *Category) Rename(name string, now time.Time) error {
+	if c.status == CategoryStatusArchived {
+		return ErrCategoryArchived
+	}
+
+	name = strings.TrimSpace(name)
+	if name == "" || len([]rune(name)) > 160 {
+		return ErrInvalidCategoryName
+	}
+
+	if err := c.validateTimestamp(now); err != nil {
+		return err
+	}
+
+	if name == c.name {
+		return nil
+	}
+
+	c.name = name
+	c.touch(now)
+
+	return nil
+}
+
+func (c *Category) ChangeParent(parentID CategoryID, now time.Time) error {
+	if c.status == CategoryStatusArchived {
+		return ErrCategoryArchived
+	}
+
+	if parentID != "" && parentID == c.id {
+		return ErrInvalidParentCategory
+	}
+
+	if err := c.validateTimestamp(now); err != nil {
+		return err
+	}
+
+	if parentID == c.parentID {
+		return nil
+	}
+
+	c.parentID = parentID
+	c.touch(now)
+
+	return nil
+}
+
+func (c *Category) ChangeSortOrder(sortOrder int, now time.Time) error {
+	if c.status == CategoryStatusArchived {
+		return ErrCategoryArchived
+	}
+
+	if err := c.validateTimestamp(now); err != nil {
+		return err
+	}
+
+	if sortOrder == c.sortOrder {
+		return nil
+	}
+
+	c.sortOrder = sortOrder
+	c.touch(now)
+
+	return nil
+}
+
+func (c *Category) Activate(now time.Time) error {
+	switch c.status {
+	case CategoryStatusDraft:
+		if err := c.validateTimestamp(now); err != nil {
+			return err
+		}
+
+		c.status = CategoryStatusActive
+		c.touch(now)
+		return nil
+
+	case CategoryStatusActive:
+		return ErrInvalidCategoryMutation
+
+	case CategoryStatusArchived:
+		return ErrCategoryArchived
+
+	default:
+		return ErrInvalidCategoryStatus
+	}
+}
+
+func (c *Category) Archive(now time.Time) error {
+	if c.status == CategoryStatusArchived {
+		return ErrInvalidCategoryMutation
+	}
+
+	if err := c.validateTimestamp(now); err != nil {
+		return err
+	}
+
+	c.status = CategoryStatusArchived
+	c.touch(now)
+
+	return nil
+}
+
+func (c *Category) IsSelectable() bool {
+	return c.status == CategoryStatusActive
+}
+
+func (c *Category) validateTimestamp(now time.Time) error {
+	if now.IsZero() || now.Before(c.updatedAt) {
+		return ErrInvalidTimestamp
+	}
+
+	return nil
+}
+
+func (c *Category) touch(now time.Time) {
+	c.updatedAt = now.UTC()
+	c.version++
+}
+
+
+==========================================================================================
+SOURCE FILE: internal/catalogue/domain/category_mapping.go
+==========================================================================================
+package domain
+
+import (
+	"errors"
+	"strings"
+	"time"
+)
+
+var (
+	ErrInvalidCategoryMappingID = errors.New("invalid category mapping id")
+	ErrInvalidCategoryMapping   = errors.New("invalid category mapping")
+	ErrCategoryMappingArchived  = errors.New("category mapping is archived")
+	ErrCategoryMappingState     = errors.New("invalid category mapping state")
+	ErrCategoryKindsMismatch    = errors.New("category kinds do not match mapping direction")
+	ErrCategoryNotActive        = errors.New("both categories must be active")
+)
+
+type CategoryMappingID string
+
+type CategoryMappingStatus string
+
+const (
+	CategoryMappingStatusDraft    CategoryMappingStatus = "draft"
+	CategoryMappingStatusActive   CategoryMappingStatus = "active"
+	CategoryMappingStatusArchived CategoryMappingStatus = "archived"
+)
+
+type CreateCategoryMappingInput struct {
+	ID                    CategoryMappingID
+	PublicCategoryID      CategoryID
+	SpecializedCategoryID CategoryID
+	MarketID              string
+	Description           string
+}
+
+type CategoryMapping struct {
+	id                    CategoryMappingID
+	publicCategoryID      CategoryID
+	specializedCategoryID CategoryID
+	marketID              string
+	description           string
+
+	status    CategoryMappingStatus
+	version   uint64
+	createdAt time.Time
+	updatedAt time.Time
+}
+
+func NewCategoryMapping(
+	input CreateCategoryMappingInput,
+	now time.Time,
+) (*CategoryMapping, error) {
+	if strings.TrimSpace(string(input.ID)) == "" {
+		return nil, ErrInvalidCategoryMappingID
+	}
+
+	if strings.TrimSpace(string(input.PublicCategoryID)) == "" ||
+		strings.TrimSpace(string(input.SpecializedCategoryID)) == "" ||
+		input.PublicCategoryID == input.SpecializedCategoryID {
+		return nil, ErrInvalidCategoryMapping
+	}
+
+	if now.IsZero() {
+		return nil, ErrInvalidTimestamp
+	}
+
+	return &CategoryMapping{
+		id:                    input.ID,
+		publicCategoryID:      input.PublicCategoryID,
+		specializedCategoryID: input.SpecializedCategoryID,
+		marketID:              strings.TrimSpace(input.MarketID),
+		description:           strings.TrimSpace(input.Description),
+		status:                CategoryMappingStatusDraft,
+		version:               1,
+		createdAt:             now.UTC(),
+		updatedAt:             now.UTC(),
+	}, nil
+}
+
+func (m *CategoryMapping) ID() CategoryMappingID {
+	return m.id
+}
+
+func (m *CategoryMapping) PublicCategoryID() CategoryID {
+	return m.publicCategoryID
+}
+
+func (m *CategoryMapping) SpecializedCategoryID() CategoryID {
+	return m.specializedCategoryID
+}
+
+func (m *CategoryMapping) MarketID() string {
+	return m.marketID
+}
+
+func (m *CategoryMapping) Description() string {
+	return m.description
+}
+
+func (m *CategoryMapping) Status() CategoryMappingStatus {
+	return m.status
+}
+
+func (m *CategoryMapping) Version() uint64 {
+	return m.version
+}
+
+func (m *CategoryMapping) CreatedAt() time.Time {
+	return m.createdAt
+}
+
+func (m *CategoryMapping) UpdatedAt() time.Time {
+	return m.updatedAt
+}
+
+func (m *CategoryMapping) Activate(
+	publicCategory *Category,
+	specializedCategory *Category,
+	now time.Time,
+) error {
+	if m.status == CategoryMappingStatusArchived {
+		return ErrCategoryMappingArchived
+	}
+
+	if m.status != CategoryMappingStatusDraft {
+		return ErrCategoryMappingState
+	}
+
+	if publicCategory == nil || specializedCategory == nil {
+		return ErrInvalidCategoryMapping
+	}
+
+	if publicCategory.ID() != m.publicCategoryID ||
+		specializedCategory.ID() != m.specializedCategoryID {
+		return ErrInvalidCategoryMapping
+	}
+
+	if publicCategory.Kind() != CategoryKindGeneral ||
+		specializedCategory.Kind() != CategoryKindSpecialized {
+		return ErrCategoryKindsMismatch
+	}
+
+	if !publicCategory.IsSelectable() || !specializedCategory.IsSelectable() {
+		return ErrCategoryNotActive
+	}
+
+	if now.IsZero() || now.Before(m.updatedAt) {
+		return ErrInvalidTimestamp
+	}
+
+	m.status = CategoryMappingStatusActive
+	m.touch(now)
+
+	return nil
+}
+
+func (m *CategoryMapping) Archive(now time.Time) error {
+	if m.status == CategoryMappingStatusArchived {
+		return ErrCategoryMappingState
+	}
+
+	if now.IsZero() || now.Before(m.updatedAt) {
+		return ErrInvalidTimestamp
+	}
+
+	m.status = CategoryMappingStatusArchived
+	m.touch(now)
+
+	return nil
+}
+
+func (m *CategoryMapping) IsUsable() bool {
+	return m.status == CategoryMappingStatusActive
+}
+
+func (m *CategoryMapping) touch(now time.Time) {
+	m.updatedAt = now.UTC()
+	m.version++
+}
+
+
+==========================================================================================
+RELATED GO FILE INVENTORY
+==========================================================================================
+internal\catalogue\domain\category.go
+internal\catalogue\domain\category_mapping.go
+internal\catalogue\domain\category_mapping_test.go
+internal\catalogue\domain\category_test.go
+internal\catalogue\domain\timestamp_errors.go
+internal\catalogue\handler.go
+internal\catalogue\handler_test.go
+internal\database\database.go
+internal\database\migrate.go
+internal\health\health.go
+internal\health\health_test.go
+internal\httpapi\router.go
+internal\market\domain\market.go
+internal\market\domain\market_test.go
+
+==========================================================================================
+REFERENCES TO MARKET, CATEGORY AND OFFER
+==========================================================================================
+internal\catalogue\domain\category.go:10: ErrInvalidCategoryID       = errors.New("invalid category id")
+internal\catalogue\domain\category.go:11: ErrInvalidCategoryCode     = errors.New("invalid category code")
+internal\catalogue\domain\category.go:12: ErrInvalidCategoryName     = errors.New("invalid category name")
+internal\catalogue\domain\category.go:13: ErrInvalidCategoryKind     = errors.New("invalid category kind")
+internal\catalogue\domain\category.go:14: ErrInvalidCategoryStatus   = errors.New("invalid category status")
+internal\catalogue\domain\category.go:15: ErrInvalidParentCategory   = errors.New("invalid parent category")
+internal\catalogue\domain\category.go:16: ErrCategoryArchived        = errors.New("category is archived")
+internal\catalogue\domain\category.go:17: ErrInvalidCategoryMutation = errors.New("invalid category mutation")
+internal\catalogue\domain\category.go:20: type CategoryID string
+internal\catalogue\domain\category.go:22: type CategoryKind string
+internal\catalogue\domain\category.go:27: CategoryKindGeneral     CategoryKind = "general"
+internal\catalogue\domain\category.go:28: CategoryKindSpecialized CategoryKind = "specialized"
+internal\catalogue\domain\category.go:37: func (k CategoryKind) IsValid() bool {
+internal\catalogue\domain\category.go:48: ID        CategoryID
+internal\catalogue\domain\category.go:51: Kind      CategoryKind
+internal\catalogue\domain\category.go:52: ParentID  CategoryID
+internal\catalogue\domain\category.go:56: type Category struct {
+internal\catalogue\domain\category.go:57: id        CategoryID
+internal\catalogue\domain\category.go:60: kind      CategoryKind
+internal\catalogue\domain\category.go:61: parentID  CategoryID
+internal\catalogue\domain\category.go:70: func NewCategory(input CreateCategoryInput, now time.Time) (*Category, error) {
+internal\catalogue\domain\category.go:97: return &Category{
+internal\catalogue\domain\category.go:135: func (c *Category) ID() CategoryID {
+internal\catalogue\domain\category.go:139: func (c *Category) Code() string {
+internal\catalogue\domain\category.go:143: func (c *Category) Name() string {
+internal\catalogue\domain\category.go:147: func (c *Category) Kind() CategoryKind {
+internal\catalogue\domain\category.go:151: func (c *Category) ParentID() CategoryID {
+internal\catalogue\domain\category.go:155: func (c *Category) SortOrder() int {
+internal\catalogue\domain\category.go:159: func (c *Category) Status() CategoryStatus {
+internal\catalogue\domain\category.go:163: func (c *Category) Version() uint64 {
+internal\catalogue\domain\category.go:167: func (c *Category) CreatedAt() time.Time {
+internal\catalogue\domain\category.go:171: func (c *Category) UpdatedAt() time.Time {
+internal\catalogue\domain\category.go:175: func (c *Category) Rename(name string, now time.Time) error {
+internal\catalogue\domain\category.go:199: func (c *Category) ChangeParent(parentID CategoryID, now time.Time) error {
+internal\catalogue\domain\category.go:222: func (c *Category) ChangeSortOrder(sortOrder int, now time.Time) error {
+internal\catalogue\domain\category.go:241: func (c *Category) Activate(now time.Time) error {
+internal\catalogue\domain\category.go:263: func (c *Category) Archive(now time.Time) error {
+internal\catalogue\domain\category.go:278: func (c *Category) IsSelectable() bool {
+internal\catalogue\domain\category.go:282: func (c *Category) validateTimestamp(now time.Time) error {
+internal\catalogue\domain\category.go:290: func (c *Category) touch(now time.Time) {
+internal\catalogue\domain\category_mapping.go:10: ErrInvalidCategoryMappingID = errors.New("invalid category mapping id")
+internal\catalogue\domain\category_mapping.go:11: ErrInvalidCategoryMapping   = errors.New("invalid category mapping")
+internal\catalogue\domain\category_mapping.go:12: ErrCategoryMappingArchived  = errors.New("category mapping is archived")
+internal\catalogue\domain\category_mapping.go:13: ErrCategoryMappingState     = errors.New("invalid category mapping state")
+internal\catalogue\domain\category_mapping.go:14: ErrCategoryKindsMismatch    = errors.New("category kinds do not match mapping direction")
+internal\catalogue\domain\category_mapping.go:18: type CategoryMappingID string
+internal\catalogue\domain\category_mapping.go:29: ID                    CategoryMappingID
+internal\catalogue\domain\category_mapping.go:30: PublicCategoryID      CategoryID
+internal\catalogue\domain\category_mapping.go:31: SpecializedCategoryID CategoryID
+internal\catalogue\domain\category_mapping.go:32: MarketID              string
+internal\catalogue\domain\category_mapping.go:36: type CategoryMapping struct {
+internal\catalogue\domain\category_mapping.go:37: id                    CategoryMappingID
+internal\catalogue\domain\category_mapping.go:38: publicCategoryID      CategoryID
+internal\catalogue\domain\category_mapping.go:39: specializedCategoryID CategoryID
+internal\catalogue\domain\category_mapping.go:40: marketID              string
+internal\catalogue\domain\category_mapping.go:52: ) (*CategoryMapping, error) {
+internal\catalogue\domain\category_mapping.go:67: return &CategoryMapping{
+internal\catalogue\domain\category_mapping.go:71: marketID:              strings.TrimSpace(input.MarketID),
+internal\catalogue\domain\category_mapping.go:80: func (m *CategoryMapping) ID() CategoryMappingID {
+internal\catalogue\domain\category_mapping.go:84: func (m *CategoryMapping) PublicCategoryID() CategoryID {
+internal\catalogue\domain\category_mapping.go:88: func (m *CategoryMapping) SpecializedCategoryID() CategoryID {
+internal\catalogue\domain\category_mapping.go:92: func (m *CategoryMapping) MarketID() string {
+internal\catalogue\domain\category_mapping.go:93: return m.marketID
+internal\catalogue\domain\category_mapping.go:96: func (m *CategoryMapping) Description() string {
+internal\catalogue\domain\category_mapping.go:100: func (m *CategoryMapping) Status() CategoryMappingStatus {
+internal\catalogue\domain\category_mapping.go:104: func (m *CategoryMapping) Version() uint64 {
+internal\catalogue\domain\category_mapping.go:108: func (m *CategoryMapping) CreatedAt() time.Time {
+internal\catalogue\domain\category_mapping.go:112: func (m *CategoryMapping) UpdatedAt() time.Time {
+internal\catalogue\domain\category_mapping.go:116: func (m *CategoryMapping) Activate(
+internal\catalogue\domain\category_mapping.go:117: publicCategory *Category,
+internal\catalogue\domain\category_mapping.go:118: specializedCategory *Category,
+internal\catalogue\domain\category_mapping.go:157: func (m *CategoryMapping) Archive(now time.Time) error {
+internal\catalogue\domain\category_mapping.go:172: func (m *CategoryMapping) IsUsable() bool {
+internal\catalogue\domain\category_mapping.go:176: func (m *CategoryMapping) touch(now time.Time) {
+internal\catalogue\domain\category_mapping_test.go:9: func createMappingTestCategories(t *testing.T) (*Category, *Category, time.Time) {
+internal\catalogue\domain\category_mapping_test.go:17: Name: "Public Category",
+internal\catalogue\domain\category_mapping_test.go:22: t.Fatalf("create public category: %v", err)
+internal\catalogue\domain\category_mapping_test.go:28: Name: "Specialized Category",
+internal\catalogue\domain\category_mapping_test.go:33: t.Fatalf("create specialized category: %v", err)
+internal\catalogue\domain\category_mapping_test.go:37: t.Fatalf("activate public category: %v", err)
+internal\catalogue\domain\category_mapping_test.go:41: t.Fatalf("activate specialized category: %v", err)
+internal\catalogue\domain\category_mapping_test.go:54: MarketID:              "market-1",
+internal\catalogue\domain\category_mapping_test.go:90: MarketID:              "market-1",
+internal\catalogue\domain\category_mapping_test.go:133: // must reject the operation before category-kind validation.
+internal\catalogue\domain\category_test.go:11: id CategoryID,
+internal\catalogue\domain\category_test.go:13: kind CategoryKind,
+internal\catalogue\domain\category_test.go:14: ) *Category {
+internal\catalogue\domain\category_test.go:19: category, err := NewCategory(CreateCategoryInput{
+internal\catalogue\domain\category_test.go:22: Name:      "Test Category",
+internal\catalogue\domain\category_test.go:31: return category
+internal\catalogue\domain\category_test.go:35: category := newTestCategory(
+internal\catalogue\domain\category_test.go:37: "category-001",
+internal\catalogue\domain\category_test.go:42: if category.Status() != CategoryStatusDraft {
+internal\catalogue\domain\category_test.go:43: t.Fatalf("expected draft, got %s", category.Status())
+internal\catalogue\domain\category_test.go:46: if category.Code() != "GENERAL.GOODS" {
+internal\catalogue\domain\category_test.go:47: t.Fatalf("unexpected code: %s", category.Code())
+internal\catalogue\domain\category_test.go:50: if category.Version() != 1 {
+internal\catalogue\domain\category_test.go:51: t.Fatalf("expected version 1, got %d", category.Version())
+internal\catalogue\domain\category_test.go:67: Name: "Category",
+internal\catalogue\domain\category_test.go:77: Name: "Category",
+internal\catalogue\domain\category_test.go:87: Name: "Category",
+internal\catalogue\domain\category_test.go:97: Name:     "Category",
+internal\catalogue\domain\category_test.go:117: category := newTestCategory(
+internal\catalogue\domain\category_test.go:124: base := category.UpdatedAt()
+internal\catalogue\domain\category_test.go:126: if err := category.Activate(base.Add(time.Minute)); err != nil {
+internal\catalogue\domain\category_test.go:130: if !category.IsSelectable() {
+internal\catalogue\domain\category_test.go:131: t.Fatal("active category should be selectable")
+internal\catalogue\domain\category_test.go:134: if err := category.Archive(base.Add(2 * time.Minute)); err != nil {
+internal\catalogue\domain\category_test.go:138: if category.IsSelectable() {
+internal\catalogue\domain\category_test.go:139: t.Fatal("archived category must not be selectable")
+internal\catalogue\domain\category_test.go:142: if err := category.Activate(base.Add(3 * time.Minute)); !errors.Is(err, ErrCategoryArchived) {
+internal\catalogue\domain\category_test.go:148: category := newTestCategory(
+internal\catalogue\domain\category_test.go:155: base := category.UpdatedAt()
+internal\catalogue\domain\category_test.go:157: if err := category.Rename("New Name", base.Add(time.Minute)); err != nil {
+internal\catalogue\domain\category_test.go:161: if category.Name() != "New Name" {
+internal\catalogue\domain\category_test.go:162: t.Fatalf("unexpected name: %s", category.Name())
+internal\catalogue\domain\category_test.go:165: if err := category.ChangeParent("parent-1", base.Add(2*time.Minute)); err != nil {
+internal\catalogue\domain\category_test.go:169: if category.ParentID() != "parent-1" {
+internal\catalogue\domain\category_test.go:170: t.Fatalf("unexpected parent: %s", category.ParentID())
+internal\catalogue\domain\category_test.go:173: if err := category.ChangeSortOrder(20, base.Add(3*time.Minute)); err != nil {
+internal\catalogue\domain\category_test.go:177: if category.SortOrder() != 20 {
+internal\catalogue\domain\category_test.go:178: t.Fatalf("unexpected sort order: %d", category.SortOrder())
+internal\catalogue\domain\category_test.go:181: if category.Version() != 4 {
+internal\catalogue\domain\category_test.go:182: t.Fatalf("expected version 4, got %d", category.Version())
+internal\catalogue\domain\category_test.go:187: category := newTestCategory(
+internal\catalogue\domain\category_test.go:194: err := category.ChangeParent("cat-1", category.UpdatedAt().Add(time.Minute))
+internal\catalogue\domain\category_test.go:202: category := newTestCategory(
+internal\catalogue\domain\category_test.go:209: base := category.UpdatedAt()
+internal\catalogue\domain\category_test.go:211: if err := category.Archive(base.Add(time.Minute)); err != nil {
+internal\catalogue\domain\category_test.go:215: if err := category.Rename("Forbidden", base.Add(2*time.Minute)); !errors.Is(err, ErrCategoryArchived) {
+internal\catalogue\handler.go:26: MarketID           string          `json:"market_id"`
+internal\catalogue\handler.go:80: categoryID := strings.TrimSpace(r.URL.Query().Get("category_id"))
+internal\catalogue\handler.go:81: marketID := strings.TrimSpace(r.URL.Query().Get("market_id"))
+internal\catalogue\handler.go:103: if err := h.DB.QueryRowContext(r.Context(), countQuery, search, categoryID, marketID).Scan(&total); err != nil {
+internal\catalogue\handler.go:135: search, categoryID, marketID, pageSize, offset,
+internal\catalogue\handler.go:154: &item.MarketID,
+internal\catalogue\handler.go:217: writeError(w, http.StatusBadRequest, "invalid_offer_id", "A valid offer ID is required.")
+internal\catalogue\handler.go:259: &item.MarketID,
+internal\catalogue\handler.go:278: writeError(w, http.StatusNotFound, "offer_not_found", "The published offer was not found.")
+internal\catalogue\handler.go:281: writeError(w, http.StatusInternalServerError, "catalogue_query_failed", "The offer could not be loaded.")
+internal\catalogue\handler.go:296: writeError(w, http.StatusInternalServerError, "invalid_catalogue_data", "The offer contains invalid attributes.")
+internal\database\migrate.go:14: "github.com/igd-tesa/real-asset-management-platform/general-market-backend/migrations"
+internal\httpapi\router.go:10: "github.com/igd-tesa/real-asset-management-platform/general-market-backend/internal/catalogue"
+internal\market\domain\market.go:11: ErrInvalidMarketID       = errors.New("invalid market id")
+internal\market\domain\market.go:12: ErrInvalidMarketCode     = errors.New("invalid market code")
+internal\market\domain\market.go:13: ErrInvalidMarketName     = errors.New("invalid market name")
+internal\market\domain\market.go:14: ErrInvalidMarketTimezone = errors.New("invalid market timezone")
+internal\market\domain\market.go:16: ErrInvalidMarketState    = errors.New("invalid market state")
+internal\market\domain\market.go:17: ErrMarketClosed          = errors.New("market is closed")
+internal\market\domain\market.go:20: type MarketID string
+internal\market\domain\market.go:22: type MarketStatus string
+internal\market\domain\market.go:25: MarketStatusDraft     MarketStatus = "draft"
+internal\market\domain\market.go:26: MarketStatusActive    MarketStatus = "active"
+internal\market\domain\market.go:27: MarketStatusSuspended MarketStatus = "suspended"
+internal\market\domain\market.go:28: MarketStatusClosed    MarketStatus = "closed"
+internal\market\domain\market.go:31: func (s MarketStatus) IsValid() bool {
+internal\market\domain\market.go:44: ID          MarketID
+internal\market\domain\market.go:51: type Market struct {
+internal\market\domain\market.go:52: id          MarketID
+internal\market\domain\market.go:58: status    MarketStatus
+internal\market\domain\market.go:64: func NewMarket(input CreateMarketInput, now time.Time) (*Market, error) {
+internal\market\domain\market.go:92: return &Market{
+internal\market\domain\market.go:128: func (m *Market) ID() MarketID {
+internal\market\domain\market.go:132: func (m *Market) Code() string {
+internal\market\domain\market.go:136: func (m *Market) Name() string {
+internal\market\domain\market.go:140: func (m *Market) Description() string {
+internal\market\domain\market.go:144: func (m *Market) Timezone() string {
+internal\market\domain\market.go:148: func (m *Market) Status() MarketStatus {
+internal\market\domain\market.go:152: func (m *Market) Version() uint64 {
+internal\market\domain\market.go:156: func (m *Market) CreatedAt() time.Time {
+internal\market\domain\market.go:160: func (m *Market) UpdatedAt() time.Time {
+internal\market\domain\market.go:164: func (m *Market) UpdateDetails(
+internal\market\domain\market.go:200: func (m *Market) Activate(now time.Time) error {
+internal\market\domain\market.go:222: func (m *Market) Suspend(now time.Time) error {
+internal\market\domain\market.go:237: func (m *Market) Close(now time.Time) error {
+internal\market\domain\market.go:252: func (m *Market) IsOperational() bool {
+internal\market\domain\market.go:256: func (m *Market) validateTimestamp(now time.Time) error {
+internal\market\domain\market.go:268: func (m *Market) touch(now time.Time) {
+internal\market\domain\market_test.go:9: func testMarket(t *testing.T) *Market {
+internal\market\domain\market_test.go:14: market, err := NewMarket(CreateMarketInput{
+internal\market\domain\market_test.go:15: ID:          MarketID("market-001"),
+internal\market\domain\market_test.go:16: Code:        "general-market",
+internal\market\domain\market_test.go:17: Name:        "General Market",
+internal\market\domain\market_test.go:18: Description: "Main general market",
+internal\market\domain\market_test.go:26: return market
+internal\market\domain\market_test.go:30: market := testMarket(t)
+internal\market\domain\market_test.go:32: if market.Status() != MarketStatusDraft {
+internal\market\domain\market_test.go:33: t.Fatalf("expected draft status, got %s", market.Status())
+internal\market\domain\market_test.go:36: if market.Code() != "GENERAL-MARKET" {
+internal\market\domain\market_test.go:37: t.Fatalf("unexpected normalized code: %s", market.Code())
+internal\market\domain\market_test.go:40: if market.Version() != 1 {
+internal\market\domain\market_test.go:41: t.Fatalf("expected version 1, got %d", market.Version())
+internal\market\domain\market_test.go:57: Name: "Market",
+internal\market\domain\market_test.go:66: Name: "Market",
+internal\market\domain\market_test.go:84: Name:     "Market",
+internal\market\domain\market_test.go:103: market := testMarket(t)
+internal\market\domain\market_test.go:104: base := market.UpdatedAt()
+internal\market\domain\market_test.go:106: if err := market.Activate(base.Add(time.Minute)); err != nil {
+internal\market\domain\market_test.go:110: if !market.IsOperational() {
+internal\market\domain\market_test.go:111: t.Fatal("market should be operational")
+internal\market\domain\market_test.go:114: if err := market.Suspend(base.Add(2 * time.Minute)); err != nil {
+internal\market\domain\market_test.go:118: if market.Status() != MarketStatusSuspended {
+internal\market\domain\market_test.go:119: t.Fatalf("unexpected status: %s", market.Status())
+internal\market\domain\market_test.go:122: if err := market.Activate(base.Add(3 * time.Minute)); err != nil {
+internal\market\domain\market_test.go:126: if err := market.Close(base.Add(4 * time.Minute)); err != nil {
+internal\market\domain\market_test.go:130: if market.Status() != MarketStatusClosed {
+internal\market\domain\market_test.go:131: t.Fatalf("expected closed status, got %s", market.Status())
+internal\market\domain\market_test.go:134: if err := market.Activate(base.Add(5 * time.Minute)); !errors.Is(err, ErrMarketClosed) {
+internal\market\domain\market_test.go:140: market := testMarket(t)
+internal\market\domain\market_test.go:141: now := market.UpdatedAt()
+internal\market\domain\market_test.go:143: if err := market.Suspend(now.Add(time.Minute)); !errors.Is(err, ErrInvalidMarketState) {
+internal\market\domain\market_test.go:147: if err := market.Activate(now.Add(time.Minute)); err != nil {
+internal\market\domain\market_test.go:151: if err := market.Activate(now.Add(2 * time.Minute)); !errors.Is(err, ErrInvalidMarketState) {
+internal\market\domain\market_test.go:157: market := testMarket(t)
+internal\market\domain\market_test.go:159: err := market.Activate(market.CreatedAt().Add(-time.Minute))
+internal\market\domain\market_test.go:167: market := testMarket(t)
+internal\market\domain\market_test.go:168: initialVersion := market.Version()
+internal\market\domain\market_test.go:169: now := market.UpdatedAt()
+internal\market\domain\market_test.go:171: if err := market.UpdateDetails(
+internal\market\domain\market_test.go:172: "Updated Market",
+internal\market\domain\market_test.go:180: if market.Version() != initialVersion+1 {
+internal\market\domain\market_test.go:181: t.Fatalf("expected version %d, got %d", initialVersion+1, market.Version())
+
+Reference lines collected: 222
+
+==========================================================================================
+DOMAIN MODULE DIRECTORY INVENTORY
+==========================================================================================
+market : EXISTS | Files: 3
+catalogue : EXISTS | Files: 9
+offerconfig : EXISTS | Files: 9
+eligibility : EXISTS | Files: 1
+orders : EXISTS | Files: 1
+matching : EXISTS | Files: 1
+trades : EXISTS | Files: 1
+execution : EXISTS | Files: 1
+commodity : EXISTS | Files: 1
