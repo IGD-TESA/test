@@ -124,6 +124,39 @@ function Write-AtomicUtf8 {
     }
 }
 
+function Write-AtomicBytes {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$Path,
+
+        [Parameter(Mandatory = $true)]
+        [byte[]]$Bytes
+    )
+
+    $directory = Split-Path -Parent $Path
+
+    if (-not (Test-Path -LiteralPath $directory -PathType Container)) {
+        New-Item -ItemType Directory -Path $directory -Force |
+            Out-Null
+    }
+
+    $temporaryPath = Join-Path $directory (
+        "." + [System.IO.Path]::GetFileName($Path) +
+        "." + [guid]::NewGuid().ToString("N") +
+        ".tmp"
+    )
+
+    try {
+        [System.IO.File]::WriteAllBytes($temporaryPath, $Bytes)
+        Move-Item -LiteralPath $temporaryPath -Destination $Path -Force
+    }
+    finally {
+        if (Test-Path -LiteralPath $temporaryPath) {
+            Remove-Item -LiteralPath $temporaryPath -Force
+        }
+    }
+}
+
 function Replace-TextExactlyOnce {
     param(
         [Parameter(Mandatory = $true)]
@@ -349,26 +382,63 @@ function Find-ProjectRoot {
     Stop-Script "General Market project root was not found."
 }
 
+function Invoke-CheckedNativeCommand {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$Executable,
+
+        [Parameter(Mandatory = $true)]
+        [string[]]$Arguments,
+
+        [Parameter(Mandatory = $true)]
+        [string]$Label
+    )
+
+    Write-Section $Label
+
+    $previousPreference = $ErrorActionPreference
+    $output = @()
+    $exitCode = -1
+    $invocationError = $null
+
+    try {
+        # Windows PowerShell 5.1 can promote native stderr records to
+        # terminating errors when ErrorActionPreference is Stop.
+        # Continue only for this native invocation so stdout/stderr and
+        # the real process exit code can both be collected.
+        $ErrorActionPreference = "Continue"
+        $output = @(& $Executable @Arguments 2>&1)
+        $exitCode = $LASTEXITCODE
+    }
+    catch {
+        $invocationError = $_
+    }
+    finally {
+        $ErrorActionPreference = $previousPreference
+    }
+
+    foreach ($line in $output) {
+        Write-Host $line
+    }
+
+    if ($null -ne $invocationError) {
+        Stop-Script ("$Executable invocation failed: " + $invocationError.Exception.Message)
+    }
+
+    if ($null -eq $exitCode -or [int]$exitCode -ne 0) {
+        Stop-Script ("$Executable failed with exit code '$exitCode': " + ($Arguments -join " "))
+    }
+
+    Write-Success "Command passed."
+}
+
 function Invoke-GoCheck {
     param(
         [string[]]$Arguments,
         [string]$Label
     )
 
-    Write-Section $Label
-
-    $output = & go @Arguments 2>&1
-    $exitCode = $LASTEXITCODE
-
-    foreach ($line in $output) {
-        Write-Host $line
-    }
-
-    if ($exitCode -ne 0) {
-        Stop-Script "Go command failed: go $($Arguments -join ' ')"
-    }
-
-    Write-Success "Command passed."
+    Invoke-CheckedNativeCommand -Executable "go" -Arguments $Arguments -Label $Label
 }
 
 function Get-ProtectedFileHashes {
@@ -462,10 +532,10 @@ function Restore-OriginalFiles {
         $backup = Join-Path $Script:BackupRoot $relative
 
         if (Test-Path -LiteralPath $backup -PathType Leaf) {
-            $content = Read-Utf8Text $backup
-            Write-AtomicUtf8 -Path $target -Content $content
+            $originalBytes = [System.IO.File]::ReadAllBytes($backup)
+            Write-AtomicBytes -Path $target -Bytes $originalBytes
 
-            Write-WarningMessage "Restored: $relative"
+            Write-WarningMessage "Restored byte-exact original: $relative"
         }
     }
 
@@ -541,6 +611,21 @@ try {
     $services = Read-Utf8Text $servicesPath
     $existingTests = Read-Utf8Text $testsPath
 
+    $servicesImportAnchor = @'
+    "math"
+    "strings"
+    "time"
+'@
+
+    $servicesImportReplacement = @'
+    "math"
+    "sort"
+    "strings"
+    "time"
+'@
+
+    $services = Replace-TextExactlyOnce -Source $services -OldText $servicesImportAnchor -NewText $servicesImportReplacement -Label "services.go sort import required by deterministic policy validation"
+
     if ($services.Contains($Script:PackageMarker)) {
         Stop-Script "Package 01 hardening marker already exists."
     }
@@ -579,9 +664,9 @@ try {
 
     foreach ($relative in $targetFiles) {
         $full = Join-Path $Script:Root $relative
-        $content = Read-Utf8Text $full
+        $originalBytes = [System.IO.File]::ReadAllBytes($full)
 
-        $Script:OriginalFiles[$relative] = $content
+        $Script:OriginalFiles[$relative] = $originalBytes
 
         $backup = Join-Path $Script:BackupRoot $relative
         $backupDirectory = Split-Path -Parent $backup
@@ -589,7 +674,7 @@ try {
         New-Item -ItemType Directory -Path $backupDirectory -Force |
             Out-Null
 
-        Write-AtomicUtf8 -Path $backup -Content $content
+        Write-AtomicBytes -Path $backup -Bytes $originalBytes
     }
 
     Write-Success "Original Application files backed up."
@@ -3162,11 +3247,7 @@ func TestPackage01ApplicationContextPropagatesCancellation(t *testing.T) {
         $newTestFull
     )
 
-    & gofmt -w @formatFiles
-
-    if ($LASTEXITCODE -ne 0) {
-        Stop-Script "gofmt failed."
-    }
+    Invoke-CheckedNativeCommand -Executable "gofmt" -Arguments (@("-w") + $formatFiles) -Label "GO FORMAT"
 
     Write-Success "gofmt completed."
 
