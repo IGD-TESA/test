@@ -1,0 +1,3553 @@
+﻿GENERAL MARKET BACKEND - CODE CONTEXT
+Generated: 2026-11-05 00:06:10
+Project root: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\general-market-backend
+Read-only extraction. No source files modified.
+
+====================================================================================================
+1. GO MODULE
+====================================================================================================
+
+====================================================================================================
+FILE: go.mod
+====================================================================================================
+module github.com/igd-tesa/real-asset-management-platform/general-market-backend
+
+go 1.25.0
+
+require github.com/jackc/pgx/v5 v5.7.6
+
+require (
+	github.com/jackc/pgpassfile v1.0.0 // indirect
+	github.com/jackc/pgservicefile v0.0.0-20240606120523-5a60cdf6a761 // indirect
+	github.com/jackc/puddle/v2 v2.2.2 // indirect
+	golang.org/x/crypto v0.37.0 // indirect
+	golang.org/x/sync v0.13.0 // indirect
+	golang.org/x/text v0.24.0 // indirect
+)
+
+
+====================================================================================================
+2. COMPLETE PROJECT STRUCTURE
+====================================================================================================
+docker-compose.yml
+cmd\migrate\main.go
+cmd\server\main.go
+config\config.go
+docker\init\001-create-market-app.sql
+internal\catalogue\handler.go
+internal\catalogue\handler_test.go
+internal\catalogue\domain\category.go
+internal\catalogue\domain\category_mapping.go
+internal\catalogue\domain\category_mapping_test.go
+internal\catalogue\domain\category_test.go
+internal\catalogue\domain\timestamp_errors.go
+internal\database\database.go
+internal\database\migrate.go
+internal\health\health.go
+internal\health\health_test.go
+internal\httpapi\router.go
+internal\market\domain\market.go
+internal\market\domain\market_test.go
+internal\marketflow\capabilities.go
+internal\marketflow\capabilities_test.go
+internal\marketflow\ports.go
+migrations\000001_initial.sql
+migrations\000002_market_domain_foundation.sql
+migrations\000003_integrity_hardening.sql
+migrations\migrations.go
+
+====================================================================================================
+3. MARKETFLOW
+====================================================================================================
+
+====================================================================================================
+FILE: internal\marketflow\capabilities.go
+====================================================================================================
+package marketflow
+
+import (
+	"errors"
+	"fmt"
+	"sort"
+	"strings"
+	"time"
+)
+
+var (
+	ErrInvalidInput       = errors.New("invalid input")
+	ErrInvalidTransition  = errors.New("invalid state transition")
+	ErrNotEligible        = errors.New("operation is not eligible")
+	ErrNotFound           = errors.New("entity not found")
+	ErrConflict           = errors.New("conflict")
+	ErrPolicyViolation    = errors.New("execution policy violation")
+	ErrExternalNotAllowed = errors.New("external operation is not authorized")
+)
+
+type ID string
+
+func validID(id ID) bool {
+	return strings.TrimSpace(string(id)) != ""
+}
+
+func validTime(t time.Time) bool {
+	return !t.IsZero()
+}
+
+// ============================================================
+// MARKET AND OFFER CONFIGURATION
+// ============================================================
+
+type MarketState string
+
+const (
+	MarketDraft     MarketState = "draft"
+	MarketActive    MarketState = "active"
+	MarketSuspended MarketState = "suspended"
+	MarketClosed    MarketState = "closed"
+)
+
+type OfferState string
+
+const (
+	OfferDraft     OfferState = "draft"
+	OfferReview    OfferState = "pending_review"
+	OfferApproved  OfferState = "approved"
+	OfferPublished OfferState = "published"
+	OfferSuspended OfferState = "suspended"
+	OfferRejected  OfferState = "rejected"
+	OfferExpired   OfferState = "expired"
+	OfferClosed    OfferState = "closed"
+)
+
+type ParameterType string
+
+const (
+	ParamString  ParameterType = "string"
+	ParamNumber  ParameterType = "number"
+	ParamBoolean ParameterType = "boolean"
+)
+
+type ParameterDefinition struct {
+	Code     string
+	Type     ParameterType
+	Required bool
+	Min      *float64
+	Max      *float64
+	Allowed  []string
+}
+
+type OfferConfiguration struct {
+	ID           ID
+	CategoryID   ID
+	Version      uint64
+	Parameters   []ParameterDefinition
+	RequiredDocs []string
+	Active       bool
+	CreatedAt    time.Time
+}
+
+type OfferParameters map[string]any
+
+func (c OfferConfiguration) Validate(values OfferParameters) error {
+	if !validID(c.ID) || !validID(c.CategoryID) ||
+		c.Version == 0 || !validTime(c.CreatedAt) {
+		return ErrInvalidInput
+	}
+
+	for _, definition := range c.Parameters {
+		value, exists := values[definition.Code]
+
+		if !exists {
+			if definition.Required {
+				return fmt.Errorf("%w: missing parameter %s",
+					ErrInvalidInput, definition.Code)
+			}
+			continue
+		}
+
+		switch definition.Type {
+		case ParamString:
+			if _, ok := value.(string); !ok {
+				return fmt.Errorf("%w: parameter %s must be string",
+					ErrInvalidInput, definition.Code)
+			}
+
+		case ParamBoolean:
+			if _, ok := value.(bool); !ok {
+				return fmt.Errorf("%w: parameter %s must be boolean",
+					ErrInvalidInput, definition.Code)
+			}
+
+		case ParamNumber:
+			number, ok := value.(float64)
+			if !ok {
+				return fmt.Errorf("%w: parameter %s must be number",
+					ErrInvalidInput, definition.Code)
+			}
+			if definition.Min != nil && number < *definition.Min {
+				return fmt.Errorf("%w: parameter %s below minimum",
+					ErrInvalidInput, definition.Code)
+			}
+			if definition.Max != nil && number > *definition.Max {
+				return fmt.Errorf("%w: parameter %s above maximum",
+					ErrInvalidInput, definition.Code)
+			}
+
+		default:
+			return ErrInvalidInput
+		}
+
+		if len(definition.Allowed) > 0 {
+			text, ok := value.(string)
+			if !ok {
+				return ErrInvalidInput
+			}
+
+			allowed := false
+			for _, candidate := range definition.Allowed {
+				if candidate == text {
+					allowed = true
+					break
+				}
+			}
+			if !allowed {
+				return fmt.Errorf("%w: parameter %s is not allowed",
+					ErrInvalidInput, definition.Code)
+			}
+		}
+	}
+
+	return nil
+}
+
+// ============================================================
+// COMPANY ELIGIBILITY
+// ============================================================
+
+type QualificationState string
+
+const (
+	QualificationPending  QualificationState = "pending"
+	QualificationApproved QualificationState = "approved"
+	QualificationRejected QualificationState = "rejected"
+	QualificationExpired  QualificationState = "expired"
+)
+
+type CompanyQualification struct {
+	CompanyID    ID
+	CategoryID   ID
+	ActivityCode string
+	State        QualificationState
+	Documents    []string
+	ValidUntil   time.Time
+	Version      uint64
+}
+
+func (q CompanyQualification) IsEligible(
+	categoryID ID,
+	activityCode string,
+	requiredDocuments []string,
+	now time.Time,
+) error {
+	if !validID(q.CompanyID) || !validID(categoryID) ||
+		!validTime(now) || q.Version == 0 {
+		return ErrInvalidInput
+	}
+
+	if q.State != QualificationApproved ||
+		q.CategoryID != categoryID ||
+		q.ActivityCode != activityCode {
+		return ErrNotEligible
+	}
+
+	if !q.ValidUntil.IsZero() && now.After(q.ValidUntil) {
+		return ErrNotEligible
+	}
+
+	available := make(map[string]bool, len(q.Documents))
+	for _, document := range q.Documents {
+		available[document] = true
+	}
+
+	for _, document := range requiredDocuments {
+		if !available[document] {
+			return fmt.Errorf("%w: missing document %s",
+				ErrNotEligible, document)
+		}
+	}
+
+	return nil
+}
+
+// ============================================================
+// OFFER LIFECYCLE
+// ============================================================
+
+type Offer struct {
+	ID                    ID
+	MarketID              ID
+	OwnerID               ID
+	PublicCategoryID      ID
+	SpecializedCategoryID ID
+	ConfigurationID       ID
+	ConfigurationVersion  uint64
+	Title                 string
+	Description           string
+	Quantity              int64
+	Remaining             int64
+	Unit                  string
+	Price                 int64
+	Currency              string
+	State                 OfferState
+	ValidUntil            time.Time
+	Version               uint64
+	CreatedAt             time.Time
+	UpdatedAt             time.Time
+}
+
+func (o *Offer) Validate() error {
+	if o == nil || !validID(o.ID) || !validID(o.MarketID) ||
+		!validID(o.OwnerID) || !validID(o.PublicCategoryID) ||
+		!validID(o.SpecializedCategoryID) ||
+		!validID(o.ConfigurationID) ||
+		o.ConfigurationVersion == 0 ||
+		strings.TrimSpace(o.Title) == "" ||
+		o.Quantity <= 0 || o.Remaining < 0 ||
+		o.Remaining > o.Quantity || o.Price < 0 ||
+		strings.TrimSpace(o.Unit) == "" ||
+		strings.TrimSpace(o.Currency) == "" ||
+		o.Version == 0 || !validTime(o.CreatedAt) ||
+		!validTime(o.UpdatedAt) {
+		return ErrInvalidInput
+	}
+	return nil
+}
+
+func (o *Offer) SubmitForReview(now time.Time) error {
+	if err := o.Validate(); err != nil {
+		return err
+	}
+	if o.State != OfferDraft || !validTime(now) {
+		return ErrInvalidTransition
+	}
+	o.State = OfferReview
+	o.touch(now)
+	return nil
+}
+
+func (o *Offer) Approve(now time.Time) error {
+	if o.State != OfferReview || !validTime(now) {
+		return ErrInvalidTransition
+	}
+	o.State = OfferApproved
+	o.touch(now)
+	return nil
+}
+
+func (o *Offer) Publish(now time.Time) error {
+	if o.State != OfferApproved || !validTime(now) {
+		return ErrInvalidTransition
+	}
+	if o.Remaining <= 0 {
+		return ErrNotEligible
+	}
+	if !o.ValidUntil.IsZero() && !now.Before(o.ValidUntil) {
+		return ErrNotEligible
+	}
+	o.State = OfferPublished
+	o.touch(now)
+	return nil
+}
+
+func (o *Offer) Suspend(now time.Time) error {
+	if o.State != OfferPublished || !validTime(now) {
+		return ErrInvalidTransition
+	}
+	o.State = OfferSuspended
+	o.touch(now)
+	return nil
+}
+
+func (o *Offer) Close(now time.Time) error {
+	if o.State == OfferClosed || !validTime(now) {
+		return ErrInvalidTransition
+	}
+	o.State = OfferClosed
+	o.touch(now)
+	return nil
+}
+
+func (o *Offer) touch(now time.Time) {
+	o.UpdatedAt = now.UTC()
+	o.Version++
+}
+
+// ============================================================
+// SUPPLY REQUESTS AND PROPOSALS
+// ============================================================
+
+type RequestState string
+
+const (
+	RequestOpen      RequestState = "open"
+	RequestSelected  RequestState = "selected"
+	RequestClosed    RequestState = "closed"
+	RequestCancelled RequestState = "cancelled"
+)
+
+type SupplyRequest struct {
+	ID                 ID
+	RequesterID        ID
+	CategoryID         ID
+	Quantity           int64
+	Unit               string
+	MaxPrice           int64
+	Currency           string
+	State              RequestState
+	SelectedProposalID ID
+	CreatedAt          time.Time
+}
+
+type ProposalState string
+
+const (
+	ProposalSubmitted ProposalState = "submitted"
+	ProposalAccepted  ProposalState = "accepted"
+	ProposalRejected  ProposalState = "rejected"
+	ProposalWithdrawn ProposalState = "withdrawn"
+)
+
+type SupplyProposal struct {
+	ID            ID
+	RequestID     ID
+	SupplierID    ID
+	OfferID       ID
+	Quantity      int64
+	UnitPrice     int64
+	Currency      string
+	DeliveryTerms string
+	State         ProposalState
+	CreatedAt     time.Time
+}
+
+func (r SupplyRequest) Validate() error {
+	if !validID(r.ID) || !validID(r.RequesterID) ||
+		!validID(r.CategoryID) || r.Quantity <= 0 ||
+		r.Unit == "" || r.Currency == "" ||
+		!validTime(r.CreatedAt) {
+		return ErrInvalidInput
+	}
+	return nil
+}
+
+func (p SupplyProposal) IsCompatible(r SupplyRequest) bool {
+	return p.RequestID == r.ID &&
+		p.Quantity >= r.Quantity &&
+		p.UnitPrice > 0 &&
+		p.Currency == r.Currency &&
+		p.State == ProposalSubmitted
+}
+
+func SelectProposal(
+	request *SupplyRequest,
+	proposal SupplyProposal,
+) error {
+	if request == nil || request.State != RequestOpen {
+		return ErrInvalidTransition
+	}
+	if !validID(proposal.ID) || !proposal.IsCompatible(*request) {
+		return ErrNotEligible
+	}
+	if request.MaxPrice > 0 && proposal.UnitPrice > request.MaxPrice {
+		return ErrNotEligible
+	}
+
+	request.SelectedProposalID = proposal.ID
+	request.State = RequestSelected
+	return nil
+}
+
+// ============================================================
+// ORDERS AND ORDER BOOK
+// All prices are integer minor units. No float arithmetic.
+// ============================================================
+
+type OrderSide string
+
+const (
+	Buy  OrderSide = "buy"
+	Sell OrderSide = "sell"
+)
+
+type OrderState string
+
+const (
+	OrderPending   OrderState = "pending"
+	OrderOpen      OrderState = "open"
+	OrderPartial   OrderState = "partially_filled"
+	OrderFilled    OrderState = "filled"
+	OrderCancelled OrderState = "cancelled"
+	OrderRejected  OrderState = "rejected"
+)
+
+type Order struct {
+	ID        ID
+	OfferID   ID
+	MarketID  ID
+	UserID    ID
+	Side      OrderSide
+	Price     int64
+	Quantity  int64
+	Filled    int64
+	State     OrderState
+	CreatedAt time.Time
+	Version   uint64
+}
+
+func (o Order) Validate() error {
+	if !validID(o.ID) || !validID(o.OfferID) ||
+		!validID(o.MarketID) || !validID(o.UserID) ||
+		(o.Side != Buy && o.Side != Sell) ||
+		o.Price <= 0 || o.Quantity <= 0 ||
+		o.Filled < 0 || o.Filled > o.Quantity ||
+		!validTime(o.CreatedAt) || o.Version == 0 {
+		return ErrInvalidInput
+	}
+	return nil
+}
+
+func (o *Order) Open() error {
+	if err := o.Validate(); err != nil {
+		return err
+	}
+	if o.State != OrderPending {
+		return ErrInvalidTransition
+	}
+	o.State = OrderOpen
+	o.Version++
+	return nil
+}
+
+func (o *Order) Cancel() error {
+	if o.State != OrderOpen && o.State != OrderPartial {
+		return ErrInvalidTransition
+	}
+	o.State = OrderCancelled
+	o.Version++
+	return nil
+}
+
+func (o *Order) Remaining() int64 {
+	return o.Quantity - o.Filled
+}
+
+type MatchResult struct {
+	BuyOrderID  ID
+	SellOrderID ID
+	Quantity    int64
+	Price       int64
+}
+
+func MatchOrders(buy, sell *Order) (MatchResult, error) {
+	if buy == nil || sell == nil {
+		return MatchResult{}, ErrInvalidInput
+	}
+	if err := buy.Validate(); err != nil {
+		return MatchResult{}, err
+	}
+	if err := sell.Validate(); err != nil {
+		return MatchResult{}, err
+	}
+
+	if buy.Side != Buy || sell.Side != Sell ||
+		buy.State != OrderOpen && buy.State != OrderPartial ||
+		sell.State != OrderOpen && sell.State != OrderPartial {
+		return MatchResult{}, ErrInvalidTransition
+	}
+
+	if buy.MarketID != sell.MarketID ||
+		buy.OfferID != sell.OfferID ||
+		buy.UserID == sell.UserID ||
+		buy.Price < sell.Price {
+		return MatchResult{}, ErrNotEligible
+	}
+
+	quantity := buy.Remaining()
+	if sell.Remaining() < quantity {
+		quantity = sell.Remaining()
+	}
+	if quantity <= 0 {
+		return MatchResult{}, ErrNotEligible
+	}
+
+	// Price-time rule: older order is the maker.
+	executionPrice := buy.Price
+	if sell.CreatedAt.Before(buy.CreatedAt) ||
+		sell.CreatedAt.Equal(buy.CreatedAt) {
+		executionPrice = sell.Price
+	}
+
+	buy.Filled += quantity
+	sell.Filled += quantity
+
+	if buy.Remaining() == 0 {
+		buy.State = OrderFilled
+	} else {
+		buy.State = OrderPartial
+	}
+
+	if sell.Remaining() == 0 {
+		sell.State = OrderFilled
+	} else {
+		sell.State = OrderPartial
+	}
+
+	buy.Version++
+	sell.Version++
+
+	return MatchResult{
+		BuyOrderID:  buy.ID,
+		SellOrderID: sell.ID,
+		Quantity:    quantity,
+		Price:       executionPrice,
+	}, nil
+}
+
+func SortOrderBook(orders []Order) {
+	sort.SliceStable(orders, func(i, j int) bool {
+		a, b := orders[i], orders[j]
+
+		if a.Side != b.Side {
+			return a.Side == Buy
+		}
+		if a.Price != b.Price {
+			if a.Side == Buy {
+				return a.Price > b.Price
+			}
+			return a.Price < b.Price
+		}
+		return a.CreatedAt.Before(b.CreatedAt)
+	})
+}
+
+// ============================================================
+// TRADE - independent status dimensions
+// ============================================================
+
+type TradeState string
+type ContractState string
+type ServiceState string
+type DeliveryState string
+type SettlementReadiness string
+type SettlementState string
+
+const (
+	TradeCreated   TradeState = "created"
+	TradeConfirmed TradeState = "confirmed"
+	TradeExecuting TradeState = "executing"
+	TradeCompleted TradeState = "completed"
+	TradeCancelled TradeState = "cancelled"
+
+	ContractNotRequired ContractState = "not_required"
+	ContractPending     ContractState = "pending"
+	ContractCreated     ContractState = "created"
+	ContractFailed      ContractState = "failed"
+
+	ServiceNotRequired ServiceState = "not_required"
+	ServicePending     ServiceState = "pending"
+	ServiceInProgress  ServiceState = "in_progress"
+	ServiceCompleted   ServiceState = "completed"
+	ServiceFailed      ServiceState = "failed"
+
+	DeliveryNotRequired DeliveryState = "not_required"
+	DeliveryPending     DeliveryState = "pending"
+	DeliveryConfirmed   DeliveryState = "confirmed"
+	DeliveryFailed      DeliveryState = "failed"
+
+	SettlementNotReady SettlementReadiness = "not_ready"
+	SettlementReady    SettlementReadiness = "ready"
+
+	SettlementPending SettlementState = "pending"
+	SettlementDone    SettlementState = "completed"
+	SettlementFailed  SettlementState = "failed"
+)
+
+type Trade struct {
+	ID          ID
+	MatchID     ID
+	BuyOrderID  ID
+	SellOrderID ID
+	BuyerID     ID
+	SellerID    ID
+	OfferID     ID
+	Quantity    int64
+	Price       int64
+
+	State               TradeState
+	Contract            ContractState
+	Services            ServiceState
+	Delivery            DeliveryState
+	SettlementReadiness SettlementReadiness
+	Settlement          SettlementState
+
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	Version   uint64
+}
+
+func (t Trade) Validate() error {
+	if !validID(t.ID) || !validID(t.BuyOrderID) ||
+		!validID(t.SellOrderID) || !validID(t.BuyerID) ||
+		!validID(t.SellerID) || !validID(t.OfferID) ||
+		t.BuyerID == t.SellerID || t.Quantity <= 0 ||
+		t.Price <= 0 || !validTime(t.CreatedAt) ||
+		!validTime(t.UpdatedAt) || t.Version == 0 {
+		return ErrInvalidInput
+	}
+	return nil
+}
+
+func (t *Trade) RecalculateSettlementReadiness() {
+	if t.Contract == ContractFailed ||
+		t.Services == ServiceFailed ||
+		t.Delivery == DeliveryFailed {
+		t.SettlementReadiness = SettlementNotReady
+		return
+	}
+
+	contractOK := t.Contract == ContractNotRequired ||
+		t.Contract == ContractCreated
+	servicesOK := t.Services == ServiceNotRequired ||
+		t.Services == ServiceCompleted
+	deliveryOK := t.Delivery == DeliveryNotRequired ||
+		t.Delivery == DeliveryConfirmed
+
+	if contractOK && servicesOK && deliveryOK {
+		t.SettlementReadiness = SettlementReady
+	} else {
+		t.SettlementReadiness = SettlementNotReady
+	}
+}
+
+// ============================================================
+// VERSIONED EXECUTION POLICIES
+// ============================================================
+
+type StepRequirement string
+
+const (
+	StepRequired    StepRequirement = "required"
+	StepOptional    StepRequirement = "optional"
+	StepConditional StepRequirement = "conditional"
+)
+
+type ExecutionStep struct {
+	Code              string
+	Order             int
+	Requirement       StepRequirement
+	RequiredDocuments []string
+	DependsOn         []string
+}
+
+type ExecutionPolicy struct {
+	ID              ID
+	Name            string
+	Version         uint64
+	OfferCategoryID ID
+	Steps           []ExecutionStep
+	Active          bool
+	CreatedAt       time.Time
+}
+
+func (p ExecutionPolicy) Validate() error {
+	if !validID(p.ID) || !validID(p.OfferCategoryID) ||
+		strings.TrimSpace(p.Name) == "" ||
+		p.Version == 0 || !validTime(p.CreatedAt) ||
+		len(p.Steps) == 0 {
+		return ErrInvalidInput
+	}
+
+	seen := make(map[string]bool)
+	for _, step := range p.Steps {
+		if strings.TrimSpace(step.Code) == "" ||
+			step.Order < 1 || seen[step.Code] {
+			return ErrInvalidInput
+		}
+		if step.Requirement != StepRequired &&
+			step.Requirement != StepOptional &&
+			step.Requirement != StepConditional {
+			return ErrInvalidInput
+		}
+		seen[step.Code] = true
+	}
+
+	for _, step := range p.Steps {
+		for _, dependency := range step.DependsOn {
+			if !seen[dependency] || dependency == step.Code {
+				return ErrPolicyViolation
+			}
+		}
+	}
+
+	return nil
+}
+
+type ExecutionProgress struct {
+	TradeID        ID
+	PolicyID       ID
+	PolicyVersion  uint64
+	CompletedSteps map[string]bool
+}
+
+func (p ExecutionProgress) CanComplete(
+	policy ExecutionPolicy,
+	stepCode string,
+) error {
+	if p.PolicyID != policy.ID ||
+		p.PolicyVersion != policy.Version {
+		return ErrConflict
+	}
+
+	var selected *ExecutionStep
+	for i := range policy.Steps {
+		if policy.Steps[i].Code == stepCode {
+			selected = &policy.Steps[i]
+			break
+		}
+	}
+	if selected == nil {
+		return ErrNotFound
+	}
+
+	for _, dependency := range selected.DependsOn {
+		if !p.CompletedSteps[dependency] {
+			return fmt.Errorf("%w: dependency %s",
+				ErrPolicyViolation, dependency)
+		}
+	}
+	return nil
+}
+
+// ============================================================
+// PHYSICAL COMMODITY AGGREGATION
+// ============================================================
+
+type CommodityLot struct {
+	ID                 ID
+	OfferID            ID
+	CommodityCode      string
+	Quantity           int64
+	Unit               string
+	Verified           bool
+	AggregationAllowed bool
+}
+
+type CommodityAggregation struct {
+	ID            ID
+	CommodityCode string
+	Unit          string
+	LotIDs        []ID
+	TotalQuantity int64
+	CreatedAt     time.Time
+}
+
+func AggregateCommodity(
+	id ID,
+	lots []CommodityLot,
+	minimumQuantity int64,
+	now time.Time,
+) (CommodityAggregation, error) {
+	if !validID(id) || len(lots) == 0 ||
+		minimumQuantity <= 0 || !validTime(now) {
+		return CommodityAggregation{}, ErrInvalidInput
+	}
+
+	first := lots[0]
+	if first.CommodityCode == "" || first.Unit == "" {
+		return CommodityAggregation{}, ErrInvalidInput
+	}
+
+	result := CommodityAggregation{
+		ID:            id,
+		CommodityCode: first.CommodityCode,
+		Unit:          first.Unit,
+		CreatedAt:     now.UTC(),
+	}
+
+	seen := make(map[ID]bool)
+
+	for _, lot := range lots {
+		if !validID(lot.ID) || lot.Quantity <= 0 ||
+			lot.CommodityCode != first.CommodityCode ||
+			lot.Unit != first.Unit ||
+			!lot.Verified || !lot.AggregationAllowed ||
+			seen[lot.ID] {
+			return CommodityAggregation{}, ErrNotEligible
+		}
+
+		seen[lot.ID] = true
+		result.LotIDs = append(result.LotIDs, lot.ID)
+		result.TotalQuantity += lot.Quantity
+	}
+
+	if result.TotalQuantity < minimumQuantity {
+		return CommodityAggregation{}, ErrNotEligible
+	}
+
+	return result, nil
+}
+
+// ============================================================
+// REAL ESTATE - platform position != legal ownership
+// ============================================================
+
+type PropertyWorkflowState string
+type PlatformPositionState string
+type LegalRegistrationState string
+
+const (
+	PropertyPending      PropertyWorkflowState = "pending"
+	PropertyTrading      PropertyWorkflowState = "trading"
+	PropertyContracting  PropertyWorkflowState = "contracting"
+	PropertyRegistration PropertyWorkflowState = "registration"
+	PropertyCompleted    PropertyWorkflowState = "completed"
+
+	PositionNotRecorded PlatformPositionState = "not_recorded"
+	PositionRecorded    PlatformPositionState = "recorded"
+	PositionRejected    PlatformPositionState = "rejected"
+
+	LegalNotRequired LegalRegistrationState = "not_required"
+	LegalPending     LegalRegistrationState = "pending"
+	LegalSubmitted   LegalRegistrationState = "submitted"
+	LegalConfirmed   LegalRegistrationState = "confirmed"
+	LegalRejected    LegalRegistrationState = "rejected"
+)
+
+type PropertyWorkflow struct {
+	ID                ID
+	OfferID           ID
+	TradeID           ID
+	PropertyReference string
+	PlatformPosition  PlatformPositionState
+	LegalRegistration LegalRegistrationState
+	State             PropertyWorkflowState
+	UpdatedAt         time.Time
+}
+
+func (p *PropertyWorkflow) RecordPlatformPosition(
+	confirmedTradeID ID,
+	now time.Time,
+) error {
+	if p == nil || !validID(confirmedTradeID) ||
+		confirmedTradeID != p.TradeID ||
+		!validTime(now) {
+		return ErrNotEligible
+	}
+
+	p.PlatformPosition = PositionRecorded
+	p.UpdatedAt = now.UTC()
+	return nil
+}
+
+func (p PropertyWorkflow) IsLegallyRegistered() bool {
+	return p.LegalRegistration == LegalConfirmed
+}
+
+// ============================================================
+// LEGAL / EXTERNAL INTEGRATION TRACKING
+// ============================================================
+
+type ExternalRequestState string
+
+const (
+	ExternalPending   ExternalRequestState = "pending"
+	ExternalSent      ExternalRequestState = "sent"
+	ExternalSucceeded ExternalRequestState = "succeeded"
+	ExternalFailed    ExternalRequestState = "failed"
+)
+
+type ExternalRequest struct {
+	ID                 ID
+	CorrelationID      ID
+	IdempotencyKey     string
+	InstitutionCode    string
+	Purpose            string
+	Scope              []string
+	PayloadReference   string
+	State              ExternalRequestState
+	ExternalTrackingID string
+	ResponseReference  string
+	Attempt            int
+	CreatedAt          time.Time
+	UpdatedAt          time.Time
+}
+
+func (r ExternalRequest) ValidateAuthorization(
+	grantedScopes []string,
+) error {
+	if !validID(r.ID) || !validID(r.CorrelationID) ||
+		strings.TrimSpace(r.IdempotencyKey) == "" ||
+		strings.TrimSpace(r.InstitutionCode) == "" ||
+		strings.TrimSpace(r.Purpose) == "" ||
+		len(r.Scope) == 0 || !validTime(r.CreatedAt) {
+		return ErrInvalidInput
+	}
+
+	allowed := make(map[string]bool)
+	for _, scope := range grantedScopes {
+		allowed[scope] = true
+	}
+
+	for _, scope := range r.Scope {
+		if !allowed[scope] {
+			return ErrExternalNotAllowed
+		}
+	}
+	return nil
+}
+
+// ============================================================
+// AUDIT
+// ============================================================
+
+type AuditEvent struct {
+	ID              ID
+	AggregateType   string
+	AggregateID     ID
+	Action          string
+	ActorID         ID
+	CorrelationID   ID
+	PreviousVersion uint64
+	NewVersion      uint64
+	OccurredAt      time.Time
+	Metadata        map[string]string
+}
+
+func (e AuditEvent) Validate() error {
+	if !validID(e.ID) || !validID(e.AggregateID) ||
+		!validID(e.ActorID) || !validID(e.CorrelationID) ||
+		strings.TrimSpace(e.AggregateType) == "" ||
+		strings.TrimSpace(e.Action) == "" ||
+		!validTime(e.OccurredAt) ||
+		e.NewVersion < e.PreviousVersion {
+		return ErrInvalidInput
+	}
+	return nil
+}
+
+
+====================================================================================================
+FILE: internal\marketflow\capabilities_test.go
+====================================================================================================
+package marketflow
+
+import (
+	"errors"
+	"testing"
+	"time"
+)
+
+func TestOfferLifecycle(t *testing.T) {
+	now := time.Date(2026, 11, 4, 10, 0, 0, 0, time.UTC)
+
+	offer := &Offer{
+		ID:                    "offer-1",
+		MarketID:              "market-1",
+		OwnerID:               "owner-1",
+		PublicCategoryID:      "public-1",
+		SpecializedCategoryID: "special-1",
+		ConfigurationID:       "config-1",
+		ConfigurationVersion:  1,
+		Title:                 "Test offer",
+		Quantity:              100,
+		Remaining:             100,
+		Unit:                  "unit",
+		Price:                 1000,
+		Currency:              "IRR",
+		State:                 OfferDraft,
+		Version:               1,
+		CreatedAt:             now,
+		UpdatedAt:             now,
+	}
+
+	if err := offer.SubmitForReview(now.Add(time.Minute)); err != nil {
+		t.Fatal(err)
+	}
+	if err := offer.Approve(now.Add(2 * time.Minute)); err != nil {
+		t.Fatal(err)
+	}
+	if err := offer.Publish(now.Add(3 * time.Minute)); err != nil {
+		t.Fatal(err)
+	}
+	if offer.State != OfferPublished {
+		t.Fatalf("unexpected state: %s", offer.State)
+	}
+}
+
+func TestOrderMatchingPartialFill(t *testing.T) {
+	now := time.Date(2026, 11, 4, 10, 0, 0, 0, time.UTC)
+
+	buy := &Order{
+		ID: "buy-1", OfferID: "offer-1", MarketID: "market-1",
+		UserID: "buyer", Side: Buy, Price: 1200,
+		Quantity: 100, State: OrderOpen,
+		CreatedAt: now, Version: 1,
+	}
+
+	sell := &Order{
+		ID: "sell-1", OfferID: "offer-1", MarketID: "market-1",
+		UserID: "seller", Side: Sell, Price: 1100,
+		Quantity: 40, State: OrderOpen,
+		CreatedAt: now.Add(time.Minute), Version: 1,
+	}
+
+	result, err := MatchOrders(buy, sell)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if result.Quantity != 40 {
+		t.Fatalf("expected 40, got %d", result.Quantity)
+	}
+	if buy.State != OrderPartial || sell.State != OrderFilled {
+		t.Fatal("incorrect order states after partial fill")
+	}
+	if buy.Remaining() != 60 {
+		t.Fatalf("expected 60 remaining, got %d", buy.Remaining())
+	}
+}
+
+func TestOrdersCannotMatchTheirOwnUser(t *testing.T) {
+	now := time.Now().UTC()
+
+	buy := &Order{
+		ID: "b", OfferID: "o", MarketID: "m",
+		UserID: "same", Side: Buy, Price: 100,
+		Quantity: 10, State: OrderOpen,
+		CreatedAt: now, Version: 1,
+	}
+
+	sell := &Order{
+		ID: "s", OfferID: "o", MarketID: "m",
+		UserID: "same", Side: Sell, Price: 90,
+		Quantity: 10, State: OrderOpen,
+		CreatedAt: now, Version: 1,
+	}
+
+	_, err := MatchOrders(buy, sell)
+	if !errors.Is(err, ErrNotEligible) {
+		t.Fatalf("expected ErrNotEligible, got %v", err)
+	}
+}
+
+func TestProposalSelection(t *testing.T) {
+	request := &SupplyRequest{
+		ID:          "request-1",
+		RequesterID: "buyer",
+		CategoryID:  "category-1",
+		Quantity:    50,
+		Unit:        "ton",
+		MaxPrice:    200,
+		Currency:    "IRR",
+		State:       RequestOpen,
+		CreatedAt:   time.Now().UTC(),
+	}
+
+	proposal := SupplyProposal{
+		ID:         "proposal-1",
+		RequestID:  "request-1",
+		SupplierID: "supplier",
+		OfferID:    "offer-1",
+		Quantity:   60,
+		UnitPrice:  180,
+		Currency:   "IRR",
+		State:      ProposalSubmitted,
+		CreatedAt:  time.Now().UTC(),
+	}
+
+	if err := SelectProposal(request, proposal); err != nil {
+		t.Fatal(err)
+	}
+
+	if request.State != RequestSelected ||
+		request.SelectedProposalID != proposal.ID {
+		t.Fatal("proposal was not selected")
+	}
+}
+
+func TestExternalRequestRequiresGrantedScope(t *testing.T) {
+	request := ExternalRequest{
+		ID:              "external-1",
+		CorrelationID:   "correlation-1",
+		IdempotencyKey:  "idempotency-1",
+		InstitutionCode: "registry",
+		Purpose:         "property verification",
+		Scope:           []string{"property.read"},
+		State:           ExternalPending,
+		CreatedAt:       time.Now().UTC(),
+	}
+
+	if err := request.ValidateAuthorization([]string{"property.read"}); err != nil {
+		t.Fatal(err)
+	}
+
+	if err := request.ValidateAuthorization([]string{"identity.read"}); !errors.Is(err, ErrExternalNotAllowed) {
+		t.Fatalf("expected authorization failure, got %v", err)
+	}
+}
+
+func TestExecutionPolicyDependencies(t *testing.T) {
+	policy := ExecutionPolicy{
+		ID:              "policy-1",
+		Name:            "Property transaction",
+		Version:         1,
+		OfferCategoryID: "property",
+		Active:          true,
+		CreatedAt:       time.Now().UTC(),
+		Steps: []ExecutionStep{
+			{Code: "contract", Order: 1, Requirement: StepRequired},
+			{Code: "position", Order: 2, Requirement: StepRequired, DependsOn: []string{"contract"}},
+		},
+	}
+
+	if err := policy.Validate(); err != nil {
+		t.Fatal(err)
+	}
+
+	progress := ExecutionProgress{
+		TradeID:        "trade-1",
+		PolicyID:       policy.ID,
+		PolicyVersion:  1,
+		CompletedSteps: map[string]bool{},
+	}
+
+	if err := progress.CanComplete(policy, "position"); !errors.Is(err, ErrPolicyViolation) {
+		t.Fatalf("expected dependency failure, got %v", err)
+	}
+
+	progress.CompletedSteps["contract"] = true
+	if err := progress.CanComplete(policy, "position"); err != nil {
+		t.Fatal(err)
+	}
+}
+
+func TestCommodityAggregation(t *testing.T) {
+	now := time.Now().UTC()
+
+	lots := []CommodityLot{
+		{
+			ID: "lot-1", CommodityCode: "WHEAT",
+			Quantity: 30, Unit: "ton",
+			Verified: true, AggregationAllowed: true,
+		},
+		{
+			ID: "lot-2", CommodityCode: "WHEAT",
+			Quantity: 40, Unit: "ton",
+			Verified: true, AggregationAllowed: true,
+		},
+	}
+
+	result, err := AggregateCommodity("aggregation-1", lots, 60, now)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if result.TotalQuantity != 70 {
+		t.Fatalf("expected 70, got %d", result.TotalQuantity)
+	}
+}
+
+func TestPlatformPositionDoesNotMeanLegalRegistration(t *testing.T) {
+	workflow := PropertyWorkflow{
+		ID:                "property-flow-1",
+		OfferID:           "offer-1",
+		TradeID:           "trade-1",
+		PlatformPosition:  PositionNotRecorded,
+		LegalRegistration: LegalPending,
+		State:             PropertyRegistration,
+	}
+
+	if err := workflow.RecordPlatformPosition("trade-1", time.Now()); err != nil {
+		t.Fatal(err)
+	}
+
+	if workflow.IsLegallyRegistered() {
+		t.Fatal("platform position must not imply legal registration")
+	}
+}
+
+
+====================================================================================================
+FILE: internal\marketflow\ports.go
+====================================================================================================
+package marketflow
+
+import "context"
+
+// These are permanent contracts.
+// Implementations can later use PostgreSQL and real service clients.
+// No service below is treated as operational until an adapter exists.
+
+type OfferRepository interface {
+	GetOffer(context.Context, ID) (Offer, error)
+	SaveOffer(context.Context, Offer, uint64) error
+	ListPublishedOffers(context.Context, int, int) ([]Offer, error)
+}
+
+type OrderRepository interface {
+	GetOrder(context.Context, ID) (Order, error)
+	SaveOrder(context.Context, Order, uint64) error
+	GetOpenBook(context.Context, ID, ID) ([]Order, error)
+}
+
+type TradeRepository interface {
+	GetTrade(context.Context, ID) (Trade, error)
+	SaveTrade(context.Context, Trade, uint64) error
+}
+
+type SupplyRequestRepository interface {
+	GetSupplyRequest(context.Context, ID) (SupplyRequest, error)
+	SaveSupplyRequest(context.Context, SupplyRequest) error
+}
+
+type ExecutionPolicyRepository interface {
+	GetActivePolicy(context.Context, ID) (ExecutionPolicy, error)
+}
+
+type AuditRepository interface {
+	Append(context.Context, AuditEvent) error
+	ListByAggregate(context.Context, string, ID, int) ([]AuditEvent, error)
+}
+
+// Account service is the authority for identity and base permissions.
+type IdentityGateway interface {
+	VerifyIdentity(context.Context, ID) error
+	Authorize(context.Context, ID, string) error
+}
+
+// My Assets is the authority for buying power and reservations.
+type AssetGateway interface {
+	CheckBuyingPower(context.Context, ID, int64, string) error
+	Reserve(context.Context, ID, ID, int64, string) (ID, error)
+	Release(context.Context, ID, ID) error
+	RegisterPlatformPosition(context.Context, ID, ID, int64) error
+}
+
+// Independent authoritative services.
+type ContractGateway interface {
+	CreateContract(context.Context, ID, ID) (ID, error)
+	GetContractStatus(context.Context, ID) (string, error)
+}
+
+type ServiceGateway interface {
+	RequestService(context.Context, ID, string, map[string]string) (ID, error)
+	GetServiceStatus(context.Context, ID) (string, error)
+}
+
+type SettlementGateway interface {
+	RequestSettlement(context.Context, ID, ID) (ID, error)
+	GetSettlementStatus(context.Context, ID) (string, error)
+}
+
+type LegalGateway interface {
+	SubmitAuthorizedRequest(context.Context, ExternalRequest) (string, error)
+	GetRequestResult(context.Context, string) (string, error)
+}
+
+// A repository adapter must enforce optimistic concurrency,
+// atomic writes, and idempotency where applicable.
+// The domain package itself does not pretend to provide persistence.
+
+
+====================================================================================================
+4. MARKET AND CATALOGUE
+====================================================================================================
+
+====================================================================================================
+FILE: internal\market\domain\market.go
+====================================================================================================
+package domain
+
+import (
+	"errors"
+	"fmt"
+	"strings"
+	"time"
+)
+
+var (
+	ErrInvalidMarketID       = errors.New("invalid market id")
+	ErrInvalidMarketCode     = errors.New("invalid market code")
+	ErrInvalidMarketName     = errors.New("invalid market name")
+	ErrInvalidMarketTimezone = errors.New("invalid market timezone")
+	ErrInvalidTimestamp      = errors.New("invalid timestamp")
+	ErrInvalidMarketState    = errors.New("invalid market state")
+	ErrMarketClosed          = errors.New("market is closed")
+)
+
+type MarketID string
+
+type MarketStatus string
+
+const (
+	MarketStatusDraft     MarketStatus = "draft"
+	MarketStatusActive    MarketStatus = "active"
+	MarketStatusSuspended MarketStatus = "suspended"
+	MarketStatusClosed    MarketStatus = "closed"
+)
+
+func (s MarketStatus) IsValid() bool {
+	switch s {
+	case MarketStatusDraft,
+		MarketStatusActive,
+		MarketStatusSuspended,
+		MarketStatusClosed:
+		return true
+	default:
+		return false
+	}
+}
+
+type CreateMarketInput struct {
+	ID          MarketID
+	Code        string
+	Name        string
+	Description string
+	Timezone    string
+}
+
+type Market struct {
+	id          MarketID
+	code        string
+	name        string
+	description string
+	timezone    string
+
+	status    MarketStatus
+	version   uint64
+	createdAt time.Time
+	updatedAt time.Time
+}
+
+func NewMarket(input CreateMarketInput, now time.Time) (*Market, error) {
+	if strings.TrimSpace(string(input.ID)) == "" {
+		return nil, ErrInvalidMarketID
+	}
+
+	code := normalizeMarketCode(input.Code)
+	if !isValidMarketCode(code) {
+		return nil, ErrInvalidMarketCode
+	}
+
+	name := strings.TrimSpace(input.Name)
+	if name == "" || len([]rune(name)) > 160 {
+		return nil, ErrInvalidMarketName
+	}
+
+	if now.IsZero() {
+		return nil, ErrInvalidTimestamp
+	}
+
+	timezone := strings.TrimSpace(input.Timezone)
+	if timezone == "" {
+		timezone = "UTC"
+	}
+
+	if _, err := time.LoadLocation(timezone); err != nil {
+		return nil, fmt.Errorf("%w: %s", ErrInvalidMarketTimezone, timezone)
+	}
+
+	return &Market{
+		id:          input.ID,
+		code:        code,
+		name:        name,
+		description: strings.TrimSpace(input.Description),
+		timezone:    timezone,
+		status:      MarketStatusDraft,
+		version:     1,
+		createdAt:   now.UTC(),
+		updatedAt:   now.UTC(),
+	}, nil
+}
+
+func normalizeMarketCode(value string) string {
+	return strings.ToUpper(strings.TrimSpace(value))
+}
+
+func isValidMarketCode(value string) bool {
+	if len(value) < 2 || len(value) > 32 {
+		return false
+	}
+
+	for _, r := range value {
+		valid := (r >= 'A' && r <= 'Z') ||
+			(r >= '0' && r <= '9') ||
+			r == '-' ||
+			r == '_'
+
+		if !valid {
+			return false
+		}
+	}
+
+	return true
+}
+
+func (m *Market) ID() MarketID {
+	return m.id
+}
+
+func (m *Market) Code() string {
+	return m.code
+}
+
+func (m *Market) Name() string {
+	return m.name
+}
+
+func (m *Market) Description() string {
+	return m.description
+}
+
+func (m *Market) Timezone() string {
+	return m.timezone
+}
+
+func (m *Market) Status() MarketStatus {
+	return m.status
+}
+
+func (m *Market) Version() uint64 {
+	return m.version
+}
+
+func (m *Market) CreatedAt() time.Time {
+	return m.createdAt
+}
+
+func (m *Market) UpdatedAt() time.Time {
+	return m.updatedAt
+}
+
+func (m *Market) UpdateDetails(
+	name string,
+	description string,
+	timezone string,
+	now time.Time,
+) error {
+	if m.status == MarketStatusClosed {
+		return ErrMarketClosed
+	}
+
+	name = strings.TrimSpace(name)
+	if name == "" || len([]rune(name)) > 160 {
+		return ErrInvalidMarketName
+	}
+
+	timezone = strings.TrimSpace(timezone)
+	if timezone == "" {
+		timezone = "UTC"
+	}
+
+	if _, err := time.LoadLocation(timezone); err != nil {
+		return fmt.Errorf("%w: %s", ErrInvalidMarketTimezone, timezone)
+	}
+
+	if err := m.validateTimestamp(now); err != nil {
+		return err
+	}
+
+	m.name = name
+	m.description = strings.TrimSpace(description)
+	m.timezone = timezone
+	m.touch(now)
+
+	return nil
+}
+
+func (m *Market) Activate(now time.Time) error {
+	switch m.status {
+	case MarketStatusDraft, MarketStatusSuspended:
+		if err := m.validateTimestamp(now); err != nil {
+			return err
+		}
+
+		m.status = MarketStatusActive
+		m.touch(now)
+		return nil
+
+	case MarketStatusActive:
+		return ErrInvalidMarketState
+
+	case MarketStatusClosed:
+		return ErrMarketClosed
+
+	default:
+		return ErrInvalidMarketState
+	}
+}
+
+func (m *Market) Suspend(now time.Time) error {
+	if m.status != MarketStatusActive {
+		return ErrInvalidMarketState
+	}
+
+	if err := m.validateTimestamp(now); err != nil {
+		return err
+	}
+
+	m.status = MarketStatusSuspended
+	m.touch(now)
+
+	return nil
+}
+
+func (m *Market) Close(now time.Time) error {
+	if m.status == MarketStatusClosed {
+		return ErrInvalidMarketState
+	}
+
+	if err := m.validateTimestamp(now); err != nil {
+		return err
+	}
+
+	m.status = MarketStatusClosed
+	m.touch(now)
+
+	return nil
+}
+
+func (m *Market) IsOperational() bool {
+	return m.status == MarketStatusActive
+}
+
+func (m *Market) validateTimestamp(now time.Time) error {
+	if now.IsZero() {
+		return ErrInvalidTimestamp
+	}
+
+	if now.Before(m.updatedAt) {
+		return ErrInvalidTimestamp
+	}
+
+	return nil
+}
+
+func (m *Market) touch(now time.Time) {
+	m.updatedAt = now.UTC()
+	m.version++
+}
+
+
+====================================================================================================
+FILE: internal\market\domain\market_test.go
+====================================================================================================
+package domain
+
+import (
+	"errors"
+	"testing"
+	"time"
+)
+
+func testMarket(t *testing.T) *Market {
+	t.Helper()
+
+	now := time.Date(2026, 11, 4, 10, 0, 0, 0, time.UTC)
+
+	market, err := NewMarket(CreateMarketInput{
+		ID:          MarketID("market-001"),
+		Code:        "general-market",
+		Name:        "General Market",
+		Description: "Main general market",
+		Timezone:    "UTC",
+	}, now)
+
+	if err != nil {
+		t.Fatalf("NewMarket() error = %v", err)
+	}
+
+	return market
+}
+
+func TestNewMarket(t *testing.T) {
+	market := testMarket(t)
+
+	if market.Status() != MarketStatusDraft {
+		t.Fatalf("expected draft status, got %s", market.Status())
+	}
+
+	if market.Code() != "GENERAL-MARKET" {
+		t.Fatalf("unexpected normalized code: %s", market.Code())
+	}
+
+	if market.Version() != 1 {
+		t.Fatalf("expected version 1, got %d", market.Version())
+	}
+}
+
+func TestNewMarketRejectsInvalidInput(t *testing.T) {
+	now := time.Now().UTC()
+
+	tests := []struct {
+		name  string
+		input CreateMarketInput
+		want  error
+	}{
+		{
+			name: "missing id",
+			input: CreateMarketInput{
+				Code: "MKT",
+				Name: "Market",
+			},
+			want: ErrInvalidMarketID,
+		},
+		{
+			name: "invalid code",
+			input: CreateMarketInput{
+				ID:   "m-1",
+				Code: "invalid code!",
+				Name: "Market",
+			},
+			want: ErrInvalidMarketCode,
+		},
+		{
+			name: "missing name",
+			input: CreateMarketInput{
+				ID:   "m-1",
+				Code: "MKT",
+				Name: " ",
+			},
+			want: ErrInvalidMarketName,
+		},
+		{
+			name: "invalid timezone",
+			input: CreateMarketInput{
+				ID:       "m-1",
+				Code:     "MKT",
+				Name:     "Market",
+				Timezone: "Not/A/Timezone",
+			},
+			want: ErrInvalidMarketTimezone,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			_, err := NewMarket(tt.input, now)
+
+			if !errors.Is(err, tt.want) {
+				t.Fatalf("expected error %v, got %v", tt.want, err)
+			}
+		})
+	}
+}
+
+func TestMarketLifecycle(t *testing.T) {
+	market := testMarket(t)
+	base := market.UpdatedAt()
+
+	if err := market.Activate(base.Add(time.Minute)); err != nil {
+		t.Fatalf("Activate() error = %v", err)
+	}
+
+	if !market.IsOperational() {
+		t.Fatal("market should be operational")
+	}
+
+	if err := market.Suspend(base.Add(2 * time.Minute)); err != nil {
+		t.Fatalf("Suspend() error = %v", err)
+	}
+
+	if market.Status() != MarketStatusSuspended {
+		t.Fatalf("unexpected status: %s", market.Status())
+	}
+
+	if err := market.Activate(base.Add(3 * time.Minute)); err != nil {
+		t.Fatalf("reactivation error = %v", err)
+	}
+
+	if err := market.Close(base.Add(4 * time.Minute)); err != nil {
+		t.Fatalf("Close() error = %v", err)
+	}
+
+	if market.Status() != MarketStatusClosed {
+		t.Fatalf("expected closed status, got %s", market.Status())
+	}
+
+	if err := market.Activate(base.Add(5 * time.Minute)); !errors.Is(err, ErrMarketClosed) {
+		t.Fatalf("expected ErrMarketClosed, got %v", err)
+	}
+}
+
+func TestMarketRejectsInvalidTransitions(t *testing.T) {
+	market := testMarket(t)
+	now := market.UpdatedAt()
+
+	if err := market.Suspend(now.Add(time.Minute)); !errors.Is(err, ErrInvalidMarketState) {
+		t.Fatalf("expected invalid state error, got %v", err)
+	}
+
+	if err := market.Activate(now.Add(time.Minute)); err != nil {
+		t.Fatalf("Activate() error = %v", err)
+	}
+
+	if err := market.Activate(now.Add(2 * time.Minute)); !errors.Is(err, ErrInvalidMarketState) {
+		t.Fatalf("expected invalid state error, got %v", err)
+	}
+}
+
+func TestMarketRejectsTimeRegression(t *testing.T) {
+	market := testMarket(t)
+
+	err := market.Activate(market.CreatedAt().Add(-time.Minute))
+
+	if !errors.Is(err, ErrInvalidTimestamp) {
+		t.Fatalf("expected ErrInvalidTimestamp, got %v", err)
+	}
+}
+
+func TestMarketVersionIncrementsOnMutation(t *testing.T) {
+	market := testMarket(t)
+	initialVersion := market.Version()
+	now := market.UpdatedAt()
+
+	if err := market.UpdateDetails(
+		"Updated Market",
+		"Updated description",
+		"UTC",
+		now.Add(time.Minute),
+	); err != nil {
+		t.Fatalf("UpdateDetails() error = %v", err)
+	}
+
+	if market.Version() != initialVersion+1 {
+		t.Fatalf("expected version %d, got %d", initialVersion+1, market.Version())
+	}
+}
+
+
+====================================================================================================
+FILE: internal\catalogue\domain\category.go
+====================================================================================================
+package domain
+
+import (
+	"errors"
+	"strings"
+	"time"
+)
+
+var (
+	ErrInvalidCategoryID       = errors.New("invalid category id")
+	ErrInvalidCategoryCode     = errors.New("invalid category code")
+	ErrInvalidCategoryName     = errors.New("invalid category name")
+	ErrInvalidCategoryKind     = errors.New("invalid category kind")
+	ErrInvalidCategoryStatus   = errors.New("invalid category status")
+	ErrInvalidParentCategory   = errors.New("invalid parent category")
+	ErrCategoryArchived        = errors.New("category is archived")
+	ErrInvalidCategoryMutation = errors.New("invalid category mutation")
+)
+
+type CategoryID string
+
+type CategoryKind string
+
+type CategoryStatus string
+
+const (
+	CategoryKindGeneral     CategoryKind = "general"
+	CategoryKindSpecialized CategoryKind = "specialized"
+)
+
+const (
+	CategoryStatusDraft    CategoryStatus = "draft"
+	CategoryStatusActive   CategoryStatus = "active"
+	CategoryStatusArchived CategoryStatus = "archived"
+)
+
+func (k CategoryKind) IsValid() bool {
+	return k == CategoryKindGeneral || k == CategoryKindSpecialized
+}
+
+func (s CategoryStatus) IsValid() bool {
+	return s == CategoryStatusDraft ||
+		s == CategoryStatusActive ||
+		s == CategoryStatusArchived
+}
+
+type CreateCategoryInput struct {
+	ID        CategoryID
+	Code      string
+	Name      string
+	Kind      CategoryKind
+	ParentID  CategoryID
+	SortOrder int
+}
+
+type Category struct {
+	id        CategoryID
+	code      string
+	name      string
+	kind      CategoryKind
+	parentID  CategoryID
+	sortOrder int
+
+	status    CategoryStatus
+	version   uint64
+	createdAt time.Time
+	updatedAt time.Time
+}
+
+func NewCategory(input CreateCategoryInput, now time.Time) (*Category, error) {
+	if strings.TrimSpace(string(input.ID)) == "" {
+		return nil, ErrInvalidCategoryID
+	}
+
+	code := normalizeCategoryCode(input.Code)
+	if !isValidCategoryCode(code) {
+		return nil, ErrInvalidCategoryCode
+	}
+
+	name := strings.TrimSpace(input.Name)
+	if name == "" || len([]rune(name)) > 160 {
+		return nil, ErrInvalidCategoryName
+	}
+
+	if !input.Kind.IsValid() {
+		return nil, ErrInvalidCategoryKind
+	}
+
+	if input.ParentID != "" && input.ParentID == input.ID {
+		return nil, ErrInvalidParentCategory
+	}
+
+	if now.IsZero() {
+		return nil, ErrInvalidTimestamp
+	}
+
+	return &Category{
+		id:        input.ID,
+		code:      code,
+		name:      name,
+		kind:      input.Kind,
+		parentID:  input.ParentID,
+		sortOrder: input.SortOrder,
+		status:    CategoryStatusDraft,
+		version:   1,
+		createdAt: now.UTC(),
+		updatedAt: now.UTC(),
+	}, nil
+}
+
+func normalizeCategoryCode(value string) string {
+	return strings.ToUpper(strings.TrimSpace(value))
+}
+
+func isValidCategoryCode(value string) bool {
+	if len(value) < 2 || len(value) > 64 {
+		return false
+	}
+
+	for _, r := range value {
+		valid := (r >= 'A' && r <= 'Z') ||
+			(r >= '0' && r <= '9') ||
+			r == '-' ||
+			r == '_' ||
+			r == '.'
+
+		if !valid {
+			return false
+		}
+	}
+
+	return true
+}
+
+func (c *Category) ID() CategoryID {
+	return c.id
+}
+
+func (c *Category) Code() string {
+	return c.code
+}
+
+func (c *Category) Name() string {
+	return c.name
+}
+
+func (c *Category) Kind() CategoryKind {
+	return c.kind
+}
+
+func (c *Category) ParentID() CategoryID {
+	return c.parentID
+}
+
+func (c *Category) SortOrder() int {
+	return c.sortOrder
+}
+
+func (c *Category) Status() CategoryStatus {
+	return c.status
+}
+
+func (c *Category) Version() uint64 {
+	return c.version
+}
+
+func (c *Category) CreatedAt() time.Time {
+	return c.createdAt
+}
+
+func (c *Category) UpdatedAt() time.Time {
+	return c.updatedAt
+}
+
+func (c *Category) Rename(name string, now time.Time) error {
+	if c.status == CategoryStatusArchived {
+		return ErrCategoryArchived
+	}
+
+	name = strings.TrimSpace(name)
+	if name == "" || len([]rune(name)) > 160 {
+		return ErrInvalidCategoryName
+	}
+
+	if err := c.validateTimestamp(now); err != nil {
+		return err
+	}
+
+	if name == c.name {
+		return nil
+	}
+
+	c.name = name
+	c.touch(now)
+
+	return nil
+}
+
+func (c *Category) ChangeParent(parentID CategoryID, now time.Time) error {
+	if c.status == CategoryStatusArchived {
+		return ErrCategoryArchived
+	}
+
+	if parentID != "" && parentID == c.id {
+		return ErrInvalidParentCategory
+	}
+
+	if err := c.validateTimestamp(now); err != nil {
+		return err
+	}
+
+	if parentID == c.parentID {
+		return nil
+	}
+
+	c.parentID = parentID
+	c.touch(now)
+
+	return nil
+}
+
+func (c *Category) ChangeSortOrder(sortOrder int, now time.Time) error {
+	if c.status == CategoryStatusArchived {
+		return ErrCategoryArchived
+	}
+
+	if err := c.validateTimestamp(now); err != nil {
+		return err
+	}
+
+	if sortOrder == c.sortOrder {
+		return nil
+	}
+
+	c.sortOrder = sortOrder
+	c.touch(now)
+
+	return nil
+}
+
+func (c *Category) Activate(now time.Time) error {
+	switch c.status {
+	case CategoryStatusDraft:
+		if err := c.validateTimestamp(now); err != nil {
+			return err
+		}
+
+		c.status = CategoryStatusActive
+		c.touch(now)
+		return nil
+
+	case CategoryStatusActive:
+		return ErrInvalidCategoryMutation
+
+	case CategoryStatusArchived:
+		return ErrCategoryArchived
+
+	default:
+		return ErrInvalidCategoryStatus
+	}
+}
+
+func (c *Category) Archive(now time.Time) error {
+	if c.status == CategoryStatusArchived {
+		return ErrInvalidCategoryMutation
+	}
+
+	if err := c.validateTimestamp(now); err != nil {
+		return err
+	}
+
+	c.status = CategoryStatusArchived
+	c.touch(now)
+
+	return nil
+}
+
+func (c *Category) IsSelectable() bool {
+	return c.status == CategoryStatusActive
+}
+
+func (c *Category) validateTimestamp(now time.Time) error {
+	if now.IsZero() || now.Before(c.updatedAt) {
+		return ErrInvalidTimestamp
+	}
+
+	return nil
+}
+
+func (c *Category) touch(now time.Time) {
+	c.updatedAt = now.UTC()
+	c.version++
+}
+
+
+====================================================================================================
+FILE: internal\catalogue\domain\category_mapping.go
+====================================================================================================
+package domain
+
+import (
+	"errors"
+	"strings"
+	"time"
+)
+
+var (
+	ErrInvalidCategoryMappingID = errors.New("invalid category mapping id")
+	ErrInvalidCategoryMapping   = errors.New("invalid category mapping")
+	ErrCategoryMappingArchived  = errors.New("category mapping is archived")
+	ErrCategoryMappingState     = errors.New("invalid category mapping state")
+	ErrCategoryKindsMismatch    = errors.New("category kinds do not match mapping direction")
+	ErrCategoryNotActive        = errors.New("both categories must be active")
+)
+
+type CategoryMappingID string
+
+type CategoryMappingStatus string
+
+const (
+	CategoryMappingStatusDraft    CategoryMappingStatus = "draft"
+	CategoryMappingStatusActive   CategoryMappingStatus = "active"
+	CategoryMappingStatusArchived CategoryMappingStatus = "archived"
+)
+
+type CreateCategoryMappingInput struct {
+	ID                    CategoryMappingID
+	PublicCategoryID      CategoryID
+	SpecializedCategoryID CategoryID
+	MarketID              string
+	Description           string
+}
+
+type CategoryMapping struct {
+	id                    CategoryMappingID
+	publicCategoryID      CategoryID
+	specializedCategoryID CategoryID
+	marketID              string
+	description           string
+
+	status    CategoryMappingStatus
+	version   uint64
+	createdAt time.Time
+	updatedAt time.Time
+}
+
+func NewCategoryMapping(
+	input CreateCategoryMappingInput,
+	now time.Time,
+) (*CategoryMapping, error) {
+	if strings.TrimSpace(string(input.ID)) == "" {
+		return nil, ErrInvalidCategoryMappingID
+	}
+
+	if strings.TrimSpace(string(input.PublicCategoryID)) == "" ||
+		strings.TrimSpace(string(input.SpecializedCategoryID)) == "" ||
+		input.PublicCategoryID == input.SpecializedCategoryID {
+		return nil, ErrInvalidCategoryMapping
+	}
+
+	if now.IsZero() {
+		return nil, ErrInvalidTimestamp
+	}
+
+	return &CategoryMapping{
+		id:                    input.ID,
+		publicCategoryID:      input.PublicCategoryID,
+		specializedCategoryID: input.SpecializedCategoryID,
+		marketID:              strings.TrimSpace(input.MarketID),
+		description:           strings.TrimSpace(input.Description),
+		status:                CategoryMappingStatusDraft,
+		version:               1,
+		createdAt:             now.UTC(),
+		updatedAt:             now.UTC(),
+	}, nil
+}
+
+func (m *CategoryMapping) ID() CategoryMappingID {
+	return m.id
+}
+
+func (m *CategoryMapping) PublicCategoryID() CategoryID {
+	return m.publicCategoryID
+}
+
+func (m *CategoryMapping) SpecializedCategoryID() CategoryID {
+	return m.specializedCategoryID
+}
+
+func (m *CategoryMapping) MarketID() string {
+	return m.marketID
+}
+
+func (m *CategoryMapping) Description() string {
+	return m.description
+}
+
+func (m *CategoryMapping) Status() CategoryMappingStatus {
+	return m.status
+}
+
+func (m *CategoryMapping) Version() uint64 {
+	return m.version
+}
+
+func (m *CategoryMapping) CreatedAt() time.Time {
+	return m.createdAt
+}
+
+func (m *CategoryMapping) UpdatedAt() time.Time {
+	return m.updatedAt
+}
+
+func (m *CategoryMapping) Activate(
+	publicCategory *Category,
+	specializedCategory *Category,
+	now time.Time,
+) error {
+	if m.status == CategoryMappingStatusArchived {
+		return ErrCategoryMappingArchived
+	}
+
+	if m.status != CategoryMappingStatusDraft {
+		return ErrCategoryMappingState
+	}
+
+	if publicCategory == nil || specializedCategory == nil {
+		return ErrInvalidCategoryMapping
+	}
+
+	if publicCategory.ID() != m.publicCategoryID ||
+		specializedCategory.ID() != m.specializedCategoryID {
+		return ErrInvalidCategoryMapping
+	}
+
+	if publicCategory.Kind() != CategoryKindGeneral ||
+		specializedCategory.Kind() != CategoryKindSpecialized {
+		return ErrCategoryKindsMismatch
+	}
+
+	if !publicCategory.IsSelectable() || !specializedCategory.IsSelectable() {
+		return ErrCategoryNotActive
+	}
+
+	if now.IsZero() || now.Before(m.updatedAt) {
+		return ErrInvalidTimestamp
+	}
+
+	m.status = CategoryMappingStatusActive
+	m.touch(now)
+
+	return nil
+}
+
+func (m *CategoryMapping) Archive(now time.Time) error {
+	if m.status == CategoryMappingStatusArchived {
+		return ErrCategoryMappingState
+	}
+
+	if now.IsZero() || now.Before(m.updatedAt) {
+		return ErrInvalidTimestamp
+	}
+
+	m.status = CategoryMappingStatusArchived
+	m.touch(now)
+
+	return nil
+}
+
+func (m *CategoryMapping) IsUsable() bool {
+	return m.status == CategoryMappingStatusActive
+}
+
+func (m *CategoryMapping) touch(now time.Time) {
+	m.updatedAt = now.UTC()
+	m.version++
+}
+
+
+====================================================================================================
+FILE: internal\catalogue\domain\category_mapping_test.go
+====================================================================================================
+package domain
+
+import (
+	"errors"
+	"testing"
+	"time"
+)
+
+func createMappingTestCategories(t *testing.T) (*Category, *Category, time.Time) {
+	t.Helper()
+
+	now := time.Date(2026, 11, 4, 10, 0, 0, 0, time.UTC)
+
+	publicCategory, err := NewCategory(CreateCategoryInput{
+		ID:   "public-1",
+		Code: "PUBLIC",
+		Name: "Public Category",
+		Kind: CategoryKindGeneral,
+	}, now)
+
+	if err != nil {
+		t.Fatalf("create public category: %v", err)
+	}
+
+	specializedCategory, err := NewCategory(CreateCategoryInput{
+		ID:   "special-1",
+		Code: "SPECIAL",
+		Name: "Specialized Category",
+		Kind: CategoryKindSpecialized,
+	}, now)
+
+	if err != nil {
+		t.Fatalf("create specialized category: %v", err)
+	}
+
+	if err := publicCategory.Activate(now.Add(time.Minute)); err != nil {
+		t.Fatalf("activate public category: %v", err)
+	}
+
+	if err := specializedCategory.Activate(now.Add(time.Minute)); err != nil {
+		t.Fatalf("activate specialized category: %v", err)
+	}
+
+	return publicCategory, specializedCategory, now
+}
+
+func TestNewCategoryMapping(t *testing.T) {
+	now := time.Now().UTC()
+
+	mapping, err := NewCategoryMapping(CreateCategoryMappingInput{
+		ID:                    "mapping-1",
+		PublicCategoryID:      "public-1",
+		SpecializedCategoryID: "special-1",
+		MarketID:              "market-1",
+		Description:           "Public to specialized mapping",
+	}, now)
+
+	if err != nil {
+		t.Fatalf("NewCategoryMapping() error = %v", err)
+	}
+
+	if mapping.Status() != CategoryMappingStatusDraft {
+		t.Fatalf("expected draft status, got %s", mapping.Status())
+	}
+
+	if mapping.Version() != 1 {
+		t.Fatalf("expected version 1, got %d", mapping.Version())
+	}
+}
+
+func TestNewCategoryMappingRejectsSameCategory(t *testing.T) {
+	_, err := NewCategoryMapping(CreateCategoryMappingInput{
+		ID:                    "mapping-1",
+		PublicCategoryID:      "same",
+		SpecializedCategoryID: "same",
+	}, time.Now().UTC())
+
+	if !errors.Is(err, ErrInvalidCategoryMapping) {
+		t.Fatalf("expected ErrInvalidCategoryMapping, got %v", err)
+	}
+}
+
+func TestCategoryMappingActivation(t *testing.T) {
+	publicCategory, specializedCategory, now := createMappingTestCategories(t)
+
+	mapping, err := NewCategoryMapping(CreateCategoryMappingInput{
+		ID:                    "mapping-1",
+		PublicCategoryID:      publicCategory.ID(),
+		SpecializedCategoryID: specializedCategory.ID(),
+		MarketID:              "market-1",
+	}, now.Add(2*time.Minute))
+
+	if err != nil {
+		t.Fatalf("NewCategoryMapping() error = %v", err)
+	}
+
+	activationTime := now.Add(3 * time.Minute)
+
+	if err := mapping.Activate(publicCategory, specializedCategory, activationTime); err != nil {
+		t.Fatalf("Activate() error = %v", err)
+	}
+
+	if !mapping.IsUsable() {
+		t.Fatal("mapping should be usable")
+	}
+
+	if mapping.Status() != CategoryMappingStatusActive {
+		t.Fatalf("unexpected status: %s", mapping.Status())
+	}
+
+	if mapping.Version() != 2 {
+		t.Fatalf("expected version 2, got %d", mapping.Version())
+	}
+}
+
+func TestCategoryMappingRejectsWrongKinds(t *testing.T) {
+	publicCategory, specializedCategory, now := createMappingTestCategories(t)
+
+	mapping, err := NewCategoryMapping(CreateCategoryMappingInput{
+		ID:                    "mapping-1",
+		PublicCategoryID:      publicCategory.ID(),
+		SpecializedCategoryID: specializedCategory.ID(),
+	}, now.Add(2*time.Minute))
+
+	if err != nil {
+		t.Fatalf("NewCategoryMapping() error = %v", err)
+	}
+
+	err = mapping.Activate(specializedCategory, publicCategory, now.Add(3*time.Minute))
+
+	if !errors.Is(err, ErrInvalidCategoryMapping) {
+		// The IDs are deliberately reversed, so the mapping identity check
+		// must reject the operation before category-kind validation.
+		t.Fatalf("expected ErrInvalidCategoryMapping, got %v", err)
+	}
+}
+
+func TestCategoryMappingRequiresActiveCategories(t *testing.T) {
+	now := time.Now().UTC()
+
+	publicCategory, err := NewCategory(CreateCategoryInput{
+		ID:   "public-1",
+		Code: "PUBLIC",
+		Name: "Public",
+		Kind: CategoryKindGeneral,
+	}, now)
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	specializedCategory, err := NewCategory(CreateCategoryInput{
+		ID:   "special-1",
+		Code: "SPECIAL",
+		Name: "Specialized",
+		Kind: CategoryKindSpecialized,
+	}, now)
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	mapping, err := NewCategoryMapping(CreateCategoryMappingInput{
+		ID:                    "mapping-1",
+		PublicCategoryID:      publicCategory.ID(),
+		SpecializedCategoryID: specializedCategory.ID(),
+	}, now.Add(time.Minute))
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	err = mapping.Activate(publicCategory, specializedCategory, now.Add(2*time.Minute))
+
+	if !errors.Is(err, ErrCategoryNotActive) {
+		t.Fatalf("expected ErrCategoryNotActive, got %v", err)
+	}
+}
+
+func TestCategoryMappingArchive(t *testing.T) {
+	publicCategory, specializedCategory, now := createMappingTestCategories(t)
+
+	mapping, err := NewCategoryMapping(CreateCategoryMappingInput{
+		ID:                    "mapping-1",
+		PublicCategoryID:      publicCategory.ID(),
+		SpecializedCategoryID: specializedCategory.ID(),
+	}, now.Add(2*time.Minute))
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if err := mapping.Activate(publicCategory, specializedCategory, now.Add(3*time.Minute)); err != nil {
+		t.Fatal(err)
+	}
+
+	if err := mapping.Archive(now.Add(4 * time.Minute)); err != nil {
+		t.Fatalf("Archive() error = %v", err)
+	}
+
+	if mapping.IsUsable() {
+		t.Fatal("archived mapping must not be usable")
+	}
+
+	if err := mapping.Activate(publicCategory, specializedCategory, now.Add(5*time.Minute)); !errors.Is(err, ErrCategoryMappingArchived) {
+		t.Fatalf("expected ErrCategoryMappingArchived, got %v", err)
+	}
+}
+
+
+====================================================================================================
+FILE: internal\catalogue\domain\category_test.go
+====================================================================================================
+package domain
+
+import (
+	"errors"
+	"testing"
+	"time"
+)
+
+func newTestCategory(
+	t *testing.T,
+	id CategoryID,
+	code string,
+	kind CategoryKind,
+) *Category {
+	t.Helper()
+
+	now := time.Date(2026, 11, 4, 10, 0, 0, 0, time.UTC)
+
+	category, err := NewCategory(CreateCategoryInput{
+		ID:        id,
+		Code:      code,
+		Name:      "Test Category",
+		Kind:      kind,
+		SortOrder: 10,
+	}, now)
+
+	if err != nil {
+		t.Fatalf("NewCategory() error = %v", err)
+	}
+
+	return category
+}
+
+func TestNewCategory(t *testing.T) {
+	category := newTestCategory(
+		t,
+		"category-001",
+		"general.goods",
+		CategoryKindGeneral,
+	)
+
+	if category.Status() != CategoryStatusDraft {
+		t.Fatalf("expected draft, got %s", category.Status())
+	}
+
+	if category.Code() != "GENERAL.GOODS" {
+		t.Fatalf("unexpected code: %s", category.Code())
+	}
+
+	if category.Version() != 1 {
+		t.Fatalf("expected version 1, got %d", category.Version())
+	}
+}
+
+func TestNewCategoryRejectsInvalidInput(t *testing.T) {
+	now := time.Now().UTC()
+
+	tests := []struct {
+		name  string
+		input CreateCategoryInput
+		want  error
+	}{
+		{
+			name: "missing id",
+			input: CreateCategoryInput{
+				Code: "CAT",
+				Name: "Category",
+				Kind: CategoryKindGeneral,
+			},
+			want: ErrInvalidCategoryID,
+		},
+		{
+			name: "invalid code",
+			input: CreateCategoryInput{
+				ID:   "cat-1",
+				Code: "bad code",
+				Name: "Category",
+				Kind: CategoryKindGeneral,
+			},
+			want: ErrInvalidCategoryCode,
+		},
+		{
+			name: "invalid kind",
+			input: CreateCategoryInput{
+				ID:   "cat-1",
+				Code: "CAT",
+				Name: "Category",
+				Kind: "unknown",
+			},
+			want: ErrInvalidCategoryKind,
+		},
+		{
+			name: "self parent",
+			input: CreateCategoryInput{
+				ID:       "cat-1",
+				Code:     "CAT",
+				Name:     "Category",
+				Kind:     CategoryKindGeneral,
+				ParentID: "cat-1",
+			},
+			want: ErrInvalidParentCategory,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			_, err := NewCategory(tt.input, now)
+
+			if !errors.Is(err, tt.want) {
+				t.Fatalf("expected %v, got %v", tt.want, err)
+			}
+		})
+	}
+}
+
+func TestCategoryLifecycle(t *testing.T) {
+	category := newTestCategory(
+		t,
+		"cat-1",
+		"CAT",
+		CategoryKindGeneral,
+	)
+
+	base := category.UpdatedAt()
+
+	if err := category.Activate(base.Add(time.Minute)); err != nil {
+		t.Fatalf("Activate() error = %v", err)
+	}
+
+	if !category.IsSelectable() {
+		t.Fatal("active category should be selectable")
+	}
+
+	if err := category.Archive(base.Add(2 * time.Minute)); err != nil {
+		t.Fatalf("Archive() error = %v", err)
+	}
+
+	if category.IsSelectable() {
+		t.Fatal("archived category must not be selectable")
+	}
+
+	if err := category.Activate(base.Add(3 * time.Minute)); !errors.Is(err, ErrCategoryArchived) {
+		t.Fatalf("expected ErrCategoryArchived, got %v", err)
+	}
+}
+
+func TestCategoryMutation(t *testing.T) {
+	category := newTestCategory(
+		t,
+		"cat-1",
+		"CAT",
+		CategoryKindGeneral,
+	)
+
+	base := category.UpdatedAt()
+
+	if err := category.Rename("New Name", base.Add(time.Minute)); err != nil {
+		t.Fatalf("Rename() error = %v", err)
+	}
+
+	if category.Name() != "New Name" {
+		t.Fatalf("unexpected name: %s", category.Name())
+	}
+
+	if err := category.ChangeParent("parent-1", base.Add(2*time.Minute)); err != nil {
+		t.Fatalf("ChangeParent() error = %v", err)
+	}
+
+	if category.ParentID() != "parent-1" {
+		t.Fatalf("unexpected parent: %s", category.ParentID())
+	}
+
+	if err := category.ChangeSortOrder(20, base.Add(3*time.Minute)); err != nil {
+		t.Fatalf("ChangeSortOrder() error = %v", err)
+	}
+
+	if category.SortOrder() != 20 {
+		t.Fatalf("unexpected sort order: %d", category.SortOrder())
+	}
+
+	if category.Version() != 4 {
+		t.Fatalf("expected version 4, got %d", category.Version())
+	}
+}
+
+func TestCategoryRejectsSelfParent(t *testing.T) {
+	category := newTestCategory(
+		t,
+		"cat-1",
+		"CAT",
+		CategoryKindGeneral,
+	)
+
+	err := category.ChangeParent("cat-1", category.UpdatedAt().Add(time.Minute))
+
+	if !errors.Is(err, ErrInvalidParentCategory) {
+		t.Fatalf("expected ErrInvalidParentCategory, got %v", err)
+	}
+}
+
+func TestCategoryRejectsMutationAfterArchive(t *testing.T) {
+	category := newTestCategory(
+		t,
+		"cat-1",
+		"CAT",
+		CategoryKindGeneral,
+	)
+
+	base := category.UpdatedAt()
+
+	if err := category.Archive(base.Add(time.Minute)); err != nil {
+		t.Fatalf("Archive() error = %v", err)
+	}
+
+	if err := category.Rename("Forbidden", base.Add(2*time.Minute)); !errors.Is(err, ErrCategoryArchived) {
+		t.Fatalf("expected ErrCategoryArchived, got %v", err)
+	}
+}
+
+
+====================================================================================================
+FILE: internal\catalogue\domain\timestamp_errors.go
+====================================================================================================
+package domain
+
+import "errors"
+
+// ErrInvalidTimestamp indicates an invalid or inconsistent domain timestamp.
+var ErrInvalidTimestamp = errors.New("invalid timestamp")
+
+
+====================================================================================================
+FILE: internal\catalogue\handler.go
+====================================================================================================
+package catalogue
+
+import (
+	"database/sql"
+	"encoding/json"
+	"errors"
+	"net/http"
+	"strconv"
+	"strings"
+	"time"
+)
+
+const (
+	defaultPageSize = 20
+	maxPageSize     = 100
+	maxSearchLength = 120
+)
+
+type Handler struct {
+	DB *sql.DB
+}
+
+type OfferSummary struct {
+	ID                 string          `json:"id"`
+	Code               string          `json:"code"`
+	MarketID           string          `json:"market_id"`
+	MarketName         string          `json:"market_name"`
+	PublicCategoryID   string          `json:"public_category_id,omitempty"`
+	PublicCategoryName string          `json:"public_category_name,omitempty"`
+	ClassificationID   string          `json:"classification_id"`
+	Title              string          `json:"title"`
+	Summary            string          `json:"summary,omitempty"`
+	OfferType          string          `json:"offer_type"`
+	PriceAmount        string          `json:"price_amount,omitempty"`
+	CurrencyCode       string          `json:"currency_code,omitempty"`
+	QuantityTotal      string          `json:"quantity_total,omitempty"`
+	QuantityUnit       string          `json:"quantity_unit,omitempty"`
+	Attributes         json.RawMessage `json:"attributes"`
+	PublishedAt        time.Time       `json:"published_at"`
+	ValidUntil         *time.Time      `json:"valid_until,omitempty"`
+}
+
+type ListResponse struct {
+	Data       []OfferSummary `json:"data"`
+	Page       int            `json:"page"`
+	PageSize   int            `json:"page_size"`
+	Total      int64          `json:"total"`
+	TotalPages int64          `json:"total_pages"`
+}
+
+type APIError struct {
+	Code    string `json:"code"`
+	Message string `json:"message"`
+}
+
+func (h Handler) Register(mux *http.ServeMux) {
+	mux.HandleFunc("GET /api/v1/catalogue/offers", h.ListOffers)
+	mux.HandleFunc("GET /api/v1/catalogue/offers/{id}", h.GetOffer)
+}
+
+func (h Handler) ListOffers(w http.ResponseWriter, r *http.Request) {
+	page, err := parsePositiveInt(r.URL.Query().Get("page"), 1, 1000000)
+	if err != nil {
+		writeError(w, http.StatusBadRequest, "invalid_page", "page must be a positive integer.")
+		return
+	}
+
+	pageSize, err := parsePositiveInt(r.URL.Query().Get("page_size"), defaultPageSize, maxPageSize)
+	if err != nil {
+		writeError(w, http.StatusBadRequest, "invalid_page_size", "page_size must be between 1 and 100.")
+		return
+	}
+
+	search := strings.TrimSpace(r.URL.Query().Get("q"))
+	if len(search) > maxSearchLength {
+		writeError(w, http.StatusBadRequest, "search_too_long", "q must not exceed 120 characters.")
+		return
+	}
+
+	categoryID := strings.TrimSpace(r.URL.Query().Get("category_id"))
+	marketID := strings.TrimSpace(r.URL.Query().Get("market_id"))
+
+	if h.DB == nil {
+		writeError(w, http.StatusServiceUnavailable, "database_unavailable", "Catalogue storage is unavailable.")
+		return
+	}
+
+	const filter = `
+		FROM offers o
+		INNER JOIN markets m ON m.id = o.market_id
+		LEFT JOIN public_categories pc ON pc.id = o.public_category_id
+		WHERE o.status = 'published'
+		  AND m.status = 'active'
+		  AND (o.valid_from IS NULL OR o.valid_from <= now())
+		  AND (o.valid_until IS NULL OR o.valid_until > now())
+		  AND ($1 = '' OR o.title ILIKE '%' || $1 || '%' OR COALESCE(o.summary, '') ILIKE '%' || $1 || '%')
+		  AND ($2 = '' OR o.public_category_id::text = $2)
+		  AND ($3 = '' OR o.market_id::text = $3)
+	`
+
+	var total int64
+	countQuery := "SELECT count(*) " + filter
+	if err := h.DB.QueryRowContext(r.Context(), countQuery, search, categoryID, marketID).Scan(&total); err != nil {
+		writeError(w, http.StatusInternalServerError, "catalogue_query_failed", "The catalogue could not be loaded.")
+		return
+	}
+
+	offset := (page - 1) * pageSize
+	const listSelect = `
+		SELECT
+			o.id::text,
+			o.public_code,
+			o.market_id::text,
+			m.name,
+			COALESCE(o.public_category_id::text, ''),
+			COALESCE(pc.name, ''),
+			o.classification_id::text,
+			o.title,
+			COALESCE(o.summary, ''),
+			o.offer_type,
+			COALESCE(o.price_amount::text, ''),
+			COALESCE(o.currency_code, ''),
+			COALESCE(o.quantity_total::text, ''),
+			COALESCE(o.quantity_unit, ''),
+			o.attributes,
+			o.published_at,
+			o.valid_until
+	`
+	rows, err := h.DB.QueryContext(
+		r.Context(),
+		listSelect+filter+`
+			ORDER BY o.published_at DESC, o.id DESC
+			LIMIT $4 OFFSET $5
+		`,
+		search, categoryID, marketID, pageSize, offset,
+	)
+	if err != nil {
+		writeError(w, http.StatusInternalServerError, "catalogue_query_failed", "The catalogue could not be loaded.")
+		return
+	}
+	defer rows.Close()
+
+	data := make([]OfferSummary, 0, pageSize)
+	for rows.Next() {
+		var item OfferSummary
+		var categoryIDValue string
+		var categoryName string
+		var validUntil sql.NullTime
+		var attributes []byte
+
+		if err := rows.Scan(
+			&item.ID,
+			&item.Code,
+			&item.MarketID,
+			&item.MarketName,
+			&categoryIDValue,
+			&categoryName,
+			&item.ClassificationID,
+			&item.Title,
+			&item.Summary,
+			&item.OfferType,
+			&item.PriceAmount,
+			&item.CurrencyCode,
+			&item.QuantityTotal,
+			&item.QuantityUnit,
+			&attributes,
+			&item.PublishedAt,
+			&validUntil,
+		); err != nil {
+			writeError(w, http.StatusInternalServerError, "catalogue_scan_failed", "A catalogue record could not be read.")
+			return
+		}
+
+		item.PublicCategoryID = categoryIDValue
+		item.PublicCategoryName = categoryName
+		if validUntil.Valid {
+			value := validUntil.Time
+			item.ValidUntil = &value
+		}
+		if len(attributes) == 0 {
+			item.Attributes = json.RawMessage(`{}`)
+		} else if json.Valid(attributes) {
+			item.Attributes = json.RawMessage(append([]byte(nil), attributes...))
+		} else {
+			writeError(w, http.StatusInternalServerError, "invalid_catalogue_data", "A catalogue record contains invalid attributes.")
+			return
+		}
+		data = append(data, item)
+	}
+	if err := rows.Err(); err != nil {
+		writeError(w, http.StatusInternalServerError, "catalogue_read_failed", "The catalogue could not be read completely.")
+		return
+	}
+
+	totalPages := int64(0)
+	if total > 0 {
+		totalPages = (total + int64(pageSize) - 1) / int64(pageSize)
+	}
+
+	writeJSON(w, http.StatusOK, ListResponse{
+		Data:       data,
+		Page:       page,
+		PageSize:   pageSize,
+		Total:      total,
+		TotalPages: totalPages,
+	})
+}
+
+func (h Handler) GetOffer(w http.ResponseWriter, r *http.Request) {
+	if h.DB == nil {
+		writeError(w, http.StatusServiceUnavailable, "database_unavailable", "Catalogue storage is unavailable.")
+		return
+	}
+
+	id := strings.TrimSpace(r.PathValue("id"))
+	if id == "" || len(id) > 64 {
+		writeError(w, http.StatusBadRequest, "invalid_offer_id", "A valid offer ID is required.")
+		return
+	}
+
+	const query = `
+		SELECT
+			o.id::text,
+			o.public_code,
+			o.market_id::text,
+			m.name,
+			COALESCE(o.public_category_id::text, ''),
+			COALESCE(pc.name, ''),
+			o.classification_id::text,
+			o.title,
+			COALESCE(o.summary, ''),
+			o.offer_type,
+			COALESCE(o.price_amount::text, ''),
+			COALESCE(o.currency_code, ''),
+			COALESCE(o.quantity_total::text, ''),
+			COALESCE(o.quantity_unit, ''),
+			o.attributes,
+			o.published_at,
+			o.valid_until
+		FROM offers o
+		INNER JOIN markets m ON m.id = o.market_id
+		LEFT JOIN public_categories pc ON pc.id = o.public_category_id
+		WHERE o.id::text = $1
+		  AND o.status = 'published'
+		  AND m.status = 'active'
+		  AND (o.valid_from IS NULL OR o.valid_from <= now())
+		  AND (o.valid_until IS NULL OR o.valid_until > now())
+	`
+
+	var item OfferSummary
+	var categoryIDValue string
+	var categoryName string
+	var validUntil sql.NullTime
+	var attributes []byte
+
+	err := h.DB.QueryRowContext(r.Context(), query, id).Scan(
+		&item.ID,
+		&item.Code,
+		&item.MarketID,
+		&item.MarketName,
+		&categoryIDValue,
+		&categoryName,
+		&item.ClassificationID,
+		&item.Title,
+		&item.Summary,
+		&item.OfferType,
+		&item.PriceAmount,
+		&item.CurrencyCode,
+		&item.QuantityTotal,
+		&item.QuantityUnit,
+		&attributes,
+		&item.PublishedAt,
+		&validUntil,
+	)
+
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			writeError(w, http.StatusNotFound, "offer_not_found", "The published offer was not found.")
+			return
+		}
+		writeError(w, http.StatusInternalServerError, "catalogue_query_failed", "The offer could not be loaded.")
+		return
+	}
+
+	item.PublicCategoryID = categoryIDValue
+	item.PublicCategoryName = categoryName
+	if validUntil.Valid {
+		value := validUntil.Time
+		item.ValidUntil = &value
+	}
+	if len(attributes) == 0 {
+		item.Attributes = json.RawMessage(`{}`)
+	} else if json.Valid(attributes) {
+		item.Attributes = json.RawMessage(append([]byte(nil), attributes...))
+	} else {
+		writeError(w, http.StatusInternalServerError, "invalid_catalogue_data", "The offer contains invalid attributes.")
+		return
+	}
+
+	writeJSON(w, http.StatusOK, item)
+}
+
+func parsePositiveInt(raw string, fallback, maximum int) (int, error) {
+	if raw == "" {
+		return fallback, nil
+	}
+	value, err := strconv.Atoi(raw)
+	if err != nil || value < 1 || value > maximum {
+		return 0, errors.New("out of range")
+	}
+	return value, nil
+}
+
+func writeError(w http.ResponseWriter, status int, code, message string) {
+	writeJSON(w, status, APIError{Code: code, Message: message})
+}
+
+func writeJSON(w http.ResponseWriter, status int, value any) {
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.Header().Set("X-Content-Type-Options", "nosniff")
+	w.WriteHeader(status)
+	_ = json.NewEncoder(w).Encode(value)
+}
+
+
+====================================================================================================
+FILE: internal\catalogue\handler_test.go
+====================================================================================================
+package catalogue
+
+import (
+	"net/http"
+	"net/http/httptest"
+	"testing"
+)
+
+func TestListOffersRejectsInvalidPage(t *testing.T) {
+	handler := Handler{}
+	mux := http.NewServeMux()
+	handler.Register(mux)
+
+	request := httptest.NewRequest(http.MethodGet, "/api/v1/catalogue/offers?page=0", nil)
+	response := httptest.NewRecorder()
+	mux.ServeHTTP(response, request)
+
+	if response.Code != http.StatusBadRequest {
+		t.Fatalf("expected status %d, got %d", http.StatusBadRequest, response.Code)
+	}
+}
+
+func TestListOffersRejectsOversizedPageSize(t *testing.T) {
+	handler := Handler{}
+	mux := http.NewServeMux()
+	handler.Register(mux)
+
+	request := httptest.NewRequest(http.MethodGet, "/api/v1/catalogue/offers?page_size=101", nil)
+	response := httptest.NewRecorder()
+	mux.ServeHTTP(response, request)
+
+	if response.Code != http.StatusBadRequest {
+		t.Fatalf("expected status %d, got %d", http.StatusBadRequest, response.Code)
+	}
+}
+
+func TestListOffersRejectsLongSearch(t *testing.T) {
+	handler := Handler{}
+	mux := http.NewServeMux()
+	handler.Register(mux)
+
+	longSearch := make([]byte, 121)
+	for i := range longSearch {
+		longSearch[i] = 'a'
+	}
+
+	request := httptest.NewRequest(
+		http.MethodGet,
+		"/api/v1/catalogue/offers?q="+string(longSearch),
+		nil,
+	)
+	response := httptest.NewRecorder()
+	mux.ServeHTTP(response, request)
+
+	if response.Code != http.StatusBadRequest {
+		t.Fatalf("expected status %d, got %d", http.StatusBadRequest, response.Code)
+	}
+}
+
+func TestListOffersReportsUnavailableDatabase(t *testing.T) {
+	handler := Handler{}
+	mux := http.NewServeMux()
+	handler.Register(mux)
+
+	request := httptest.NewRequest(http.MethodGet, "/api/v1/catalogue/offers", nil)
+	response := httptest.NewRecorder()
+	mux.ServeHTTP(response, request)
+
+	if response.Code != http.StatusServiceUnavailable {
+		t.Fatalf("expected status %d, got %d", http.StatusServiceUnavailable, response.Code)
+	}
+}
+
+
+====================================================================================================
+5. APPLICATION MODULES
+====================================================================================================
+
+====================================================================================================
+6. HTTP API AND SERVER
+====================================================================================================
+
+====================================================================================================
+FILE: cmd\server\main.go
+====================================================================================================
+package main
+
+import (
+	"context"
+	"errors"
+	"log/slog"
+	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
+
+	"github.com/igd-tesa/real-asset-management-platform/general-market-backend/config"
+	"github.com/igd-tesa/real-asset-management-platform/general-market-backend/internal/database"
+	"github.com/igd-tesa/real-asset-management-platform/general-market-backend/internal/httpapi"
+)
+
+func main() {
+	logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
+	slog.SetDefault(logger)
+
+	cfg, err := config.Load()
+	if err != nil {
+		logger.Error("invalid configuration", "error", err)
+		os.Exit(1)
+	}
+
+	startupCtx, startupCancel := context.WithTimeout(
+		context.Background(), 10*time.Second,
+	)
+
+	db, err := database.Open(startupCtx, database.Config{
+		URL:             cfg.DatabaseURL,
+		MaxOpenConns:    cfg.DBMaxOpenConns,
+		MaxIdleConns:    cfg.DBMaxIdleConns,
+		ConnMaxLifetime: cfg.DBConnMaxLifetime,
+	})
+	startupCancel()
+
+	if err != nil {
+		logger.Error("database initialization failed", "error", err)
+		os.Exit(1)
+	}
+
+	if db != nil {
+		defer db.Close()
+	}
+
+	server := &http.Server{
+		Addr:              cfg.HTTPAddr,
+		Handler:           httpapi.New(db),
+		ReadHeaderTimeout: 5 * time.Second,
+		IdleTimeout:       60 * time.Second,
+	}
+
+	serverErrors := make(chan error, 1)
+
+	go func() {
+		logger.Info("HTTP server starting", "address", cfg.HTTPAddr)
+		serverErrors <- server.ListenAndServe()
+	}()
+
+	signalCtx, stop := signal.NotifyContext(
+		context.Background(), os.Interrupt, syscall.SIGTERM,
+	)
+	defer stop()
+
+	select {
+	case err := <-serverErrors:
+		if !errors.Is(err, http.ErrServerClosed) {
+			logger.Error("HTTP server stopped unexpectedly", "error", err)
+			os.Exit(1)
+		}
+
+	case <-signalCtx.Done():
+		shutdownCtx, cancel := context.WithTimeout(
+			context.Background(), 10*time.Second,
+		)
+		defer cancel()
+
+		if err := server.Shutdown(shutdownCtx); err != nil {
+			logger.Error("graceful shutdown failed", "error", err)
+			_ = server.Close()
+		}
+	}
+}
+
+
+====================================================================================================
+FILE: internal\httpapi\router.go
+====================================================================================================
+package httpapi
+
+import (
+	"context"
+	"database/sql"
+	"encoding/json"
+	"net/http"
+	"time"
+
+	"github.com/igd-tesa/real-asset-management-platform/general-market-backend/internal/catalogue"
+)
+
+func New(db *sql.DB) http.Handler {
+	mux := http.NewServeMux()
+
+	mux.HandleFunc("GET /health/live", func(w http.ResponseWriter, r *http.Request) {
+		writeHealthJSON(w, http.StatusOK, map[string]string{
+			"status": "alive",
+		})
+	})
+
+	mux.HandleFunc("GET /health/ready", func(w http.ResponseWriter, r *http.Request) {
+		if db == nil {
+			writeHealthJSON(w, http.StatusServiceUnavailable, map[string]string{
+				"status": "not_ready",
+				"reason": "database_unavailable",
+			})
+			return
+		}
+
+		ctx, cancel := timeouts(r)
+		defer cancel()
+
+		if err := db.PingContext(ctx); err != nil {
+			writeHealthJSON(w, http.StatusServiceUnavailable, map[string]string{
+				"status": "not_ready",
+				"reason": "database_unavailable",
+			})
+			return
+		}
+
+		writeHealthJSON(w, http.StatusOK, map[string]string{
+			"status": "ready",
+		})
+	})
+
+	catalogue.Handler{DB: db}.Register(mux)
+
+	return securityHeaders(mux)
+}
+
+func timeouts(r *http.Request) (context.Context, context.CancelFunc) {
+	return context.WithTimeout(r.Context(), 2*time.Second)
+}
+
+func writeHealthJSON(w http.ResponseWriter, status int, body any) {
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.Header().Set("X-Content-Type-Options", "nosniff")
+	w.WriteHeader(status)
+	_ = json.NewEncoder(w).Encode(body)
+}
+
+func securityHeaders(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("X-Content-Type-Options", "nosniff")
+		w.Header().Set("X-Frame-Options", "DENY")
+		w.Header().Set("Referrer-Policy", "no-referrer")
+		w.Header().Set("Cache-Control", "no-store")
+		next.ServeHTTP(w, r)
+	})
+}
+
+
+====================================================================================================
+FILE: internal\health\health.go
+====================================================================================================
+package health
+
+import (
+	"context"
+	"database/sql"
+	"encoding/json"
+	"net/http"
+	"time"
+)
+
+type Handler struct {
+	DB *sql.DB
+}
+
+func (h Handler) Liveness(w http.ResponseWriter, r *http.Request) {
+	writeJSON(w, http.StatusOK, map[string]string{
+		"status": "ok",
+	})
+}
+
+func (h Handler) Readiness(w http.ResponseWriter, r *http.Request) {
+	if h.DB == nil {
+		writeJSON(w, http.StatusServiceUnavailable, map[string]string{
+			"status": "not_ready",
+			"reason": "database_not_configured",
+		})
+		return
+	}
+
+	ctx, cancel := context.WithTimeout(r.Context(), 2*time.Second)
+	defer cancel()
+
+	if err := h.DB.PingContext(ctx); err != nil {
+		writeJSON(w, http.StatusServiceUnavailable, map[string]string{
+			"status": "not_ready",
+			"reason": "database_unavailable",
+		})
+		return
+	}
+
+	writeJSON(w, http.StatusOK, map[string]string{
+		"status": "ready",
+	})
+}
+
+func writeJSON(w http.ResponseWriter, status int, value any) {
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(status)
+	_ = json.NewEncoder(w).Encode(value)
+}
+
+
+====================================================================================================
+FILE: internal\health\health_test.go
+====================================================================================================
+package health
+
+import (
+	"net/http"
+	"net/http/httptest"
+	"testing"
+)
+
+func TestLiveness(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/healthz", nil)
+	rec := httptest.NewRecorder()
+
+	Handler{}.Liveness(rec, req)
+
+	if rec.Code != http.StatusOK {
+		t.Fatalf("expected %d, got %d", http.StatusOK, rec.Code)
+	}
+}
+
+func TestReadinessWithoutDatabase(t *testing.T) {
+	req := httptest.NewRequest(http.MethodGet, "/readyz", nil)
+	rec := httptest.NewRecorder()
+
+	Handler{}.Readiness(rec, req)
+
+	if rec.Code != http.StatusServiceUnavailable {
+		t.Fatalf("expected %d, got %d", http.StatusServiceUnavailable, rec.Code)
+	}
+}
+
+
+====================================================================================================
+FILE: config\config.go
+====================================================================================================
+package config
+
+import (
+	"fmt"
+	"os"
+	"strconv"
+	"time"
+)
+
+type Config struct {
+	HTTPAddr          string
+	DatabaseURL       string
+	DBMaxOpenConns    int
+	DBMaxIdleConns    int
+	DBConnMaxLifetime time.Duration
+}
+
+func Load() (Config, error) {
+	cfg := Config{
+		HTTPAddr:          env("HTTP_ADDR", ":8080"),
+		DatabaseURL:       os.Getenv("DATABASE_URL"),
+		DBMaxOpenConns:    10,
+		DBMaxIdleConns:    5,
+		DBConnMaxLifetime: 5 * time.Minute,
+	}
+
+	var err error
+
+	cfg.DBMaxOpenConns, err = intEnv("DB_MAX_OPEN_CONNS", 10)
+	if err != nil {
+		return Config{}, err
+	}
+
+	cfg.DBMaxIdleConns, err = intEnv("DB_MAX_IDLE_CONNS", 5)
+	if err != nil {
+		return Config{}, err
+	}
+
+	if cfg.DBMaxOpenConns < 1 ||
+		cfg.DBMaxIdleConns < 0 ||
+		cfg.DBMaxIdleConns > cfg.DBMaxOpenConns {
+		return Config{}, fmt.Errorf("invalid database connection pool settings")
+	}
+
+	if value := os.Getenv("DB_CONN_MAX_LIFETIME"); value != "" {
+		cfg.DBConnMaxLifetime, err = time.ParseDuration(value)
+		if err != nil || cfg.DBConnMaxLifetime <= 0 {
+			return Config{}, fmt.Errorf("invalid DB_CONN_MAX_LIFETIME")
+		}
+	}
+
+	return cfg, nil
+}
+
+func env(key, fallback string) string {
+	if value := os.Getenv(key); value != "" {
+		return value
+	}
+	return fallback
+}
+
+func intEnv(key string, fallback int) (int, error) {
+	value := os.Getenv(key)
+	if value == "" {
+		return fallback, nil
+	}
+
+	n, err := strconv.Atoi(value)
+	if err != nil {
+		return 0, fmt.Errorf("invalid %s: %w", key, err)
+	}
+
+	return n, nil
+}
+
+
+====================================================================================================
+7. INTEGRATION CONTRACTS
+====================================================================================================
+
+====================================================================================================
+8. MIGRATION INVENTORY (NAMES ONLY)
+====================================================================================================
+000001_initial.sql
+000002_market_domain_foundation.sql
+000003_integrity_hardening.sql
+migrations.go
+
+====================================================================================================
+9. GIT STATUS
+====================================================================================================
+?? GENERAL-MARKET-CODE-CONTEXT-20261105-000610.txt
+
+====================================================================================================
+10. RECENT COMMITS
+====================================================================================================
+7c9c873 Update platform project
+b88852b Update platform backend and baseline reports
+8bf43ed Update account backend
+a246a5d Complete authorization, scope hierarchy, and integration tests
+b814c4e feat: add verification idempotency rate limiting and audit trail
+
+====================================================================================================
+11. GO TEST RESULTS
+====================================================================================================
+?   	github.com/igd-tesa/real-asset-management-platform/general-market-backend/cmd/migrate	[no test files]
+?   	github.com/igd-tesa/real-asset-management-platform/general-market-backend/cmd/server	[no test files]
+?   	github.com/igd-tesa/real-asset-management-platform/general-market-backend/config	[no test files]
+ok  	github.com/igd-tesa/real-asset-management-platform/general-market-backend/internal/catalogue	(cached)
+ok  	github.com/igd-tesa/real-asset-management-platform/general-market-backend/internal/catalogue/domain	(cached)
+?   	github.com/igd-tesa/real-asset-management-platform/general-market-backend/internal/database	[no test files]
+ok  	github.com/igd-tesa/real-asset-management-platform/general-market-backend/internal/health	(cached)
+?   	github.com/igd-tesa/real-asset-management-platform/general-market-backend/internal/httpapi	[no test files]
+ok  	github.com/igd-tesa/real-asset-management-platform/general-market-backend/internal/market/domain	(cached)
+ok  	github.com/igd-tesa/real-asset-management-platform/general-market-backend/internal/marketflow	(cached)
+?   	github.com/igd-tesa/real-asset-management-platform/general-market-backend/migrations	[no test files]
+GO_TEST_EXIT_CODE: 0
+
+====================================================================================================
+12. EXTRACTION SUMMARY
+====================================================================================================
+Generated successfully.
+Output file: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\general-market-backend\GENERAL-MARKET-CODE-CONTEXT-20261105-000610.txt
+No source code, database, migrations or Docker configuration modified.
