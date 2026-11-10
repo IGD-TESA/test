@@ -1,0 +1,1628 @@
+﻿IGD - ACCOUNT BACKEND / FRONTEND DISCOVERY
+Generated: 2026-11-10 09:05:51
+Project root: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform
+Scope: Account / Identity / Authentication / User Profile
+Excluded scope: General Market, My Assets, Contracts, Services, Settlement
+
+============================================================
+1. GIT STATUS
+============================================================
+
+Repository: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform
+>> git branch --show-current
+main
+>> git rev-parse --short HEAD
+58a12cc
+>> git status --short
+?? .npmrc
+?? IGD-Frontend-Network-Report.txt
+?? IGD-front/
+?? Initialize-IGD-Front.ps1
+?? Initialize-IGD-Front.ps1.20261105-235421.bak
+?? Initialize-IGD-Front.ps1.20261105-235506.bak
+?? Initialize-IGD-Front.ps1.backup-20261105-233716
+?? Initialize-IGD-Front.ps1.backup-VERBOSE-20261105-234214
+?? Initialize-IGD-Front.ps1.backup-mirrors-20261105-234543
+?? general-market-backend/.backups/application-package-01-20261105-040009/
+?? general-market-backend/.backups/application-package-01-20261105-040312/
+?? general-market-backend/.backups/application-package-01-20261105-042004/
+?? general-market-backend/.backups/application-package-01-20261105-042429/
+?? general-market-backend/.backups/package-07-08-final-20261105-093221/
+?? general-market-backend/.backups/package-07-08-final-20261105-093428/
+?? general-market-backend/.backups/package-09A-20261105-094558/
+?? general-market-backend/.backups/package-09A-fix-20261105-094713/
+?? general-market-backend/.backups/package-09B-20261105-095924/
+?? general-market-backend/.backups/package-09C-20261105-100237/
+?? general-market-backend/.diagnostics/
+?? general-market-backend/GENERAL-MARKET-BACKEND-REPORT-20261105-030854.txt
+?? general-market-backend/GENERAL-MARKET-BACKEND-REPORT-20261105-031040.txt
+?? general-market-backend/IGD-Frontend-Network-Report.txt
+?? general-market-backend/internal/application/
+?? general-market-backend/internal/commodity/aggregation/
+?? general-market-backend/internal/eligibility/qualification/
+?? general-market-backend/internal/execution/contracts.go
+?? general-market-backend/internal/execution/execution.go
+?? general-market-backend/internal/execution/execution_test.go
+?? general-market-backend/internal/integration/
+?? general-market-backend/internal/matching/contracts.go
+?? general-market-backend/internal/matching/matching.go
+?? general-market-backend/internal/matching/matching_test.go
+?? general-market-backend/internal/offer/
+?? general-market-backend/internal/offerconfig/parameterized/
+?? general-market-backend/internal/orders/contracts.go
+?? general-market-backend/internal/orders/orders.go
+?? general-market-backend/internal/orders/orders_test.go
+?? general-market-backend/internal/realestate/
+?? general-market-backend/internal/specialized/
+?? general-market-backend/internal/supply/
+?? general-market-backend/internal/workflowruntime/
+?? general-market-backend/scripts/Complete-GeneralMarket-Packages07-08.ps1
+?? general-market-backend/scripts/Export-GeneralMarket-Project-Forensic-Report.ps1
+?? general-market-backend/scripts/Fix-GeneralMarket-Package09A.ps1
+?? general-market-backend/scripts/Harden-GeneralMarket-Application-Package01.ps1
+?? general-market-backend/scripts/Harden-GeneralMarket-Application-Package01.ps1.pre-anchor-fix-20261105-040246.bak
+?? general-market-backend/scripts/Harden-GeneralMarket-Packages07-08.ps1
+?? general-market-backend/scripts/Implement-GeneralMarket-Application-Layer.ps1
+?? general-market-backend/scripts/Implement-GeneralMarket-Package02.ps1
+?? general-market-backend/scripts/Implement-GeneralMarket-Package02.ps1.bak-20261105-084751
+?? general-market-backend/scripts/Implement-GeneralMarket-Package03.ps1
+?? general-market-backend/scripts/Implement-GeneralMarket-Package03.ps1.bak-idempotency-20261105-085149
+?? general-market-backend/scripts/Implement-GeneralMarket-Package04.ps1
+?? general-market-backend/scripts/Implement-GeneralMarket-Package05.ps1
+?? general-market-backend/scripts/Implement-GeneralMarket-Package06.ps1
+?? general-market-backend/scripts/Implement-GeneralMarket-Package07.ps1
+?? general-market-backend/scripts/Implement-GeneralMarket-Package08.ps1
+?? general-market-backend/scripts/Implement-GeneralMarket-Package09A.ps1
+?? general-market-backend/scripts/Implement-GeneralMarket-Package09B.ps1
+?? general-market-backend/scripts/Repair-And-Run-GeneralMarket-Package01.ps1
+
+============================================================
+2. ACCOUNT-RELATED PROJECTS AND FILES
+============================================================
+Matched files: 125
+account-backend\cmd\server\main.go
+account-backend\config\config.go
+account-backend\docker-compose.yml
+account-backend\Dockerfile
+account-backend\go.mod
+account-backend\infrastructure\postgres\connection.go
+account-backend\infrastructure\postgres\postgres.go
+account-backend\infrastructure\redis\connection.go
+account-backend\infrastructure\redis\redis.go
+account-backend\internal\auth\audit_repository.go
+account-backend\internal\auth\handler.go
+account-backend\internal\auth\login_errors.go
+account-backend\internal\auth\login_models.go
+account-backend\internal\auth\login_repository.go
+account-backend\internal\auth\login_service.go
+account-backend\internal\auth\model.go
+account-backend\internal\auth\password_handler.go
+account-backend\internal\auth\password_models.go
+account-backend\internal\auth\password_repository.go
+account-backend\internal\auth\password_reset_handler.go
+account-backend\internal\auth\password_reset_models.go
+account-backend\internal\auth\password_reset_repository.go
+account-backend\internal\auth\password_reset_service.go
+account-backend\internal\auth\password_service.go
+account-backend\internal\auth\repository.go
+account-backend\internal\auth\service.go
+account-backend\internal\auth\session_handler.go
+account-backend\internal\auth\session_repository.go
+account-backend\internal\auth\session_service.go
+account-backend\internal\auth\trusted_device_management.go
+account-backend\internal\auth\trusted_device_management_handler.go
+account-backend\internal\auth\trusted_device_repository.go
+account-backend\internal\authorization\assignment.go
+account-backend\internal\authorization\authorization_postgres_integration_test.go
+account-backend\internal\authorization\authorization_service.go
+account-backend\internal\authorization\authorization_service_test.go
+account-backend\internal\authorization\errors.go
+account-backend\internal\authorization\handler.go
+account-backend\internal\authorization\middleware.go
+account-backend\internal\authorization\middleware_test.go
+account-backend\internal\authorization\model.go
+account-backend\internal\authorization\permission.go
+account-backend\internal\authorization\repository.go
+account-backend\internal\authorization\repository_contracts.go
+account-backend\internal\authorization\role.go
+account-backend\internal\authorization\scope.go
+account-backend\internal\authorization\service.go
+account-backend\internal\banking\handler.go
+account-backend\internal\banking\model.go
+account-backend\internal\banking\repository.go
+account-backend\internal\banking\service.go
+account-backend\internal\contracts\handler.go
+account-backend\internal\contracts\model.go
+account-backend\internal\contracts\repository.go
+account-backend\internal\contracts\service.go
+account-backend\internal\security\handler.go
+account-backend\internal\security\model.go
+account-backend\internal\security\repository.go
+account-backend\internal\security\service.go
+account-backend\internal\user\email_handler.go
+account-backend\internal\user\email_model.go
+account-backend\internal\user\email_repository.go
+account-backend\internal\user\email_service.go
+account-backend\internal\user\handler.go
+account-backend\internal\user\legal_entity_handler.go
+account-backend\internal\user\legal_entity_model.go
+account-backend\internal\user\legal_entity_repository.go
+account-backend\internal\user\legal_entity_service.go
+account-backend\internal\user\model.go
+account-backend\internal\user\phone_handler.go
+account-backend\internal\user\phone_model.go
+account-backend\internal\user\phone_repository.go
+account-backend\internal\user\phone_service.go
+account-backend\internal\user\profile_handler.go
+account-backend\internal\user\profile_model.go
+account-backend\internal\user\profile_repository.go
+account-backend\internal\user\profile_service.go
+account-backend\internal\user\repository.go
+account-backend\internal\user\service.go
+account-backend\internal\verification\audit.go
+account-backend\internal\verification\audit_repository.go
+account-backend\internal\verification\bank.go
+account-backend\internal\verification\biometric.go
+account-backend\internal\verification\cache.go
+account-backend\internal\verification\contact.go
+account-backend\internal\verification\document.go
+account-backend\internal\verification\handler.go
+account-backend\internal\verification\identity.go
+account-backend\internal\verification\legal_entity.go
+account-backend\internal\verification\model.go
+account-backend\internal\verification\official_document.go
+account-backend\internal\verification\protection.go
+account-backend\internal\verification\provider.go
+account-backend\internal\verification\providers.go
+account-backend\internal\verification\repository.go
+account-backend\internal\verification\service.go
+account-backend\internal\verification\test_provider.go
+account-backend\internal\wallet\handler.go
+account-backend\internal\wallet\model.go
+account-backend\internal\wallet\repository.go
+account-backend\internal\wallet\service.go
+account-backend\migrations\001_create_users.sql
+account-backend\migrations\002_create_user_profiles.sql
+account-backend\migrations\003_create_legal_entities.sql
+account-backend\migrations\004_create_user_phones.sql
+account-backend\migrations\005_create_user_emails.sql
+account-backend\migrations\006_create_verifications.sql
+account-backend\migrations\007_create_verification_audits.sql
+account-backend\migrations\008_extend_user_profiles_for_registration.sql
+account-backend\migrations\009_create_auth_credentials.sql
+account-backend\migrations\010_create_trusted_devices.sql
+account-backend\migrations\011_create_auth_sessions.sql
+account-backend\migrations\012_create_auth_audits.sql
+account-backend\migrations\013_create_password_reset_tokens.sql
+account-backend\migrations\014_create_authorization_roles.sql
+account-backend\migrations\015_create_authorization_permissions.sql
+account-backend\migrations\016_create_authorization_role_permissions.sql
+account-backend\migrations\017_create_authorization_user_roles.sql
+account-backend\migrations\018_create_authorization_user_permission_overrides.sql
+account-backend\migrations\019_create_authorization_scopes.sql
+account-backend\README.md
+account-backend\scripts\test-authorization-scope-http.go
+general-market-backend\internal\integrations\account\README.md
+IGD-front\app\src\app\features\account\account.routes.ts
+IGD-front\backups\account-profile-20261110-044609\app.ts
+
+============================================================
+3. PROJECT MANIFESTS AND CONFIGURATION
+============================================================
+
+--- FILE: account-backend\docker-compose.yml ---
+name: account-backend
+
+services:
+  postgres:
+    image: postgres:18
+    container_name: account-postgres
+    environment:
+      POSTGRES_DB: account
+      POSTGRES_USER: account
+      POSTGRES_PASSWORD: account_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U account -d account"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  redis:
+    image: redis:8
+    container_name: account-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    external: true
+    name: account-backend_postgres_data
+  redis_data:
+    external: true
+    name: account-backend_redis_data
+
+--- FILE: account-backend\Dockerfile ---
+
+--- FILE: account-backend\go.mod ---
+module account-backend
+
+go 1.27.1
+
+require (
+	github.com/jackc/pgx/v5 v5.10.0
+	github.com/redis/go-redis/v9 v9.22.0
+)
+
+require (
+	github.com/cespare/xxhash/v2 v2.3.0 // indirect
+	github.com/jackc/pgpassfile v1.0.0 // indirect
+	github.com/jackc/pgservicefile v0.0.0-20240606120523-5a60cdf6a761 // indirect
+	github.com/jackc/puddle/v2 v2.2.2 // indirect
+	go.uber.org/atomic v1.11.0 // indirect
+	golang.org/x/crypto v0.56.0 // indirect
+	golang.org/x/sync v0.22.0 // indirect
+	golang.org/x/sys v0.47.0 // indirect
+	golang.org/x/text v0.41.0 // indirect
+)
+
+--- FILE: account-backend\migrations\001_create_users.sql ---
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
+CREATE TABLE users (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    user_type VARCHAR(20) NOT NULL,
+
+    status VARCHAR(20) NOT NULL DEFAULT 'active',
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    CONSTRAINT users_user_type_check
+        CHECK (user_type IN ('individual', 'legal')),
+
+    CONSTRAINT users_status_check
+        CHECK (status IN (
+            'active',
+            'limited',
+            'suspended',
+            'blocked',
+            'closed'
+        ))
+);
+
+--- FILE: account-backend\migrations\002_create_user_profiles.sql ---
+CREATE TABLE user_profiles (
+    user_id UUID PRIMARY KEY,
+
+    first_name VARCHAR(100) NOT NULL,
+
+    last_name VARCHAR(100) NOT NULL,
+
+    national_id VARCHAR(20) NOT NULL UNIQUE,
+
+    birth_date DATE,
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    CONSTRAINT user_profiles_user_fk
+        FOREIGN KEY (user_id)
+        REFERENCES users(id)
+        ON DELETE CASCADE
+);
+
+--- FILE: account-backend\migrations\003_create_legal_entities.sql ---
+CREATE TABLE legal_entities (
+    user_id UUID PRIMARY KEY,
+
+    legal_name VARCHAR(255) NOT NULL,
+
+    national_id VARCHAR(20) NOT NULL UNIQUE,
+
+    registration_number VARCHAR(50) UNIQUE,
+
+    economic_code VARCHAR(50) UNIQUE,
+
+    legal_type VARCHAR(50),
+
+    registration_date DATE,
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    CONSTRAINT legal_entities_user_fk
+        FOREIGN KEY (user_id)
+        REFERENCES users(id)
+        ON DELETE CASCADE
+);
+
+--- FILE: account-backend\migrations\004_create_user_phones.sql ---
+CREATE TABLE user_phones (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    user_id UUID NOT NULL,
+
+    phone_number VARCHAR(20) NOT NULL,
+
+    is_primary BOOLEAN NOT NULL DEFAULT FALSE,
+
+    is_verified BOOLEAN NOT NULL DEFAULT FALSE,
+
+    verified_at TIMESTAMPTZ,
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    CONSTRAINT user_phones_user_fk
+        FOREIGN KEY (user_id)
+        REFERENCES users(id)
+        ON DELETE CASCADE
+);
+
+CREATE INDEX idx_user_phones_user_id
+    ON user_phones(user_id);
+
+CREATE UNIQUE INDEX idx_user_phones_unique_number
+    ON user_phones(phone_number);
+
+CREATE UNIQUE INDEX idx_user_phones_primary
+    ON user_phones(user_id)
+    WHERE is_primary = TRUE;
+
+--- FILE: account-backend\migrations\005_create_user_emails.sql ---
+CREATE TABLE user_emails (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    user_id UUID NOT NULL,
+
+    email VARCHAR(320) NOT NULL,
+
+    is_primary BOOLEAN NOT NULL DEFAULT FALSE,
+
+    is_verified BOOLEAN NOT NULL DEFAULT FALSE,
+
+    verified_at TIMESTAMPTZ,
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    CONSTRAINT user_emails_user_fk
+        FOREIGN KEY (user_id)
+        REFERENCES users(id)
+        ON DELETE CASCADE
+);
+
+CREATE INDEX idx_user_emails_user_id
+    ON user_emails(user_id);
+
+CREATE UNIQUE INDEX idx_user_emails_unique_email
+    ON user_emails(email);
+
+CREATE UNIQUE INDEX idx_user_emails_primary
+    ON user_emails(user_id)
+    WHERE is_primary = TRUE;
+
+--- FILE: account-backend\migrations\006_create_verifications.sql ---
+CREATE TABLE IF NOT EXISTS verifications (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    user_id UUID NOT NULL
+        REFERENCES users(id)
+        ON DELETE CASCADE,
+
+    verification_type VARCHAR(50) NOT NULL,
+
+    provider VARCHAR(100) NOT NULL,
+
+    status VARCHAR(30) NOT NULL DEFAULT 'pending',
+
+    reference_id VARCHAR(255),
+
+    verification_level VARCHAR(30),
+
+    verified_at TIMESTAMPTZ,
+
+    expires_at TIMESTAMPTZ,
+
+    rejection_reason TEXT,
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    CONSTRAINT verifications_type_check
+        CHECK (
+            verification_type IN (
+                'identity',
+                'contact',
+                'bank',
+                'document',
+                'biometric',
+                'legal_entity',
+                'official_document'
+            )
+        ),
+
+    CONSTRAINT verifications_status_check
+        CHECK (
+            status IN (
+                'pending',
+                'verified',
+                'rejected',
+                'failed',
+                'expired',
+                'manual_review'
+            )
+        ),
+
+    CONSTRAINT verifications_level_check
+        CHECK (
+            verification_level IS NULL
+            OR verification_level IN (
+                'basic',
+                'standard',
+                'strong'
+            )
+        )
+);
+
+CREATE INDEX IF NOT EXISTS idx_verifications_user_id
+    ON verifications(user_id);
+
+CREATE INDEX IF NOT EXISTS idx_verifications_user_type
+    ON verifications(user_id, verification_type);
+
+CREATE INDEX IF NOT EXISTS idx_verifications_status
+    ON verifications(status);
+
+CREATE INDEX IF NOT EXISTS idx_verifications_reference_id
+    ON verifications(reference_id);
+
+--- FILE: account-backend\migrations\007_create_verification_audits.sql ---
+CREATE TABLE IF NOT EXISTS verification_audits (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    user_id UUID NOT NULL
+        REFERENCES users(id)
+        ON DELETE CASCADE,
+
+    verification_id UUID
+        REFERENCES verifications(id)
+        ON DELETE SET NULL,
+
+    operation VARCHAR(50) NOT NULL,
+
+    verification_type VARCHAR(50),
+
+    provider VARCHAR(100),
+
+    status VARCHAR(30),
+
+    idempotency_key VARCHAR(255),
+
+    ip_address INET,
+
+    user_agent TEXT,
+
+    error_message TEXT,
+
+    metadata JSONB,
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_verification_audits_user_id
+    ON verification_audits(user_id);
+
+CREATE INDEX IF NOT EXISTS idx_verification_audits_verification_id
+    ON verification_audits(verification_id);
+
+CREATE INDEX IF NOT EXISTS idx_verification_audits_operation
+    ON verification_audits(operation);
+
+CREATE INDEX IF NOT EXISTS idx_verification_audits_created_at
+    ON verification_audits(created_at);
+
+CREATE INDEX IF NOT EXISTS idx_verification_audits_idempotency_key
+    ON verification_audits(idempotency_key);
+
+--- FILE: account-backend\migrations\008_extend_user_profiles_for_registration.sql ---
+ALTER TABLE user_profiles
+    ADD COLUMN IF NOT EXISTS father_name VARCHAR(100);
+
+ALTER TABLE user_profiles
+    ADD COLUMN IF NOT EXISTS address TEXT;
+
+ALTER TABLE user_profiles
+    ADD COLUMN IF NOT EXISTS postal_code VARCHAR(10);
+
+CREATE INDEX IF NOT EXISTS idx_user_profiles_national_id
+    ON user_profiles(national_id);
+
+ALTER TABLE user_profiles
+    ADD CONSTRAINT user_profiles_postal_code_check
+    CHECK (
+        postal_code IS NULL
+        OR postal_code ~ '^[0-9]{10}$'
+    );
+
+--- FILE: account-backend\migrations\009_create_auth_credentials.sql ---
+CREATE TABLE IF NOT EXISTS auth_credentials (
+    user_id UUID PRIMARY KEY
+        REFERENCES users(id)
+        ON DELETE CASCADE,
+
+    password_hash TEXT NOT NULL,
+
+    password_changed_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    failed_login_attempts INTEGER NOT NULL DEFAULT 0,
+
+    locked_until TIMESTAMPTZ,
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_auth_credentials_locked_until
+    ON auth_credentials(locked_until);
+
+--- FILE: account-backend\migrations\010_create_trusted_devices.sql ---
+CREATE TABLE IF NOT EXISTS trusted_devices (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    user_id UUID NOT NULL
+        REFERENCES users(id)
+        ON DELETE CASCADE,
+
+    device_name VARCHAR(150),
+
+    token_hash TEXT NOT NULL UNIQUE,
+
+    expires_at TIMESTAMPTZ NOT NULL,
+
+    last_used_at TIMESTAMPTZ,
+
+    revoked_at TIMESTAMPTZ,
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_trusted_devices_user_id
+    ON trusted_devices(user_id);
+
+CREATE INDEX IF NOT EXISTS idx_trusted_devices_expires_at
+    ON trusted_devices(expires_at);
+
+CREATE INDEX IF NOT EXISTS idx_trusted_devices_active
+    ON trusted_devices(user_id, expires_at)
+    WHERE revoked_at IS NULL;
+
+--- FILE: account-backend\migrations\011_create_auth_sessions.sql ---
+CREATE TABLE IF NOT EXISTS auth_sessions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    user_id UUID NOT NULL
+        REFERENCES users(id)
+        ON DELETE CASCADE,
+
+    access_token_hash TEXT NOT NULL UNIQUE,
+
+    refresh_token_hash TEXT NOT NULL UNIQUE,
+
+    access_expires_at TIMESTAMPTZ NOT NULL,
+
+    refresh_expires_at TIMESTAMPTZ NOT NULL,
+
+    revoked_at TIMESTAMPTZ,
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_auth_sessions_user_id
+    ON auth_sessions(user_id);
+
+CREATE INDEX IF NOT EXISTS idx_auth_sessions_access_expires
+    ON auth_sessions(access_expires_at);
+
+CREATE INDEX IF NOT EXISTS idx_auth_sessions_refresh_expires
+    ON auth_sessions(refresh_expires_at);
+
+--- FILE: account-backend\migrations\012_create_auth_audits.sql ---
+CREATE TABLE IF NOT EXISTS auth_audits (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    user_id UUID
+        REFERENCES users(id)
+        ON DELETE SET NULL,
+
+    operation VARCHAR(100) NOT NULL,
+
+    status VARCHAR(50) NOT NULL,
+
+    ip_address INET,
+
+    user_agent TEXT,
+
+    error_code VARCHAR(100),
+
+    metadata JSONB NOT NULL DEFAULT '{}'::jsonb,
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_auth_audits_user_id
+    ON auth_audits(user_id);
+
+CREATE INDEX IF NOT EXISTS idx_auth_audits_operation
+    ON auth_audits(operation);
+
+CREATE INDEX IF NOT EXISTS idx_auth_audits_created_at
+    ON auth_audits(created_at);
+
+--- FILE: account-backend\migrations\013_create_password_reset_tokens.sql ---
+CREATE TABLE IF NOT EXISTS password_reset_tokens (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL,
+    token_hash TEXT NOT NULL UNIQUE,
+    expires_at TIMESTAMPTZ NOT NULL,
+    used_at TIMESTAMPTZ NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    CONSTRAINT password_reset_tokens_user_fk
+        FOREIGN KEY (user_id)
+        REFERENCES users(id)
+        ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_password_reset_tokens_user_id
+    ON password_reset_tokens(user_id);
+
+CREATE INDEX IF NOT EXISTS idx_password_reset_tokens_expires_at
+    ON password_reset_tokens(expires_at);
+
+CREATE INDEX IF NOT EXISTS idx_password_reset_tokens_active
+    ON password_reset_tokens(user_id, expires_at)
+    WHERE used_at IS NULL;
+
+--- FILE: account-backend\migrations\014_create_authorization_roles.sql ---
+-- ============================================================
+-- 014_create_authorization_roles.sql
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS authorization_roles (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    code VARCHAR(100) NOT NULL UNIQUE,
+
+    name VARCHAR(150) NOT NULL,
+
+    role_type VARCHAR(50) NOT NULL,
+
+    default_scope_type VARCHAR(50) NOT NULL,
+
+    description TEXT,
+
+    is_system_role BOOLEAN NOT NULL DEFAULT FALSE,
+
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    CONSTRAINT authorization_roles_role_type_check
+        CHECK (
+            role_type IN (
+                'management',
+                'operational',
+                'base',
+                'specialized',
+                'general',
+                'supervisory'
+            )
+        ),
+
+    CONSTRAINT authorization_roles_scope_type_check
+        CHECK (
+            default_scope_type IN (
+                'global',
+                'self',
+                'organization',
+                'project',
+                'asset',
+                'contract',
+                'custom'
+            )
+        )
+);
+
+CREATE INDEX IF NOT EXISTS idx_authorization_roles_role_type
+    ON authorization_roles(role_type);
+
+CREATE INDEX IF NOT EXISTS idx_authorization_roles_scope_type
+    ON authorization_roles(default_scope_type);
+
+CREATE INDEX IF NOT EXISTS idx_authorization_roles_active
+    ON authorization_roles(is_active);
+
+
+-- ============================================================
+-- Seed: System Roles
+-- ============================================================
+
+INSERT INTO authorization_roles
+(
+    code,
+    name,
+    role_type,
+    default_scope_type,
+    description,
+    is_system_role
+)
+VALUES
+(
+    'system_admin',
+    'Ù…Ø¯ÛŒØ± Ø³Ø§Ù…Ø§Ù†Ù‡',
+    'management',
+    'global',
+    'Ù…Ø¯ÛŒØ±ÛŒØª Ú©Ù„ Ø³Ø§Ù…Ø§Ù†Ù‡ Ùˆ Ú©Ù†ØªØ±Ù„ Ø¯Ø³ØªØ±Ø³ÛŒâ€ŒÙ‡Ø§',
+    TRUE
+),
+(
+    'project_manager',
+    'Ù…Ø¯ÛŒØ± Ù¾Ø±ÙˆÚ˜Ù‡',
+    'operational',
+    'project',
+    'Ù…Ø¯ÛŒØ±ÛŒØª Ù¾Ø±ÙˆÚ˜Ù‡ Ø¯Ø± Ù…Ø­Ø¯ÙˆØ¯Ù‡ Ù¾Ø±ÙˆÚ˜Ù‡â€ŒÙ‡Ø§ÛŒ ØªØ¹ÛŒÛŒÙ†â€ŒØ´Ø¯Ù‡',
+    TRUE
+),
+(
+    'user',
+    'Ú©Ø§Ø±Ø¨Ø±',
+    'base',
+    'self',
+    'Ú©Ø§Ø±Ø¨Ø± Ø§ØµÙ„ÛŒ Ø³Ø§Ù…Ø§Ù†Ù‡ Ùˆ Ø¯Ø§Ø±Ù†Ø¯Ù‡ Ø­Ù‚ÙˆÙ‚ Ù‚Ø±Ø§Ø±Ø¯Ø§Ø¯ÛŒ',
+    TRUE
+),
+(
+[TRUNCATED: file has 188 lines]
+
+--- FILE: account-backend\migrations\015_create_authorization_permissions.sql ---
+-- ============================================================
+-- 015_create_authorization_permissions.sql
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS authorization_permissions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    code VARCHAR(150) NOT NULL UNIQUE,
+
+    resource VARCHAR(100) NOT NULL,
+
+    action VARCHAR(100) NOT NULL,
+
+    name VARCHAR(150) NOT NULL,
+
+    description TEXT,
+
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    CONSTRAINT authorization_permissions_resource_action_unique
+        UNIQUE (resource, action)
+);
+
+CREATE INDEX IF NOT EXISTS idx_authorization_permissions_resource
+    ON authorization_permissions(resource);
+
+CREATE INDEX IF NOT EXISTS idx_authorization_permissions_action
+    ON authorization_permissions(action);
+
+CREATE INDEX IF NOT EXISTS idx_authorization_permissions_active
+    ON authorization_permissions(is_active);
+
+
+-- ============================================================
+-- Seed: Core Permissions
+-- ============================================================
+
+INSERT INTO authorization_permissions
+(
+    code,
+    resource,
+    action,
+    name,
+    description
+)
+VALUES
+
+-- User
+(
+    'user.read',
+    'user',
+    'read',
+    'Ù…Ø´Ø§Ù‡Ø¯Ù‡ Ú©Ø§Ø±Ø¨Ø±',
+    'Ù…Ø´Ø§Ù‡Ø¯Ù‡ Ø§Ø·Ù„Ø§Ø¹Ø§Øª Ú©Ø§Ø±Ø¨Ø±'
+),
+(
+    'user.update',
+    'user',
+    'update',
+    'ÙˆÛŒØ±Ø§ÛŒØ´ Ú©Ø§Ø±Ø¨Ø±',
+    'ÙˆÛŒØ±Ø§ÛŒØ´ Ø§Ø·Ù„Ø§Ø¹Ø§Øª Ú©Ø§Ø±Ø¨Ø±'
+),
+
+-- Profile
+(
+    'profile.read',
+    'profile',
+    'read',
+    'Ù…Ø´Ø§Ù‡Ø¯Ù‡ Ù…Ø´Ø®ØµØ§Øª',
+    'Ù…Ø´Ø§Ù‡Ø¯Ù‡ Ø§Ø·Ù„Ø§Ø¹Ø§Øª ØªÚ©Ù…ÛŒÙ„ÛŒ Ú©Ø§Ø±Ø¨Ø±'
+),
+(
+    'profile.update',
+    'profile',
+    'update',
+    'ÙˆÛŒØ±Ø§ÛŒØ´ Ù…Ø´Ø®ØµØ§Øª',
+    'ÙˆÛŒØ±Ø§ÛŒØ´ Ø§Ø·Ù„Ø§Ø¹Ø§Øª ØªÚ©Ù…ÛŒÙ„ÛŒ Ú©Ø§Ø±Ø¨Ø±'
+),
+
+-- Legal Entity
+(
+    'legal_entity.read',
+    'legal_entity',
+    'read',
+    'Ù…Ø´Ø§Ù‡Ø¯Ù‡ Ø´Ø®Øµ Ø­Ù‚ÙˆÙ‚ÛŒ',
+    'Ù…Ø´Ø§Ù‡Ø¯Ù‡ Ø§Ø·Ù„Ø§Ø¹Ø§Øª Ø´Ø®Øµ Ø­Ù‚ÙˆÙ‚ÛŒ'
+),
+(
+    'legal_entity.update',
+    'legal_entity',
+    'update',
+    'ÙˆÛŒØ±Ø§ÛŒØ´ Ø´Ø®Øµ Ø­Ù‚ÙˆÙ‚ÛŒ',
+    'ÙˆÛŒØ±Ø§ÛŒØ´ Ø§Ø·Ù„Ø§Ø¹Ø§Øª Ø´Ø®Øµ Ø­Ù‚ÙˆÙ‚ÛŒ'
+),
+
+-- Bank Account
+[TRUNCATED: file has 348 lines]
+
+--- FILE: account-backend\migrations\016_create_authorization_role_permissions.sql ---
+-- ============================================================
+-- 016_create_authorization_role_permissions.sql
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS authorization_role_permissions (
+    role_id UUID NOT NULL
+        REFERENCES authorization_roles(id)
+        ON DELETE CASCADE,
+
+    permission_id UUID NOT NULL
+        REFERENCES authorization_permissions(id)
+        ON DELETE CASCADE,
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    PRIMARY KEY (role_id, permission_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_authorization_role_permissions_permission
+    ON authorization_role_permissions(permission_id);
+
+
+-- ============================================================
+-- Seed: User Role
+-- ============================================================
+
+INSERT INTO authorization_role_permissions (role_id, permission_id)
+SELECT r.id, p.id
+FROM authorization_roles r
+CROSS JOIN authorization_permissions p
+WHERE r.code = 'user'
+  AND p.code IN (
+      'user.read',
+      'user.update',
+      'profile.read',
+      'profile.update',
+      'bank_account.read',
+      'bank_account.add',
+      'bank_account.update',
+      'market.read',
+      'offer.read',
+      'order.read',
+      'order.create',
+      'order.cancel',
+      'contract.read',
+      'contract.sign',
+      'contractual_right.read',
+      'contractual_right.purchase',
+      'contractual_right.transfer',
+      'wallet.read',
+      'payment.read',
+      'payment.create',
+      'transaction.read',
+      'verification.read',
+      'verification.request'
+  )
+ON CONFLICT DO NOTHING;
+
+
+-- ============================================================
+-- Seed: Project Manager
+-- ============================================================
+
+INSERT INTO authorization_role_permissions (role_id, permission_id)
+SELECT r.id, p.id
+FROM authorization_roles r
+CROSS JOIN authorization_permissions p
+WHERE r.code = 'project_manager'
+  AND p.code IN (
+      'user.read',
+      'profile.read',
+      'market.read',
+
+      'project.read',
+      'project.create',
+      'project.update',
+      'project_member.read',
+      'project_member.add',
+      'project_member.update',
+      'project_member.remove',
+
+      'offer.read',
+      'offer.create',
+      'offer.update',
+      'offer.activate',
+      'offer.deactivate',
+
+      'contract.read',
+      'contractual_right.read',
+
+      'transaction.read',
+      'verification.read'
+  )
+ON CONFLICT DO NOTHING;
+
+
+-- ============================================================
+-- Seed: Financial Manager
+-- ============================================================
+
+[TRUNCATED: file has 352 lines]
+
+--- FILE: account-backend\migrations\017_create_authorization_user_roles.sql ---
+-- ============================================================
+-- 017_create_authorization_user_roles.sql
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS authorization_user_roles (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    user_id UUID NOT NULL
+        REFERENCES users(id)
+        ON DELETE CASCADE,
+
+    role_id UUID NOT NULL
+        REFERENCES authorization_roles(id)
+        ON DELETE CASCADE,
+
+    scope_id UUID,
+
+    assigned_by UUID
+        REFERENCES users(id)
+        ON DELETE SET NULL,
+
+    starts_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    expires_at TIMESTAMPTZ,
+
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    CONSTRAINT authorization_user_roles_dates_check
+        CHECK (
+            expires_at IS NULL
+            OR expires_at > starts_at
+        )
+);
+
+CREATE INDEX IF NOT EXISTS idx_authorization_user_roles_user
+    ON authorization_user_roles(user_id);
+
+CREATE INDEX IF NOT EXISTS idx_authorization_user_roles_role
+    ON authorization_user_roles(role_id);
+
+CREATE INDEX IF NOT EXISTS idx_authorization_user_roles_scope
+    ON authorization_user_roles(scope_id);
+
+CREATE INDEX IF NOT EXISTS idx_authorization_user_roles_active
+    ON authorization_user_roles(is_active);
+
+CREATE INDEX IF NOT EXISTS idx_authorization_user_roles_expires
+    ON authorization_user_roles(expires_at);
+
+--- FILE: account-backend\migrations\018_create_authorization_user_permission_overrides.sql ---
+-- ============================================================
+-- 018_create_authorization_user_permission_overrides.sql
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS authorization_user_permission_overrides (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    user_id UUID NOT NULL
+        REFERENCES users(id)
+        ON DELETE CASCADE,
+
+    permission_id UUID NOT NULL
+        REFERENCES authorization_permissions(id)
+        ON DELETE CASCADE,
+
+    effect VARCHAR(10) NOT NULL,
+
+    scope_id UUID,
+
+    assigned_by UUID
+        REFERENCES users(id)
+        ON DELETE SET NULL,
+
+    starts_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    expires_at TIMESTAMPTZ,
+
+    reason TEXT,
+
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    CONSTRAINT authorization_user_permission_overrides_effect_check
+        CHECK (
+            effect IN (
+                'allow',
+                'deny'
+            )
+        ),
+
+    CONSTRAINT authorization_user_permission_overrides_dates_check
+        CHECK (
+            expires_at IS NULL
+            OR expires_at > starts_at
+        )
+);
+
+CREATE INDEX IF NOT EXISTS idx_authorization_user_permission_overrides_user
+    ON authorization_user_permission_overrides(user_id);
+
+CREATE INDEX IF NOT EXISTS idx_authorization_user_permission_overrides_permission
+    ON authorization_user_permission_overrides(permission_id);
+
+CREATE INDEX IF NOT EXISTS idx_authorization_user_permission_overrides_scope
+    ON authorization_user_permission_overrides(scope_id);
+
+CREATE INDEX IF NOT EXISTS idx_authorization_user_permission_overrides_effect
+    ON authorization_user_permission_overrides(effect);
+
+CREATE INDEX IF NOT EXISTS idx_authorization_user_permission_overrides_active
+    ON authorization_user_permission_overrides(is_active);
+
+CREATE INDEX IF NOT EXISTS idx_authorization_user_permission_overrides_expires
+    ON authorization_user_permission_overrides(expires_at);
+
+--- FILE: account-backend\migrations\019_create_authorization_scopes.sql ---
+-- ============================================================
+-- 019_create_authorization_scopes.sql
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS authorization_scopes (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    scope_type VARCHAR(50) NOT NULL,
+
+    resource_type VARCHAR(100),
+
+    resource_id UUID,
+
+    parent_scope_id UUID
+        REFERENCES authorization_scopes(id)
+        ON DELETE CASCADE,
+
+    name VARCHAR(200),
+
+    description TEXT,
+
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    CONSTRAINT authorization_scopes_scope_type_check
+        CHECK (
+            scope_type IN (
+                'global',
+                'organization',
+                'project',
+                'asset',
+                'contract',
+                'self',
+                'custom'
+            )
+        ),
+
+    CONSTRAINT authorization_scopes_resource_pair_check
+        CHECK (
+            (
+                scope_type IN ('global', 'self')
+                AND resource_type IS NULL
+                AND resource_id IS NULL
+            )
+            OR
+            (
+                scope_type IN (
+                    'organization',
+                    'project',
+                    'asset',
+                    'contract',
+                    'custom'
+                )
+            )
+        )
+);
+
+CREATE INDEX IF NOT EXISTS idx_authorization_scopes_scope_type
+    ON authorization_scopes(scope_type);
+
+CREATE INDEX IF NOT EXISTS idx_authorization_scopes_resource
+    ON authorization_scopes(resource_type, resource_id);
+
+CREATE INDEX IF NOT EXISTS idx_authorization_scopes_parent
+    ON authorization_scopes(parent_scope_id);
+
+CREATE INDEX IF NOT EXISTS idx_authorization_scopes_active
+    ON authorization_scopes(is_active);
+
+
+-- ============================================================
+-- Foreign-key links to scopes
+-- ============================================================
+
+ALTER TABLE authorization_user_roles
+    ADD CONSTRAINT fk_authorization_user_roles_scope
+    FOREIGN KEY (scope_id)
+    REFERENCES authorization_scopes(id)
+    ON DELETE SET NULL;
+
+ALTER TABLE authorization_user_permission_overrides
+    ADD CONSTRAINT fk_authorization_user_permission_overrides_scope
+    FOREIGN KEY (scope_id)
+    REFERENCES authorization_scopes(id)
+    ON DELETE SET NULL;
+
+
+-- ============================================================
+-- Global Scope
+-- ============================================================
+
+INSERT INTO authorization_scopes
+(
+    scope_type,
+    name,
+    description
+)
+[TRUNCATED: file has 130 lines]
+
+--- FILE: account-backend\README.md ---
+
+--- FILE: general-market-backend\internal\integrations\account\README.md ---
+# Account Service Client
+
+## Responsibility
+
+Integrate with Account for identity, authentication context, roles, and permissions through an explicit contract.
+
+## Architecture constraints
+
+- Keep one authoritative owner for each category of data.
+- Validate inputs and state transitions on the server.
+- Use explicit service contracts and safe idempotency where operations
+  can be retried.
+- Add dependencies only when required by a defined responsibility.
+
+## Implementation status
+
+Structural documentation only. Business implementation and automated tests
+must be completed and verified separately.
+
+============================================================
+4. API / AUTH / DATA / BUSINESS RULE CANDIDATES
+============================================================
+
+--- FILE: account-backend\cmd\server\main.go ---
+L: 
+
+--- FILE: account-backend\config\config.go ---
+L: 
+
+--- FILE: account-backend\infrastructure\postgres\connection.go ---
+L: 
+
+--- FILE: account-backend\infrastructure\postgres\postgres.go ---
+L: 
+
+--- FILE: account-backend\infrastructure\redis\connection.go ---
+L: 
+
+--- FILE: account-backend\infrastructure\redis\redis.go ---
+L: 
+
+--- FILE: account-backend\internal\auth\audit_repository.go ---
+L: 
+
+--- FILE: account-backend\internal\auth\handler.go ---
+L: 
+
+--- FILE: account-backend\internal\auth\login_errors.go ---
+L: 
+
+--- FILE: account-backend\internal\auth\login_models.go ---
+L: 
+
+--- FILE: account-backend\internal\auth\login_repository.go ---
+L: 
+
+--- FILE: account-backend\internal\auth\login_service.go ---
+L: 
+
+--- FILE: account-backend\internal\auth\model.go ---
+L: 
+
+--- FILE: account-backend\internal\auth\password_handler.go ---
+L: 
+
+--- FILE: account-backend\internal\auth\password_models.go ---
+L: 
+
+--- FILE: account-backend\internal\auth\password_repository.go ---
+L: 
+
+--- FILE: account-backend\internal\auth\password_reset_handler.go ---
+L: 
+
+--- FILE: account-backend\internal\auth\password_reset_models.go ---
+L: 
+
+--- FILE: account-backend\internal\auth\password_reset_repository.go ---
+L: 
+
+--- FILE: account-backend\internal\auth\password_reset_service.go ---
+L: 
+
+--- FILE: account-backend\internal\auth\password_service.go ---
+L: 
+
+--- FILE: account-backend\internal\auth\repository.go ---
+L: 
+
+--- FILE: account-backend\internal\auth\service.go ---
+L: 
+
+--- FILE: account-backend\internal\auth\session_handler.go ---
+L: 
+
+--- FILE: account-backend\internal\auth\session_repository.go ---
+L: 
+
+--- FILE: account-backend\internal\auth\session_service.go ---
+L: 
+
+--- FILE: account-backend\internal\auth\trusted_device_management.go ---
+L: 
+
+--- FILE: account-backend\internal\auth\trusted_device_management_handler.go ---
+L: 
+
+--- FILE: account-backend\internal\auth\trusted_device_repository.go ---
+L: 
+
+--- FILE: account-backend\internal\authorization\assignment.go ---
+L: 
+
+--- FILE: account-backend\internal\authorization\authorization_postgres_integration_test.go ---
+L: 
+
+--- FILE: account-backend\internal\authorization\authorization_service.go ---
+L: 
+
+--- FILE: account-backend\internal\authorization\authorization_service_test.go ---
+L: 
+
+--- FILE: account-backend\internal\authorization\errors.go ---
+L: 
+
+--- FILE: account-backend\internal\authorization\handler.go ---
+L: 
+
+--- FILE: account-backend\internal\authorization\middleware.go ---
+L: 
+
+--- FILE: account-backend\internal\authorization\middleware_test.go ---
+L: 
+
+--- FILE: account-backend\internal\authorization\model.go ---
+L: 
+
+--- FILE: account-backend\internal\authorization\permission.go ---
+L: 
+
+--- FILE: account-backend\internal\authorization\repository.go ---
+L: 
+
+--- FILE: account-backend\internal\authorization\repository_contracts.go ---
+L: 
+
+--- FILE: account-backend\internal\authorization\role.go ---
+L: 
+
+--- FILE: account-backend\internal\authorization\scope.go ---
+L: 
+
+--- FILE: account-backend\internal\authorization\service.go ---
+L: 
+
+--- FILE: account-backend\internal\user\email_handler.go ---
+L: 
+
+--- FILE: account-backend\internal\user\email_model.go ---
+L: 
+
+--- FILE: account-backend\internal\user\email_repository.go ---
+L: 
+
+--- FILE: account-backend\internal\user\email_service.go ---
+L: 
+
+--- FILE: account-backend\internal\user\handler.go ---
+L: 
+
+--- FILE: account-backend\internal\user\legal_entity_handler.go ---
+L: 
+
+--- FILE: account-backend\internal\user\legal_entity_model.go ---
+L: 
+
+--- FILE: account-backend\internal\user\legal_entity_repository.go ---
+L: 
+
+--- FILE: account-backend\internal\user\legal_entity_service.go ---
+L: 
+
+--- FILE: account-backend\internal\user\model.go ---
+L: 
+
+--- FILE: account-backend\internal\user\phone_handler.go ---
+L: 
+
+--- FILE: account-backend\internal\user\phone_model.go ---
+L: 
+
+--- FILE: account-backend\internal\user\phone_repository.go ---
+L: 
+
+--- FILE: account-backend\internal\user\phone_service.go ---
+L: 
+
+--- FILE: account-backend\internal\user\profile_handler.go ---
+L: 
+
+--- FILE: account-backend\internal\user\profile_model.go ---
+L: 
+
+--- FILE: account-backend\internal\user\profile_repository.go ---
+L: 
+
+--- FILE: account-backend\internal\user\profile_service.go ---
+L: 
+
+--- FILE: account-backend\internal\user\repository.go ---
+L: 
+
+--- FILE: account-backend\internal\user\service.go ---
+L: 
+
+--- FILE: account-backend\internal\verification\audit.go ---
+L: 
+
+--- FILE: account-backend\internal\verification\audit_repository.go ---
+L: 
+
+--- FILE: account-backend\internal\verification\bank.go ---
+L: 
+
+--- FILE: account-backend\internal\verification\biometric.go ---
+L: 
+
+--- FILE: account-backend\internal\verification\cache.go ---
+L: 
+
+--- FILE: account-backend\internal\verification\contact.go ---
+L: 
+
+--- FILE: account-backend\internal\verification\document.go ---
+L: 
+
+--- FILE: account-backend\internal\verification\handler.go ---
+L: 
+
+--- FILE: account-backend\internal\verification\identity.go ---
+L: 
+
+--- FILE: account-backend\internal\verification\legal_entity.go ---
+L: 
+
+--- FILE: account-backend\internal\verification\model.go ---
+L: 
+
+--- FILE: account-backend\internal\verification\official_document.go ---
+L: 
+
+--- FILE: account-backend\internal\verification\protection.go ---
+L: 
+
+--- FILE: account-backend\internal\verification\provider.go ---
+L: 
+
+--- FILE: account-backend\internal\verification\providers.go ---
+L: 
+
+--- FILE: account-backend\internal\verification\repository.go ---
+L: 
+
+--- FILE: account-backend\internal\verification\service.go ---
+L: 
+
+--- FILE: account-backend\internal\verification\test_provider.go ---
+L: 
+
+--- FILE: account-backend\migrations\001_create_users.sql ---
+L: 
+
+--- FILE: account-backend\migrations\002_create_user_profiles.sql ---
+L: 
+
+--- FILE: account-backend\migrations\003_create_legal_entities.sql ---
+L: 
+
+--- FILE: account-backend\migrations\004_create_user_phones.sql ---
+L: 
+
+--- FILE: account-backend\migrations\005_create_user_emails.sql ---
+L: 
+
+--- FILE: account-backend\migrations\006_create_verifications.sql ---
+L: 
+
+--- FILE: account-backend\migrations\007_create_verification_audits.sql ---
+L: 
+
+--- FILE: account-backend\migrations\008_extend_user_profiles_for_registration.sql ---
+L: 
+
+--- FILE: account-backend\migrations\009_create_auth_credentials.sql ---
+L: 
+
+--- FILE: account-backend\migrations\010_create_trusted_devices.sql ---
+L: 
+
+--- FILE: account-backend\migrations\011_create_auth_sessions.sql ---
+L: 
+
+--- FILE: account-backend\migrations\012_create_auth_audits.sql ---
+L: 
+
+--- FILE: account-backend\migrations\013_create_password_reset_tokens.sql ---
+L: 
+
+--- FILE: account-backend\migrations\014_create_authorization_roles.sql ---
+L: 
+
+--- FILE: account-backend\migrations\015_create_authorization_permissions.sql ---
+L: 
+
+--- FILE: account-backend\migrations\016_create_authorization_role_permissions.sql ---
+L: 
+
+--- FILE: account-backend\migrations\017_create_authorization_user_roles.sql ---
+L: 
+
+--- FILE: account-backend\migrations\018_create_authorization_user_permission_overrides.sql ---
+L: 
+
+--- FILE: account-backend\migrations\019_create_authorization_scopes.sql ---
+L: 
+
+--- FILE: account-backend\scripts\test-authorization-scope-http.go ---
+L: 
+
+--- FILE: IGD-front\app\src\app\features\account\account.routes.ts ---
+L: 
+
+--- FILE: IGD-front\backups\account-profile-20261110-044609\app.ts ---
+L: 
+
+============================================================
+5. FRONTEND DISCOVERY CHECKLIST
+============================================================
+The following capabilities must be classified based on actual backend evidence:
+
+- Account profile and personal information
+- Registration and identity verification
+- Login and logout
+- Password management and recovery
+- SMS OTP / verification
+- Access tokens and refresh tokens
+- Roles, permissions and authorization
+- Active devices and trusted devices
+- Active sessions and session termination
+- Account security settings
+- Account status and restrictions
+- Error responses and validation rules
+- API Gateway / BFF integration
+- Required environment configuration
+- Missing or incomplete backend endpoints
+
+For every capability, identify:
+1. Backend implementation status
+2. API method and route
+3. Request and response structure
+4. Authentication and authorization requirements
+5. Frontend page / component / interaction required
+6. Dependencies on other services
+7. Missing information or unresolved questions
+
+Do not infer an API from a filename or a model.
+Do not classify an endpoint as operational without implementation evidence.
+Do not invent frontend data or backend capabilities.
+
+============================================================
+6. SCAN LIMITATIONS
+============================================================
+This is a static source discovery report.
+It does not prove runtime availability or successful integration.
+Only account-related paths and files are included.
+Some shared authentication or gateway code may require manual classification.
+No project source files were modified.
