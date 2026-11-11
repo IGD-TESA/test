@@ -1,0 +1,191 @@
+﻿<div class="igd-shell" [class.is-collapsed]="sidebarCollapsed">
+
+  <aside class="primary-sidebar" aria-label="ناوبری اصلی">
+    <div class="brand-area">
+      <div class="brand-mark" aria-hidden="true">
+        <span class="material-symbols-outlined">account_balance</span>
+      </div>
+      <div class="brand-copy">
+        <strong>IGD</strong>
+        <span>مدیریت دارایی‌های واقعی</span>
+      </div>
+    </div>
+
+    <div class="sidebar-caption">فضای کاری</div>
+
+    <nav class="primary-navigation">
+      @for (section of sections; track section.id) {
+        <button
+          type="button"
+          class="primary-nav-item"
+          [class.active]="activeSectionId === section.id"
+          [attr.aria-current]="activeSectionId === section.id ? 'page' : null"
+          [title]="sidebarCollapsed ? section.label : ''"
+          (click)="selectSection(section.id)"
+        >
+          <span class="material-symbols-outlined nav-icon">{{ section.icon }}</span>
+          <span class="nav-label">{{ section.label }}</span>
+          <span class="active-indicator"></span>
+        </button>
+      }
+    </nav>
+
+    <div class="sidebar-bottom">
+      <div class="sidebar-divider"></div>
+
+      <div class="account-profile-area" [class.menu-open]="accountMenuOpen">
+        <button
+          type="button"
+          class="profile-entry"
+          [attr.aria-expanded]="accountMenuOpen"
+          aria-haspopup="true"
+          aria-label="منوی حساب کاربری"
+          (click)="toggleAccountMenu()"
+        >
+          <div class="profile-avatar">
+            <span class="material-symbols-outlined">person</span>
+          </div>
+
+          <div class="profile-copy">
+            <strong>{{ accountUserName }}</strong>
+            <span>حساب کاربری</span>
+          </div>
+
+          <span class="material-symbols-outlined profile-chevron">
+            {{ accountMenuOpen ? 'expand_more' : 'expand_less' }}
+          </span>
+        </button>
+
+        @if (accountMenuOpen) {
+          <div class="account-dropdown" role="menu" aria-label="گزینه‌های حساب کاربری">
+            <div class="account-dropdown-heading">
+              <div class="dropdown-avatar">
+                <span class="material-symbols-outlined">person</span>
+              </div>
+              <div class="dropdown-user-copy">
+                <strong>{{ accountUserName }}</strong>
+                <span>مدیریت حساب کاربری</span>
+              </div>
+            </div>
+
+            @for (group of accountMenuGroups; track group.title) {
+              <div class="account-menu-group">
+                <button
+  type="button"
+  class="account-menu-group-title"
+  (click)="navigateAccountGroup(group.title === 'حساب کاربری' ? 'account' : (group.title === 'امنیت و دسترسی' ? 'security' : 'management'))"
+>
+  {{ group.title }}
+</button>
+                @for (item of group.items; track item.id) {
+                  <button
+                    type="button"
+                    class="account-menu-item"
+                    [class.danger]="item.danger"
+                    [disabled]="item.id === 'logout' && logoutInProgress"
+                    role="menuitem"
+                    (click)="navigateAccountMenuItem(item.id)"
+                  >
+                    <span class="material-symbols-outlined">{{ item.icon }}</span>
+                    <span>{{ item.id === 'logout' && logoutInProgress ? 'در حال خروج...' : item.label }}</span>
+                  </button>
+                }
+              </div>
+            }
+
+            @if (logoutError) {
+              <div class="account-menu-footnote account-menu-error" role="alert">
+                <span class="material-symbols-outlined">error</span>
+                <span>{{ logoutError }}</span>
+              </div>
+            }
+            <div class="account-menu-footnote">
+              <span class="material-symbols-outlined">info</span>
+              <span>امکانات حساب پس از اتصال سرویس مربوطه فعال می‌شوند.</span>
+            </div>
+          </div>
+        }
+      </div>
+
+      <div class="sidebar-version">IGD Platform</div>
+    </div>
+  </aside>
+
+  <section class="workspace-frame">
+
+    <aside class="secondary-sidebar" aria-label="ناوبری بخش">
+      <div class="secondary-header">
+        <span class="secondary-eyebrow">بخش انتخاب‌شده</span>
+        <div class="secondary-title">
+          <span class="material-symbols-outlined">{{ activeSection.icon }}</span>
+          <strong>{{ activeSection.label }}</strong>
+        </div>
+      </div>
+
+      <div class="secondary-divider"></div>
+      <div class="secondary-menu-caption">دسترسی‌های این بخش</div>
+
+      <nav class="secondary-navigation">
+        @for (item of activeSection.items; track item.id) {
+          <button
+            type="button"
+            class="secondary-nav-item"
+            [class.active]="activeItemId === item.id"
+            [attr.aria-current]="activeItemId === item.id ? 'page' : null"
+            (click)="selectItem(item.id)"
+          >
+            <span class="material-symbols-outlined">{{ item.icon }}</span>
+            <span>{{ item.label }}</span>
+            @if (activeItemId === item.id) {
+              <span class="secondary-active-dot"></span>
+            }
+          </button>
+        }
+      </nav>
+
+      <div class="secondary-footer">
+        <span class="material-symbols-outlined">info</span>
+        <span>ساختار بخش‌ها در حال تکمیل است.</span>
+      </div>
+    </aside>
+
+    <main class="main-workspace">
+      <header class="topbar">
+        <div class="topbar-start">
+          <button
+            type="button"
+            class="icon-button sidebar-toggle"
+            (click)="toggleSidebar()"
+            [attr.aria-label]="sidebarCollapsed ? 'باز کردن نوار کناری' : 'جمع کردن نوار کناری'"
+            title="جمع‌کردن یا بازکردن منوی اصلی"
+          >
+            <span class="material-symbols-outlined">
+              {{ sidebarCollapsed ? 'left_panel_open' : 'left_panel_close' }}
+            </span>
+          </button>
+
+          <div class="breadcrumb">
+            <span>IGD</span>
+            <span class="material-symbols-outlined">chevron_left</span>
+            <strong>{{ activeSection.label }}</strong>
+            <span class="material-symbols-outlined">chevron_left</span>
+            <span>{{ activeItem.label }}</span>
+          </div>
+        </div>
+
+        <div class="topbar-end">
+          <div class="environment-label">
+            <span class="status-dot"></span>
+            <span>محیط کاربری</span>
+          </div>
+        </div>
+      </header>
+
+      <section class="workspace-canvas">
+        <div class="workspace-content">
+          <router-outlet></router-outlet>
+        </div>
+      </section>
+    </main>
+  </section>
+</div>

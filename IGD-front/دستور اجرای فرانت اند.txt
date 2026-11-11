@@ -1,0 +1,12 @@
+$ErrorActionPreference = "Stop"
+
+$Root = "E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app"
+$NgCmd = Join-Path $Root "node_modules\.bin\ng.cmd"
+
+if (-not (Test-Path -LiteralPath $NgCmd)) {
+    throw "Angular CLI executable not found: $NgCmd"
+}
+
+Set-Location -LiteralPath $Root
+
+& $NgCmd serve --host 127.0.0.1 --port 4200

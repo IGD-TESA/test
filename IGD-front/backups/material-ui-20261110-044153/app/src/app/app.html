@@ -1,0 +1,139 @@
+<div
+  class="igd-shell"
+  [class.is-collapsed]="sidebarCollapsed"
+  dir="rtl"
+  data-testid="igd-app-shell"
+>
+  <!-- PRIMARY SIDEBAR -->
+  <aside class="primary-sidebar" aria-label="ناوبری اصلی">
+    <div class="sidebar-brand">
+      <div class="brand-mark" aria-hidden="true">
+        <span class="material-symbols-outlined">account_balance</span>
+      </div>
+
+      <div class="brand-copy">
+        <strong>IGD</strong>
+        <span>مدیریت دارایی‌های واقعی</span>
+      </div>
+    </div>
+
+    <div class="sidebar-section-label">فضای کاری</div>
+
+    <nav class="primary-navigation">
+      @for (section of sections; track section.id) {
+        <button
+          type="button"
+          class="primary-nav-item"
+          [class.is-active]="selectedSectionId === section.id"
+          [attr.aria-current]="selectedSectionId === section.id ? 'page' : null"
+          [attr.title]="section.label"
+          (click)="selectSection(section.id)"
+        >
+          <span class="material-symbols-outlined nav-icon" aria-hidden="true">
+            {{ section.icon }}
+          </span>
+          <span class="nav-label">{{ section.label }}</span>
+          @if (selectedSectionId === section.id) {
+            <span class="active-indicator" aria-hidden="true"></span>
+          }
+        </button>
+      }
+    </nav>
+
+    <div class="sidebar-bottom">
+      <div class="sidebar-divider"></div>
+
+      <button type="button" class="profile-entry" title="حساب کاربری">
+        <span class="profile-avatar material-symbols-outlined" aria-hidden="true">
+          person
+        </span>
+        <span class="profile-copy">
+          <strong>حساب کاربری</strong>
+          <small>پروفایل و تنظیمات</small>
+        </span>
+        <span class="material-symbols-outlined profile-more" aria-hidden="true">
+          more_horiz
+        </span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- INSET WORKSPACE -->
+  <div class="shell-inset">
+    <!-- SECONDARY NAVIGATION -->
+    <aside class="secondary-sidebar" aria-label="ناوبری ثانویه">
+      <div class="secondary-heading">
+        <span class="secondary-eyebrow">بخش انتخاب‌شده</span>
+        <h2>{{ selectedSection.label }}</h2>
+      </div>
+
+      <div class="secondary-divider"></div>
+
+      <div class="secondary-empty">
+        <span class="material-symbols-outlined" aria-hidden="true">
+          account_tree
+        </span>
+        <strong>ناوبری این بخش</strong>
+        <p>
+          گزینه‌های تخصصی این قسمت پس از بررسی سرویس و قرارداد بک‌اند مربوط
+          به آن تعریف خواهند شد.
+        </p>
+      </div>
+
+      <div class="secondary-footer">
+        <span class="material-symbols-outlined" aria-hidden="true">layers</span>
+        <span>ساختار اولیه پلتفرم</span>
+      </div>
+    </aside>
+
+    <!-- MAIN INSET CONTENT -->
+    <main class="main-inset">
+      <header class="shell-header">
+        <div class="header-start">
+          <button
+            type="button"
+            class="icon-button sidebar-toggle"
+            (click)="toggleSidebar()"
+            [attr.aria-label]="sidebarCollapsed ? 'بازکردن نوار کناری' : 'جمع‌کردن نوار کناری'"
+            [attr.aria-expanded]="!sidebarCollapsed"
+          >
+            <span class="material-symbols-outlined" aria-hidden="true">
+              dock_to_right
+            </span>
+          </button>
+
+          <div class="header-breadcrumb">
+            <span>IGD</span>
+            <span class="material-symbols-outlined" aria-hidden="true">
+              chevron_left
+            </span>
+            <strong>{{ selectedSection.label }}</strong>
+          </div>
+        </div>
+
+        <div class="header-end">
+          <span class="workspace-caption">سامانه مدیریت دارایی‌های واقعی</span>
+          <span class="header-brand-mark">IGD</span>
+        </div>
+      </header>
+
+      <section class="workspace-canvas" aria-label="فضای محتوای برنامه">
+        <div class="workspace-empty">
+          <div class="workspace-empty-icon">
+            <span class="material-symbols-outlined" aria-hidden="true">
+              space_dashboard
+            </span>
+          </div>
+
+          <span class="workspace-kicker">IGD WORKSPACE</span>
+          <h1>فضای کاری آماده است</h1>
+          <p>
+            پوسته اصلی پلتفرم ایجاد شده است. محتوای تخصصی هر بخش پس از بررسی
+            بک‌اند، قراردادهای API و مسئولیت سرویس مربوطه در این فضا قرار
+            خواهد گرفت.
+          </p>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>

@@ -1,0 +1,51 @@
+﻿:host {
+  display: block;
+  min-width: 0;
+  width: 100%;
+}
+
+.account-page {
+  width: 100%;
+  min-width: 0;
+  padding: 1.25rem;
+  box-sizing: border-box;
+  color: inherit;
+}
+
+.account-page__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.account-page__header h1 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.8;
+}
+
+.account-page__header p {
+  margin: 0.35rem 0 0;
+  color: var(--muted-foreground, #777);
+  font-size: 0.875rem;
+  line-height: 1.8;
+}
+
+.account-page__content {
+  min-height: 8rem;
+  padding: 1rem;
+  border: 1px solid var(--border, #e5e5e5);
+  border-radius: 0.75rem;
+  background: var(--card, transparent);
+  box-sizing: border-box;
+}
+
+.account-page__content p {
+  margin: 0;
+  color: var(--muted-foreground, #777);
+  font-size: 0.875rem;
+  line-height: 2;
+}

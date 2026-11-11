@@ -1,0 +1,110 @@
+@font-face {
+  font-family: "Material Symbols Outlined";
+  font-style: normal;
+  font-weight: 100 700;
+  src: url("../../assets/fonts/material-symbols-outlined.woff2") format("woff2");
+  font-display: block;
+}
+
+@font-face {
+  font-family: "Vazirmatn Variable";
+  font-style: normal;
+  font-weight: 100 900;
+  src: url("../../assets/fonts/vazirmatn-arabic-wght-normal.woff2") format("woff2");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Inter Variable";
+  font-style: normal;
+  font-weight: 100 900;
+  src: url("../../assets/fonts/inter-latin-wght-normal.woff2") format("woff2");
+  font-display: swap;
+}
+
+:root {
+  font-family: "Vazirmatn Variable", "Inter Variable", sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  --igd-font-family-persian: "Vazirmatn Variable", sans-serif;
+  --igd-font-family-latin: "Inter Variable", sans-serif;
+  --igd-font-family: "Vazirmatn Variable", "Inter Variable", sans-serif;
+
+  --igd-color-primary: #203b30;
+  --igd-color-primary-dark: #172b24;
+  --igd-color-primary-soft: #e9f0eb;
+  --igd-color-olive: #7b8052;
+  --igd-color-gold: #b99a5b;
+  --igd-color-background: #fbfaf6;
+  --igd-color-surface: #ffffff;
+  --igd-color-surface-muted: #f4f1e8;
+  --igd-color-text: #202923;
+  --igd-color-text-muted: #6e766f;
+  --igd-color-border: #e5e1d7;
+  --igd-color-success: #2e7252;
+  --igd-color-warning: #b78332;
+  --igd-color-danger: #a9473e;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  min-width: 320px;
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  overflow-x: hidden;
+  background: var(--igd-color-background);
+  color: var(--igd-color-text);
+  font-family: var(--igd-font-family);
+  direction: rtl;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.material-symbols-outlined {
+  display: inline-block;
+  direction: ltr;
+  font-family: "Material Symbols Outlined";
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  white-space: nowrap;
+  word-wrap: normal;
+  font-feature-settings: "liga";
+  -webkit-font-feature-settings: "liga";
+  -webkit-font-smoothing: antialiased;
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+  user-select: none;
+}
+
+::selection {
+  color: #fff;
+  background: var(--igd-color-primary);
+}
+
+:focus-visible {
+  outline: 2px solid var(--igd-color-gold);
+  outline-offset: 3px;
+}

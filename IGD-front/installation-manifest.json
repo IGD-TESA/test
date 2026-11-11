@@ -1,0 +1,22 @@
+{
+    "projectRoot":  "E:\\شرکت توسعه سبز ایران\\پلتفرم\\پلتفرم آی جی دی\\Real-Asset-Management-Platform",
+    "sourceRoot":  "E:\\شرکت توسعه سبز ایران\\پلتفرم\\پلتفرم آی جی دی\\Real-Asset-Management-Platform\\IGD-front",
+    "angularWorkspace":  "E:\\شرکت توسعه سبز ایران\\پلتفرم\\پلتفرم آی جی دی\\Real-Asset-Management-Platform\\IGD-front\\app",
+    "installationRoot":  "D:\\Program Files\\IGD-Frontend",
+    "nodeVersion":  "v24.15.0",
+    "npmVersion":  "11.12.1",
+    "angularCliVersion":  "22.2.6",
+    "nodeExecutable":  "D:\\Program Files\\IGD-Frontend\\Runtimes\\NodeJS\\node-v24.15.0-win-x64\\node.exe",
+    "npmExecutable":  "D:\\Program Files\\IGD-Frontend\\Runtimes\\NodeJS\\node-v24.15.0-win-x64\\node_modules\\npm\\bin\\npm-cli.js",
+    "angularCli":  "D:\\Program Files\\IGD-Frontend\\Tools\\AngularCLI\\node_modules\\@angular\\cli\\bin\\ng.js",
+    "projectRuntime":  "D:\\Program Files\\IGD-Frontend\\Libraries\\IGD-Frontend",
+    "dependencyModules":  "D:\\Program Files\\IGD-Frontend\\Libraries\\IGD-Frontend\\node_modules",
+    "npmCache":  "D:\\Program Files\\IGD-Frontend\\PackageCaches\\npm",
+    "temporaryFiles":  "D:\\Program Files\\IGD-Frontend\\PackageCaches\\temp",
+    "npmRegistry":  "https://registry.npmjs.org/",
+    "nodeArchive":  "https://nodejs.org/dist/v24.15.0/node-v24.15.0-win-x64.zip",
+    "nodeChecksum":  "https://nodejs.org/dist/v24.15.0/SHASUMS256.txt",
+    "operatingSystemArchitecture":  "AMD64",
+    "createdAt":  "2026-11-06T00:24:37.7884709-08:00",
+    "installationPolicy":  "Project source and configuration are stored on E:. Runtimes, tools, dependencies, caches and downloads are stored on D:."
+}

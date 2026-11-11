@@ -1,0 +1,40 @@
+import type { Routes } from '@angular/router';
+import { featurePageRoute } from '../../shared/routing/feature-route.factory';
+
+export const ACCOUNT_ROUTES: Routes = [
+  featurePageRoute(
+    '',
+    'حساب من',
+    'مدیریت اطلاعات و تنظیمات حساب کاربری.',
+  ),
+  featurePageRoute(
+    'profile',
+    'اطلاعات حساب',
+    'مشاهده و مدیریت اطلاعات پایه حساب.',
+  ),
+  featurePageRoute(
+    'verification',
+    'احراز هویت',
+    'پیگیری وضعیت احراز هویت.',
+  ),
+  featurePageRoute(
+    'security',
+    'امنیت حساب',
+    'مدیریت تنظیمات امنیتی حساب.',
+  ),
+  featurePageRoute(
+    'login',
+    'ورود',
+    'مسیر ورود به حساب کاربری.',
+  ),
+  featurePageRoute(
+    'register',
+    'ثبت‌نام',
+    'مسیر ایجاد حساب کاربری.',
+  ),
+  featurePageRoute(
+    'recover-password',
+    'بازیابی رمز عبور',
+    'مسیر بازیابی دسترسی به حساب.',
+  ),
+];

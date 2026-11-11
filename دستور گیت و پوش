@@ -1,1 +1,6 @@
 cd "E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\test-clone"; git add -A; git commit -m "Update test project"; if ($LASTEXITCODE -eq 0) { git push -u origin HEAD }
+
+
+
+
+cd "E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform"; git add -A; git commit -m "Update test project"; if ($LASTEXITCODE -eq 0) { git push -u origin HEAD }

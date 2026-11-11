@@ -1,0 +1,13 @@
+:root {
+  --igd-font-family-persian: "Vazirmatn Variable", sans-serif;
+  --igd-font-family-latin: "Inter Variable", sans-serif;
+
+  --igd-font-size-xs: 0.75rem;
+  --igd-font-size-sm: 0.875rem;
+  --igd-font-size-md: 1rem;
+  --igd-font-size-lg: 1.125rem;
+  --igd-font-size-xl: 1.375rem;
+  --igd-font-size-2xl: 1.75rem;
+
+  --igd-line-height: 1.8;
+}

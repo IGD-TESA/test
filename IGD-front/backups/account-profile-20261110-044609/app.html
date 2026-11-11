@@ -1,0 +1,174 @@
+<div class="igd-shell" [class.is-collapsed]="sidebarCollapsed">
+
+  <aside class="primary-sidebar" aria-label="ناوبری اصلی">
+    <div class="brand-area">
+      <div class="brand-mark" aria-hidden="true">
+        <span class="material-symbols-outlined">account_balance</span>
+      </div>
+      <div class="brand-copy">
+        <strong>IGD</strong>
+        <span>مدیریت دارایی‌های واقعی</span>
+      </div>
+    </div>
+
+    <div class="sidebar-caption">فضای کاری</div>
+
+    <nav class="primary-navigation">
+      @for (section of sections; track section.id) {
+        <button
+          type="button"
+          class="primary-nav-item"
+          [class.active]="activeSectionId === section.id"
+          [attr.aria-current]="activeSectionId === section.id ? 'page' : null"
+          [title]="sidebarCollapsed ? section.label : ''"
+          (click)="selectSection(section.id)"
+        >
+          <span class="material-symbols-outlined nav-icon">{{ section.icon }}</span>
+          <span class="nav-label">{{ section.label }}</span>
+          <span class="active-indicator"></span>
+        </button>
+      }
+    </nav>
+
+    <div class="sidebar-bottom">
+      <div class="sidebar-divider"></div>
+      <div class="sidebar-support">
+        <span class="material-symbols-outlined">help</span>
+        <span class="nav-label">راهنما و پشتیبانی</span>
+      </div>
+      <div class="sidebar-version">IGD Platform</div>
+    </div>
+  </aside>
+
+  <section class="workspace-frame">
+
+    <aside class="secondary-sidebar" aria-label="ناوبری بخش">
+      <div class="secondary-header">
+        <span class="secondary-eyebrow">بخش انتخاب‌شده</span>
+        <div class="secondary-title">
+          <span class="material-symbols-outlined">{{ activeSection.icon }}</span>
+          <strong>{{ activeSection.label }}</strong>
+        </div>
+      </div>
+
+      <div class="secondary-divider"></div>
+
+      <div class="secondary-menu-caption">دسترسی‌های این بخش</div>
+
+      <nav class="secondary-navigation">
+        @for (item of activeSection.items; track item.id) {
+          <button
+            type="button"
+            class="secondary-nav-item"
+            [class.active]="activeItemId === item.id"
+            [attr.aria-current]="activeItemId === item.id ? 'page' : null"
+            (click)="selectItem(item.id)"
+          >
+            <span class="material-symbols-outlined">{{ item.icon }}</span>
+            <span>{{ item.label }}</span>
+            @if (activeItemId === item.id) {
+              <span class="secondary-active-dot"></span>
+            }
+          </button>
+        }
+      </nav>
+
+      <div class="secondary-footer">
+        <span class="material-symbols-outlined">info</span>
+        <span>ساختار بخش‌ها در حال تکمیل است.</span>
+      </div>
+    </aside>
+
+    <main class="main-workspace">
+      <header class="topbar">
+        <div class="topbar-start">
+          <button
+            type="button"
+            class="icon-button sidebar-toggle"
+            (click)="toggleSidebar()"
+            [attr.aria-label]="sidebarCollapsed ? 'باز کردن نوار کناری' : 'جمع کردن نوار کناری'"
+            title="جمع‌کردن یا بازکردن منوی اصلی"
+          >
+            <span class="material-symbols-outlined">
+              {{ sidebarCollapsed ? 'left_panel_open' : 'left_panel_close' }}
+            </span>
+          </button>
+
+          <div class="breadcrumb">
+            <span>IGD</span>
+            <span class="material-symbols-outlined">chevron_left</span>
+            <strong>{{ activeSection.label }}</strong>
+            <span class="material-symbols-outlined">chevron_left</span>
+            <span>{{ activeItem.label }}</span>
+          </div>
+        </div>
+
+        <div class="topbar-end">
+          <div class="environment-label">
+            <span class="status-dot"></span>
+            <span>محیط کاربری</span>
+          </div>
+          <div class="topbar-divider"></div>
+          <div class="profile-entry">
+            <div class="profile-avatar">
+              <span class="material-symbols-outlined">person</span>
+            </div>
+            <div class="profile-copy">
+              <strong>حساب کاربری</strong>
+              <span>پنل شخصی</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <section class="workspace-canvas">
+        <div class="workspace-content">
+          <div class="workspace-heading">
+            <div>
+              <div class="page-overline">
+                <span class="material-symbols-outlined">grid_view</span>
+                <span>{{ activeSection.label }}</span>
+              </div>
+              <h1>{{ activeItem.label }}</h1>
+              <p class="workspace-description">
+                فضای کاری این بخش از پلتفرم مدیریت دارایی‌های واقعی.
+              </p>
+            </div>
+            <div class="workspace-heading-mark" aria-hidden="true">
+              <span class="material-symbols-outlined">{{ activeItem.icon }}</span>
+            </div>
+          </div>
+
+          <div class="workspace-empty">
+            <div class="empty-graphic" aria-hidden="true">
+              <div class="empty-graphic-back"></div>
+              <div class="empty-graphic-front">
+                <span class="material-symbols-outlined">dashboard_customize</span>
+              </div>
+              <span class="empty-graphic-symbol symbol-one material-symbols-outlined">widgets</span>
+              <span class="empty-graphic-symbol symbol-two material-symbols-outlined">tune</span>
+              <span class="empty-graphic-symbol symbol-three material-symbols-outlined">apps</span>
+            </div>
+
+            <h2>فضای کاری آماده است</h2>
+            <p>
+              ساختار رابط کاربری این بخش آماده شده است.
+              محتوای تخصصی پس از بررسی سرویس مرجع، مدل داده و قراردادهای API
+              در این فضا قرار می‌گیرد.
+            </p>
+            <div class="empty-state-note">
+              <span class="material-symbols-outlined">info</span>
+              <span>در این مرحله اطلاعات یا عملیات آزمایشی نمایش داده نمی‌شود.</span>
+            </div>
+          </div>
+
+          <footer class="workspace-footer">
+            <span>IGD</span>
+            <span class="footer-separator"></span>
+            <span>سامانه مدیریت دارایی‌های واقعی</span>
+          </footer>
+        </div>
+      </section>
+    </main>
+  </section>
+</div>

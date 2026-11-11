@@ -1,0 +1,423 @@
+<div class="trading-terminal" dir="rtl">
+
+  <!-- TOP NAVIGATION -->
+  <header class="terminal-header">
+
+    <div class="header-brand">
+      <div class="brand-symbol">
+        <mat-icon>account_balance</mat-icon>
+      </div>
+      <div class="brand-text">
+        <strong>IGD</strong>
+        <span>سامانه مدیریت دارایی‌های واقعی</span>
+      </div>
+    </div>
+
+    <nav class="header-navigation">
+      <button mat-button class="nav-item active">بازار کلی</button>
+      <button mat-button class="nav-item">دارایی‌های من</button>
+      <button mat-button class="nav-item">قراردادها</button>
+      <button mat-button class="nav-item">خدمات</button>
+      <button mat-button class="nav-item">تسویه</button>
+    </nav>
+
+    <div class="header-actions">
+      <button mat-icon-button aria-label="جست‌وجو">
+        <mat-icon>search</mat-icon>
+      </button>
+      <button mat-icon-button aria-label="اعلان‌ها">
+        <mat-icon>notifications_none</mat-icon>
+      </button>
+      <span class="market-status">
+        <span class="status-dot"></span>
+        وضعیت بازار
+      </span>
+    </div>
+
+  </header>
+
+  <!-- MAIN WORKSPACE -->
+  <main class="workspace"
+    [class.orderbook-collapsed]="orderBookCollapsed"
+    [class.details-collapsed]="detailsCollapsed">
+
+    <!-- MARKET WATCH + PORTFOLIO -->
+    <section class="main-market-column">
+
+      <section class="terminal-panel market-watch">
+
+        <div class="panel-heading">
+          <div class="panel-title">
+            <mat-icon>monitoring</mat-icon>
+            <strong>دیده‌بان بازار کلی</strong>
+          </div>
+
+          <div class="panel-actions">
+            <span class="panel-caption">فهرست بازارها و عرضه‌ها</span>
+            <button mat-icon-button aria-label="تنظیمات دیده‌بان">
+              <mat-icon>tune</mat-icon>
+            </button>
+          </div>
+        </div>
+
+        <div class="market-filter-bar">
+          <button mat-button class="filter-active">همه بازارها</button>
+          <button mat-button>کالا</button>
+          <button mat-button>املاک</button>
+          <button mat-button>سایر دارایی‌ها</button>
+
+          <span class="filter-spacer"></span>
+
+          <button mat-icon-button aria-label="جست‌وجوی بازار">
+            <mat-icon>search</mat-icon>
+          </button>
+          <button mat-icon-button aria-label="فیلتر بازار">
+            <mat-icon>filter_list</mat-icon>
+          </button>
+        </div>
+
+        <div class="table-scroll">
+          <table class="terminal-table market-table">
+            <thead>
+              <tr>
+                <th>نام عرضه / دارایی</th>
+                <th>بازار</th>
+                <th>قیمت</th>
+                <th>تغییرات</th>
+                <th>حجم</th>
+                <th>وضعیت</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colspan="6" class="empty-table">
+                  <mat-icon>table_chart</mat-icon>
+                  <span>اطلاعات عرضه‌ها پس از اتصال سرویس بازار نمایش داده می‌شود.</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <footer class="panel-footer">
+          <span>دیده‌بان بازار</span>
+          <span>آماده اتصال به سرویس کاتالوگ و عرضه‌ها</span>
+        </footer>
+
+      </section>
+
+      <section class="terminal-panel portfolio-panel">
+
+        <div class="panel-heading">
+          <div class="panel-title">
+            <mat-icon>account_balance_wallet</mat-icon>
+            <strong>دارایی‌های من | پرتفوی</strong>
+          </div>
+
+          <button mat-button class="text-action">
+            مشاهده همه دارایی‌ها
+            <mat-icon>chevron_left</mat-icon>
+          </button>
+        </div>
+
+        <div class="portfolio-summary">
+          <div class="summary-cell">
+            <span>ارزش کل دارایی‌ها</span>
+            <strong>—</strong>
+          </div>
+          <div class="summary-cell">
+            <span>سود و زیان کل</span>
+            <strong>—</strong>
+          </div>
+          <div class="summary-cell">
+            <span>موقعیت‌های فعال</span>
+            <strong>—</strong>
+          </div>
+        </div>
+
+        <div class="table-scroll">
+          <table class="terminal-table">
+            <thead>
+              <tr>
+                <th>دارایی</th>
+                <th>مقدار</th>
+                <th>ارزش</th>
+                <th>وضعیت</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colspan="4" class="empty-table">
+                  اطلاعات پرتفوی از سرویس دارایی‌های من دریافت خواهد شد.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </section>
+
+    </section>
+
+    <!-- ORDER BOOK -->
+    <section class="terminal-panel orderbook-panel">
+
+      <div class="panel-heading compact-heading">
+        <div class="panel-title">
+          <mat-icon>swap_vert</mat-icon>
+          <strong>دفتر سفارش</strong>
+        </div>
+
+        <button mat-icon-button
+          (click)="toggleOrderBook()"
+          [attr.aria-label]="orderBookCollapsed ? 'بازکردن دفتر سفارش' : 'جمع‌کردن دفتر سفارش'">
+          <mat-icon>{{ orderBookCollapsed ? 'chevron_left' : 'chevron_right' }}</mat-icon>
+        </button>
+      </div>
+
+      <div class="panel-body">
+
+        <div class="orderbook-instrument">
+          <span>نماد انتخابی</span>
+          <strong>—</strong>
+        </div>
+
+        <div class="order-side sell-side">
+          <div class="order-side-heading">
+            <span>فروش</span>
+            <span>قیمت</span>
+            <span>مقدار</span>
+          </div>
+          <div class="order-empty">سفارشی وجود ندارد</div>
+        </div>
+
+        <div class="order-spread">
+          <span>قیمت میانی</span>
+          <strong>—</strong>
+        </div>
+
+        <div class="order-side buy-side">
+          <div class="order-side-heading">
+            <span>خرید</span>
+            <span>قیمت</span>
+            <span>مقدار</span>
+          </div>
+          <div class="order-empty">سفارشی وجود ندارد</div>
+        </div>
+
+        <div class="orderbook-legend">
+          <span class="legend-sell">فروش</span>
+          <span class="legend-buy">خرید</span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- INSTRUMENT DETAILS -->
+    <section class="terminal-panel details-panel">
+
+      <div class="panel-heading compact-heading">
+        <div class="panel-title">
+          <mat-icon>info</mat-icon>
+          <strong>جزئیات نماد</strong>
+        </div>
+
+        <button mat-icon-button
+          (click)="toggleDetails()"
+          [attr.aria-label]="detailsCollapsed ? 'بازکردن جزئیات' : 'جمع‌کردن جزئیات'">
+          <mat-icon>{{ detailsCollapsed ? 'chevron_left' : 'chevron_right' }}</mat-icon>
+        </button>
+      </div>
+
+      <div class="panel-body details-content">
+
+        <div class="instrument-identity">
+          <div class="instrument-placeholder">—</div>
+          <strong>نمادی انتخاب نشده</strong>
+          <span>جزئیات دارایی انتخابی</span>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="detail-row">
+          <span>آخرین قیمت</span>
+          <strong>—</strong>
+        </div>
+        <div class="detail-row">
+          <span>تغییرات</span>
+          <strong>—</strong>
+        </div>
+        <div class="detail-row">
+          <span>حجم عرضه</span>
+          <strong>—</strong>
+        </div>
+        <div class="detail-row">
+          <span>وضعیت عرضه</span>
+          <strong>—</strong>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="detail-section-title">اطلاعات تکمیلی</div>
+        <button mat-button class="detail-link">
+          مشخصات دارایی
+        </button>
+        <button mat-button class="detail-link">
+          قراردادها و تعهدات
+        </button>
+        <button mat-button class="detail-link">
+          سوابق و رویدادها
+        </button>
+
+      </div>
+    </section>
+
+    <!-- VERTICAL TOOLBAR -->
+    <aside class="terminal-toolbar">
+
+      <button mat-icon-button
+        [class.selected]="activeTool === 'market'"
+        (click)="selectTool('market')"
+        aria-label="بازار کلی">
+        <mat-icon>candlestick_chart</mat-icon>
+      </button>
+
+      <button mat-icon-button
+        [class.selected]="activeTool === 'assets'"
+        (click)="selectTool('assets')"
+        aria-label="دارایی‌های من">
+        <mat-icon>account_balance_wallet</mat-icon>
+      </button>
+
+      <button mat-icon-button
+        [class.selected]="activeTool === 'orders'"
+        (click)="selectTool('orders')"
+        aria-label="سفارش‌ها">
+        <mat-icon>receipt_long</mat-icon>
+      </button>
+
+      <button mat-icon-button
+        [class.selected]="activeTool === 'contracts'"
+        (click)="selectTool('contracts')"
+        aria-label="قراردادها">
+        <mat-icon>description</mat-icon>
+      </button>
+
+      <button mat-icon-button
+        [class.selected]="activeTool === 'services'"
+        (click)="selectTool('services')"
+        aria-label="خدمات">
+        <mat-icon>local_shipping</mat-icon>
+      </button>
+
+      <div class="toolbar-spacer"></div>
+
+      <button mat-icon-button
+        [class.selected]="activeTool === 'notifications'"
+        (click)="selectTool('notifications')"
+        aria-label="اعلان‌ها">
+        <mat-icon>notifications</mat-icon>
+      </button>
+
+      <button mat-icon-button
+        [class.selected]="activeTool === 'account'"
+        (click)="selectTool('account')"
+        aria-label="حساب کاربری">
+        <mat-icon>person</mat-icon>
+      </button>
+
+    </aside>
+
+  </main>
+
+  <!-- ACTIVITY WORKSPACE -->
+  <section class="terminal-panel activity-panel">
+
+    <div class="panel-heading activity-heading">
+      <div class="panel-title">
+        <mat-icon>view_list</mat-icon>
+        <strong>فضای کاری و سوابق</strong>
+      </div>
+      <span class="panel-caption">وضعیت مستقل سفارش، معامله و تسویه</span>
+    </div>
+
+    <mat-tab-group
+      class="terminal-tabs"
+      animationDuration="0ms"
+      [disableRipple]="true">
+
+      <mat-tab label="سفارشات فعال">
+        <div class="tab-empty">
+          سفارش‌های فعال پس از اتصال سرویس سفارش‌ها نمایش داده می‌شوند.
+        </div>
+      </mat-tab>
+
+      <mat-tab label="تاریخچه سفارشات">
+        <div class="tab-empty">
+          تاریخچه سفارش‌ها
+        </div>
+      </mat-tab>
+
+      <mat-tab label="معاملات">
+        <div class="tab-empty">
+          سوابق معاملات
+        </div>
+      </mat-tab>
+
+      <mat-tab label="اجرای معامله">
+        <div class="tab-empty">
+          مراحل اجرای معامله
+        </div>
+      </mat-tab>
+
+      <mat-tab label="وضعیت تسویه">
+        <div class="tab-empty">
+          وضعیت و سوابق تسویه
+        </div>
+      </mat-tab>
+
+    </mat-tab-group>
+
+  </section>
+
+  <!-- BOTTOM ASSET STRIP -->
+  <footer class="asset-status-bar">
+
+    <div class="asset-status-item">
+      <span>وضعیت حساب</span>
+      <strong>—</strong>
+    </div>
+
+    <div class="asset-status-item user-status">
+      <span>نام کاربر</span>
+      <strong>حساب کاربری</strong>
+    </div>
+
+    <div class="asset-status-item">
+      <span>قدرت خرید</span>
+      <strong>—</strong>
+    </div>
+
+    <div class="asset-status-item">
+      <span>ارزش پرتفوی</span>
+      <strong>—</strong>
+    </div>
+
+    <div class="asset-status-item">
+      <span>سود و زیان روزانه</span>
+      <strong>—</strong>
+    </div>
+
+    <div class="asset-status-item">
+      <span>سود و زیان کل</span>
+      <strong>—</strong>
+    </div>
+
+    <div class="asset-status-item">
+      <span>موجودی رزروشده</span>
+      <strong>—</strong>
+    </div>
+
+  </footer>
+
+</div>

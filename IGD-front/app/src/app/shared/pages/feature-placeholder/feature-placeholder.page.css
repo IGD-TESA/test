@@ -1,0 +1,28 @@
+:host {
+  display: block;
+  min-height: 100%;
+}
+
+.feature-placeholder {
+  min-height: 100%;
+  padding: 2rem;
+  color: var(--igd-text-primary, #202923);
+  font-family: var(--igd-font-fa, sans-serif);
+}
+
+.feature-placeholder__content {
+  max-width: 72rem;
+  margin-inline: auto;
+}
+
+.feature-placeholder h1 {
+  margin: 0 0 1rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.feature-placeholder p {
+  margin: 0;
+  color: var(--igd-text-secondary, #6e766f);
+  line-height: 1.9;
+}

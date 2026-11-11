@@ -1,0 +1,846 @@
+﻿<div class="account-workspace">
+
+  <header class="account-heading">
+    <div class="heading-main">
+      <div class="heading-eyebrow">
+        <span class="material-symbols-outlined">account_circle</span>
+        فضای کاربری IGD
+      </div>
+      <h1>{{ title }}</h1>
+      <p>{{ description }}</p>
+    </div>
+
+    <div class="heading-status">
+      <span class="status-dot"></span>
+      پیش‌نمایش رابط کاربری
+    </div>
+  </header>
+
+  @if (notice(); as message) {
+    <div class="notice" [class.notice-success]="message.type === 'success'"
+         [class.notice-error]="message.type === 'error'"
+         [class.notice-warning]="message.type === 'warning'"
+         [class.notice-info]="message.type === 'info'"
+         role="status">
+      <span class="material-symbols-outlined">
+        {{ message.type === 'success' ? 'check_circle' :
+           message.type === 'error' ? 'error' :
+           message.type === 'warning' ? 'warning' : 'info' }}
+      </span>
+      <span>{{ message.message }}</span>
+      <button type="button" class="icon-button" (click)="clearNotice()" aria-label="بستن">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+  }
+
+  @if (section !== 'login' && section !== 'register' && section !== 'recover-password') {
+    <nav class="account-nav" aria-label="بخش‌های حساب کاربری">
+      @for (item of navigation; track item.path) {
+        <a
+          [routerLink]="item.path ? ['/account', item.path] : ['/account']"
+          routerLinkActive="nav-active"
+          [routerLinkActiveOptions]="{ exact: item.path === '' }"
+          class="account-nav-item">
+          <span class="material-symbols-outlined">{{ item.icon }}</span>
+          <span>{{ item.label }}</span>
+        </a>
+      }
+    </nav>
+  }
+
+  @switch (section) {
+
+    @case ('overview') {
+      <section class="overview-grid">
+
+        <article class="welcome-panel">
+          <div class="welcome-copy">
+            <span class="eyebrow">داشبورد حساب کاربری</span>
+            <h2>
+              {{ profile().firstName || 'کاربر' }}
+              {{ profile().lastName }}
+            </h2>
+            <p>مدیریت هویت، اطلاعات تماس، امنیت و دسترسی‌های حساب شما</p>
+          </div>
+          <div class="welcome-icon">
+            <span class="material-symbols-outlined">person</span>
+          </div>
+        </article>
+
+        <div class="metric-grid">
+          <article class="metric-card">
+            <span class="metric-icon green">
+              <span class="material-symbols-outlined">assignment_ind</span>
+            </span>
+            <div>
+              <span class="metric-label">تکمیل اطلاعات شخصی</span>
+              <strong>{{ profileCompletion() }}٪</strong>
+            </div>
+          </article>
+
+          <article class="metric-card">
+            <span class="metric-icon gold">
+              <span class="material-symbols-outlined">contact_phone</span>
+            </span>
+            <div>
+              <span class="metric-label">راه‌های ارتباطی</span>
+              <strong>{{ store.phones().length + store.emails().length }}</strong>
+            </div>
+          </article>
+
+          <article class="metric-card">
+            <span class="metric-icon blue">
+              <span class="material-symbols-outlined">devices</span>
+            </span>
+            <div>
+              <span class="metric-label">دستگاه‌های فعال نمایشی</span>
+              <strong>{{ store.devices().filter ? store.devices().length : 0 }}</strong>
+            </div>
+          </article>
+
+          <article class="metric-card">
+            <span class="metric-icon violet">
+              <span class="material-symbols-outlined">verified_user</span>
+            </span>
+            <div>
+              <span class="metric-label">مدارک انتخاب‌شده</span>
+              <strong>{{ store.documents().length }}</strong>
+            </div>
+          </article>
+        </div>
+
+        <article class="panel completion-panel">
+          <div class="panel-heading">
+            <div>
+              <h3>تکمیل اطلاعات حساب</h3>
+              <p>برای استفاده از امکانات پلتفرم، اطلاعات حساب را تکمیل کن.</p>
+            </div>
+            <strong class="completion-number">{{ profileCompletion() }}٪</strong>
+          </div>
+
+          <div class="progress-track">
+            <div class="progress-value" [style.width.%]="profileCompletion()"></div>
+          </div>
+
+          <div class="completion-actions">
+            <a routerLink="/account/profile">تکمیل اطلاعات شخصی</a>
+            <a routerLink="/account/contacts">افزودن راه ارتباطی</a>
+            <a routerLink="/account/verification">بررسی احراز هویت</a>
+          </div>
+        </article>
+
+        <article class="panel quick-panel">
+          <div class="panel-heading">
+            <div>
+              <h3>دسترسی سریع</h3>
+              <p>بخش‌های اصلی مدیریت حساب</p>
+            </div>
+          </div>
+
+          <div class="quick-grid">
+            <a routerLink="/account/profile" class="quick-item">
+              <span class="material-symbols-outlined">person</span>
+              <span>اطلاعات شخصی</span>
+              <span class="material-symbols-outlined arrow">chevron_left</span>
+            </a>
+            <a routerLink="/account/legal-entity" class="quick-item">
+              <span class="material-symbols-outlined">domain</span>
+              <span>اطلاعات حقوقی</span>
+              <span class="material-symbols-outlined arrow">chevron_left</span>
+            </a>
+            <a routerLink="/account/contacts" class="quick-item">
+              <span class="material-symbols-outlined">alternate_email</span>
+              <span>اطلاعات تماس</span>
+              <span class="material-symbols-outlined arrow">chevron_left</span>
+            </a>
+            <a routerLink="/account/security" class="quick-item">
+              <span class="material-symbols-outlined">lock</span>
+              <span>امنیت حساب</span>
+              <span class="material-symbols-outlined arrow">chevron_left</span>
+            </a>
+          </div>
+        </article>
+
+        <div class="demo-disclaimer">
+          <span class="material-symbols-outlined">info</span>
+          اطلاعات این داشبورد آزمایشی است و هنوز از حساب واقعی دریافت نشده است.
+        </div>
+      </section>
+    }
+
+    @case ('profile') {
+      <section class="panel form-panel">
+        <div class="panel-heading">
+          <div>
+            <h3>مشخصات هویتی و فردی</h3>
+            <p>ساختار فیلدها بر اساس مدل پروفایل حساب کاربری تنظیم شده است.</p>
+          </div>
+          <span class="panel-icon material-symbols-outlined">badge</span>
+        </div>
+
+        <form [formGroup]="profileForm" (ngSubmit)="saveProfile()">
+          <div class="form-grid">
+            <label class="field">
+              <span>نام <b>*</b></span>
+              <input formControlName="firstName" placeholder="نام">
+              @if (profileForm.controls.firstName.invalid && profileForm.controls.firstName.touched) {
+                <small class="field-error">وارد کردن نام الزامی است.</small>
+              }
+            </label>
+
+            <label class="field">
+              <span>نام خانوادگی <b>*</b></span>
+              <input formControlName="lastName" placeholder="نام خانوادگی">
+              @if (profileForm.controls.lastName.invalid && profileForm.controls.lastName.touched) {
+                <small class="field-error">وارد کردن نام خانوادگی الزامی است.</small>
+              }
+            </label>
+
+            <label class="field">
+              <span>کد ملی <b>*</b></span>
+              <input formControlName="nationalId" inputmode="numeric" maxlength="10" placeholder="۱۰ رقم">
+              @if (profileForm.controls.nationalId.invalid && profileForm.controls.nationalId.touched) {
+                <small class="field-error">کد ملی باید ۱۰ رقم باشد.</small>
+              }
+            </label>
+
+            <label class="field">
+              <span>تاریخ تولد</span>
+              <input type="date" formControlName="birthDate">
+            </label>
+
+            <label class="field">
+              <span>نام پدر</span>
+              <input formControlName="fatherName" placeholder="نام پدر">
+            </label>
+
+            <label class="field">
+              <span>کد پستی</span>
+              <input formControlName="postalCode" inputmode="numeric" maxlength="10" placeholder="۱۰ رقم">
+              @if (profileForm.controls.postalCode.invalid && profileForm.controls.postalCode.touched) {
+                <small class="field-error">کد پستی باید ۱۰ رقم باشد.</small>
+              }
+            </label>
+
+            <label class="field field-full">
+              <span>نشانی محل سکونت</span>
+              <textarea formControlName="address" rows="3" placeholder="نشانی کامل"></textarea>
+            </label>
+          </div>
+
+          <div class="form-footer">
+            <span class="form-hint">فیلدهای دارای علامت * ضروری هستند.</span>
+            <button type="submit" class="primary-button">
+              <span class="material-symbols-outlined">save</span>
+              ذخیره پیش‌نمایش
+            </button>
+          </div>
+        </form>
+      </section>
+    }
+
+    @case ('legal-entity') {
+      <section class="panel form-panel">
+        <div class="panel-heading">
+          <div>
+            <h3>مشخصات شخصیت حقوقی</h3>
+            <p>این فرم برای حساب‌هایی است که از نوع شخصیت حقوقی هستند.</p>
+          </div>
+          <span class="panel-icon material-symbols-outlined">domain</span>
+        </div>
+
+        <form [formGroup]="legalForm" (ngSubmit)="saveLegalEntity()">
+          <div class="form-grid">
+            <label class="field field-full">
+              <span>نام کامل شخصیت حقوقی <b>*</b></span>
+              <input formControlName="legalName" placeholder="نام ثبت‌شده شرکت یا مؤسسه">
+              @if (legalForm.controls.legalName.invalid && legalForm.controls.legalName.touched) {
+                <small class="field-error">نام شخصیت حقوقی الزامی است.</small>
+              }
+            </label>
+
+            <label class="field">
+              <span>شناسه ملی <b>*</b></span>
+              <input formControlName="nationalId" maxlength="11" inputmode="numeric" placeholder="شناسه ملی">
+              @if (legalForm.controls.nationalId.invalid && legalForm.controls.nationalId.touched) {
+                <small class="field-error">شناسه ملی باید ۱۱ رقم باشد.</small>
+              }
+            </label>
+
+            <label class="field">
+              <span>شماره ثبت</span>
+              <input formControlName="registrationNumber" placeholder="شماره ثبت">
+            </label>
+
+            <label class="field">
+              <span>کد اقتصادی</span>
+              <input formControlName="economicCode" placeholder="کد اقتصادی">
+            </label>
+
+            <label class="field">
+              <span>نوع شخصیت حقوقی</span>
+              <select formControlName="legalType">
+                <option value="company">شرکت</option>
+                <option value="institution">مؤسسه</option>
+                <option value="cooperative">تعاونی</option>
+                <option value="other">سایر</option>
+              </select>
+            </label>
+
+            <label class="field">
+              <span>تاریخ ثبت</span>
+              <input type="date" formControlName="registrationDate">
+            </label>
+          </div>
+
+          <div class="form-footer">
+            <span class="form-hint">اطلاعات ثبتی باید با اسناد رسمی مطابقت داشته باشد.</span>
+            <button type="submit" class="primary-button">
+              <span class="material-symbols-outlined">save</span>
+              ذخیره پیش‌نمایش
+            </button>
+          </div>
+        </form>
+      </section>
+    }
+
+    @case ('contacts') {
+      <div class="two-column-layout">
+        <section class="panel">
+          <div class="panel-heading">
+            <div>
+              <h3>شماره‌های تلفن</h3>
+              <p>افزودن و انتخاب شماره اصلی</p>
+            </div>
+            <span class="panel-icon material-symbols-outlined">phone_iphone</span>
+          </div>
+
+          <form class="inline-form" [formGroup]="phoneForm" (ngSubmit)="addPhone()">
+            <label class="field">
+              <span>شماره تلفن همراه</span>
+              <input formControlName="phone" inputmode="tel" placeholder="0912xxxxxxx">
+              @if (phoneForm.controls.phone.invalid && phoneForm.controls.phone.touched) {
+                <small class="field-error">شماره تلفن معتبر وارد کن.</small>
+              }
+            </label>
+            <button class="primary-button" type="submit">
+              <span class="material-symbols-outlined">add</span>
+              افزودن
+            </button>
+          </form>
+
+          <div class="contact-list">
+            @for (item of store.phones(); track item.id) {
+              <div class="contact-row">
+                <span class="contact-icon material-symbols-outlined">call</span>
+                <div class="contact-info">
+                  <strong>{{ item.value }}</strong>
+                  <small>
+                    {{ item.verified ? 'تأییدشده' : 'تأییدنشده' }}
+                    ·
+                    {{ item.primary ? 'شماره اصلی' : 'شماره فرعی' }}
+                  </small>
+                </div>
+                @if (!item.primary) {
+                  <button type="button" class="text-button" (click)="setPrimaryPhone(item.id)">اصلی</button>
+                }
+                <button type="button" class="icon-button danger" (click)="removePhone(item.id)" aria-label="حذف شماره">
+                  <span class="material-symbols-outlined">delete</span>
+                </button>
+              </div>
+            } @empty {
+              <div class="empty-state">
+                <span class="material-symbols-outlined">phone_disabled</span>
+                <p>هنوز شماره تلفنی اضافه نشده است.</p>
+              </div>
+            }
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-heading">
+            <div>
+              <h3>نشانی‌های ایمیل</h3>
+              <p>افزودن و انتخاب ایمیل اصلی</p>
+            </div>
+            <span class="panel-icon material-symbols-outlined">mail</span>
+          </div>
+
+          <form class="inline-form" [formGroup]="emailForm" (ngSubmit)="addEmail()">
+            <label class="field">
+              <span>نشانی ایمیل</span>
+              <input formControlName="email" type="email" placeholder="name@example.com">
+              @if (emailForm.controls.email.invalid && emailForm.controls.email.touched) {
+                <small class="field-error">ایمیل معتبر وارد کن.</small>
+              }
+            </label>
+            <button class="primary-button" type="submit">
+              <span class="material-symbols-outlined">add</span>
+              افزودن
+            </button>
+          </form>
+
+          <div class="contact-list">
+            @for (item of store.emails(); track item.id) {
+              <div class="contact-row">
+                <span class="contact-icon material-symbols-outlined">alternate_email</span>
+                <div class="contact-info">
+                  <strong>{{ item.value }}</strong>
+                  <small>
+                    {{ item.verified ? 'تأییدشده' : 'تأییدنشده' }}
+                    ·
+                    {{ item.primary ? 'ایمیل اصلی' : 'ایمیل فرعی' }}
+                  </small>
+                </div>
+                @if (!item.primary) {
+                  <button type="button" class="text-button" (click)="setPrimaryEmail(item.id)">اصلی</button>
+                }
+                <button type="button" class="icon-button danger" (click)="removeEmail(item.id)" aria-label="حذف ایمیل">
+                  <span class="material-symbols-outlined">delete</span>
+                </button>
+              </div>
+            } @empty {
+              <div class="empty-state">
+                <span class="material-symbols-outlined">mark_email_unread</span>
+                <p>هنوز ایمیلی اضافه نشده است.</p>
+              </div>
+            }
+          </div>
+        </section>
+      </div>
+    }
+
+    @case ('verification') {
+      <section class="panel">
+        <div class="panel-heading">
+          <div>
+            <h3>مدیریت مدارک احراز هویت</h3>
+            <p>انتخاب نوع مدرک و افزودن فایل برای آماده‌سازی درخواست</p>
+          </div>
+          <span class="panel-icon material-symbols-outlined">verified_user</span>
+        </div>
+
+        <div class="verification-levels">
+          <div class="verification-level">
+            <span class="level-number">۱</span>
+            <div><strong>هویت پایه</strong><small>اطلاعات هویتی</small></div>
+          </div>
+          <div class="verification-level">
+            <span class="level-number">۲</span>
+            <div><strong>اطلاعات تماس</strong><small>تلفن و ایمیل</small></div>
+          </div>
+          <div class="verification-level">
+            <span class="level-number">۳</span>
+            <div><strong>مدارک تکمیلی</strong><small>اسناد و مستندات</small></div>
+          </div>
+        </div>
+
+        <div class="form-grid verification-form">
+          <label class="field">
+            <span>نوع درخواست</span>
+            <select
+              [value]="selectedVerificationType()"
+              (change)="chooseVerificationType($any($event.target).value)">
+              <option value="identity">احراز هویت</option>
+              <option value="contact">تأیید اطلاعات تماس</option>
+              <option value="document">بررسی مدرک</option>
+              <option value="biometric">احراز هویت زیستی</option>
+              <option value="legal_entity">احراز شخصیت حقوقی</option>
+              <option value="official_document">مدرک رسمی</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span>انتخاب فایل</span>
+            <input type="file" accept=".pdf,.jpg,.jpeg,.png,.webp" (change)="onFileSelected($event)">
+            <small class="field-hint">PDF، JPG، PNG یا WEBP؛ حداکثر ۱۰ مگابایت</small>
+          </label>
+        </div>
+
+        <div class="notice notice-warning">
+          <span class="material-symbols-outlined">info</span>
+          انتخاب فایل فقط در مرورگر ثبت می‌شود. بارگذاری، بررسی و تأیید واقعی مدرک پس از اتصال سرویس احراز هویت انجام خواهد شد.
+        </div>
+
+        <div class="table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>نوع مدرک</th>
+                <th>نام فایل</th>
+                <th>زمان انتخاب</th>
+                <th>وضعیت</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (doc of store.documents(); track doc.id) {
+                <tr>
+                  <td>{{ doc.type }}</td>
+                  <td>{{ doc.fileName }}</td>
+                  <td>{{ doc.selectedAt }}</td>
+                  <td><span class="status-pill status-pending">فقط محلی</span></td>
+                  <td>
+                    <button type="button" class="icon-button danger" (click)="removeDocument(doc.id)">
+                      <span class="material-symbols-outlined">delete</span>
+                    </button>
+                  </td>
+                </tr>
+              } @empty {
+                <tr><td colspan="5" class="table-empty">مدرکی انتخاب نشده است.</td></tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </section>
+    }
+
+    @case ('security') {
+      <div class="two-column-layout">
+        <section class="panel">
+          <div class="panel-heading">
+            <div>
+              <h3>تغییر رمز عبور</h3>
+              <p>رمز عبور جدید باید حداقل ۸ کاراکتر داشته باشد.</p>
+            </div>
+            <span class="panel-icon material-symbols-outlined">lock_reset</span>
+          </div>
+
+          <form [formGroup]="securityForm" (ngSubmit)="submitPasswordChange()">
+            <div class="form-stack">
+              <label class="field">
+                <span>رمز عبور فعلی</span>
+                <input type="password" formControlName="currentPassword" autocomplete="current-password">
+              </label>
+
+              <label class="field">
+                <span>رمز عبور جدید</span>
+                <input type="password" formControlName="newPassword" autocomplete="new-password">
+                @if (securityForm.controls.newPassword.invalid && securityForm.controls.newPassword.touched) {
+                  <small class="field-error">رمز جدید باید حداقل ۸ کاراکتر باشد.</small>
+                }
+              </label>
+
+              <label class="field">
+                <span>تکرار رمز عبور جدید</span>
+                <input type="password" formControlName="confirmPassword" autocomplete="new-password">
+              </label>
+            </div>
+
+            <button type="submit" class="primary-button full-button">
+              <span class="material-symbols-outlined">key</span>
+              بررسی فرم تغییر رمز
+            </button>
+          </form>
+        </section>
+
+        <section class="panel">
+          <div class="panel-heading">
+            <div>
+              <h3>توصیه‌های امنیتی</h3>
+              <p>اصول حفاظت از حساب کاربری</p>
+            </div>
+            <span class="panel-icon material-symbols-outlined">shield</span>
+          </div>
+
+          <div class="security-tips">
+            <div class="tip-row">
+              <span class="material-symbols-outlined">check_circle</span>
+              <div><strong>رمز عبور منحصربه‌فرد</strong><small>از رمز عبور اختصاصی و غیرتکراری استفاده کن.</small></div>
+            </div>
+            <div class="tip-row">
+              <span class="material-symbols-outlined">check_circle</span>
+              <div><strong>اطلاعات تماس معتبر</strong><small>شماره تلفن و ایمیل قابل دسترس ثبت کن.</small></div>
+            </div>
+            <div class="tip-row">
+              <span class="material-symbols-outlined">check_circle</span>
+              <div><strong>بازبینی دستگاه‌ها</strong><small>دستگاه‌های ناشناس را بررسی کن.</small></div>
+            </div>
+            <div class="tip-row">
+              <span class="material-symbols-outlined">check_circle</span>
+              <div><strong>مراقبت از اطلاعات ورود</strong><small>رمز و کدهای تأیید را در اختیار دیگران قرار نده.</small></div>
+            </div>
+          </div>
+        </section>
+      </div>
+    }
+
+    @case ('devices') {
+      <section class="panel">
+        <div class="panel-heading">
+          <div>
+            <h3>دستگاه‌های ثبت‌شده</h3>
+            <p>فهرست نمایشی دستگاه‌های مرتبط با حساب</p>
+          </div>
+          <span class="panel-icon material-symbols-outlined">devices</span>
+        </div>
+
+        <div class="device-list">
+          @for (device of store.devices(); track device.id) {
+            <article class="device-card" [class.device-disabled]="!device.active">
+              <span class="device-icon material-symbols-outlined">devices</span>
+              <div class="device-details">
+                <strong>{{ device.name }}</strong>
+                <span>{{ device.browser }}</span>
+                <small>آخرین فعالیت: {{ device.lastSeen }}</small>
+              </div>
+              <div class="device-state">
+                <span class="status-pill" [class.status-active]="device.active" [class.status-disabled]="!device.active">
+                  {{ device.active ? 'فعال' : 'غیرفعال در پیش‌نمایش' }}
+                </span>
+                @if (device.trusted) {
+                  <small>دستگاه مورد اعتماد</small>
+                }
+              </div>
+              @if (device.active) {
+                <button type="button" class="secondary-button danger-button" (click)="revokeDevice(device.id)">
+                  غیرفعال‌سازی نمایشی
+                </button>
+              }
+            </article>
+          }
+        </div>
+      </section>
+    }
+
+    @case ('sessions') {
+      <section class="panel">
+        <div class="panel-heading">
+          <div>
+            <h3>نشست‌های حساب کاربری</h3>
+            <p>نمایش نشست‌های نمونه و وضعیت آن‌ها</p>
+          </div>
+          <button type="button" class="secondary-button" (click)="endOtherSessions()">
+            <span class="material-symbols-outlined">logout</span>
+            خاتمه نمایشی سایر نشست‌ها
+          </button>
+        </div>
+
+        <div class="table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>دستگاه</th>
+                <th>موقعیت</th>
+                <th>زمان ایجاد</th>
+                <th>آخرین فعالیت</th>
+                <th>وضعیت</th>
+                <th>عملیات</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (session of store.sessions(); track session.id) {
+                <tr>
+                  <td>
+                    {{ session.device }}
+                    @if (session.current) {
+                      <span class="current-label">نشست فعلی</span>
+                    }
+                  </td>
+                  <td>{{ session.location }}</td>
+                  <td>{{ session.createdAt }}</td>
+                  <td>{{ session.lastActivity }}</td>
+                  <td>
+                    <span class="status-pill" [class.status-active]="session.active" [class.status-disabled]="!session.active">
+                      {{ session.active ? 'فعال' : 'پایان‌یافته در پیش‌نمایش' }}
+                    </span>
+                  </td>
+                  <td>
+                    @if (session.active && !session.current) {
+                      <button type="button" class="text-button danger-text" (click)="endSession(session.id)">خاتمه</button>
+                    }
+                  </td>
+                </tr>
+              } @empty {
+                <tr><td colspan="6" class="table-empty">نشستی وجود ندارد.</td></tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+        <div class="notice notice-warning">
+          <span class="material-symbols-outlined">info</span>
+          تغییر وضعیت نشست‌ها در این صفحه صرفاً نمایشی است و نشست واقعی را در سرور خاتمه نمی‌دهد.
+        </div>
+      </section>
+    }
+
+    @case ('permissions') {
+      <section class="panel">
+        <div class="panel-heading">
+          <div>
+            <h3>نقش‌ها و مجوزهای حساب</h3>
+            <p>ساختار نمایش بر اساس مدل نقش، مجوز و محدوده دسترسی طراحی شده است.</p>
+          </div>
+          <span class="panel-icon material-symbols-outlined">admin_panel_settings</span>
+        </div>
+
+        <div class="role-summary">
+          <div>
+            <span>نوع نقش نمایشی</span>
+            <strong>کاربر پایه</strong>
+          </div>
+          <div>
+            <span>محدوده دسترسی</span>
+            <strong>حساب شخصی</strong>
+          </div>
+          <div>
+            <span>تعداد مجوزهای نمونه</span>
+            <strong>{{ store.permissions().length }}</strong>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>گروه</th>
+                <th>مجوز</th>
+                <th>کد مجوز</th>
+                <th>شرح</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (permission of store.permissions(); track permission.code) {
+                <tr>
+                  <td>{{ permission.category }}</td>
+                  <td>{{ permission.name }}</td>
+                  <td><code>{{ permission.code }}</code></td>
+                  <td>{{ permission.description }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+        <div class="notice notice-warning">
+          <span class="material-symbols-outlined">info</span>
+          این فهرست نمونه رابط کاربری است؛ نقش و مجوز معتبر باید از سرویس مجوزدهی دریافت شود.
+        </div>
+      </section>
+    }
+
+    @case ('login') {
+      <section class="auth-layout">
+        <div class="auth-intro">
+          <span class="material-symbols-outlined">lock_person</span>
+          <h2>ورود به حساب کاربری</h2>
+          <p>برای دسترسی به فضای شخصی خود اطلاعات ورود را وارد کن.</p>
+        </div>
+
+        <div class="panel auth-panel">
+          <form [formGroup]="loginForm" (ngSubmit)="submitLogin()">
+            <label class="field">
+              <span>شماره تلفن یا شناسه کاربری</span>
+              <input formControlName="identifier" autocomplete="username" placeholder="شماره تلفن یا شناسه">
+            </label>
+
+            <label class="field">
+              <span>رمز عبور</span>
+              <input type="password" formControlName="password" autocomplete="current-password">
+            </label>
+
+            <label class="checkbox-field">
+              <input type="checkbox" formControlName="remember">
+              <span>مرا به خاطر بسپار</span>
+            </label>
+
+            <button type="submit" class="primary-button full-button">ورود</button>
+
+            <div class="auth-links">
+              <a routerLink="/account/recover-password">بازیابی رمز عبور</a>
+              <a routerLink="/account/register">ایجاد حساب جدید</a>
+            </div>
+          </form>
+        </div>
+      </section>
+    }
+
+    @case ('register') {
+      <section class="auth-layout">
+        <div class="auth-intro">
+          <span class="material-symbols-outlined">person_add</span>
+          <h2>ایجاد حساب کاربری</h2>
+          <p>اطلاعات اولیه را برای آماده‌سازی ثبت‌نام وارد کن.</p>
+        </div>
+
+        <div class="panel auth-panel">
+          <form [formGroup]="registerForm" (ngSubmit)="submitRegistration()">
+            <div class="form-grid">
+              <label class="field">
+                <span>نام</span>
+                <input formControlName="firstName">
+              </label>
+              <label class="field">
+                <span>نام خانوادگی</span>
+                <input formControlName="lastName">
+              </label>
+              <label class="field">
+                <span>کد ملی</span>
+                <input formControlName="nationalId" maxlength="10" inputmode="numeric">
+              </label>
+              <label class="field">
+                <span>شماره تلفن</span>
+                <input formControlName="phone" inputmode="tel" placeholder="0912xxxxxxx">
+              </label>
+              <label class="field field-full">
+                <span>رمز عبور</span>
+                <input type="password" formControlName="password" autocomplete="new-password">
+                <small class="field-hint">حداقل ۸ کاراکتر</small>
+              </label>
+            </div>
+
+            <label class="checkbox-field">
+              <input type="checkbox" formControlName="accepted">
+              <span>شرایط استفاده از خدمات را مطالعه کرده و می‌پذیرم.</span>
+            </label>
+
+            <button type="submit" class="primary-button full-button">بررسی اطلاعات ثبت‌نام</button>
+
+            <div class="auth-links">
+              <a routerLink="/account/login">قبلاً حساب دارم؛ ورود</a>
+            </div>
+          </form>
+        </div>
+      </section>
+    }
+
+    @case ('recover-password') {
+      <section class="auth-layout">
+        <div class="auth-intro">
+          <span class="material-symbols-outlined">lock_reset</span>
+          <h2>بازیابی رمز عبور</h2>
+          <p>شناسه حساب را وارد کن تا درخواست بازیابی آماده شود.</p>
+        </div>
+
+        <div class="panel auth-panel">
+          <form [formGroup]="recoveryForm" (ngSubmit)="submitRecovery()">
+            <label class="field">
+              <span>شماره تلفن یا ایمیل</span>
+              <input formControlName="identifier" placeholder="شماره تلفن یا ایمیل">
+            </label>
+
+            <button type="submit" class="primary-button full-button">
+              ادامه فرایند بازیابی
+            </button>
+
+            <div class="auth-links">
+              <a routerLink="/account/login">بازگشت به ورود</a>
+              <a routerLink="/account/register">ثبت‌نام</a>
+            </div>
+          </form>
+        </div>
+      </section>
+    }
+
+    @default {
+      <section class="panel empty-state">
+        <span class="material-symbols-outlined">web</span>
+        <h3>صفحه موردنظر در دسترس نیست.</h3>
+        <a routerLink="/account">بازگشت به حساب من</a>
+      </section>
+    }
+  }
+
+</div>

@@ -1,0 +1,57 @@
+﻿IGD FRONTEND - INITIAL ARCHITECTURE
+===================================
+
+Framework:
+Angular 22 + TypeScript 6
+
+Styling:
+Tailwind CSS 4
+Angular Material
+Spartan
+
+Charts:
+ECharts + ngx-echarts
+
+Fonts:
+Vazirmatn Variable
+Inter Variable
+
+Architecture:
+
+CORE
+Global application infrastructure:
+API clients, authentication, authorization,
+guards, interceptors and configuration.
+
+LAYOUTS
+Main application layout and authentication layout.
+
+FEATURES
+General Market:
+Catalogue, Markets, Offers, Offer Requests,
+Proposals, Orders, Order Book, Matching,
+Trades, Execution, Commodity, Real Estate,
+Regulatory and Audit.
+
+Other platform features:
+My Assets, Account, Contracts, Services,
+Settlement and Notifications.
+
+SHARED
+Reusable components, directives, pipes,
+models and utilities.
+
+DESIGN SYSTEM
+Tokens, themes, components, patterns and icons.
+
+ASSETS
+Fonts, images and illustrations.
+
+DOCS
+Architecture, Design System, Frontend and API documentation.
+
+IMPORTANT:
+This is the initial directory architecture only.
+No business functionality is implemented.
+Existing Angular configuration and application files
+must be preserved.

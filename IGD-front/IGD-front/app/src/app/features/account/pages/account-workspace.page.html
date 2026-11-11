@@ -1,0 +1,299 @@
+﻿<div class="account-page" dir="rtl">
+  <header class="account-heading">
+    <div>
+      <div class="account-eyebrow">IGD / ACCOUNT CENTER</div>
+      <h1>{{ currentInfo().title }}</h1>
+      <p>{{ currentInfo().description }}</p>
+    </div>
+    <a class="back-link" routerLink="/">
+      <span class="material-symbols-outlined">arrow_forward</span>
+      بازگشت به فضای کار
+    </a>
+  </header>
+
+  <div class="account-layout">
+    <aside class="account-menu">
+      <div class="menu-caption">مدیریت حساب</div>
+      @for (item of navigation; track item.path) {
+        <a
+          class="menu-link"
+          [routerLink]="item.path"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: item.exact === true }">
+          <span class="material-symbols-outlined">{{ item.icon }}</span>
+          <span>{{ item.label }}</span>
+          <span class="material-symbols-outlined menu-arrow">chevron_left</span>
+        </a>
+      }
+
+      <div class="menu-divider"></div>
+      <div class="menu-caption">دسترسی حساب</div>
+      <a class="menu-link" routerLink="/account/login" routerLinkActive="active">
+        <span class="material-symbols-outlined">login</span>
+        <span>ورود</span>
+      </a>
+      <a class="menu-link" routerLink="/account/register" routerLinkActive="active">
+        <span class="material-symbols-outlined">person_add</span>
+        <span>ثبت‌نام</span>
+      </a>
+      <a class="menu-link" routerLink="/account/recover-password" routerLinkActive="active">
+        <span class="material-symbols-outlined">lock_reset</span>
+        <span>بازیابی رمز</span>
+      </a>
+    </aside>
+
+    <main class="account-content">
+      @if (notice()) {
+        <div class="account-notice">
+          <span class="material-symbols-outlined">info</span>
+          <span>{{ notice() }}</span>
+          <button type="button" (click)="notice.set('')" aria-label="بستن">×</button>
+        </div>
+      }
+
+      @switch (section()) {
+        @case ('overview') {
+          <section class="content-section">
+            <div class="section-title">
+              <div>
+                <h2>وضعیت حساب کاربری</h2>
+                <p>از این قسمت به بخش‌های مختلف حساب خود دسترسی دارید.</p>
+              </div>
+              <span class="material-symbols-outlined section-symbol">account_circle</span>
+            </div>
+
+            <div class="overview-grid">
+              <a class="overview-card" routerLink="/account/profile">
+                <span class="material-symbols-outlined">person</span>
+                <strong>اطلاعات شخصی</strong>
+                <small>مشاهده مشخصات پایه</small>
+              </a>
+              <a class="overview-card" routerLink="/account/verification">
+                <span class="material-symbols-outlined">verified_user</span>
+                <strong>احراز هویت</strong>
+                <small>مدارک و اطلاعات هویتی</small>
+              </a>
+              <a class="overview-card" routerLink="/account/devices">
+                <span class="material-symbols-outlined">devices</span>
+                <strong>دستگاه‌های من</strong>
+                <small>مدیریت دستگاه‌های متصل</small>
+              </a>
+              <a class="overview-card" routerLink="/account/security">
+                <span class="material-symbols-outlined">shield_lock</span>
+                <strong>امنیت حساب</strong>
+                <small>تنظیمات امنیتی</small>
+              </a>
+            </div>
+
+            <div class="info-panel">
+              <span class="material-symbols-outlined">info</span>
+              <div>
+                <strong>محیط پیش‌نمایش فرانت‌اند</strong>
+                <p>اطلاعات این نسخه نمایشی است و هنوز به سرویس حساب کاربری متصل نشده است. عملیات حساس پس از اتصال API فعال می‌شوند.</p>
+              </div>
+            </div>
+          </section>
+        }
+
+        @case ('devices') {
+          <section class="content-section">
+            <div class="section-title">
+              <div>
+                <h2>دستگاه‌های متصل</h2>
+                <p>فهرست زیر داده نمونه است و از سرور دریافت نشده است.</p>
+              </div>
+              <span class="material-symbols-outlined section-symbol">devices</span>
+            </div>
+
+            <div class="device-toolbar">
+              <div>
+                <strong>{{ devices().length }} دستگاه</strong>
+                <span>در فهرست نمایشی</span>
+              </div>
+              <span class="demo-tag">پیش‌نمایش محلی</span>
+            </div>
+
+            @if (devices().length === 0) {
+              <div class="empty-state">
+                <span class="material-symbols-outlined">devices_off</span>
+                <strong>دستگاهی در فهرست وجود ندارد</strong>
+                <p>فهرست دستگاه‌های نمونه خالی شده است.</p>
+              </div>
+            } @else {
+              <div class="device-list">
+                @for (device of devices(); track device.id) {
+                  <article class="device-card">
+                    <div class="device-icon">
+                      <span class="material-symbols-outlined">{{ device.type }}</span>
+                    </div>
+                    <div class="device-details">
+                      <div class="device-name-row">
+                        <strong>{{ device.name }}</strong>
+                        @if (device.current) {
+                          <span class="current-tag">دستگاه جاری نمونه</span>
+                        }
+                      </div>
+                      <span>{{ device.browser }}</span>
+                      <span>{{ device.location }}</span>
+                      <small>{{ device.lastSeen }}</small>
+                    </div>
+                    <div class="device-actions">
+                      <button
+                        type="button"
+                        class="remove-button"
+                        (click)="removeDevice(device.id)">
+                        <span class="material-symbols-outlined">delete</span>
+                        حذف از فهرست
+                      </button>
+                    </div>
+                  </article>
+                }
+              </div>
+            }
+
+            <div class="info-panel">
+              <span class="material-symbols-outlined">warning</span>
+              <div>
+                <strong>توجه درباره امنیت</strong>
+                <p>حذف دستگاه در این نسخه فقط فهرست محلی را تغییر می‌دهد. لغو واقعی دسترسی دستگاه باید پس از اتصال به API احراز هویت انجام شود.</p>
+              </div>
+            </div>
+          </section>
+        }
+
+        @case ('profile') {
+          <section class="content-section">
+            <h2>اطلاعات شخصی</h2>
+            <p class="section-intro">مشخصات هویتی حساب در این بخش نمایش و مدیریت خواهد شد.</p>
+            <div class="form-preview">
+              <label>نام</label><input type="text" placeholder="نام" />
+              <label>نام خانوادگی</label><input type="text" placeholder="نام خانوادگی" />
+              <label>کد ملی</label><input type="text" inputmode="numeric" placeholder="کد ملی" />
+              <label>تاریخ تولد</label><input type="date" />
+              <label>نام پدر</label><input type="text" placeholder="نام پدر" />
+              <label>کد پستی</label><input type="text" placeholder="کد پستی" />
+              <label>نشانی</label><textarea rows="3" placeholder="نشانی محل سکونت"></textarea>
+              <button type="button" class="primary-button" (click)="showLocalNotice('فرم اطلاعات شخصی آماده اتصال به API است؛ هنوز اطلاعاتی ارسال نشده است.')">ذخیره پیش‌نویس نمایشی</button>
+            </div>
+          </section>
+        }
+
+        @case ('legal-entity') {
+          <section class="content-section">
+            <h2>اطلاعات حقوقی</h2>
+            <p class="section-intro">این بخش برای اطلاعات شرکت‌ها و اشخاص حقوقی در نظر گرفته شده است.</p>
+            <div class="form-preview">
+              <label>نام حقوقی</label><input type="text" placeholder="نام ثبت‌شده شرکت" />
+              <label>شناسه ملی</label><input type="text" placeholder="شناسه ملی" />
+              <label>شماره ثبت</label><input type="text" placeholder="شماره ثبت" />
+              <label>کد اقتصادی</label><input type="text" placeholder="کد اقتصادی" />
+              <label>نوع شخصیت حقوقی</label>
+              <select><option>انتخاب نوع شخصیت حقوقی</option><option>شرکت سهامی خاص</option><option>شرکت با مسئولیت محدود</option><option>سایر</option></select>
+              <button type="button" class="primary-button" (click)="showLocalNotice('اطلاعات حقوقی فقط در پیش‌نمایش فرم وارد شده و ارسال نشده است.')">ذخیره پیش‌نویس نمایشی</button>
+            </div>
+          </section>
+        }
+
+        @case ('contacts') {
+          <section class="content-section">
+            <h2>راه‌های ارتباطی</h2>
+            <p class="section-intro">مدیریت شماره تلفن و نشانی ایمیل در این بخش انجام خواهد شد.</p>
+            <div class="form-preview">
+              <label>شماره تلفن همراه</label><input type="tel" placeholder="09xxxxxxxxx" />
+              <label>نشانی ایمیل</label><input type="email" placeholder="name@example.com" />
+              <button type="button" class="primary-button" (click)="showLocalNotice('فرم راه‌های ارتباطی آماده اتصال به سرویس حساب من است.')">ثبت پیش‌نویس</button>
+            </div>
+          </section>
+        }
+
+        @case ('verification') {
+          <section class="content-section">
+            <h2>احراز هویت</h2>
+            <p class="section-intro">مدارک و اطلاعات موردنیاز برای احراز هویت در این قسمت مدیریت می‌شوند.</p>
+            <div class="upload-panel">
+              <span class="material-symbols-outlined">upload_file</span>
+              <strong>انتخاب مدرک هویتی</strong>
+              <p>انتخاب فایل در این نسخه صرفاً نمایشی است و بارگذاری واقعی انجام نمی‌شود.</p>
+              <input type="file" accept=".pdf,.jpg,.jpeg,.png" />
+            </div>
+            <div class="info-panel">
+              <span class="material-symbols-outlined">pending</span>
+              <div><strong>وضعیت اتصال</strong><p>برای ثبت درخواست و پیگیری نتیجه، اتصال سرویس احراز هویت لازم است.</p></div>
+            </div>
+          </section>
+        }
+
+        @case ('security') {
+          <section class="content-section">
+            <h2>امنیت حساب</h2>
+            <p class="section-intro">فرم تغییر رمز عبور در انتظار اتصال به API امنیت حساب است.</p>
+            <div class="form-preview">
+              <label>رمز عبور فعلی</label><input type="password" autocomplete="current-password" />
+              <label>رمز عبور جدید</label><input type="password" autocomplete="new-password" />
+              <label>تکرار رمز عبور جدید</label><input type="password" autocomplete="new-password" />
+              <button type="button" class="primary-button" (click)="showLocalNotice('تغییر رمز عبور تا زمان اتصال API غیرفعال است. هیچ رمزی ذخیره یا ارسال نشد.')">بررسی فرم</button>
+            </div>
+          </section>
+        }
+
+        @case ('sessions') {
+          <section class="content-section">
+            <h2>نشست‌های فعال</h2>
+            <p class="section-intro">در نسخه متصل، نشست‌های معتبر از سرویس احراز هویت دریافت می‌شوند.</p>
+            <div class="empty-state">
+              <span class="material-symbols-outlined">history</span>
+              <strong>اطلاعات نشست‌ها هنوز متصل نشده است</strong>
+              <p>در این نسخه هیچ نشست واقعی نمایش داده نمی‌شود.</p>
+            </div>
+          </section>
+        }
+
+        @case ('permissions') {
+          <section class="content-section">
+            <h2>نقش و دسترسی‌ها</h2>
+            <p class="section-intro">نمایش اطلاعات دسترسی پس از اتصال به سرویس حساب من تکمیل می‌شود.</p>
+            <div class="info-panel">
+              <span class="material-symbols-outlined">admin_panel_settings</span>
+              <div><strong>مرجع نهایی مجوزها</strong><p>کنترل مجوز عملیات باید در سمت سرور انجام شود. این صفحه در حال حاضر صرفاً محل نمایش اطلاعات خواهد بود.</p></div>
+            </div>
+          </section>
+        }
+
+        @case ('login') {
+          <section class="content-section">
+            <h2>ورود به حساب</h2>
+            <div class="form-preview">
+              <label>شماره همراه یا شناسه کاربری</label><input type="text" autocomplete="username" />
+              <label>رمز عبور</label><input type="password" autocomplete="current-password" />
+              <button type="button" class="primary-button" (click)="showLocalNotice('فرم ورود آماده اتصال است؛ ورود واقعی هنوز انجام نمی‌شود.')">ادامه</button>
+            </div>
+          </section>
+        }
+
+        @case ('register') {
+          <section class="content-section">
+            <h2>ایجاد حساب کاربری</h2>
+            <div class="form-preview">
+              <label>نام</label><input type="text" />
+              <label>نام خانوادگی</label><input type="text" />
+              <label>کد ملی</label><input type="text" />
+              <label>شماره همراه</label><input type="tel" />
+              <label>رمز عبور</label><input type="password" autocomplete="new-password" />
+              <button type="button" class="primary-button" (click)="showLocalNotice('فرم ثبت‌نام آماده اتصال است؛ حسابی ایجاد نشده است.')">ادامه ثبت‌نام</button>
+            </div>
+          </section>
+        }
+
+        @case ('recover-password') {
+          <section class="content-section">
+            <h2>بازیابی رمز عبور</h2>
+            <div class="form-preview">
+              <label>شماره همراه یا شناسه کاربری</label><input type="text" />
+              <button type="button" class="primary-button" (click)="showLocalNotice('فرم بازیابی آماده اتصال است؛ پیامکی ارسال نشده است.')">درخواست بازیابی</button>
+            </div>
+          </section>
+        }
+      }
+    </main>
+  </div>
+</div>
