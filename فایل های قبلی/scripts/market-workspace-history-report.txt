@@ -1,0 +1,1245 @@
+
+====================================================================================================
+FILE: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.ts
+====================================================================================================
+import { Component } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatDividerModule } from '@angular/material/divider';
+
+@Component({
+  selector: 'igd-general-market',
+  standalone: true,
+  imports: [
+    MatButtonModule,
+    MatIconModule,
+    MatTabsModule,
+    MatDividerModule,
+  ],
+  templateUrl: './general-market.html',
+  styleUrl: './general-market.css',
+})
+export class GeneralMarketPage {
+  orderBookCollapsed = false;
+  detailsCollapsed = false;
+
+  activeTool = 'market';
+
+  toggleOrderBook(): void {
+    this.orderBookCollapsed = !this.orderBookCollapsed;
+  }
+
+  toggleDetails(): void {
+    this.detailsCollapsed = !this.detailsCollapsed;
+  }
+
+  selectTool(tool: string): void {
+    this.activeTool = tool;
+  }
+}
+
+====================================================================================================
+FILE: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.html
+====================================================================================================
+<div class="trading-terminal" dir="rtl">
+
+  <!-- TOP NAVIGATION -->
+  <header class="terminal-header">
+
+    <div class="header-brand">
+      <div class="brand-symbol">
+        <mat-icon>account_balance</mat-icon>
+      </div>
+      <div class="brand-text">
+        <strong>IGD</strong>
+        <span>سامانه مدیریت دارایی‌های واقعی</span>
+      </div>
+    </div>
+
+    <nav class="header-navigation">
+      <button mat-button class="nav-item active">بازار کلی</button>
+      <button mat-button class="nav-item">دارایی‌های من</button>
+      <button mat-button class="nav-item">قراردادها</button>
+      <button mat-button class="nav-item">خدمات</button>
+      <button mat-button class="nav-item">تسویه</button>
+    </nav>
+
+    <div class="header-actions">
+      <button mat-icon-button aria-label="جست‌وجو">
+        <mat-icon>search</mat-icon>
+      </button>
+      <button mat-icon-button aria-label="اعلان‌ها">
+        <mat-icon>notifications_none</mat-icon>
+      </button>
+      <span class="market-status">
+        <span class="status-dot"></span>
+        وضعیت بازار
+      </span>
+    </div>
+
+  </header>
+
+  <!-- MAIN WORKSPACE -->
+  <main class="workspace"
+    [class.orderbook-collapsed]="orderBookCollapsed"
+    [class.details-collapsed]="detailsCollapsed">
+
+    <!-- MARKET WATCH + PORTFOLIO -->
+    <section class="main-market-column">
+
+      <section class="terminal-panel market-watch">
+
+        <div class="panel-heading">
+          <div class="panel-title">
+            <mat-icon>monitoring</mat-icon>
+            <strong>دیده‌بان بازار کلی</strong>
+          </div>
+
+          <div class="panel-actions">
+            <span class="panel-caption">فهرست بازارها و عرضه‌ها</span>
+            <button mat-icon-button aria-label="تنظیمات دیده‌بان">
+              <mat-icon>tune</mat-icon>
+            </button>
+          </div>
+        </div>
+
+        <div class="market-filter-bar">
+          <button mat-button class="filter-active">همه بازارها</button>
+          <button mat-button>کالا</button>
+          <button mat-button>املاک</button>
+          <button mat-button>سایر دارایی‌ها</button>
+
+          <span class="filter-spacer"></span>
+
+          <button mat-icon-button aria-label="جست‌وجوی بازار">
+            <mat-icon>search</mat-icon>
+          </button>
+          <button mat-icon-button aria-label="فیلتر بازار">
+            <mat-icon>filter_list</mat-icon>
+          </button>
+        </div>
+
+        <div class="table-scroll">
+          <table class="terminal-table market-table">
+            <thead>
+              <tr>
+                <th>نام عرضه / دارایی</th>
+                <th>بازار</th>
+                <th>قیمت</th>
+                <th>تغییرات</th>
+                <th>حجم</th>
+                <th>وضعیت</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colspan="6" class="empty-table">
+                  <mat-icon>table_chart</mat-icon>
+                  <span>اطلاعات عرضه‌ها پس از اتصال سرویس بازار نمایش داده می‌شود.</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <footer class="panel-footer">
+          <span>دیده‌بان بازار</span>
+          <span>آماده اتصال به سرویس کاتالوگ و عرضه‌ها</span>
+        </footer>
+
+      </section>
+
+      <section class="terminal-panel portfolio-panel">
+
+        <div class="panel-heading">
+          <div class="panel-title">
+            <mat-icon>account_balance_wallet</mat-icon>
+            <strong>دارایی‌های من | پرتفوی</strong>
+          </div>
+
+          <button mat-button class="text-action">
+            مشاهده همه دارایی‌ها
+            <mat-icon>chevron_left</mat-icon>
+          </button>
+        </div>
+
+        <div class="portfolio-summary">
+          <div class="summary-cell">
+            <span>ارزش کل دارایی‌ها</span>
+            <strong>—</strong>
+          </div>
+          <div class="summary-cell">
+            <span>سود و زیان کل</span>
+            <strong>—</strong>
+          </div>
+          <div class="summary-cell">
+            <span>موقعیت‌های فعال</span>
+            <strong>—</strong>
+          </div>
+        </div>
+
+        <div class="table-scroll">
+          <table class="terminal-table">
+            <thead>
+              <tr>
+                <th>دارایی</th>
+                <th>مقدار</th>
+                <th>ارزش</th>
+                <th>وضعیت</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colspan="4" class="empty-table">
+                  اطلاعات پرتفوی از سرویس دارایی‌های من دریافت خواهد شد.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </section>
+
+    </section>
+
+    <!-- ORDER BOOK -->
+    <section class="terminal-panel orderbook-panel">
+
+      <div class="panel-heading compact-heading">
+        <div class="panel-title">
+          <mat-icon>swap_vert</mat-icon>
+          <strong>دفتر سفارش</strong>
+        </div>
+
+        <button mat-icon-button
+          (click)="toggleOrderBook()"
+          [attr.aria-label]="orderBookCollapsed ? 'بازکردن دفتر سفارش' : 'جمع‌کردن دفتر سفارش'">
+          <mat-icon>{{ orderBookCollapsed ? 'chevron_left' : 'chevron_right' }}</mat-icon>
+        </button>
+      </div>
+
+      <div class="panel-body">
+
+        <div class="orderbook-instrument">
+          <span>نماد انتخابی</span>
+          <strong>—</strong>
+        </div>
+
+        <div class="order-side sell-side">
+          <div class="order-side-heading">
+            <span>فروش</span>
+            <span>قیمت</span>
+            <span>مقدار</span>
+          </div>
+          <div class="order-empty">سفارشی وجود ندارد</div>
+        </div>
+
+        <div class="order-spread">
+          <span>قیمت میانی</span>
+          <strong>—</strong>
+        </div>
+
+        <div class="order-side buy-side">
+          <div class="order-side-heading">
+            <span>خرید</span>
+            <span>قیمت</span>
+            <span>مقدار</span>
+          </div>
+          <div class="order-empty">سفارشی وجود ندارد</div>
+        </div>
+
+        <div class="orderbook-legend">
+          <span class="legend-sell">فروش</span>
+          <span class="legend-buy">خرید</span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- INSTRUMENT DETAILS -->
+    <section class="terminal-panel details-panel">
+
+      <div class="panel-heading compact-heading">
+        <div class="panel-title">
+          <mat-icon>info</mat-icon>
+          <strong>جزئیات نماد</strong>
+        </div>
+
+        <button mat-icon-button
+          (click)="toggleDetails()"
+          [attr.aria-label]="detailsCollapsed ? 'بازکردن جزئیات' : 'جمع‌کردن جزئیات'">
+          <mat-icon>{{ detailsCollapsed ? 'chevron_left' : 'chevron_right' }}</mat-icon>
+        </button>
+      </div>
+
+      <div class="panel-body details-content">
+
+        <div class="instrument-identity">
+          <div class="instrument-placeholder">—</div>
+          <strong>نمادی انتخاب نشده</strong>
+          <span>جزئیات دارایی انتخابی</span>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="detail-row">
+          <span>آخرین قیمت</span>
+          <strong>—</strong>
+        </div>
+        <div class="detail-row">
+          <span>تغییرات</span>
+          <strong>—</strong>
+        </div>
+        <div class="detail-row">
+          <span>حجم عرضه</span>
+          <strong>—</strong>
+        </div>
+        <div class="detail-row">
+          <span>وضعیت عرضه</span>
+          <strong>—</strong>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="detail-section-title">اطلاعات تکمیلی</div>
+        <button mat-button class="detail-link">
+          مشخصات دارایی
+        </button>
+        <button mat-button class="detail-link">
+          قراردادها و تعهدات
+        </button>
+        <button mat-button class="detail-link">
+          سوابق و رویدادها
+        </button>
+
+      </div>
+    </section>
+
+    <!-- VERTICAL TOOLBAR -->
+    <aside class="terminal-toolbar">
+
+      <button mat-icon-button
+        [class.selected]="activeTool === 'market'"
+        (click)="selectTool('market')"
+        aria-label="بازار کلی">
+        <mat-icon>candlestick_chart</mat-icon>
+      </button>
+
+      <button mat-icon-button
+        [class.selected]="activeTool === 'assets'"
+        (click)="selectTool('assets')"
+        aria-label="دارایی‌های من">
+        <mat-icon>account_balance_wallet</mat-icon>
+      </button>
+
+      <button mat-icon-button
+        [class.selected]="activeTool === 'orders'"
+        (click)="selectTool('orders')"
+        aria-label="سفارش‌ها">
+        <mat-icon>receipt_long</mat-icon>
+      </button>
+
+      <button mat-icon-button
+        [class.selected]="activeTool === 'contracts'"
+        (click)="selectTool('contracts')"
+        aria-label="قراردادها">
+        <mat-icon>description</mat-icon>
+      </button>
+
+      <button mat-icon-button
+        [class.selected]="activeTool === 'services'"
+        (click)="selectTool('services')"
+        aria-label="خدمات">
+        <mat-icon>local_shipping</mat-icon>
+      </button>
+
+      <div class="toolbar-spacer"></div>
+
+      <button mat-icon-button
+        [class.selected]="activeTool === 'notifications'"
+        (click)="selectTool('notifications')"
+        aria-label="اعلان‌ها">
+        <mat-icon>notifications</mat-icon>
+      </button>
+
+      <button mat-icon-button
+        [class.selected]="activeTool === 'account'"
+        (click)="selectTool('account')"
+        aria-label="حساب کاربری">
+        <mat-icon>person</mat-icon>
+      </button>
+
+    </aside>
+
+  </main>
+
+  <!-- ACTIVITY WORKSPACE -->
+  <section class="terminal-panel activity-panel">
+
+    <div class="panel-heading activity-heading">
+      <div class="panel-title">
+        <mat-icon>view_list</mat-icon>
+        <strong>فضای کاری و سوابق</strong>
+      </div>
+      <span class="panel-caption">وضعیت مستقل سفارش، معامله و تسویه</span>
+    </div>
+
+    <mat-tab-group
+      class="terminal-tabs"
+      animationDuration="0ms"
+      [disableRipple]="true">
+
+      <mat-tab label="سفارشات فعال">
+        <div class="tab-empty">
+          سفارش‌های فعال پس از اتصال سرویس سفارش‌ها نمایش داده می‌شوند.
+        </div>
+      </mat-tab>
+
+      <mat-tab label="تاریخچه سفارشات">
+        <div class="tab-empty">
+          تاریخچه سفارش‌ها
+        </div>
+      </mat-tab>
+
+      <mat-tab label="معاملات">
+        <div class="tab-empty">
+          سوابق معاملات
+        </div>
+      </mat-tab>
+
+      <mat-tab label="اجرای معامله">
+        <div class="tab-empty">
+          مراحل اجرای معامله
+        </div>
+      </mat-tab>
+
+      <mat-tab label="وضعیت تسویه">
+        <div class="tab-empty">
+          وضعیت و سوابق تسویه
+        </div>
+      </mat-tab>
+
+    </mat-tab-group>
+
+  </section>
+
+  <!-- BOTTOM ASSET STRIP -->
+  <footer class="asset-status-bar">
+
+    <div class="asset-status-item">
+      <span>وضعیت حساب</span>
+      <strong>—</strong>
+    </div>
+
+    <div class="asset-status-item user-status">
+      <span>نام کاربر</span>
+      <strong>حساب کاربری</strong>
+    </div>
+
+    <div class="asset-status-item">
+      <span>قدرت خرید</span>
+      <strong>—</strong>
+    </div>
+
+    <div class="asset-status-item">
+      <span>ارزش پرتفوی</span>
+      <strong>—</strong>
+    </div>
+
+    <div class="asset-status-item">
+      <span>سود و زیان روزانه</span>
+      <strong>—</strong>
+    </div>
+
+    <div class="asset-status-item">
+      <span>سود و زیان کل</span>
+      <strong>—</strong>
+    </div>
+
+    <div class="asset-status-item">
+      <span>موجودی رزروشده</span>
+      <strong>—</strong>
+    </div>
+
+  </footer>
+
+</div>
+
+====================================================================================================
+FILE: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.css
+====================================================================================================
+:host {
+  display: block;
+  min-height: 100dvh;
+  color: var(--mat-sys-on-surface, #26352d);
+  font-family: inherit;
+}
+
+.trading-terminal {
+  --terminal-green: #183d32;
+  --terminal-green-light: #285846;
+  --terminal-olive: #77764b;
+  --terminal-gold: #b69a5b;
+  --terminal-cream: #f4f0e5;
+  --terminal-border: #d9d4c6;
+  --terminal-muted: #777b72;
+  --terminal-panel: #fffefa;
+  --terminal-background: #eae7dc;
+
+  min-height: 100dvh;
+  height: 100dvh;
+  display: grid;
+  grid-template-rows: 52px minmax(300px, 1fr) 190px 54px;
+  gap: 5px;
+  padding: 5px;
+  overflow: hidden;
+  background: var(--terminal-background);
+  direction: rtl;
+  font-size: 12px;
+}
+
+/* HEADER */
+
+.terminal-header {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 0 12px;
+  background: var(--terminal-green);
+  color: #fff;
+  border: 1px solid #102e25;
+  box-shadow: 0 1px 3px #0002;
+}
+
+.header-brand,
+.header-navigation,
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.brand-symbol {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  color: var(--terminal-gold);
+  border: 1px solid #ffffff35;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  white-space: nowrap;
+}
+
+.brand-text strong {
+  font-size: 16px;
+  letter-spacing: 1px;
+}
+
+.brand-text span {
+  color: #d1d9d1;
+  font-size: 9px;
+}
+
+.header-navigation {
+  height: 100%;
+}
+
+.nav-item {
+  height: 100%;
+  color: #e8eee8 !important;
+  border-radius: 0 !important;
+  font-size: 11px;
+}
+
+.nav-item.active {
+  color: #fff !important;
+  border-bottom: 2px solid var(--terminal-gold);
+}
+
+.header-actions {
+  white-space: nowrap;
+}
+
+.header-actions button {
+  color: #fff;
+}
+
+.market-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  color: #d8e1d8;
+}
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #9dbb76;
+}
+
+/* MAIN GRID - MIRRORED */
+
+.workspace {
+  direction: rtl;
+  min-height: 0;
+  min-width: 0;
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1fr)
+    190px
+    165px
+    43px;
+  grid-template-areas: "market orderbook details tools";
+  gap: 5px;
+  overflow: hidden;
+}
+
+.terminal-panel {
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--terminal-panel);
+  border: 1px solid var(--terminal-border);
+  box-shadow: 0 1px 2px #00000008;
+}
+
+.main-market-column {
+  grid-area: market;
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: minmax(0, 1.3fr) minmax(150px, 0.85fr);
+  gap: 5px;
+}
+
+.market-watch,
+.portfolio-panel {
+  min-height: 0;
+}
+
+/* PANEL HEADINGS */
+
+.panel-heading {
+  flex: 0 0 36px;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 0 10px;
+  background: #f0eee4;
+  border-bottom: 1px solid var(--terminal-border);
+}
+
+.panel-title {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--terminal-green);
+  white-space: nowrap;
+}
+
+.panel-title mat-icon {
+  width: 17px;
+  height: 17px;
+  font-size: 17px;
+}
+
+.panel-title strong {
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.panel-actions {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.panel-caption {
+  color: var(--terminal-muted);
+  font-size: 10px;
+}
+
+.panel-heading button {
+  width: 30px;
+  height: 30px;
+}
+
+.compact-heading {
+  padding: 0 5px;
+}
+
+/* MARKET WATCH */
+
+.market-filter-bar {
+  flex: 0 0 36px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 7px;
+  border-bottom: 1px solid var(--terminal-border);
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.market-filter-bar button {
+  min-width: 0;
+  padding: 0 8px;
+  font-size: 10px;
+}
+
+.market-filter-bar .filter-active {
+  color: var(--terminal-green);
+  background: #e5e9df;
+}
+
+.filter-spacer {
+  flex: 1;
+}
+
+.table-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}
+
+.terminal-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: auto;
+  font-size: 11px;
+  text-align: right;
+}
+
+.terminal-table thead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.terminal-table th {
+  height: 30px;
+  padding: 0 10px;
+  background: #f7f5ee;
+  color: #565e55;
+  font-weight: 600;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--terminal-border);
+}
+
+.terminal-table td {
+  height: 34px;
+  padding: 5px 10px;
+  border-bottom: 1px solid #ece9df;
+}
+
+.empty-table {
+  height: 90px !important;
+  text-align: center;
+  color: var(--terminal-muted);
+}
+
+.empty-table mat-icon {
+  display: block;
+  margin: 0 auto 5px;
+  color: #aaa795;
+}
+
+.panel-footer {
+  flex: 0 0 25px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 9px;
+  color: var(--terminal-muted);
+  font-size: 9px;
+  border-top: 1px solid #ece9df;
+}
+
+/* PORTFOLIO */
+
+.portfolio-summary {
+  flex: 0 0 53px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--terminal-border);
+}
+
+.summary-cell {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 5px 12px;
+  border-left: 1px solid #e9e5da;
+}
+
+.summary-cell span {
+  color: var(--terminal-muted);
+  font-size: 10px;
+}
+
+.summary-cell strong {
+  font-size: 13px;
+  color: var(--terminal-green);
+}
+
+.text-action {
+  color: var(--terminal-green) !important;
+  font-size: 10px;
+}
+
+/* ORDER BOOK */
+
+.orderbook-panel {
+  grid-area: orderbook;
+}
+
+.orderbook-panel .panel-body,
+.details-panel .panel-body {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 8px;
+}
+
+.orderbook-instrument {
+  display: flex;
+  justify-content: space-between;
+  padding: 7px 5px;
+  margin-bottom: 8px;
+  background: #f5f3eb;
+  color: var(--terminal-muted);
+}
+
+.orderbook-instrument strong {
+  color: var(--terminal-green);
+}
+
+.order-side {
+  border: 1px solid var(--terminal-border);
+  margin-bottom: 7px;
+}
+
+.order-side-heading {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  padding: 7px 4px;
+  font-size: 10px;
+  font-weight: 600;
+  text-align: center;
+  background: #f4f1e8;
+}
+
+.sell-side .order-side-heading {
+  color: #a34d43;
+}
+
+.buy-side .order-side-heading {
+  color: #34704e;
+}
+
+.order-empty {
+  min-height: 65px;
+  display: grid;
+  place-items: center;
+  color: var(--terminal-muted);
+  font-size: 10px;
+}
+
+.order-spread {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 5px;
+  margin-bottom: 7px;
+  background: #ece9de;
+  color: var(--terminal-muted);
+}
+
+.order-spread strong {
+  color: var(--terminal-green);
+}
+
+.orderbook-legend {
+  display: flex;
+  justify-content: space-around;
+  font-size: 10px;
+}
+
+.legend-buy {
+  color: #34704e;
+}
+
+.legend-sell {
+  color: #a34d43;
+}
+
+/* DETAILS */
+
+.details-panel {
+  grid-area: details;
+}
+
+.instrument-identity {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 7px;
+  padding: 12px 2px;
+  text-align: center;
+}
+
+.instrument-placeholder {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--terminal-border);
+  background: #f5f3eb;
+  color: var(--terminal-olive);
+  font-size: 20px;
+}
+
+.instrument-identity strong {
+  color: var(--terminal-green);
+  font-size: 11px;
+}
+
+.instrument-identity span {
+  color: var(--terminal-muted);
+  font-size: 9px;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 5px;
+  padding: 9px 2px;
+  border-bottom: 1px solid #ece9df;
+  font-size: 10px;
+}
+
+.detail-row span {
+  color: var(--terminal-muted);
+}
+
+.detail-row strong {
+  color: var(--terminal-green);
+}
+
+.detail-section-title {
+  padding: 11px 2px 5px;
+  color: var(--terminal-green);
+  font-weight: 700;
+}
+
+.detail-link {
+  display: block;
+  width: 100%;
+  text-align: right;
+  font-size: 10px;
+}
+
+/* TOOLBAR */
+
+.terminal-toolbar {
+  grid-area: tools;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 3px;
+  background: var(--terminal-green);
+  border: 1px solid #102e25;
+}
+
+.terminal-toolbar button {
+  flex: 0 0 34px;
+  width: 34px;
+  height: 34px;
+  color: #e6e9df;
+}
+
+.terminal-toolbar button.selected {
+  background: #ffffff20;
+  color: #e5c78b;
+  border-right: 2px solid var(--terminal-gold);
+  border-radius: 0;
+}
+
+.toolbar-spacer {
+  flex: 1;
+}
+
+/* LOWER ACTIVITY WORKSPACE */
+
+.activity-panel {
+  min-height: 0;
+}
+
+.activity-heading {
+  flex-basis: 32px;
+}
+
+.terminal-tabs {
+  min-height: 0;
+  flex: 1;
+}
+
+.terminal-tabs ::ng-deep .mat-mdc-tab-labels {
+  background: #f6f4ed;
+  border-bottom: 1px solid var(--terminal-border);
+}
+
+.terminal-tabs ::ng-deep .mat-mdc-tab {
+  height: 38px;
+  min-width: 110px;
+  font-size: 10px;
+}
+
+.terminal-tabs ::ng-deep .mat-mdc-tab-body-wrapper {
+  flex: 1;
+  min-height: 0;
+}
+
+.tab-empty {
+  min-height: 90px;
+  display: grid;
+  place-items: center;
+  color: var(--terminal-muted);
+  font-size: 11px;
+}
+
+/* BOTTOM ASSET STRIP */
+
+.asset-status-bar {
+  min-width: 0;
+  display: flex;
+  align-items: stretch;
+  background: var(--terminal-green);
+  color: #fff;
+  border: 1px solid #102e25;
+  overflow: hidden;
+}
+
+.asset-status-item {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 3px;
+  padding: 0 12px;
+  border-left: 1px solid #ffffff25;
+  white-space: nowrap;
+}
+
+.asset-status-item span {
+  color: #cbd7cb;
+  font-size: 9px;
+}
+
+.asset-status-item strong {
+  color: #f3ead5;
+  font-size: 11px;
+}
+
+.user-status strong {
+  color: #fff;
+}
+
+/* COLLAPSIBLE PANELS */
+
+.workspace.orderbook-collapsed {
+  grid-template-columns: minmax(0, 1fr) 39px 165px 43px;
+}
+
+.workspace.details-collapsed {
+  grid-template-columns: minmax(0, 1fr) 190px 39px 43px;
+}
+
+.workspace.orderbook-collapsed.details-collapsed {
+  grid-template-columns: minmax(0, 1fr) 39px 39px 43px;
+}
+
+.workspace.orderbook-collapsed .orderbook-panel .panel-body,
+.workspace.details-collapsed .details-panel .panel-body {
+  display: none;
+}
+
+.workspace.orderbook-collapsed .orderbook-panel .panel-title,
+.workspace.details-collapsed .details-panel .panel-title {
+  display: none;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 1250px) {
+  .workspace {
+    grid-template-columns: minmax(0, 1fr) 165px 145px 40px;
+  }
+
+  .workspace.orderbook-collapsed {
+    grid-template-columns: minmax(0, 1fr) 39px 145px 40px;
+  }
+
+  .workspace.details-collapsed {
+    grid-template-columns: minmax(0, 1fr) 165px 39px 40px;
+  }
+
+  .header-navigation {
+    gap: 0;
+  }
+
+  .nav-item {
+    padding: 0 7px;
+  }
+}
+
+@media (max-width: 900px) {
+  .trading-terminal {
+    min-width: 760px;
+    overflow: auto;
+    height: auto;
+    min-height: 100dvh;
+    grid-template-rows: 52px 570px 190px 54px;
+  }
+
+  .header-navigation .nav-item:nth-child(n+4) {
+    display: none;
+  }
+
+  .workspace {
+    grid-template-columns: minmax(0, 1fr) 145px 125px 40px;
+  }
+}
+
+====================================================================================================
+FILE: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.routes.ts
+====================================================================================================
+import type { Routes } from '@angular/router';
+import { featurePageRoute } from '../../shared/routing/feature-route.factory';
+
+export const GENERAL_MARKET_ROUTES: Routes = [
+  {
+    path: '',
+    title: 'بازار کلی | IGD',
+    loadComponent: () =>
+      import('./general-market').then(
+        (module) => module.GeneralMarketPage,
+      ),
+  },
+  featurePageRoute(
+    'catalogue',
+    'کاتالوگ بازار',
+    'طبقه‌بندی، جست‌وجو و مشاهده عرضه‌ها.',
+  ),
+  featurePageRoute(
+    'markets',
+    'بازارها',
+    'مشاهده بازارها و وضعیت فعالیت آن‌ها.',
+  ),
+  featurePageRoute(
+    'offers',
+    'عرضه‌ها',
+    'مدیریت و مشاهده چرخه عمر عرضه‌ها.',
+  ),
+  featurePageRoute(
+    'offer-requests',
+    'درخواست‌های عرضه',
+    'ثبت و پیگیری درخواست‌های عرضه.',
+  ),
+  featurePageRoute(
+    'proposals',
+    'پیشنهادها',
+    'دریافت، بررسی و مقایسه پیشنهادها.',
+  ),
+  featurePageRoute(
+    'orders',
+    'سفارش‌ها',
+    'مدیریت سفارش‌های خرید و فروش.',
+  ),
+  featurePageRoute(
+    'order-book',
+    'دفتر سفارش',
+    'نمایش سفارش‌های معتبر و وضعیت آن‌ها.',
+  ),
+  featurePageRoute(
+    'matching',
+    'تطبیق',
+    'پیگیری فرایند تطبیق سفارش‌ها.',
+  ),
+  featurePageRoute(
+    'trades',
+    'معاملات',
+    'مشاهده معاملات و وضعیت آن‌ها.',
+  ),
+  featurePageRoute(
+    'execution',
+    'اجرای معامله',
+    'پیگیری مراحل اجرای معامله.',
+  ),
+  featurePageRoute(
+    'commodity',
+    'بازار کالا',
+    'گردش کار عرضه و تقاضای کالا.',
+  ),
+  featurePageRoute(
+    'real-estate',
+    'املاک و دارایی‌های واقعی',
+    'گردش کار دارایی‌های واقعی و موقعیت‌های مرتبط.',
+  ),
+  featurePageRoute(
+    'regulatory',
+    'اتصال‌های قانونی و نظارتی',
+    'پیگیری ارتباطات قانونی و نتایج استعلام‌ها.',
+  ),
+  featurePageRoute(
+    'audit',
+    'ممیزی بازار',
+    'تاریخچه و ردگیری رویدادهای بازار.',
+  ),
+];
+
+====================================================================================================
+SEARCH RESULTS
+====================================================================================================
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.css:121: .workspace {
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.css:520: /* LOWER ACTIVITY WORKSPACE */
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.css:599: .workspace.orderbook-collapsed {
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.css:603: .workspace.details-collapsed {
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.css:607: .workspace.orderbook-collapsed.details-collapsed {
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.css:611: .workspace.orderbook-collapsed .orderbook-panel .panel-body,
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.css:612: .workspace.details-collapsed .details-panel .panel-body {
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.css:616: .workspace.orderbook-collapsed .orderbook-panel .panel-title,
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.css:617: .workspace.details-collapsed .details-panel .panel-title {
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.css:624: .workspace {
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.css:628: .workspace.orderbook-collapsed {
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.css:632: .workspace.details-collapsed {
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.css:658: .workspace {
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.html:39: <!-- MAIN WORKSPACE -->
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.html:40: <main class="workspace"
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.html:269: سوابق و رویدادها
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.html:333: <!-- ACTIVITY WORKSPACE -->
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.html:339: <strong>فضای کاری و سوابق</strong>
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.html:363: سوابق معاملات
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.html:375: وضعیت و سوابق تسویه
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\settlement\settlement.routes.ts:16: 'history',
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\settlement\settlement.routes.ts:18: 'مشاهده سوابق عملیات تسویه.',

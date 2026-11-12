@@ -1,0 +1,3707 @@
+IGD FRONTEND CURRENT SOURCE REPORT
+Generated: 2026-11-10 04:30:13
+Frontend Root: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front
+====================================================================================================
+
+SECTION 1 - DIRECTORY AND FILE STRUCTURE
+====================================================================================================
+[DIR]  app
+[FILE] app\.editorconfig | 331 bytes | 2026-11-06 00:10:58
+[FILE] app\.gitignore | 666 bytes | 2026-11-06 00:10:58
+[FILE] app\.npmrc | 84 bytes | 2026-11-06 00:24:37
+[FILE] app\.postcssrc.json | 57 bytes | 2026-11-06 00:24:37
+[FILE] app\.prettierrc | 173 bytes | 2026-11-06 00:10:58
+[DIR]  app\.vscode
+[FILE] app\.vscode\extensions.json | 134 bytes | 2026-11-06 00:10:58
+[FILE] app\.vscode\launch.json | 490 bytes | 2026-11-06 00:10:58
+[FILE] app\.vscode\tasks.json | 1020 bytes | 2026-11-06 00:10:58
+[FILE] app\angular.json | 2213 bytes | 2026-11-07 10:15:21
+[FILE] app\angular.json.backup-20261107-101521 | 7233 bytes | 2026-11-06 00:29:58
+[FILE] app\package.json | 1984 bytes | 2026-11-06 00:24:35
+[DIR]  app\public
+[FILE] app\public\favicon.ico | 15086 bytes | 2026-11-06 00:10:58
+[FILE] app\README.md | 1520 bytes | 2026-11-06 00:10:58
+[DIR]  app\src
+[DIR]  app\src\app
+[FILE] app\src\app\app.config.ts | 622 bytes | 2026-11-07 10:05:51
+[FILE] app\src\app\app.css | 49 bytes | 2026-11-07 10:05:51
+[FILE] app\src\app\app.html | 17 bytes | 2026-11-07 10:05:51
+[FILE] app\src\app\app.routes.ts | 1606 bytes | 2026-11-07 10:05:52
+[FILE] app\src\app\app.spec.ts | 707 bytes | 2026-11-06 00:10:58
+[FILE] app\src\app\app.ts | 252 bytes | 2026-11-07 10:05:51
+[DIR]  app\src\app\core
+[DIR]  app\src\app\core\api
+[DIR]  app\src\app\core\api\clients
+[FILE] app\src\app\core\api\clients\.gitkeep | 0 bytes | 2026-11-07 10:02:11
+[DIR]  app\src\app\core\auth
+[FILE] app\src\app\core\auth\.gitkeep | 0 bytes | 2026-11-07 10:02:11
+[DIR]  app\src\app\core\authorization
+[FILE] app\src\app\core\authorization\.gitkeep | 0 bytes | 2026-11-07 10:02:11
+[DIR]  app\src\app\core\config
+[FILE] app\src\app\core\config\.gitkeep | 0 bytes | 2026-11-07 10:02:11
+[FILE] app\src\app\core\config\runtime-config.ts | 191 bytes | 2026-11-07 10:05:51
+[DIR]  app\src\app\core\guards
+[FILE] app\src\app\core\guards\.gitkeep | 0 bytes | 2026-11-07 10:02:11
+[DIR]  app\src\app\core\interceptors
+[FILE] app\src\app\core\interceptors\.gitkeep | 0 bytes | 2026-11-07 10:02:11
+[DIR]  app\src\app\features
+[DIR]  app\src\app\features\account
+[FILE] app\src\app\features\account\.gitkeep | 0 bytes | 2026-11-07 10:02:11
+[FILE] app\src\app\features\account\account.routes.ts | 1057 bytes | 2026-11-07 10:05:52
+[DIR]  app\src\app\features\contracts
+[FILE] app\src\app\features\contracts\.gitkeep | 0 bytes | 2026-11-07 10:02:11
+[FILE] app\src\app\features\contracts\contracts.routes.ts | 722 bytes | 2026-11-07 10:05:52
+[DIR]  app\src\app\features\general-market
+[DIR]  app\src\app\features\general-market\audit
+[FILE] app\src\app\features\general-market\audit\.gitkeep | 0 bytes | 2026-11-07 10:02:11
+[DIR]  app\src\app\features\general-market\catalogue
+[FILE] app\src\app\features\general-market\catalogue\.gitkeep | 0 bytes | 2026-11-07 10:02:11
+[DIR]  app\src\app\features\general-market\commodity
+[FILE] app\src\app\features\general-market\commodity\.gitkeep | 0 bytes | 2026-11-07 10:02:11
+[DIR]  app\src\app\features\general-market\execution
+[FILE] app\src\app\features\general-market\execution\.gitkeep | 0 bytes | 2026-11-07 10:02:11
+[FILE] app\src\app\features\general-market\general-market.css | 11271 bytes | 2026-11-09 10:47:49
+[FILE] app\src\app\features\general-market\general-market.css.backup-history-20261109-104747 | 10809 bytes | 2026-11-09 10:27:07
+[FILE] app\src\app\features\general-market\general-market.html | 13257 bytes | 2026-11-09 10:47:49
+[FILE] app\src\app\features\general-market\general-market.html.backup-history-20261109-104747 | 12744 bytes | 2026-11-09 10:27:07
+[FILE] app\src\app\features\general-market\general-market.routes.ts | 2351 bytes | 2026-11-09 10:27:07
+[FILE] app\src\app\features\general-market\general-market.ts | 883 bytes | 2026-11-09 10:28:03
+[DIR]  app\src\app\features\general-market\markets
+[FILE] app\src\app\features\general-market\markets\.gitkeep | 0 bytes | 2026-11-07 10:02:11
+[DIR]  app\src\app\features\general-market\matching
+[FILE] app\src\app\features\general-market\matching\.gitkeep | 0 bytes | 2026-11-07 10:02:11
+[DIR]  app\src\app\features\general-market\offer-requests
+[FILE] app\src\app\features\general-market\offer-requests\.gitkeep | 0 bytes | 2026-11-07 10:02:11
+[DIR]  app\src\app\features\general-market\offers
+[FILE] app\src\app\features\general-market\offers\.gitkeep | 0 bytes | 2026-11-07 10:02:11
+[DIR]  app\src\app\features\general-market\order-book
+[FILE] app\src\app\features\general-market\order-book\.gitkeep | 0 bytes | 2026-11-07 10:02:11
+[DIR]  app\src\app\features\general-market\orders
+[FILE] app\src\app\features\general-market\orders\.gitkeep | 0 bytes | 2026-11-07 10:02:11
+[DIR]  app\src\app\features\general-market\proposals
+[FILE] app\src\app\features\general-market\proposals\.gitkeep | 0 bytes | 2026-11-07 10:02:11
+[DIR]  app\src\app\features\general-market\real-estate
+[FILE] app\src\app\features\general-market\real-estate\.gitkeep | 0 bytes | 2026-11-07 10:02:11
+[DIR]  app\src\app\features\general-market\regulatory
+[FILE] app\src\app\features\general-market\regulatory\.gitkeep | 0 bytes | 2026-11-07 10:02:11
+[DIR]  app\src\app\features\general-market\trades
+[FILE] app\src\app\features\general-market\trades\.gitkeep | 0 bytes | 2026-11-07 10:02:11
+[DIR]  app\src\app\features\my-assets
+[FILE] app\src\app\features\my-assets\.gitkeep | 0 bytes | 2026-11-07 10:02:11
+[FILE] app\src\app\features\my-assets\my-assets.routes.ts | 875 bytes | 2026-11-07 10:05:52
+[DIR]  app\src\app\features\notifications
+[FILE] app\src\app\features\notifications\.gitkeep | 0 bytes | 2026-11-07 10:02:11
+[FILE] app\src\app\features\notifications\notifications.routes.ts | 454 bytes | 2026-11-07 10:05:52
+[DIR]  app\src\app\features\services
+[FILE] app\src\app\features\services\.gitkeep | 0 bytes | 2026-11-07 10:02:11
+[FILE] app\src\app\features\services\services.routes.ts | 936 bytes | 2026-11-07 10:05:52
+[DIR]  app\src\app\features\settlement
+[FILE] app\src\app\features\settlement\.gitkeep | 0 bytes | 2026-11-07 10:02:11
+[FILE] app\src\app\features\settlement\settlement.routes.ts | 553 bytes | 2026-11-07 10:05:52
+[DIR]  app\src\app\layouts
+[DIR]  app\src\app\layouts\auth-layout
+[FILE] app\src\app\layouts\auth-layout\.gitkeep | 0 bytes | 2026-11-07 10:02:11
+[DIR]  app\src\app\layouts\main-layout
+[FILE] app\src\app\layouts\main-layout\.gitkeep | 0 bytes | 2026-11-07 10:02:11
+[DIR]  app\src\app\shared
+[DIR]  app\src\app\shared\components
+[FILE] app\src\app\shared\components\.gitkeep | 0 bytes | 2026-11-07 10:02:11
+[DIR]  app\src\app\shared\directives
+[FILE] app\src\app\shared\directives\.gitkeep | 0 bytes | 2026-11-07 10:02:11
+[DIR]  app\src\app\shared\models
+[FILE] app\src\app\shared\models\.gitkeep | 0 bytes | 2026-11-07 10:02:11
+[DIR]  app\src\app\shared\pages
+[DIR]  app\src\app\shared\pages\feature-placeholder
+[FILE] app\src\app\shared\pages\feature-placeholder\feature-placeholder.page.css | 474 bytes | 2026-11-07 10:05:51
+[FILE] app\src\app\shared\pages\feature-placeholder\feature-placeholder.page.html | 219 bytes | 2026-11-07 10:05:51
+[FILE] app\src\app\shared\pages\feature-placeholder\feature-placeholder.page.ts | 364 bytes | 2026-11-07 10:05:51
+[DIR]  app\src\app\shared\pipes
+[FILE] app\src\app\shared\pipes\.gitkeep | 0 bytes | 2026-11-07 10:02:11
+[DIR]  app\src\app\shared\routing
+[FILE] app\src\app\shared\routing\feature-route.factory.ts | 422 bytes | 2026-11-07 10:05:51
+[DIR]  app\src\app\shared\utils
+[FILE] app\src\app\shared\utils\.gitkeep | 0 bytes | 2026-11-07 10:02:11
+[DIR]  app\src\environments
+[FILE] app\src\environments\.gitkeep | 0 bytes | 2026-11-07 10:02:11
+[FILE] app\src\environments\environment.production.ts | 85 bytes | 2026-11-07 10:05:51
+[FILE] app\src\environments\environment.ts | 86 bytes | 2026-11-07 10:05:51
+[FILE] app\src\index.html | 502 bytes | 2026-11-07 10:05:51
+[FILE] app\src\main.ts | 276 bytes | 2026-11-07 10:05:51
+[FILE] app\src\styles.css | 81 bytes | 2026-11-06 00:10:58
+[FILE] app\tsconfig.app.json | 412 bytes | 2026-11-06 00:10:58
+[FILE] app\tsconfig.json | 939 bytes | 2026-11-06 00:10:58
+[FILE] app\tsconfig.spec.json | 423 bytes | 2026-11-06 00:10:58
+[DIR]  assets
+[DIR]  assets\fonts
+[FILE] assets\fonts\.gitkeep | 0 bytes | 2026-11-07 10:02:11
+[FILE] assets\fonts\inter-latin-ext-wght-normal.woff2 | 85068 bytes | 2026-11-06 00:22:38
+[FILE] assets\fonts\inter-latin-wght-normal.woff2 | 48256 bytes | 2026-11-06 00:22:38
+[FILE] assets\fonts\material-symbols-outlined.woff2 | 4011996 bytes | 2026-11-06 00:22:37
+[FILE] assets\fonts\vazirmatn-arabic-wght-normal.woff2 | 46308 bytes | 2026-11-06 00:22:36
+[FILE] assets\fonts\vazirmatn-latin-ext-wght-normal.woff2 | 21860 bytes | 2026-11-06 00:22:36
+[FILE] assets\fonts\vazirmatn-latin-wght-normal.woff2 | 34524 bytes | 2026-11-06 00:22:36
+[DIR]  assets\illustrations
+[FILE] assets\illustrations\.gitkeep | 0 bytes | 2026-11-07 10:02:11
+[DIR]  assets\images
+[FILE] assets\images\.gitkeep | 0 bytes | 2026-11-07 10:02:11
+[DIR]  design-system
+[DIR]  design-system\components
+[FILE] design-system\components\.gitkeep | 0 bytes | 2026-11-07 10:02:11
+[DIR]  design-system\icons
+[FILE] design-system\icons\.gitkeep | 0 bytes | 2026-11-07 10:02:11
+[FILE] design-system\igd-foundation.css | 4258 bytes | 2026-11-09 10:32:38
+[FILE] design-system\igd-foundation.css.backup-font-fix-20261109-103238 | 1360 bytes | 2026-11-06 00:24:37
+[DIR]  design-system\patterns
+[FILE] design-system\patterns\.gitkeep | 0 bytes | 2026-11-07 10:02:11
+[DIR]  design-system\themes
+[FILE] design-system\themes\.gitkeep | 0 bytes | 2026-11-07 10:02:11
+[FILE] design-system\tokens\colors.css | 494 bytes | 2026-11-06 00:24:37
+[FILE] design-system\tokens\typography.css | 356 bytes | 2026-11-06 00:24:37
+[DIR]  docs
+[DIR]  docs\api
+[FILE] docs\api\.gitkeep | 0 bytes | 2026-11-07 10:02:11
+[DIR]  docs\architecture
+[FILE] docs\architecture\.gitkeep | 0 bytes | 2026-11-07 10:02:11
+[FILE] docs\architecture\FRONTEND-STRUCTURE.txt | 1124 bytes | 2026-11-07 10:02:11
+[DIR]  docs\design-system
+[FILE] docs\design-system\.gitkeep | 0 bytes | 2026-11-07 10:02:11
+[DIR]  docs\frontend
+[FILE] docs\frontend\.gitkeep | 0 bytes | 2026-11-07 10:02:11
+[FILE] IGD-Frontend-Configuration-Review.txt | 35802 bytes | 2026-11-06 05:00:04
+[FILE] installation-manifest.json | 1779 bytes | 2026-11-06 00:24:37
+[DIR]  scripts
+[FILE] scripts\Build-IGD-Front.ps1 | 1012 bytes | 2026-11-06 00:24:37
+[FILE] scripts\market-workspace-history-report.txt | 33402 bytes | 2026-11-09 10:41:35
+[FILE] scripts\Start-IGD-Front.ps1 | 1143 bytes | 2026-11-06 00:24:37
+[FILE] دستور اجرای فرانت اند.txt | 410 bytes | 2026-11-10 03:46:54
+
+SECTION 2 - SOURCE AND CONFIGURATION CONTENTS
+====================================================================================================
+
+====================================================================================================
+FILE: app\angular.json
+SIZE: 2213 bytes
+LAST MODIFIED: 2026-11-07 10:15:21
+====================================================================================================
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "cli": {
+    "packageManager": "npm",
+    "analytics": false
+  },
+  "newProjectRoot": "projects",
+  "projects": {
+    "igd-front": {
+      "projectType": "application",
+      "schematics": {},
+      "root": "",
+      "sourceRoot": "src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:application",
+          "options": {
+            "browser": "src/main.ts",
+            "tsConfig": "tsconfig.app.json",
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "public"
+              }
+            ],
+            "styles": [
+              "src/styles.css",
+              "../design-system/igd-foundation.css"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kB",
+                  "maximumError": "1MB"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "4kB",
+                  "maximumError": "8kB"
+                }
+              ],
+              "outputHashing": "all",
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.production.ts"
+                }
+              ]
+            },
+            "development": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular/build:dev-server",
+          "configurations": {
+            "production": {
+              "buildTarget": "igd-front:build:production"
+            },
+            "development": {
+              "buildTarget": "igd-front:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "test": {
+          "builder": "@angular/build:unit-test"
+        }
+      }
+    }
+  }
+}
+
+
+
+====================================================================================================
+FILE: app\package.json
+SIZE: 1984 bytes
+LAST MODIFIED: 2026-11-06 00:24:35
+====================================================================================================
+{
+    "name":  "igd-front",
+    "version":  "0.0.0",
+    "scripts":  {
+                    "ng":  "ng",
+                    "start":  "ng serve",
+                    "build":  "ng build",
+                    "watch":  "ng build --watch --configuration development",
+                    "test":  "ng test"
+                },
+    "private":  true,
+    "dependencies":  {
+                         "@angular/common":  "^22.2.0",
+                         "@angular/compiler":  "^22.2.0",
+                         "@angular/core":  "^22.2.0",
+                         "@angular/forms":  "^22.2.0",
+                         "@angular/platform-browser":  "^22.2.0",
+                         "@angular/router":  "^22.2.0",
+                         "rxjs":  "~7.8.0",
+                         "tslib":  "^2.3.0",
+                         "@angular/material":  "^22.0.0",
+                         "@angular/cdk":  "^22.0.0",
+                         "@spartan-ng/brain":  "latest",
+                         "ngx-echarts":  "22.0.0",
+                         "echarts":  "latest",
+                         "@fontsource-variable/vazirmatn":  "latest",
+                         "@fontsource-variable/inter":  "latest",
+                         "material-symbols":  "latest"
+                     },
+    "devDependencies":  {
+                            "@angular/build":  "^22.2.6",
+                            "@angular/cli":  "^22.2.6",
+                            "@angular/compiler-cli":  "^22.2.0",
+                            "jsdom":  "^30.0.0",
+                            "prettier":  "^3.8.1",
+                            "typescript":  "~6.0.2",
+                            "vitest":  "^5.0.0",
+                            "@spartan-ng/cli":  "latest",
+                            "tailwindcss":  "^4.0.0",
+                            "@tailwindcss/postcss":  "^4.0.0",
+                            "postcss":  "latest"
+                        }
+}
+
+
+====================================================================================================
+FILE: app\src\app\app.config.ts
+SIZE: 622 bytes
+LAST MODIFIED: 2026-11-07 10:05:51
+====================================================================================================
+import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
+import { provideHttpClient } from '@angular/common/http';
+import {
+  provideRouter,
+  withComponentInputBinding,
+  withInMemoryScrolling,
+} from '@angular/router';
+
+import { routes } from './app.routes';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideBrowserGlobalErrorListeners(),
+
+    provideHttpClient(),
+
+    provideRouter(
+      routes,
+      withComponentInputBinding(),
+      withInMemoryScrolling({
+        anchorScrolling: 'enabled',
+        scrollPositionRestoration: 'top',
+      }),
+    ),
+  ],
+};
+
+
+====================================================================================================
+FILE: app\src\app\app.css
+SIZE: 49 bytes
+LAST MODIFIED: 2026-11-07 10:05:51
+====================================================================================================
+:host {
+  display: block;
+  min-height: 100dvh;
+}
+
+
+====================================================================================================
+FILE: app\src\app\app.html
+SIZE: 17 bytes
+LAST MODIFIED: 2026-11-07 10:05:51
+====================================================================================================
+<router-outlet />
+
+
+====================================================================================================
+FILE: app\src\app\app.routes.ts
+SIZE: 1606 bytes
+LAST MODIFIED: 2026-11-07 10:05:52
+====================================================================================================
+import type { Routes } from '@angular/router';
+import { featurePageRoute } from './shared/routing/feature-route.factory';
+
+export const routes: Routes = [
+  {
+    path: '',
+    pathMatch: 'full',
+    redirectTo: 'market',
+  },
+  {
+    path: 'market',
+    loadChildren: () =>
+      import('./features/general-market/general-market.routes').then(
+        (module) => module.GENERAL_MARKET_ROUTES,
+      ),
+  },
+  {
+    path: 'assets',
+    loadChildren: () =>
+      import('./features/my-assets/my-assets.routes').then(
+        (module) => module.MY_ASSETS_ROUTES,
+      ),
+  },
+  {
+    path: 'account',
+    loadChildren: () =>
+      import('./features/account/account.routes').then(
+        (module) => module.ACCOUNT_ROUTES,
+      ),
+  },
+  {
+    path: 'contracts',
+    loadChildren: () =>
+      import('./features/contracts/contracts.routes').then(
+        (module) => module.CONTRACTS_ROUTES,
+      ),
+  },
+  {
+    path: 'services',
+    loadChildren: () =>
+      import('./features/services/services.routes').then(
+        (module) => module.SERVICES_ROUTES,
+      ),
+  },
+  {
+    path: 'settlement',
+    loadChildren: () =>
+      import('./features/settlement/settlement.routes').then(
+        (module) => module.SETTLEMENT_ROUTES,
+      ),
+  },
+  {
+    path: 'notifications',
+    loadChildren: () =>
+      import('./features/notifications/notifications.routes').then(
+        (module) => module.NOTIFICATIONS_ROUTES,
+      ),
+  },
+  featurePageRoute(
+    '**',
+    'صفحه پیدا نشد',
+    'نشانی واردشده معتبر نیست یا صفحه موردنظر وجود ندارد.',
+  ),
+];
+
+
+====================================================================================================
+FILE: app\src\app\app.ts
+SIZE: 252 bytes
+LAST MODIFIED: 2026-11-07 10:05:51
+====================================================================================================
+import { Component } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
+
+@Component({
+  selector: 'app-root',
+  standalone: true,
+  imports: [RouterOutlet],
+  templateUrl: './app.html',
+  styleUrl: './app.css',
+})
+export class App {}
+
+
+====================================================================================================
+FILE: app\src\styles.css
+SIZE: 81 bytes
+LAST MODIFIED: 2026-11-06 00:10:58
+====================================================================================================
+/* You can add global styles to this file, and also import other style files */
+
+
+
+====================================================================================================
+FILE: app\tsconfig.app.json
+SIZE: 412 bytes
+LAST MODIFIED: 2026-11-06 00:10:58
+====================================================================================================
+/* To learn more about Typescript configuration file: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html. */
+/* To learn more about Angular compiler options: https://angular.dev/reference/configs/angular-compiler-options. */
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "types": []
+  },
+  "include": [
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "src/**/*.spec.ts"
+  ]
+}
+
+
+
+====================================================================================================
+FILE: app\tsconfig.json
+SIZE: 939 bytes
+LAST MODIFIED: 2026-11-06 00:10:58
+====================================================================================================
+/* To learn more about Typescript configuration file: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html. */
+/* To learn more about Angular compiler options: https://angular.dev/reference/configs/angular-compiler-options. */
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "ES2022",
+    "module": "preserve"
+  },
+  "angularCompilerOptions": {
+    "enableI18nLegacyMessageIdFormat": false,
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true
+  },
+  "files": [],
+  "references": [
+    {
+      "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "./tsconfig.spec.json"
+    }
+  ]
+}
+
+
+
+====================================================================================================
+FILE: design-system\igd-foundation.css
+SIZE: 4258 bytes
+LAST MODIFIED: 2026-11-09 10:32:38
+====================================================================================================
+@layer theme, base, components, utilities;
+
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/preflight.css" layer(base);
+@import "tailwindcss/utilities.css";
+
+@import "@spartan-ng/brain/hlm-tailwind-preset.css";
+
+@import "@angular/material/prebuilt-themes/azure-blue.css";
+
+/* IGD LOCAL FONT DEFINITIONS: BEGIN */
+
+@font-face {
+  font-family: "Vazirmatn Variable";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("../assets/fonts/vazirmatn-arabic-wght-normal.woff2") format("woff2");
+  unicode-range: U+0600-06FF,U+0750-077F,U+0870-088E,U+0890-0891,U+0897-08E1,U+08E3-08FF,U+200C-200E,U+2010-2011,U+204F,U+2E41,U+FB50-FDFF,U+FE70-FE74,U+FE76-FEFC,U+102E0-102FB,U+10E60-10E7E,U+10EC2-10EC4,U+10EFC-10EFF,U+1EE00-1EE03,U+1EE05-1EE1F,U+1EE21-1EE22,U+1EE24,U+1EE27,U+1EE29-1EE32,U+1EE34-1EE37,U+1EE39,U+1EE3B,U+1EE42,U+1EE47,U+1EE49,U+1EE4B,U+1EE4D-1EE4F,U+1EE51-1EE52,U+1EE54,U+1EE57,U+1EE59,U+1EE5B,U+1EE5D,U+1EE5F,U+1EE61-1EE62,U+1EE64,U+1EE67-1EE6A,U+1EE6C-1EE72,U+1EE74-1EE77,U+1EE79-1EE7C,U+1EE7E,U+1EE80-1EE89,U+1EE8B-1EE9B,U+1EEA1-1EEA3,U+1EEA5-1EEA9,U+1EEAB-1EEBB,U+1EEF0-1EEF1;
+}
+
+@font-face {
+  font-family: "Vazirmatn Variable";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("../assets/fonts/vazirmatn-latin-ext-wght-normal.woff2") format("woff2");
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+
+@font-face {
+  font-family: "Vazirmatn Variable";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("../assets/fonts/vazirmatn-latin-wght-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+@font-face {
+  font-family: "Inter Variable";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("../assets/fonts/inter-latin-ext-wght-normal.woff2") format("woff2");
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+
+@font-face {
+  font-family: "Inter Variable";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("../assets/fonts/inter-latin-wght-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+@font-face {
+  font-family: "Material Symbols Outlined";
+  font-style: normal;
+  font-weight: 100 700;
+  font-display: block;
+  src: url("../assets/fonts/material-symbols-outlined.woff2") format("woff2");
+}
+
+.material-symbols-outlined {
+  font-family: "Material Symbols Outlined";
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  direction: ltr;
+  font-feature-settings: "liga";
+  -webkit-font-feature-settings: "liga";
+  -webkit-font-smoothing: antialiased;
+}
+
+/* IGD LOCAL FONT DEFINITIONS: END */
+
+
+
+
+
+
+
+:root {
+  color-scheme: light;
+
+  --igd-font-fa: "Vazirmatn Variable", sans-serif;
+  --igd-font-en: "Inter Variable", sans-serif;
+
+  --igd-green-950: #172b24;
+  --igd-green-900: #203b30;
+  --igd-green-800: #2b4d3d;
+  --igd-green-700: #3b6650;
+
+  --igd-olive-600: #7b8052;
+  --igd-gold-500: #b99a5b;
+
+  --igd-cream-50: #fbfaf6;
+  --igd-cream-100: #f4f1e8;
+  --igd-cream-200: #e9e4d7;
+
+  --igd-text-primary: #202923;
+  --igd-text-secondary: #6e766f;
+
+  --igd-border: #e5e1d7;
+
+  --igd-radius-sm: 8px;
+  --igd-radius-md: 14px;
+  --igd-radius-lg: 20px;
+}
+
+html,
+body {
+  min-height: 100%;
+  margin: 0;
+  background: var(--igd-cream-50);
+  color: var(--igd-text-primary);
+  font-family: var(--igd-font-fa);
+}
+
+body {
+  direction: rtl;
+  text-align: right;
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+
+====================================================================================================
+FILE: app\.postcssrc.json
+SIZE: 57 bytes
+LAST MODIFIED: 2026-11-06 00:24:37
+====================================================================================================
+{
+  "plugins": {
+    "@tailwindcss/postcss": {}
+  }
+}
+
+
+====================================================================================================
+FILE: app\.vscode\extensions.json
+SIZE: 134 bytes
+LAST MODIFIED: 2026-11-06 00:10:58
+====================================================================================================
+{
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=827846
+  "recommendations": ["angular.ng-template"]
+}
+
+
+
+====================================================================================================
+FILE: app\.vscode\launch.json
+SIZE: 490 bytes
+LAST MODIFIED: 2026-11-06 00:10:58
+====================================================================================================
+{
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "ng serve",
+      "type": "chrome",
+      "request": "launch",
+      "preLaunchTask": "npm: start",
+      "url": "http://localhost:4200/"
+    },
+    {
+      "name": "ng test",
+      "type": "chrome",
+      "request": "launch",
+      "preLaunchTask": "npm: test",
+      "url": "http://localhost:9876/debug.html"
+    }
+  ]
+}
+
+
+
+====================================================================================================
+FILE: app\.vscode\tasks.json
+SIZE: 1020 bytes
+LAST MODIFIED: 2026-11-06 00:10:58
+====================================================================================================
+{
+  // For more information, visit: https://go.microsoft.com/fwlink/?LinkId=733558
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "npm",
+      "script": "start",
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "typescript",
+        "pattern": "$tsc",
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": {
+            "regexp": "Changes detected"
+          },
+          "endsPattern": {
+            "regexp": "bundle generation (complete|failed)"
+          }
+        }
+      }
+    },
+    {
+      "type": "npm",
+      "script": "test",
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "typescript",
+        "pattern": "$tsc",
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": {
+            "regexp": "Changes detected"
+          },
+          "endsPattern": {
+            "regexp": "bundle generation (complete|failed)"
+          }
+        }
+      }
+    }
+  ]
+}
+
+
+
+====================================================================================================
+FILE: app\README.md
+SIZE: 1520 bytes
+LAST MODIFIED: 2026-11-06 00:10:58
+====================================================================================================
+# IgdFront
+
+This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.2.6.
+
+## Development server
+
+To start a local development server, run:
+
+```bash
+ng serve
+```
+
+Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+
+## Code scaffolding
+
+Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+
+```bash
+ng generate component component-name
+```
+
+For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+
+```bash
+ng generate --help
+```
+
+## Building
+
+To build the project run:
+
+```bash
+ng build
+```
+
+This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+
+## Running unit tests
+
+To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+
+```bash
+ng test
+```
+
+## Running end-to-end tests
+
+For end-to-end (e2e) testing, run:
+
+```bash
+ng e2e
+```
+
+Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+
+## Additional Resources
+
+For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+
+
+
+====================================================================================================
+FILE: app\src\app\app.spec.ts
+SIZE: 707 bytes
+LAST MODIFIED: 2026-11-06 00:10:58
+====================================================================================================
+import { TestBed } from '@angular/core/testing';
+import { App } from './app';
+
+describe('App', () => {
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [App],
+    })
+      .compileComponents();
+  });
+
+  it('should create the app', () => {
+    const fixture = TestBed.createComponent(App);
+    const app = fixture.componentInstance;
+    expect(app).toBeTruthy();
+  });
+
+  it('should render title', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, igd-front');
+  });
+});
+
+
+
+====================================================================================================
+FILE: app\src\app\core\config\runtime-config.ts
+SIZE: 191 bytes
+LAST MODIFIED: 2026-11-07 10:05:51
+====================================================================================================
+import { environment } from '../../../environments/environment';
+
+export const RUNTIME_CONFIG = Object.freeze({
+  production: environment.production,
+  apiBaseUrl: environment.apiBaseUrl,
+});
+
+
+====================================================================================================
+FILE: app\src\app\features\account\account.routes.ts
+SIZE: 1057 bytes
+LAST MODIFIED: 2026-11-07 10:05:52
+====================================================================================================
+import type { Routes } from '@angular/router';
+import { featurePageRoute } from '../../shared/routing/feature-route.factory';
+
+export const ACCOUNT_ROUTES: Routes = [
+  featurePageRoute(
+    '',
+    'حساب من',
+    'مدیریت اطلاعات و تنظیمات حساب کاربری.',
+  ),
+  featurePageRoute(
+    'profile',
+    'اطلاعات حساب',
+    'مشاهده و مدیریت اطلاعات پایه حساب.',
+  ),
+  featurePageRoute(
+    'verification',
+    'احراز هویت',
+    'پیگیری وضعیت احراز هویت.',
+  ),
+  featurePageRoute(
+    'security',
+    'امنیت حساب',
+    'مدیریت تنظیمات امنیتی حساب.',
+  ),
+  featurePageRoute(
+    'login',
+    'ورود',
+    'مسیر ورود به حساب کاربری.',
+  ),
+  featurePageRoute(
+    'register',
+    'ثبت‌نام',
+    'مسیر ایجاد حساب کاربری.',
+  ),
+  featurePageRoute(
+    'recover-password',
+    'بازیابی رمز عبور',
+    'مسیر بازیابی دسترسی به حساب.',
+  ),
+];
+
+
+====================================================================================================
+FILE: app\src\app\features\contracts\contracts.routes.ts
+SIZE: 722 bytes
+LAST MODIFIED: 2026-11-07 10:05:52
+====================================================================================================
+import type { Routes } from '@angular/router';
+import { featurePageRoute } from '../../shared/routing/feature-route.factory';
+
+export const CONTRACTS_ROUTES: Routes = [
+  featurePageRoute(
+    '',
+    'قراردادها',
+    'نمای کلی قراردادها و تعهدات حقوقی.',
+  ),
+  featurePageRoute(
+    'documents',
+    'اسناد قراردادی',
+    'مشاهده اسناد و نسخه‌های قرارداد.',
+  ),
+  featurePageRoute(
+    'obligations',
+    'تعهدات',
+    'پیگیری تعهدات قراردادی.',
+  ),
+  featurePageRoute(
+    'templates',
+    'قالب‌های قرارداد',
+    'مشاهده قالب‌های قراردادی قابل استفاده.',
+  ),
+];
+
+
+====================================================================================================
+FILE: app\src\app\features\general-market\general-market.css
+SIZE: 11271 bytes
+LAST MODIFIED: 2026-11-09 10:47:49
+====================================================================================================
+:host {
+  display: block;
+  min-height: 100dvh;
+  color: var(--mat-sys-on-surface, #26352d);
+  font-family: inherit;
+}
+
+.trading-terminal {
+  --terminal-green: #183d32;
+  --terminal-green-light: #285846;
+  --terminal-olive: #77764b;
+  --terminal-gold: #b69a5b;
+  --terminal-cream: #f4f0e5;
+  --terminal-border: #d9d4c6;
+  --terminal-muted: #777b72;
+  --terminal-panel: #fffefa;
+  --terminal-background: #eae7dc;
+
+  min-height: 100dvh;
+  height: 100dvh;
+  display: grid;
+  grid-template-rows: 52px minmax(0, 1fr) 54px;
+  gap: 5px;
+  padding: 5px;
+  overflow: hidden;
+  background: var(--terminal-background);
+  direction: rtl;
+  font-size: 12px;
+}
+
+/* HEADER */
+
+.terminal-header {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 0 12px;
+  background: var(--terminal-green);
+  color: #fff;
+  border: 1px solid #102e25;
+  box-shadow: 0 1px 3px #0002;
+}
+
+.header-brand,
+.header-navigation,
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.brand-symbol {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  color: var(--terminal-gold);
+  border: 1px solid #ffffff35;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  white-space: nowrap;
+}
+
+.brand-text strong {
+  font-size: 16px;
+  letter-spacing: 1px;
+}
+
+.brand-text span {
+  color: #d1d9d1;
+  font-size: 9px;
+}
+
+.header-navigation {
+  height: 100%;
+}
+
+.nav-item {
+  height: 100%;
+  color: #e8eee8 !important;
+  border-radius: 0 !important;
+  font-size: 11px;
+}
+
+.nav-item.active {
+  color: #fff !important;
+  border-bottom: 2px solid var(--terminal-gold);
+}
+
+.header-actions {
+  white-space: nowrap;
+}
+
+.header-actions button {
+  color: #fff;
+}
+
+.market-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  color: #d8e1d8;
+}
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #9dbb76;
+}
+
+/* MAIN GRID - MIRRORED */
+
+.workspace {
+  direction: rtl;
+  min-height: 0;
+  min-width: 0;
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1fr)
+    190px
+    165px
+    43px;
+  grid-template-areas: "market orderbook details tools";
+  gap: 5px;
+  overflow: hidden;
+}
+
+.terminal-panel {
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--terminal-panel);
+  border: 1px solid var(--terminal-border);
+  box-shadow: 0 1px 2px #00000008;
+}
+
+.main-market-column {
+  grid-area: market;
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: minmax(0, 1.3fr) minmax(150px, 0.85fr);
+  gap: 5px;
+}
+
+.market-watch,
+.portfolio-panel {
+  min-height: 0;
+}
+
+/* PANEL HEADINGS */
+
+.panel-heading {
+  flex: 0 0 36px;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 0 10px;
+  background: #f0eee4;
+  border-bottom: 1px solid var(--terminal-border);
+}
+
+.panel-title {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--terminal-green);
+  white-space: nowrap;
+}
+
+.panel-title mat-icon {
+  width: 17px;
+  height: 17px;
+  font-size: 17px;
+}
+
+.panel-title strong {
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.panel-actions {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.panel-caption {
+  color: var(--terminal-muted);
+  font-size: 10px;
+}
+
+.panel-heading button {
+  width: 30px;
+  height: 30px;
+}
+
+.compact-heading {
+  padding: 0 5px;
+}
+
+/* MARKET WATCH */
+
+.market-filter-bar {
+  flex: 0 0 36px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 7px;
+  border-bottom: 1px solid var(--terminal-border);
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.market-filter-bar button {
+  min-width: 0;
+  padding: 0 8px;
+  font-size: 10px;
+}
+
+.market-filter-bar .filter-active {
+  color: var(--terminal-green);
+  background: #e5e9df;
+}
+
+.filter-spacer {
+  flex: 1;
+}
+
+.table-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}
+
+.terminal-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: auto;
+  font-size: 11px;
+  text-align: right;
+}
+
+.terminal-table thead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.terminal-table th {
+  height: 30px;
+  padding: 0 10px;
+  background: #f7f5ee;
+  color: #565e55;
+  font-weight: 600;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--terminal-border);
+}
+
+.terminal-table td {
+  height: 34px;
+  padding: 5px 10px;
+  border-bottom: 1px solid #ece9df;
+}
+
+.empty-table {
+  height: 90px !important;
+  text-align: center;
+  color: var(--terminal-muted);
+}
+
+.empty-table mat-icon {
+  display: block;
+  margin: 0 auto 5px;
+  color: #aaa795;
+}
+
+.panel-footer {
+  flex: 0 0 25px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 9px;
+  color: var(--terminal-muted);
+  font-size: 9px;
+  border-top: 1px solid #ece9df;
+}
+
+/* PORTFOLIO */
+
+.portfolio-summary {
+  flex: 0 0 53px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--terminal-border);
+}
+
+.summary-cell {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 5px 12px;
+  border-left: 1px solid #e9e5da;
+}
+
+.summary-cell span {
+  color: var(--terminal-muted);
+  font-size: 10px;
+}
+
+.summary-cell strong {
+  font-size: 13px;
+  color: var(--terminal-green);
+}
+
+.text-action {
+  color: var(--terminal-green) !important;
+  font-size: 10px;
+}
+
+/* ORDER BOOK */
+
+.orderbook-panel {
+  grid-area: orderbook;
+}
+
+.orderbook-panel .panel-body,
+.details-panel .panel-body {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 8px;
+}
+
+.orderbook-instrument {
+  display: flex;
+  justify-content: space-between;
+  padding: 7px 5px;
+  margin-bottom: 8px;
+  background: #f5f3eb;
+  color: var(--terminal-muted);
+}
+
+.orderbook-instrument strong {
+  color: var(--terminal-green);
+}
+
+.order-side {
+  border: 1px solid var(--terminal-border);
+  margin-bottom: 7px;
+}
+
+.order-side-heading {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  padding: 7px 4px;
+  font-size: 10px;
+  font-weight: 600;
+  text-align: center;
+  background: #f4f1e8;
+}
+
+.sell-side .order-side-heading {
+  color: #a34d43;
+}
+
+.buy-side .order-side-heading {
+  color: #34704e;
+}
+
+.order-empty {
+  min-height: 65px;
+  display: grid;
+  place-items: center;
+  color: var(--terminal-muted);
+  font-size: 10px;
+}
+
+.order-spread {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 5px;
+  margin-bottom: 7px;
+  background: #ece9de;
+  color: var(--terminal-muted);
+}
+
+.order-spread strong {
+  color: var(--terminal-green);
+}
+
+.orderbook-legend {
+  display: flex;
+  justify-content: space-around;
+  font-size: 10px;
+}
+
+.legend-buy {
+  color: #34704e;
+}
+
+.legend-sell {
+  color: #a34d43;
+}
+
+/* DETAILS */
+
+.details-panel {
+  grid-area: details;
+}
+
+.instrument-identity {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 7px;
+  padding: 12px 2px;
+  text-align: center;
+}
+
+.instrument-placeholder {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--terminal-border);
+  background: #f5f3eb;
+  color: var(--terminal-olive);
+  font-size: 20px;
+}
+
+.instrument-identity strong {
+  color: var(--terminal-green);
+  font-size: 11px;
+}
+
+.instrument-identity span {
+  color: var(--terminal-muted);
+  font-size: 9px;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 5px;
+  padding: 9px 2px;
+  border-bottom: 1px solid #ece9df;
+  font-size: 10px;
+}
+
+.detail-row span {
+  color: var(--terminal-muted);
+}
+
+.detail-row strong {
+  color: var(--terminal-green);
+}
+
+.detail-section-title {
+  padding: 11px 2px 5px;
+  color: var(--terminal-green);
+  font-weight: 700;
+}
+
+.detail-link {
+  display: block;
+  width: 100%;
+  text-align: right;
+  font-size: 10px;
+}
+
+/* TOOLBAR */
+
+.terminal-toolbar {
+  grid-area: tools;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 3px;
+  background: var(--terminal-green);
+  border: 1px solid #102e25;
+}
+
+.terminal-toolbar button {
+  flex: 0 0 34px;
+  width: 34px;
+  height: 34px;
+  color: #e6e9df;
+}
+
+.terminal-toolbar button.selected {
+  background: #ffffff20;
+  color: #e5c78b;
+  border-right: 2px solid var(--terminal-gold);
+  border-radius: 0;
+}
+
+.toolbar-spacer {
+  flex: 1;
+}
+
+/* LOWER ACTIVITY WORKSPACE */
+
+.activity-panel {
+  min-height: 0;
+}
+
+.activity-heading {
+  flex-basis: 32px;
+}
+
+.terminal-tabs {
+  min-height: 0;
+  flex: 1;
+}
+
+.terminal-tabs ::ng-deep .mat-mdc-tab-labels {
+  background: #f6f4ed;
+  border-bottom: 1px solid var(--terminal-border);
+}
+
+.terminal-tabs ::ng-deep .mat-mdc-tab {
+  height: 38px;
+  min-width: 110px;
+  font-size: 10px;
+}
+
+.terminal-tabs ::ng-deep .mat-mdc-tab-body-wrapper {
+  flex: 1;
+  min-height: 0;
+}
+
+.tab-empty {
+  min-height: 90px;
+  display: grid;
+  place-items: center;
+  color: var(--terminal-muted);
+  font-size: 11px;
+}
+
+/* BOTTOM ASSET STRIP */
+
+.asset-status-bar {
+  min-width: 0;
+  display: flex;
+  align-items: stretch;
+  background: var(--terminal-green);
+  color: #fff;
+  border: 1px solid #102e25;
+  overflow: hidden;
+}
+
+.asset-status-item {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 3px;
+  padding: 0 12px;
+  border-left: 1px solid #ffffff25;
+  white-space: nowrap;
+}
+
+.asset-status-item span {
+  color: #cbd7cb;
+  font-size: 9px;
+}
+
+.asset-status-item strong {
+  color: #f3ead5;
+  font-size: 11px;
+}
+
+.user-status strong {
+  color: #fff;
+}
+
+/* COLLAPSIBLE PANELS */
+
+.workspace.orderbook-collapsed {
+  grid-template-columns: minmax(0, 1fr) 39px 165px 43px;
+}
+
+.workspace.details-collapsed {
+  grid-template-columns: minmax(0, 1fr) 190px 39px 43px;
+}
+
+.workspace.orderbook-collapsed.details-collapsed {
+  grid-template-columns: minmax(0, 1fr) 39px 39px 43px;
+}
+
+.workspace.orderbook-collapsed .orderbook-panel .panel-body,
+.workspace.details-collapsed .details-panel .panel-body {
+  display: none;
+}
+
+.workspace.orderbook-collapsed .orderbook-panel .panel-title,
+.workspace.details-collapsed .details-panel .panel-title {
+  display: none;
+}
+
+
+/* HISTORY VIEW - OPENS ONLY FROM THE VERTICAL TOOLBAR */
+
+.workspace.history-mode {
+  grid-template-columns: minmax(0, 1fr) 43px;
+  grid-template-areas: "history tools";
+}
+
+.workspace.history-mode .activity-panel {
+  grid-area: history;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+}
+
+.workspace.history-mode .terminal-tabs {
+  min-height: 0;
+  flex: 1;
+}
+
+.workspace.history-mode .terminal-tabs ::ng-deep .mat-mdc-tab-body-wrapper {
+  flex: 1;
+  min-height: 0;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 1250px) {
+  .workspace {
+    grid-template-columns: minmax(0, 1fr) 165px 145px 40px;
+  }
+
+  .workspace.orderbook-collapsed {
+    grid-template-columns: minmax(0, 1fr) 39px 145px 40px;
+  }
+
+  .workspace.details-collapsed {
+    grid-template-columns: minmax(0, 1fr) 165px 39px 40px;
+  }
+
+  .header-navigation {
+    gap: 0;
+  }
+
+  .nav-item {
+    padding: 0 7px;
+  }
+}
+
+@media (max-width: 900px) {
+  .trading-terminal {
+    min-width: 760px;
+    overflow: auto;
+    height: auto;
+    min-height: 100dvh;
+    grid-template-rows: 52px 570px 190px 54px;
+  }
+
+  .header-navigation .nav-item:nth-child(n+4) {
+    display: none;
+  }
+
+  .workspace {
+    grid-template-columns: minmax(0, 1fr) 145px 125px 40px;
+  }
+}
+
+
+====================================================================================================
+FILE: app\src\app\features\general-market\general-market.html
+SIZE: 13257 bytes
+LAST MODIFIED: 2026-11-09 10:47:49
+====================================================================================================
+<div class="trading-terminal" dir="rtl">
+
+  <!-- TOP NAVIGATION -->
+  <header class="terminal-header">
+
+    <div class="header-brand">
+      <div class="brand-symbol">
+        <mat-icon>account_balance</mat-icon>
+      </div>
+      <div class="brand-text">
+        <strong>IGD</strong>
+        <span>سامانه مدیریت دارایی‌های واقعی</span>
+      </div>
+    </div>
+
+    <nav class="header-navigation">
+      <button mat-button class="nav-item active">بازار کلی</button>
+      <button mat-button class="nav-item">دارایی‌های من</button>
+      <button mat-button class="nav-item">قراردادها</button>
+      <button mat-button class="nav-item">خدمات</button>
+      <button mat-button class="nav-item">تسویه</button>
+    </nav>
+
+    <div class="header-actions">
+      <button mat-icon-button aria-label="جست‌وجو">
+        <mat-icon>search</mat-icon>
+      </button>
+      <button mat-icon-button aria-label="اعلان‌ها">
+        <mat-icon>notifications_none</mat-icon>
+      </button>
+      <span class="market-status">
+        <span class="status-dot"></span>
+        وضعیت بازار
+      </span>
+    </div>
+
+  </header>
+
+  <!-- MAIN WORKSPACE -->
+  <main class="workspace" [class.history-mode]="activeTool === 'history'"
+    [class.orderbook-collapsed]="orderBookCollapsed"
+    [class.details-collapsed]="detailsCollapsed">
+
+    @if (activeTool !== 'history') {
+    <!-- MARKET WATCH + PORTFOLIO -->
+    <section class="main-market-column">
+
+      <section class="terminal-panel market-watch">
+
+        <div class="panel-heading">
+          <div class="panel-title">
+            <mat-icon>monitoring</mat-icon>
+            <strong>دیده‌بان بازار کلی</strong>
+          </div>
+
+          <div class="panel-actions">
+            <span class="panel-caption">فهرست بازارها و عرضه‌ها</span>
+            <button mat-icon-button aria-label="تنظیمات دیده‌بان">
+              <mat-icon>tune</mat-icon>
+            </button>
+          </div>
+        </div>
+
+        <div class="market-filter-bar">
+          <button mat-button class="filter-active">همه بازارها</button>
+          <button mat-button>کالا</button>
+          <button mat-button>املاک</button>
+          <button mat-button>سایر دارایی‌ها</button>
+
+          <span class="filter-spacer"></span>
+
+          <button mat-icon-button aria-label="جست‌وجوی بازار">
+            <mat-icon>search</mat-icon>
+          </button>
+          <button mat-icon-button aria-label="فیلتر بازار">
+            <mat-icon>filter_list</mat-icon>
+          </button>
+        </div>
+
+        <div class="table-scroll">
+          <table class="terminal-table market-table">
+            <thead>
+              <tr>
+                <th>نام عرضه / دارایی</th>
+                <th>بازار</th>
+                <th>قیمت</th>
+                <th>تغییرات</th>
+                <th>حجم</th>
+                <th>وضعیت</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colspan="6" class="empty-table">
+                  <mat-icon>table_chart</mat-icon>
+                  <span>اطلاعات عرضه‌ها پس از اتصال سرویس بازار نمایش داده می‌شود.</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <footer class="panel-footer">
+          <span>دیده‌بان بازار</span>
+          <span>آماده اتصال به سرویس کاتالوگ و عرضه‌ها</span>
+        </footer>
+
+      </section>
+
+      <section class="terminal-panel portfolio-panel">
+
+        <div class="panel-heading">
+          <div class="panel-title">
+            <mat-icon>account_balance_wallet</mat-icon>
+            <strong>دارایی‌های من | پرتفوی</strong>
+          </div>
+
+          <button mat-button class="text-action">
+            مشاهده همه دارایی‌ها
+            <mat-icon>chevron_left</mat-icon>
+          </button>
+        </div>
+
+        <div class="portfolio-summary">
+          <div class="summary-cell">
+            <span>ارزش کل دارایی‌ها</span>
+            <strong>—</strong>
+          </div>
+          <div class="summary-cell">
+            <span>سود و زیان کل</span>
+            <strong>—</strong>
+          </div>
+          <div class="summary-cell">
+            <span>موقعیت‌های فعال</span>
+            <strong>—</strong>
+          </div>
+        </div>
+
+        <div class="table-scroll">
+          <table class="terminal-table">
+            <thead>
+              <tr>
+                <th>دارایی</th>
+                <th>مقدار</th>
+                <th>ارزش</th>
+                <th>وضعیت</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colspan="4" class="empty-table">
+                  اطلاعات پرتفوی از سرویس دارایی‌های من دریافت خواهد شد.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </section>
+
+    </section>
+
+    }
+
+    @if (activeTool !== 'history') {
+    <!-- ORDER BOOK -->
+    <section class="terminal-panel orderbook-panel">
+
+      <div class="panel-heading compact-heading">
+        <div class="panel-title">
+          <mat-icon>swap_vert</mat-icon>
+          <strong>دفتر سفارش</strong>
+        </div>
+
+        <button mat-icon-button
+          (click)="toggleOrderBook()"
+          [attr.aria-label]="orderBookCollapsed ? 'بازکردن دفتر سفارش' : 'جمع‌کردن دفتر سفارش'">
+          <mat-icon>{{ orderBookCollapsed ? 'chevron_left' : 'chevron_right' }}</mat-icon>
+        </button>
+      </div>
+
+      <div class="panel-body">
+
+        <div class="orderbook-instrument">
+          <span>نماد انتخابی</span>
+          <strong>—</strong>
+        </div>
+
+        <div class="order-side sell-side">
+          <div class="order-side-heading">
+            <span>فروش</span>
+            <span>قیمت</span>
+            <span>مقدار</span>
+          </div>
+          <div class="order-empty">سفارشی وجود ندارد</div>
+        </div>
+
+        <div class="order-spread">
+          <span>قیمت میانی</span>
+          <strong>—</strong>
+        </div>
+
+        <div class="order-side buy-side">
+          <div class="order-side-heading">
+            <span>خرید</span>
+            <span>قیمت</span>
+            <span>مقدار</span>
+          </div>
+          <div class="order-empty">سفارشی وجود ندارد</div>
+        </div>
+
+        <div class="orderbook-legend">
+          <span class="legend-sell">فروش</span>
+          <span class="legend-buy">خرید</span>
+        </div>
+
+      </div>
+    </section>
+
+    }
+
+    @if (activeTool !== 'history') {
+    <!-- INSTRUMENT DETAILS -->
+    <section class="terminal-panel details-panel">
+
+      <div class="panel-heading compact-heading">
+        <div class="panel-title">
+          <mat-icon>info</mat-icon>
+          <strong>جزئیات نماد</strong>
+        </div>
+
+        <button mat-icon-button
+          (click)="toggleDetails()"
+          [attr.aria-label]="detailsCollapsed ? 'بازکردن جزئیات' : 'جمع‌کردن جزئیات'">
+          <mat-icon>{{ detailsCollapsed ? 'chevron_left' : 'chevron_right' }}</mat-icon>
+        </button>
+      </div>
+
+      <div class="panel-body details-content">
+
+        <div class="instrument-identity">
+          <div class="instrument-placeholder">—</div>
+          <strong>نمادی انتخاب نشده</strong>
+          <span>جزئیات دارایی انتخابی</span>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="detail-row">
+          <span>آخرین قیمت</span>
+          <strong>—</strong>
+        </div>
+        <div class="detail-row">
+          <span>تغییرات</span>
+          <strong>—</strong>
+        </div>
+        <div class="detail-row">
+          <span>حجم عرضه</span>
+          <strong>—</strong>
+        </div>
+        <div class="detail-row">
+          <span>وضعیت عرضه</span>
+          <strong>—</strong>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="detail-section-title">اطلاعات تکمیلی</div>
+        <button mat-button class="detail-link">
+          مشخصات دارایی
+        </button>
+        <button mat-button class="detail-link">
+          قراردادها و تعهدات
+        </button>
+        <button mat-button class="detail-link">
+          سوابق و رویدادها
+        </button>
+
+      </div>
+    </section>
+
+    @if (activeTool === 'history') {
+  <!-- ACTIVITY WORKSPACE -->
+  <section class="terminal-panel activity-panel">
+
+    <div class="panel-heading activity-heading">
+      <div class="panel-title">
+        <mat-icon>view_list</mat-icon>
+        <strong>فضای کاری و سوابق</strong>
+      </div>
+      <span class="panel-caption">وضعیت مستقل سفارش، معامله و تسویه</span>
+    </div>
+
+    <mat-tab-group
+      class="terminal-tabs"
+      animationDuration="0ms"
+      [disableRipple]="true">
+
+      <mat-tab label="سفارشات فعال">
+        <div class="tab-empty">
+          سفارش‌های فعال پس از اتصال سرویس سفارش‌ها نمایش داده می‌شوند.
+        </div>
+      </mat-tab>
+
+      <mat-tab label="تاریخچه سفارشات">
+        <div class="tab-empty">
+          تاریخچه سفارش‌ها
+        </div>
+      </mat-tab>
+
+      <mat-tab label="معاملات">
+        <div class="tab-empty">
+          سوابق معاملات
+        </div>
+      </mat-tab>
+
+      <mat-tab label="اجرای معامله">
+        <div class="tab-empty">
+          مراحل اجرای معامله
+        </div>
+      </mat-tab>
+
+      <mat-tab label="وضعیت تسویه">
+        <div class="tab-empty">
+          وضعیت و سوابق تسویه
+        </div>
+      </mat-tab>
+
+    </mat-tab-group>
+
+  </section>
+    }
+
+    }
+
+    <!-- VERTICAL TOOLBAR -->
+    <aside class="terminal-toolbar">
+
+      <button mat-icon-button
+        [class.selected]="activeTool === 'market'"
+        (click)="selectTool('market')"
+        aria-label="بازار کلی">
+        <mat-icon>candlestick_chart</mat-icon>
+      </button>
+
+      <button mat-icon-button
+        [class.selected]="activeTool === 'assets'"
+        (click)="selectTool('assets')"
+        aria-label="دارایی‌های من">
+        <mat-icon>account_balance_wallet</mat-icon>
+      </button>
+
+      <button mat-icon-button
+        [class.selected]="activeTool === 'orders'"
+        (click)="selectTool('orders')"
+        aria-label="سفارش‌ها">
+        <mat-icon>receipt_long</mat-icon>
+      </button>
+
+      <button mat-icon-button
+        [class.selected]="activeTool === 'contracts'"
+        (click)="selectTool('contracts')"
+        aria-label="قراردادها">
+        <mat-icon>description</mat-icon>
+      </button>
+
+      <button mat-icon-button
+        [class.selected]="activeTool === 'services'"
+        (click)="selectTool('services')"
+        aria-label="خدمات">
+        <mat-icon>local_shipping</mat-icon>
+      </button>
+
+      <button mat-icon-button
+        [class.selected]="activeTool === 'history'"
+        (click)="selectTool('history')"
+        aria-label="فضای کاری و سوابق"
+        title="فضای کاری و سوابق">
+        <mat-icon>history</mat-icon>
+      </button>
+      <div class="toolbar-spacer"></div>
+
+      <button mat-icon-button
+        [class.selected]="activeTool === 'notifications'"
+        (click)="selectTool('notifications')"
+        aria-label="اعلان‌ها">
+        <mat-icon>notifications</mat-icon>
+      </button>
+
+      <button mat-icon-button
+        [class.selected]="activeTool === 'account'"
+        (click)="selectTool('account')"
+        aria-label="حساب کاربری">
+        <mat-icon>person</mat-icon>
+      </button>
+
+    </aside>
+
+  </main>
+
+  <!-- BOTTOM ASSET STRIP -->
+  <footer class="asset-status-bar">
+
+    <div class="asset-status-item">
+      <span>وضعیت حساب</span>
+      <strong>—</strong>
+    </div>
+
+    <div class="asset-status-item user-status">
+      <span>نام کاربر</span>
+      <strong>حساب کاربری</strong>
+    </div>
+
+    <div class="asset-status-item">
+      <span>قدرت خرید</span>
+      <strong>—</strong>
+    </div>
+
+    <div class="asset-status-item">
+      <span>ارزش پرتفوی</span>
+      <strong>—</strong>
+    </div>
+
+    <div class="asset-status-item">
+      <span>سود و زیان روزانه</span>
+      <strong>—</strong>
+    </div>
+
+    <div class="asset-status-item">
+      <span>سود و زیان کل</span>
+      <strong>—</strong>
+    </div>
+
+    <div class="asset-status-item">
+      <span>موجودی رزروشده</span>
+      <strong>—</strong>
+    </div>
+
+  </footer>
+
+</div>
+
+
+====================================================================================================
+FILE: app\src\app\features\general-market\general-market.routes.ts
+SIZE: 2351 bytes
+LAST MODIFIED: 2026-11-09 10:27:07
+====================================================================================================
+import type { Routes } from '@angular/router';
+import { featurePageRoute } from '../../shared/routing/feature-route.factory';
+
+export const GENERAL_MARKET_ROUTES: Routes = [
+  {
+    path: '',
+    title: 'بازار کلی | IGD',
+    loadComponent: () =>
+      import('./general-market').then(
+        (module) => module.GeneralMarketPage,
+      ),
+  },
+  featurePageRoute(
+    'catalogue',
+    'کاتالوگ بازار',
+    'طبقه‌بندی، جست‌وجو و مشاهده عرضه‌ها.',
+  ),
+  featurePageRoute(
+    'markets',
+    'بازارها',
+    'مشاهده بازارها و وضعیت فعالیت آن‌ها.',
+  ),
+  featurePageRoute(
+    'offers',
+    'عرضه‌ها',
+    'مدیریت و مشاهده چرخه عمر عرضه‌ها.',
+  ),
+  featurePageRoute(
+    'offer-requests',
+    'درخواست‌های عرضه',
+    'ثبت و پیگیری درخواست‌های عرضه.',
+  ),
+  featurePageRoute(
+    'proposals',
+    'پیشنهادها',
+    'دریافت، بررسی و مقایسه پیشنهادها.',
+  ),
+  featurePageRoute(
+    'orders',
+    'سفارش‌ها',
+    'مدیریت سفارش‌های خرید و فروش.',
+  ),
+  featurePageRoute(
+    'order-book',
+    'دفتر سفارش',
+    'نمایش سفارش‌های معتبر و وضعیت آن‌ها.',
+  ),
+  featurePageRoute(
+    'matching',
+    'تطبیق',
+    'پیگیری فرایند تطبیق سفارش‌ها.',
+  ),
+  featurePageRoute(
+    'trades',
+    'معاملات',
+    'مشاهده معاملات و وضعیت آن‌ها.',
+  ),
+  featurePageRoute(
+    'execution',
+    'اجرای معامله',
+    'پیگیری مراحل اجرای معامله.',
+  ),
+  featurePageRoute(
+    'commodity',
+    'بازار کالا',
+    'گردش کار عرضه و تقاضای کالا.',
+  ),
+  featurePageRoute(
+    'real-estate',
+    'املاک و دارایی‌های واقعی',
+    'گردش کار دارایی‌های واقعی و موقعیت‌های مرتبط.',
+  ),
+  featurePageRoute(
+    'regulatory',
+    'اتصال‌های قانونی و نظارتی',
+    'پیگیری ارتباطات قانونی و نتایج استعلام‌ها.',
+  ),
+  featurePageRoute(
+    'audit',
+    'ممیزی بازار',
+    'تاریخچه و ردگیری رویدادهای بازار.',
+  ),
+];
+
+
+====================================================================================================
+FILE: app\src\app\features\general-market\general-market.ts
+SIZE: 883 bytes
+LAST MODIFIED: 2026-11-09 10:28:03
+====================================================================================================
+import { Component } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatDividerModule } from '@angular/material/divider';
+
+@Component({
+  selector: 'igd-general-market',
+  standalone: true,
+  imports: [
+    MatButtonModule,
+    MatIconModule,
+    MatTabsModule,
+    MatDividerModule,
+  ],
+  templateUrl: './general-market.html',
+  styleUrl: './general-market.css',
+})
+export class GeneralMarketPage {
+  orderBookCollapsed = false;
+  detailsCollapsed = false;
+
+  activeTool = 'market';
+
+  toggleOrderBook(): void {
+    this.orderBookCollapsed = !this.orderBookCollapsed;
+  }
+
+  toggleDetails(): void {
+    this.detailsCollapsed = !this.detailsCollapsed;
+  }
+
+  selectTool(tool: string): void {
+    this.activeTool = tool;
+  }
+}
+
+
+====================================================================================================
+FILE: app\src\app\features\my-assets\my-assets.routes.ts
+SIZE: 875 bytes
+LAST MODIFIED: 2026-11-07 10:05:52
+====================================================================================================
+import type { Routes } from '@angular/router';
+import { featurePageRoute } from '../../shared/routing/feature-route.factory';
+
+export const MY_ASSETS_ROUTES: Routes = [
+  featurePageRoute(
+    '',
+    'دارایی‌های من',
+    'نمای کلی دارایی‌ها و موقعیت‌های کاربر.',
+  ),
+  featurePageRoute(
+    'holdings',
+    'دارایی‌ها',
+    'مشاهده دارایی‌های ثبت‌شده.',
+  ),
+  featurePageRoute(
+    'positions',
+    'موقعیت‌ها',
+    'مشاهده موقعیت‌های دارایی.',
+  ),
+  featurePageRoute(
+    'reservations',
+    'رزروها',
+    'مشاهده منابع رزروشده و وضعیت آن‌ها.',
+  ),
+  featurePageRoute(
+    'purchasing-power',
+    'توان خرید',
+    'مشاهده توان خرید اعلام‌شده از مرجع دارایی‌ها.',
+  ),
+];
+
+
+====================================================================================================
+FILE: app\src\app\features\notifications\notifications.routes.ts
+SIZE: 454 bytes
+LAST MODIFIED: 2026-11-07 10:05:52
+====================================================================================================
+import type { Routes } from '@angular/router';
+import { featurePageRoute } from '../../shared/routing/feature-route.factory';
+
+export const NOTIFICATIONS_ROUTES: Routes = [
+  featurePageRoute(
+    '',
+    'اعلان‌ها',
+    'مشاهده اعلان‌ها و رویدادهای حساب.',
+  ),
+  featurePageRoute(
+    'preferences',
+    'تنظیمات اعلان‌ها',
+    'مدیریت ترجیحات دریافت اعلان‌ها.',
+  ),
+];
+
+
+====================================================================================================
+FILE: app\src\app\features\services\services.routes.ts
+SIZE: 936 bytes
+LAST MODIFIED: 2026-11-07 10:05:52
+====================================================================================================
+import type { Routes } from '@angular/router';
+import { featurePageRoute } from '../../shared/routing/feature-route.factory';
+
+export const SERVICES_ROUTES: Routes = [
+  featurePageRoute(
+    '',
+    'خدمات',
+    'مدیریت خدمات وابسته به اجرای معامله.',
+  ),
+  featurePageRoute(
+    'transport',
+    'حمل‌ونقل',
+    'پیگیری خدمات حمل‌ونقل.',
+  ),
+  featurePageRoute(
+    'storage',
+    'انبارداری',
+    'پیگیری خدمات انبارداری.',
+  ),
+  featurePageRoute(
+    'insurance',
+    'بیمه',
+    'پیگیری خدمات بیمه.',
+  ),
+  featurePageRoute(
+    'inspection',
+    'بازرسی',
+    'پیگیری خدمات بازرسی.',
+  ),
+  featurePageRoute(
+    'installation',
+    'نصب',
+    'پیگیری خدمات نصب.',
+  ),
+  featurePageRoute(
+    'delivery',
+    'تحویل',
+    'پیگیری مراحل تحویل.',
+  ),
+];
+
+
+====================================================================================================
+FILE: app\src\app\features\settlement\settlement.routes.ts
+SIZE: 553 bytes
+LAST MODIFIED: 2026-11-07 10:05:52
+====================================================================================================
+import type { Routes } from '@angular/router';
+import { featurePageRoute } from '../../shared/routing/feature-route.factory';
+
+export const SETTLEMENT_ROUTES: Routes = [
+  featurePageRoute(
+    '',
+    'تسویه',
+    'نمای کلی وضعیت تسویه معاملات.',
+  ),
+  featurePageRoute(
+    'status',
+    'وضعیت تسویه',
+    'مشاهده آمادگی و وضعیت عملیات تسویه.',
+  ),
+  featurePageRoute(
+    'history',
+    'تاریخچه تسویه',
+    'مشاهده سوابق عملیات تسویه.',
+  ),
+];
+
+
+====================================================================================================
+FILE: app\src\app\shared\pages\feature-placeholder\feature-placeholder.page.css
+SIZE: 474 bytes
+LAST MODIFIED: 2026-11-07 10:05:51
+====================================================================================================
+:host {
+  display: block;
+  min-height: 100%;
+}
+
+.feature-placeholder {
+  min-height: 100%;
+  padding: 2rem;
+  color: var(--igd-text-primary, #202923);
+  font-family: var(--igd-font-fa, sans-serif);
+}
+
+.feature-placeholder__content {
+  max-width: 72rem;
+  margin-inline: auto;
+}
+
+.feature-placeholder h1 {
+  margin: 0 0 1rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.feature-placeholder p {
+  margin: 0;
+  color: var(--igd-text-secondary, #6e766f);
+  line-height: 1.9;
+}
+
+
+====================================================================================================
+FILE: app\src\app\shared\pages\feature-placeholder\feature-placeholder.page.html
+SIZE: 219 bytes
+LAST MODIFIED: 2026-11-07 10:05:51
+====================================================================================================
+<main class="feature-placeholder" aria-labelledby="feature-heading">
+  <section class="feature-placeholder__content">
+    <h1 id="feature-heading">{{ heading() }}</h1>
+    <p>{{ description() }}</p>
+  </section>
+</main>
+
+
+====================================================================================================
+FILE: app\src\app\shared\pages\feature-placeholder\feature-placeholder.page.ts
+SIZE: 364 bytes
+LAST MODIFIED: 2026-11-07 10:05:51
+====================================================================================================
+import { Component, input } from '@angular/core';
+
+@Component({
+  selector: 'igd-feature-placeholder-page',
+  standalone: true,
+  templateUrl: './feature-placeholder.page.html',
+  styleUrl: './feature-placeholder.page.css',
+})
+export class FeaturePlaceholderPage {
+  readonly heading = input.required<string>();
+  readonly description = input.required<string>();
+}
+
+
+====================================================================================================
+FILE: app\src\app\shared\routing\feature-route.factory.ts
+SIZE: 422 bytes
+LAST MODIFIED: 2026-11-07 10:05:51
+====================================================================================================
+import type { Route } from '@angular/router';
+
+export function featurePageRoute(
+  path: string,
+  heading: string,
+  description: string,
+): Route {
+  return {
+    path,
+    title: `${heading} | IGD`,
+    data: {
+      heading,
+      description,
+    },
+    loadComponent: () =>
+      import('../pages/feature-placeholder/feature-placeholder.page').then(
+        (module) => module.FeaturePlaceholderPage,
+      ),
+  };
+}
+
+
+====================================================================================================
+FILE: app\src\environments\environment.production.ts
+SIZE: 85 bytes
+LAST MODIFIED: 2026-11-07 10:05:51
+====================================================================================================
+export const environment = {
+  production: true,
+  apiBaseUrl: '/api/v1',
+} as const;
+
+
+====================================================================================================
+FILE: app\src\environments\environment.ts
+SIZE: 86 bytes
+LAST MODIFIED: 2026-11-07 10:05:51
+====================================================================================================
+export const environment = {
+  production: false,
+  apiBaseUrl: '/api/v1',
+} as const;
+
+
+====================================================================================================
+FILE: app\src\index.html
+SIZE: 502 bytes
+LAST MODIFIED: 2026-11-07 10:05:51
+====================================================================================================
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <title>IGD | سامانه مدیریت دارایی‌های واقعی</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="سامانه مدیریت دارایی‌های واقعی">
+  <meta name="theme-color" content="#fbfaf6">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+</head>
+<body>
+  <app-root></app-root>
+</body>
+</html>
+
+
+====================================================================================================
+FILE: app\src\main.ts
+SIZE: 276 bytes
+LAST MODIFIED: 2026-11-07 10:05:51
+====================================================================================================
+import { bootstrapApplication } from '@angular/platform-browser';
+
+import { appConfig } from './app/app.config';
+import { App } from './app/app';
+
+bootstrapApplication(App, appConfig).catch((error: unknown) => {
+  console.error('IGD application bootstrap failed:', error);
+});
+
+
+====================================================================================================
+FILE: app\tsconfig.spec.json
+SIZE: 423 bytes
+LAST MODIFIED: 2026-11-06 00:10:58
+====================================================================================================
+/* To learn more about Typescript configuration file: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html. */
+/* To learn more about Angular compiler options: https://angular.dev/reference/configs/angular-compiler-options. */
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "types": [
+      "vitest/globals"
+    ]
+  },
+  "include": [
+    "src/**/*.d.ts",
+    "src/**/*.spec.ts"
+  ]
+}
+
+
+
+====================================================================================================
+FILE: design-system\tokens\colors.css
+SIZE: 494 bytes
+LAST MODIFIED: 2026-11-06 00:24:37
+====================================================================================================
+:root {
+  --igd-color-primary: #203b30;
+  --igd-color-primary-dark: #172b24;
+  --igd-color-primary-soft: #e9f0eb;
+
+  --igd-color-olive: #7b8052;
+  --igd-color-gold: #b99a5b;
+
+  --igd-color-background: #fbfaf6;
+  --igd-color-surface: #ffffff;
+  --igd-color-surface-muted: #f4f1e8;
+
+  --igd-color-text: #202923;
+  --igd-color-text-muted: #6e766f;
+
+  --igd-color-border: #e5e1d7;
+
+  --igd-color-success: #2e7252;
+  --igd-color-warning: #b78332;
+  --igd-color-danger: #a9473e;
+}
+
+
+====================================================================================================
+FILE: design-system\tokens\typography.css
+SIZE: 356 bytes
+LAST MODIFIED: 2026-11-06 00:24:37
+====================================================================================================
+:root {
+  --igd-font-family-persian: "Vazirmatn Variable", sans-serif;
+  --igd-font-family-latin: "Inter Variable", sans-serif;
+
+  --igd-font-size-xs: 0.75rem;
+  --igd-font-size-sm: 0.875rem;
+  --igd-font-size-md: 1rem;
+  --igd-font-size-lg: 1.125rem;
+  --igd-font-size-xl: 1.375rem;
+  --igd-font-size-2xl: 1.75rem;
+
+  --igd-line-height: 1.8;
+}
+
+
+====================================================================================================
+FILE: installation-manifest.json
+SIZE: 1779 bytes
+LAST MODIFIED: 2026-11-06 00:24:37
+====================================================================================================
+{
+    "projectRoot":  "E:\\شرکت توسعه سبز ایران\\پلتفرم\\پلتفرم آی جی دی\\Real-Asset-Management-Platform",
+    "sourceRoot":  "E:\\شرکت توسعه سبز ایران\\پلتفرم\\پلتفرم آی جی دی\\Real-Asset-Management-Platform\\IGD-front",
+    "angularWorkspace":  "E:\\شرکت توسعه سبز ایران\\پلتفرم\\پلتفرم آی جی دی\\Real-Asset-Management-Platform\\IGD-front\\app",
+    "installationRoot":  "D:\\Program Files\\IGD-Frontend",
+    "nodeVersion":  "v24.15.0",
+    "npmVersion":  "11.12.1",
+    "angularCliVersion":  "22.2.6",
+    "nodeExecutable":  "D:\\Program Files\\IGD-Frontend\\Runtimes\\NodeJS\\node-v24.15.0-win-x64\\node.exe",
+    "npmExecutable":  "D:\\Program Files\\IGD-Frontend\\Runtimes\\NodeJS\\node-v24.15.0-win-x64\\node_modules\\npm\\bin\\npm-cli.js",
+    "angularCli":  "D:\\Program Files\\IGD-Frontend\\Tools\\AngularCLI\\node_modules\\@angular\\cli\\bin\\ng.js",
+    "projectRuntime":  "D:\\Program Files\\IGD-Frontend\\Libraries\\IGD-Frontend",
+    "dependencyModules":  "D:\\Program Files\\IGD-Frontend\\Libraries\\IGD-Frontend\\node_modules",
+    "npmCache":  "D:\\Program Files\\IGD-Frontend\\PackageCaches\\npm",
+    "temporaryFiles":  "D:\\Program Files\\IGD-Frontend\\PackageCaches\\temp",
+    "npmRegistry":  "https://registry.npmjs.org/",
+    "nodeArchive":  "https://nodejs.org/dist/v24.15.0/node-v24.15.0-win-x64.zip",
+    "nodeChecksum":  "https://nodejs.org/dist/v24.15.0/SHASUMS256.txt",
+    "operatingSystemArchitecture":  "AMD64",
+    "createdAt":  "2026-11-06T00:24:37.7884709-08:00",
+    "installationPolicy":  "Project source and configuration are stored on E:. Runtimes, tools, dependencies, caches and downloads are stored on D:."
+}
+
+
+====================================================================================================
+FILE: scripts\Build-IGD-Front.ps1
+SIZE: 1012 bytes
+LAST MODIFIED: 2026-11-06 00:24:37
+====================================================================================================
+Set-StrictMode -Version Latest
+$ErrorActionPreference = 'Stop'
+
+$InstallRoot = 'D:\Program Files\IGD-Frontend'
+
+$NodeExe = Join-Path $InstallRoot `
+    'Runtimes\NodeJS\node-v24.15.0-win-x64\node.exe'
+
+$NgJs = Join-Path $InstallRoot `
+    'Libraries\IGD-Frontend\node_modules\@angular\cli\bin\ng.js'
+
+$AppRoot = Join-Path (Split-Path -Parent $PSScriptRoot) 'app'
+
+$env:TEMP = Join-Path $InstallRoot 'PackageCaches\temp'
+$env:TMP = $env:TEMP
+$env:NPM_CONFIG_CACHE = Join-Path $InstallRoot 'PackageCaches\npm'
+$env:NPM_CONFIG_REGISTRY = 'https://registry.npmjs.org/'
+
+if (-not (Test-Path -LiteralPath $NodeExe -PathType Leaf)) {
+    throw 'Node.js installation was not found.'
+}
+
+if (-not (Test-Path -LiteralPath $NgJs -PathType Leaf)) {
+    throw 'Workspace Angular CLI installation was not found.'
+}
+
+Push-Location $AppRoot
+
+try {
+    & $NodeExe $NgJs build
+
+    if ($LASTEXITCODE -ne 0) {
+        throw 'Angular production build failed.'
+    }
+}
+finally {
+    Pop-Location
+}
+
+
+====================================================================================================
+FILE: scripts\Start-IGD-Front.ps1
+SIZE: 1143 bytes
+LAST MODIFIED: 2026-11-06 00:24:37
+====================================================================================================
+[CmdletBinding()]
+param(
+    [string]$HostAddress = '127.0.0.1',
+    [int]$Port = 4200
+)
+
+Set-StrictMode -Version Latest
+$ErrorActionPreference = 'Stop'
+
+$InstallRoot = 'D:\Program Files\IGD-Frontend'
+
+$NodeExe = Join-Path $InstallRoot `
+    'Runtimes\NodeJS\node-v24.15.0-win-x64\node.exe'
+
+$NgJs = Join-Path $InstallRoot `
+    'Libraries\IGD-Frontend\node_modules\@angular\cli\bin\ng.js'
+
+$AppRoot = Join-Path (Split-Path -Parent $PSScriptRoot) 'app'
+
+$env:TEMP = Join-Path $InstallRoot 'PackageCaches\temp'
+$env:TMP = $env:TEMP
+$env:NPM_CONFIG_CACHE = Join-Path $InstallRoot 'PackageCaches\npm'
+$env:NPM_CONFIG_REGISTRY = 'https://registry.npmjs.org/'
+
+if (-not (Test-Path -LiteralPath $NodeExe -PathType Leaf)) {
+    throw 'Node.js installation was not found.'
+}
+
+if (-not (Test-Path -LiteralPath $NgJs -PathType Leaf)) {
+    throw 'Workspace Angular CLI installation was not found.'
+}
+
+Push-Location $AppRoot
+
+try {
+    & $NodeExe $NgJs serve --host $HostAddress --port $Port
+
+    if ($LASTEXITCODE -ne 0) {
+        throw 'Angular development server failed.'
+    }
+}
+finally {
+    Pop-Location
+}
+
+
+SECTION 3 - REPORT SUMMARY
+Included files: 42
+Skipped files: 0
+Maximum source file size: 307200 bytes
+Maximum report size: 15728640 bytes
+Excluded: node_modules, build outputs, caches, logs, lock files and sensitive files.
+
+$ErrorActionPreference = 'Stop'
+
+$FrontendRoot = 'E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front'
+$AppRoot = Join-Path $FrontendRoot 'app'
+$SourceRoot = Join-Path $AppRoot 'src\app'
+$LayoutRoot = Join-Path $SourceRoot 'layouts\main-layout'
+$BackupRoot = Join-Path $FrontendRoot ('backups\shell-sidebar2-' + (Get-Date -Format 'yyyyMMdd-HHmmss'))
+
+if (-not (Test-Path -LiteralPath $AppRoot -PathType Container)) {
+    throw "Angular workspace not found: $AppRoot"
+}
+
+$RequiredFiles = @(
+    (Join-Path $SourceRoot 'app.ts'),
+    (Join-Path $SourceRoot 'app.html'),
+    (Join-Path $SourceRoot 'app.css'),
+    (Join-Path $AppRoot 'src\styles.css')
+)
+
+foreach ($file in $RequiredFiles) {
+    if (-not (Test-Path -LiteralPath $file -PathType Leaf)) {
+        throw "Required file not found: $file"
+    }
+}
+
+New-Item -ItemType Directory -Path $LayoutRoot -Force | Out-Null
+New-Item -ItemType Directory -Path $BackupRoot -Force | Out-Null
+
+$Utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+
+function Save-ProjectFile {
+    param(
+        [string]$Path,
+        [string]$Content
+    )
+
+    if (Test-Path -LiteralPath $Path -PathType Leaf) {
+        $relative = $Path.Substring($FrontendRoot.Length).TrimStart('\')
+        $backupPath = Join-Path $BackupRoot $relative
+        $backupDirectory = Split-Path -Parent $backupPath
+
+        New-Item -ItemType Directory -Path $backupDirectory -Force | Out-Null
+        Copy-Item -LiteralPath $Path -Destination $backupPath -Force
+    }
+
+    [System.IO.File]::WriteAllText($Path, $Content, $Utf8NoBom)
+    Write-Host "[UPDATED] $Path" -ForegroundColor Green
+}
+
+$AppTs = @'
+import { Component } from '@angular/core';
+
+interface ShellSection {
+  id: string;
+  label: string;
+  icon: string;
+}
+
+@Component({
+  selector: 'app-root',
+  standalone: true,
+  templateUrl: './app.html',
+  styleUrl: './app.css',
+})
+export class App {
+  readonly sections: ShellSection[] = [
+    { id: 'overview', label: 'نمای کلی', icon: 'dashboard' },
+    { id: 'market', label: 'بازار کلی', icon: 'storefront' },
+    { id: 'assets', label: 'دارایی‌های من', icon: 'account_balance_wallet' },
+    { id: 'contracts', label: 'قراردادها', icon: 'contract' },
+    { id: 'services', label: 'خدمات', icon: 'handshake' },
+    { id: 'settlement', label: 'تسویه', icon: 'account_balance' },
+    { id: 'history', label: 'سوابق', icon: 'history' },
+  ];
+
+  selectedSectionId = 'overview';
+  sidebarCollapsed = false;
+
+  get selectedSection(): ShellSection {
+    return this.sections.find(
+      (section) => section.id === this.selectedSectionId,
+    ) ?? this.sections[0];
+  }
+
+  selectSection(sectionId: string): void {
+    this.selectedSectionId = sectionId;
+  }
+
+  toggleSidebar(): void {
+    this.sidebarCollapsed = !this.sidebarCollapsed;
+  }
+}
+'@
+
+$AppHtml = @'
+<div
+  class="igd-shell"
+  [class.is-collapsed]="sidebarCollapsed"
+  dir="rtl"
+  data-testid="igd-app-shell"
+>
+  <!-- PRIMARY SIDEBAR -->
+  <aside class="primary-sidebar" aria-label="ناوبری اصلی">
+    <div class="sidebar-brand">
+      <div class="brand-mark" aria-hidden="true">
+        <span class="material-symbols-outlined">account_balance</span>
+      </div>
+
+      <div class="brand-copy">
+        <strong>IGD</strong>
+        <span>مدیریت دارایی‌های واقعی</span>
+      </div>
+    </div>
+
+    <div class="sidebar-section-label">فضای کاری</div>
+
+    <nav class="primary-navigation">
+      @for (section of sections; track section.id) {
+        <button
+          type="button"
+          class="primary-nav-item"
+          [class.is-active]="selectedSectionId === section.id"
+          [attr.aria-current]="selectedSectionId === section.id ? 'page' : null"
+          [attr.title]="section.label"
+          (click)="selectSection(section.id)"
+        >
+          <span class="material-symbols-outlined nav-icon" aria-hidden="true">
+            {{ section.icon }}
+          </span>
+          <span class="nav-label">{{ section.label }}</span>
+          @if (selectedSectionId === section.id) {
+            <span class="active-indicator" aria-hidden="true"></span>
+          }
+        </button>
+      }
+    </nav>
+
+    <div class="sidebar-bottom">
+      <div class="sidebar-divider"></div>
+
+      <button type="button" class="profile-entry" title="حساب کاربری">
+        <span class="profile-avatar material-symbols-outlined" aria-hidden="true">
+          person
+        </span>
+        <span class="profile-copy">
+          <strong>حساب کاربری</strong>
+          <small>پروفایل و تنظیمات</small>
+        </span>
+        <span class="material-symbols-outlined profile-more" aria-hidden="true">
+          more_horiz
+        </span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- INSET WORKSPACE -->
+  <div class="shell-inset">
+    <!-- SECONDARY NAVIGATION -->
+    <aside class="secondary-sidebar" aria-label="ناوبری ثانویه">
+      <div class="secondary-heading">
+        <span class="secondary-eyebrow">بخش انتخاب‌شده</span>
+        <h2>{{ selectedSection.label }}</h2>
+      </div>
+
+      <div class="secondary-divider"></div>
+
+      <div class="secondary-empty">
+        <span class="material-symbols-outlined" aria-hidden="true">
+          account_tree
+        </span>
+        <strong>ناوبری این بخش</strong>
+        <p>
+          گزینه‌های تخصصی این قسمت پس از بررسی سرویس و قرارداد بک‌اند مربوط
+          به آن تعریف خواهند شد.
+        </p>
+      </div>
+
+      <div class="secondary-footer">
+        <span class="material-symbols-outlined" aria-hidden="true">layers</span>
+        <span>ساختار اولیه پلتفرم</span>
+      </div>
+    </aside>
+
+    <!-- MAIN INSET CONTENT -->
+    <main class="main-inset">
+      <header class="shell-header">
+        <div class="header-start">
+          <button
+            type="button"
+            class="icon-button sidebar-toggle"
+            (click)="toggleSidebar()"
+            [attr.aria-label]="sidebarCollapsed ? 'بازکردن نوار کناری' : 'جمع‌کردن نوار کناری'"
+            [attr.aria-expanded]="!sidebarCollapsed"
+          >
+            <span class="material-symbols-outlined" aria-hidden="true">
+              dock_to_right
+            </span>
+          </button>
+
+          <div class="header-breadcrumb">
+            <span>IGD</span>
+            <span class="material-symbols-outlined" aria-hidden="true">
+              chevron_left
+            </span>
+            <strong>{{ selectedSection.label }}</strong>
+          </div>
+        </div>
+
+        <div class="header-end">
+          <span class="workspace-caption">سامانه مدیریت دارایی‌های واقعی</span>
+          <span class="header-brand-mark">IGD</span>
+        </div>
+      </header>
+
+      <section class="workspace-canvas" aria-label="فضای محتوای برنامه">
+        <div class="workspace-empty">
+          <div class="workspace-empty-icon">
+            <span class="material-symbols-outlined" aria-hidden="true">
+              space_dashboard
+            </span>
+          </div>
+
+          <span class="workspace-kicker">IGD WORKSPACE</span>
+          <h1>فضای کاری آماده است</h1>
+          <p>
+            پوسته اصلی پلتفرم ایجاد شده است. محتوای تخصصی هر بخش پس از بررسی
+            بک‌اند، قراردادهای API و مسئولیت سرویس مربوطه در این فضا قرار
+            خواهد گرفت.
+          </p>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+'@
+
+$AppCss = @'
+:host {
+  display: block;
+  min-height: 100dvh;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.igd-shell {
+  --igd-sidebar-width: 252px;
+  --igd-secondary-width: 224px;
+  --igd-sidebar-collapsed-width: 76px;
+
+  display: grid;
+  grid-template-columns:
+    var(--igd-sidebar-width)
+    minmax(0, 1fr);
+  width: 100%;
+  height: 100dvh;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--igd-cream-50, #fbfaf6);
+  color: var(--igd-text-primary, #202923);
+  font-family: var(--igd-font-fa, "Vazirmatn Variable", sans-serif);
+  direction: rtl;
+  transition: grid-template-columns 180ms ease;
+}
+
+.igd-shell.is-collapsed {
+  grid-template-columns:
+    var(--igd-sidebar-collapsed-width)
+    minmax(0, 1fr);
+}
+
+/* PRIMARY SIDEBAR */
+
+.primary-sidebar {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  padding: 18px 13px 12px;
+  overflow: hidden;
+  color: #f4f4ec;
+  background: #203b30;
+  border-left: 1px solid #172b24;
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-height: 62px;
+  padding: 0 8px 17px;
+  border-bottom: 1px solid #ffffff20;
+}
+
+.brand-mark {
+  display: grid;
+  place-items: center;
+  flex: 0 0 39px;
+  width: 39px;
+  height: 39px;
+  color: #d6bd82;
+  border: 1px solid #d6bd8255;
+  border-radius: 11px;
+}
+
+.brand-mark .material-symbols-outlined {
+  font-size: 23px;
+}
+
+.brand-copy,
+.profile-copy {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 3px;
+  white-space: nowrap;
+}
+
+.brand-copy strong {
+  color: #fff;
+  font-family: var(--igd-font-en, sans-serif);
+  font-size: 18px;
+  font-weight: 750;
+  letter-spacing: 1.5px;
+}
+
+.brand-copy span {
+  color: #c5d0c6;
+  font-size: 10px;
+}
+
+.sidebar-section-label {
+  padding: 24px 12px 10px;
+  color: #aebeb1;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.primary-navigation {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+.primary-nav-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  width: 100%;
+  min-height: 45px;
+  padding: 0 12px;
+  color: #d7e0d8;
+  background: transparent;
+  border: 0;
+  border-radius: 9px;
+  text-align: right;
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 150ms ease, color 150ms ease;
+}
+
+.primary-nav-item:hover {
+  color: #fff;
+  background: #ffffff12;
+}
+
+.primary-nav-item.is-active {
+  color: #fff;
+  background: #ffffff19;
+  font-weight: 700;
+}
+
+.primary-nav-item .nav-icon {
+  flex: 0 0 22px;
+  width: 22px;
+  font-size: 21px;
+  color: #c9d4c8;
+}
+
+.primary-nav-item.is-active .nav-icon {
+  color: #e0c58c;
+}
+
+.nav-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.active-indicator {
+  position: absolute;
+  inset-block: 9px;
+  inset-inline-start: 0;
+  width: 3px;
+  border-radius: 4px;
+  background: #d2b879;
+}
+
+.sidebar-bottom {
+  margin-top: auto;
+  padding-top: 12px;
+}
+
+.sidebar-divider {
+  height: 1px;
+  margin: 0 4px 12px;
+  background: #ffffff20;
+}
+
+.profile-entry {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 53px;
+  padding: 6px 8px;
+  color: #f4f4ec;
+  background: transparent;
+  border: 0;
+  border-radius: 9px;
+  text-align: right;
+  font: inherit;
+}
+
+.profile-avatar {
+  display: grid;
+  place-items: center;
+  flex: 0 0 34px;
+  width: 34px;
+  height: 34px;
+  color: #e4d4ac;
+  background: #ffffff17;
+  border-radius: 50%;
+  font-size: 20px;
+}
+
+.profile-copy strong {
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.profile-copy small {
+  color: #bdc9be;
+  font-size: 9px;
+}
+
+.profile-more {
+  margin-inline-start: auto;
+  color: #bdc9be;
+  font-size: 19px;
+}
+
+/* COLLAPSED PRIMARY SIDEBAR */
+
+.is-collapsed .primary-sidebar {
+  padding-inline: 9px;
+}
+
+.is-collapsed .sidebar-brand {
+  justify-content: center;
+  padding-inline: 0;
+}
+
+.is-collapsed .brand-copy,
+.is-collapsed .sidebar-section-label,
+.is-collapsed .nav-label,
+.is-collapsed .active-indicator,
+.is-collapsed .profile-copy,
+.is-collapsed .profile-more {
+  display: none;
+}
+
+.is-collapsed .primary-nav-item {
+  justify-content: center;
+  padding-inline: 0;
+}
+
+.is-collapsed .profile-entry {
+  justify-content: center;
+  padding-inline: 0;
+}
+
+/* INSET / SECONDARY NAVIGATION */
+
+.shell-inset {
+  display: grid;
+  grid-template-columns:
+    var(--igd-secondary-width)
+    minmax(0, 1fr);
+  min-width: 0;
+  min-height: 0;
+  padding: 12px 12px 12px 12px;
+  overflow: hidden;
+  background: #f2f0e9;
+  direction: rtl;
+}
+
+.secondary-sidebar {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  padding: 23px 17px 14px;
+  overflow: hidden;
+  background: #f8f7f2;
+  border: 1px solid #e8e5dc;
+  border-left: 0;
+  border-radius: 0 13px 13px 0;
+}
+
+.secondary-heading {
+  padding: 0 2px 17px;
+}
+
+.secondary-eyebrow {
+  display: block;
+  margin-bottom: 8px;
+  color: #858b80;
+  font-size: 10px;
+}
+
+.secondary-heading h2 {
+  margin: 0;
+  color: #263d31;
+  font-size: 16px;
+  font-weight: 750;
+}
+
+.secondary-divider {
+  height: 1px;
+  background: #e7e4da;
+}
+
+.secondary-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 25px;
+  padding: 13px 10px;
+  color: #70796f;
+  background: #f1f0e9;
+  border: 1px dashed #d8d6ca;
+  border-radius: 9px;
+}
+
+.secondary-empty > .material-symbols-outlined {
+  color: #7b8052;
+  font-size: 22px;
+}
+
+.secondary-empty strong {
+  color: #394b3e;
+  font-size: 11px;
+}
+
+.secondary-empty p {
+  margin: 0;
+  font-size: 10px;
+  line-height: 2;
+}
+
+.secondary-footer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: auto;
+  padding: 13px 3px 0;
+  color: #8b8d82;
+  border-top: 1px solid #e7e4da;
+  font-size: 9px;
+}
+
+.secondary-footer .material-symbols-outlined {
+  font-size: 17px;
+}
+
+/* MAIN INSET */
+
+.main-inset {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid #e8e5dc;
+  border-radius: 13px 0 0 13px;
+}
+
+.shell-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 0 0 62px;
+  min-width: 0;
+  padding: 0 22px;
+  background: #fff;
+  border-bottom: 1px solid #eceae3;
+}
+
+.header-start,
+.header-end,
+.header-breadcrumb {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.header-start {
+  gap: 16px;
+}
+
+.header-breadcrumb {
+  gap: 9px;
+  color: #858b80;
+  font-size: 11px;
+}
+
+.header-breadcrumb .material-symbols-outlined {
+  font-size: 16px;
+  color: #a2a69d;
+}
+
+.header-breadcrumb strong {
+  color: #293d31;
+  font-weight: 700;
+}
+
+.icon-button {
+  display: grid;
+  place-items: center;
+  flex: 0 0 36px;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  color: #46564a;
+  background: transparent;
+  border: 1px solid #e8e6de;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.icon-button:hover {
+  background: #f5f4ee;
+}
+
+.icon-button .material-symbols-outlined {
+  font-size: 21px;
+}
+
+.header-end {
+  gap: 14px;
+}
+
+.workspace-caption {
+  color: #92968d;
+  font-size: 10px;
+}
+
+.header-brand-mark {
+  color: #7b8052;
+  font-family: var(--igd-font-en, sans-serif);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.workspace-canvas {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  place-items: center;
+  padding: 30px;
+  overflow: auto;
+  background:
+    radial-gradient(circle at 50% 43%, #f8f7f1 0, #fff 52%);
+}
+
+.workspace-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: min(100%, 510px);
+  text-align: center;
+}
+
+.workspace-empty-icon {
+  display: grid;
+  place-items: center;
+  width: 66px;
+  height: 66px;
+  margin-bottom: 20px;
+  color: #6c795f;
+  background: #edf0e8;
+  border: 1px solid #e1e6db;
+  border-radius: 18px;
+}
+
+.workspace-empty-icon .material-symbols-outlined {
+  font-size: 31px;
+}
+
+.workspace-kicker {
+  margin-bottom: 9px;
+  color: #9b8a61;
+  font-family: var(--igd-font-en, sans-serif);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.workspace-empty h1 {
+  margin: 0 0 12px;
+  color: #263d31;
+  font-size: 21px;
+  font-weight: 750;
+}
+
+.workspace-empty p {
+  max-width: 450px;
+  margin: 0;
+  color: #777f75;
+  font-size: 12px;
+  line-height: 2.2;
+}
+
+/* MATERIAL SYMBOLS */
+
+.material-symbols-outlined {
+  font-family: "Material Symbols Outlined";
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  direction: ltr;
+  font-feature-settings: "liga";
+  -webkit-font-feature-settings: "liga";
+  -webkit-font-smoothing: antialiased;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 1100px) {
+  .igd-shell {
+    --igd-sidebar-width: 224px;
+    --igd-secondary-width: 195px;
+  }
+
+  .shell-inset {
+    padding: 8px;
+  }
+
+  .secondary-sidebar {
+    padding-inline: 13px;
+  }
+
+  .shell-header {
+    padding-inline: 15px;
+  }
+}
+
+@media (max-width: 820px) {
+  .igd-shell,
+  .igd-shell.is-collapsed {
+    display: block;
+    position: relative;
+  }
+
+  .primary-sidebar {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-end: 0;
+    width: 260px;
+    height: 100%;
+    box-shadow: -10px 0 35px #172b2426;
+    transition: transform 180ms ease;
+  }
+
+  .igd-shell.is-collapsed .primary-sidebar {
+    transform: translateX(110%);
+  }
+
+  .igd-shell.is-collapsed .brand-copy,
+  .igd-shell.is-collapsed .sidebar-section-label,
+  .igd-shell.is-collapsed .nav-label,
+  .igd-shell.is-collapsed .profile-copy,
+  .igd-shell.is-collapsed .profile-more {
+    display: initial;
+  }
+
+  .igd-shell.is-collapsed .sidebar-brand {
+    justify-content: flex-start;
+    padding-inline: 8px;
+  }
+
+  .igd-shell.is-collapsed .primary-nav-item {
+    justify-content: flex-start;
+    padding-inline: 12px;
+  }
+
+  .igd-shell.is-collapsed .profile-entry {
+    justify-content: flex-start;
+    padding-inline: 8px;
+  }
+
+  .shell-inset {
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 7px;
+  }
+
+  .secondary-sidebar {
+    display: none;
+  }
+
+  .main-inset {
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
+  }
+
+  .shell-header {
+    flex-basis: 58px;
+  }
+
+  .workspace-canvas {
+    padding: 22px;
+  }
+
+  .workspace-empty h1 {
+    font-size: 18px;
+  }
+
+  .workspace-empty p {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 480px) {
+  .workspace-caption,
+  .header-brand-mark {
+    display: none;
+  }
+
+  .header-breadcrumb {
+    font-size: 10px;
+  }
+
+  .shell-header {
+    padding-inline: 11px;
+  }
+}
+'@
+
+$GlobalCss = @'
+/* IGD application shell foundation */
+html,
+body {
+  width: 100%;
+  min-width: 320px;
+  min-height: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  direction: rtl;
+  text-align: right;
+  background: var(--igd-cream-50, #fbfaf6);
+  color: var(--igd-text-primary, #202923);
+  font-family: var(--igd-font-fa, "Vazirmatn Variable", sans-serif);
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+'@
+
+$AppSpec = @'
+import { TestBed } from '@angular/core/testing';
+import { App } from './app';
+
+describe('App shell', () => {
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [App],
+    }).compileComponents();
+  });
+
+  it('should create the application shell', () => {
+    const fixture = TestBed.createComponent(App);
+    expect(fixture.componentInstance).toBeTruthy();
+  });
+
+  it('should render the IGD shell and primary navigation', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+
+    const element = fixture.nativeElement as HTMLElement;
+
+    expect(element.querySelector('[data-testid="igd-app-shell"]')).toBeTruthy();
+    expect(element.querySelector('.primary-sidebar')).toBeTruthy();
+    expect(element.querySelector('.secondary-sidebar')).toBeTruthy();
+    expect(element.querySelector('.main-inset')).toBeTruthy();
+    expect(element.textContent).toContain('بازار کلی');
+  });
+
+  it('should switch the selected shell section without loading a feature page', () => {
+    const fixture = TestBed.createComponent(App);
+    const app = fixture.componentInstance;
+
+    app.selectSection('market');
+
+    expect(app.selectedSectionId).toBe('market');
+    expect(app.selectedSection.label).toBe('بازار کلی');
+  });
+
+  it('should toggle the primary sidebar state', () => {
+    const fixture = TestBed.createComponent(App);
+    const app = fixture.componentInstance;
+
+    expect(app.sidebarCollapsed).toBe(false);
+
+    app.toggleSidebar();
+
+    expect(app.sidebarCollapsed).toBe(true);
+  });
+});
+'@
+
+Save-ProjectFile -Path (Join-Path $SourceRoot 'app.ts') -Content $AppTs
+Save-ProjectFile -Path (Join-Path $SourceRoot 'app.html') -Content $AppHtml
+Save-ProjectFile -Path (Join-Path $SourceRoot 'app.css') -Content $AppCss
+Save-ProjectFile -Path (Join-Path $AppRoot 'src\styles.css') -Content $GlobalCss
+Save-ProjectFile -Path (Join-Path $SourceRoot 'app.spec.ts') -Content $AppSpec
+
+Write-Host ''
+Write-Host 'IGD SHELL UPDATE COMPLETED' -ForegroundColor Green
+Write-Host "Backup: $BackupRoot"
+Write-Host ''
+Write-Host 'Changed files:'
+Write-Host ' - app/src/app/app.ts'
+Write-Host ' - app/src/app/app.html'
+Write-Host ' - app/src/app/app.css'
+Write-Host ' - app/src/app/app.spec.ts'
+Write-Host ' - app/src/styles.css'
+Write-Host ''
+Write-Host 'No packages installed. No backend features created. No production build executed.'

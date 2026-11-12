@@ -1,0 +1,3208 @@
+IGD ACCOUNT - FULL SOURCE REVIEW
+DATE: 2026-11-12 03:15:28
+REPOSITORY: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform
+ACCOUNT ROOT: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\account
+TOTAL FILES: 35
+====================================================================================================
+
+
+====================================================================================================
+FILE: account.routes.ts
+SIZE: 3768 bytes
+====================================================================================================
+import type { Routes } from '@angular/router';
+import { featurePageRoute } from '../../shared/routing/feature-route.factory';
+
+export const ACCOUNT_ROUTES: Routes = [
+  {
+    path: '',
+    title: 'حساب من | IGD',
+    loadComponent: () =>
+      import('./pages/overview/account-overview.page').then(
+        (module) => module.AccountOverviewPage,
+      ),
+  },
+  {
+    path: 'profile',
+    title: 'اطلاعات حساب | IGD',
+    loadComponent: () =>
+      import('./pages/profile/account-profile.page').then(
+        (module) => module.AccountProfilePage,
+      ),
+  },
+  {
+    path: 'legal-entity',
+    title: 'اطلاعات حقوقی | IGD',
+    loadComponent: () =>
+      import('./pages/legal-entity/account-legal-entity.page').then(
+        (module) => module.AccountLegalEntityPage,
+      ),
+  },
+  {
+    path: 'contacts',
+    title: 'راه‌های ارتباطی | IGD',
+    loadComponent: () =>
+      import('./pages/contacts/account-contacts.page').then(
+        (module) => module.AccountContactsPage,
+      ),
+  },
+  {
+    path: 'verification',
+    title: 'احراز هویت | IGD',
+    loadComponent: () =>
+      import('./pages/verification/account-verification.page').then(
+        (module) => module.AccountVerificationPage,
+      ),
+  },
+  {
+    path: 'security',
+    title: 'امنیت حساب | IGD',
+    loadComponent: () =>
+      import('./pages/security/account-security.page').then(
+        (module) => module.AccountSecurityPage,
+      ),
+  },
+  {
+    path: 'devices',
+    title: 'دستگاه‌های متصل | IGD',
+    loadComponent: () =>
+      import('./pages/devices/account-devices.page').then(
+        (module) => module.AccountDevicesPage,
+      ),
+  },
+  {
+    path: 'sessions',
+    title: 'نشست‌های کاربری | IGD',
+    loadComponent: () =>
+      import('./pages/sessions/account-sessions.page').then(
+        (module) => module.AccountSessionsPage,
+      ),
+  },
+  {
+    path: 'permissions',
+    title: 'مجوزهای دسترسی | IGD',
+    loadComponent: () =>
+      import('./pages/permissions/account-permissions.page').then(
+        (module) => module.AccountPermissionsPage,
+      ),
+  },
+  {
+    path: 'agreements',
+    loadChildren: () =>
+      import('../contracts/contracts.routes').then(
+        (module) => module.CONTRACTS_ROUTES,
+      ),
+  },
+  {
+    path: 'agreements',
+    loadChildren: () =>
+      import('../contracts/contracts.routes').then(
+        (module) => module.CONTRACTS_ROUTES,
+      ),
+  },
+
+  {
+    path: 'agreements',
+    loadChildren: () =>
+      import('../contracts/contracts.routes').then(
+        (module) => module.CONTRACTS_ROUTES,
+      ),
+  },
+  {
+    path: 'agreements',
+    loadChildren: () =>
+      import('../contracts/contracts.routes').then(
+        (module) => module.CONTRACTS_ROUTES,
+      ),
+  },
+
+  {
+    path: 'agreements',
+    loadChildren: () =>
+      import('../contracts/contracts.routes').then(
+        (module) => module.CONTRACTS_ROUTES,
+      ),
+  }, 
+  {
+    path: 'agreements',
+    loadChildren: () =>
+      import('../contracts/contracts.routes').then(
+        (module) => module.CONTRACTS_ROUTES,
+      ),
+  }, 
+  {
+    path: 'agreements',
+    loadChildren: () =>
+      import('../contracts/contracts.routes').then(
+        (module) => module.CONTRACTS_ROUTES,
+      ),
+  },featurePageRoute(
+    'login',
+    'ورود',
+    'مسیر ورود به حساب کاربری.',
+  ),
+  featurePageRoute(
+    'register',
+    'ثبت‌نام',
+    'مسیر ایجاد حساب کاربری.',
+  ),
+  featurePageRoute(
+    'recover-password',
+    'بازیابی رمز عبور',
+    'مسیر بازیابی دسترسی به حساب.',
+  ),
+];
+
+
+====================================================================================================
+FILE: models\account.models.ts
+SIZE: 707 bytes
+====================================================================================================
+/**
+ * Shared technical types for the Account frontend feature.
+ *
+ * Backend response DTOs are intentionally not assumed here.
+ * Add concrete response models only after verifying backend contracts.
+ */
+
+export type AccountIdentifier = string;
+
+export type AccountRequestState =
+  | 'idle'
+  | 'loading'
+  | 'success'
+  | 'error';
+
+export interface AccountLoadState {
+  state: AccountRequestState;
+  errorMessage?: string;
+}
+
+/**
+ * Generic error shape for frontend presentation.
+ * Actual backend error fields must be verified against the API contract.
+ */
+export interface AccountApiError {
+  code?: string;
+  message?: string;
+  requestId?: string;
+  details?: unknown;
+}
+
+
+====================================================================================================
+FILE: pages\account-workspace.page.css
+SIZE: 8209 bytes
+====================================================================================================
+:host {
+  display: block;
+  min-width: 0;
+  color: #26352d;
+  font-family: inherit;
+}
+
+.account-page {
+  direction: rtl;
+  width: 100%;
+  padding: 24px;
+  box-sizing: border-box;
+  color: #26352d;
+}
+
+.account-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 22px;
+}
+
+.account-eyebrow {
+  color: #8b956d;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  direction: ltr;
+  text-align: right;
+}
+
+.account-heading h1 {
+  margin: 7px 0 5px;
+  font-size: 23px;
+  font-weight: 800;
+  color: #263d31;
+}
+
+.account-heading p,
+.section-intro {
+  margin: 0;
+  color: #829087;
+  font-size: 13px;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  text-decoration: none;
+  color: #536b5b;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.account-layout {
+  display: grid;
+  grid-template-columns: 230px minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.account-menu,
+.account-content {
+  background: #fffefa;
+  border: 1px solid #e9eadf;
+  border-radius: 13px;
+  min-width: 0;
+}
+
+.account-menu {
+  padding: 12px 9px;
+  position: sticky;
+  top: 16px;
+}
+
+.menu-caption {
+  padding: 9px 11px;
+  color: #a0a58e;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.menu-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 42px;
+  padding: 0 11px;
+  margin: 2px 0;
+  border-radius: 8px;
+  color: #68776d;
+  text-decoration: none;
+  font-size: 12px;
+  transition: background .15s ease, color .15s ease;
+}
+
+.menu-link > .material-symbols-outlined:first-child {
+  font-size: 19px;
+}
+
+.menu-link:hover {
+  background: #f1f3e9;
+  color: #385d45;
+}
+
+.menu-link.active {
+  background: #eaf0e6;
+  color: #315b3e;
+  font-weight: 800;
+}
+
+.menu-arrow {
+  margin-right: auto;
+  font-size: 17px;
+  opacity: .55;
+}
+
+.menu-divider {
+  height: 1px;
+  background: #eceee5;
+  margin: 10px 8px;
+}
+
+.account-content {
+  padding: 23px;
+  min-height: 480px;
+}
+
+.content-section h2 {
+  margin: 0 0 9px;
+  font-size: 17px;
+  color: #304638;
+}
+
+.section-intro {
+  margin-bottom: 22px;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.section-title h2 {
+  margin: 0 0 7px;
+  font-size: 17px;
+}
+
+.section-title p {
+  margin: 0;
+  color: #879187;
+  font-size: 12px;
+}
+
+.section-symbol {
+  font-size: 30px;
+  color: #82936c;
+  background: #f0f2e8;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.overview-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.overview-card {
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr);
+  align-items: center;
+  column-gap: 12px;
+  row-gap: 4px;
+  padding: 16px;
+  border: 1px solid #e9ecdf;
+  border-radius: 10px;
+  text-decoration: none;
+  color: #405548;
+  transition: border-color .15s ease, background .15s ease;
+}
+
+.overview-card:hover {
+  background: #f7f8f1;
+  border-color: #b9c5ad;
+}
+
+.overview-card > .material-symbols-outlined {
+  grid-row: span 2;
+  font-size: 25px;
+  color: #718a65;
+}
+
+.overview-card strong {
+  font-size: 13px;
+}
+
+.overview-card small {
+  color: #8b968d;
+  font-size: 11px;
+}
+
+.info-panel {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  margin-top: 20px;
+  padding: 14px;
+  border: 1px solid #e8eadf;
+  background: #f8f9f3;
+  border-radius: 9px;
+  color: #657565;
+}
+
+.info-panel > .material-symbols-outlined {
+  color: #8c956a;
+  font-size: 21px;
+}
+
+.info-panel strong {
+  font-size: 12px;
+}
+
+.info-panel p {
+  margin: 5px 0 0;
+  font-size: 11px;
+  line-height: 1.9;
+  color: #7d897e;
+}
+
+.device-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 16px 0 12px;
+  padding: 12px 14px;
+  background: #f7f8f2;
+  border-radius: 9px;
+}
+
+.device-toolbar strong {
+  font-size: 13px;
+}
+
+.device-toolbar span {
+  color: #89948a;
+  font-size: 11px;
+  margin-right: 8px;
+}
+
+.demo-tag,
+.current-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: 20px;
+  background: #eef1e5;
+  color: #65784f !important;
+  font-size: 10px !important;
+  white-space: nowrap;
+}
+
+.device-list {
+  display: grid;
+  gap: 10px;
+}
+
+.device-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 15px;
+  border: 1px solid #e9ebe2;
+  border-radius: 10px;
+}
+
+.device-icon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 46px;
+  height: 46px;
+  border-radius: 11px;
+  background: #f0f2e9;
+  color: #66805d;
+}
+
+.device-icon .material-symbols-outlined {
+  font-size: 25px;
+}
+
+.device-details {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+  flex: 1;
+}
+
+.device-name-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.device-name-row strong {
+  font-size: 13px;
+}
+
+.device-details > span,
+.device-details small {
+  font-size: 11px;
+  color: #89948b;
+}
+
+.device-actions {
+  flex: 0 0 auto;
+}
+
+.remove-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 10px;
+  border: 1px solid #eadbd5;
+  border-radius: 7px;
+  background: #fff;
+  color: #a35e50;
+  font: inherit;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.remove-button:hover {
+  background: #fbf1ed;
+}
+
+.remove-button .material-symbols-outlined {
+  font-size: 17px;
+}
+
+.empty-state {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  padding: 45px 15px;
+  border: 1px dashed #dfe4d7;
+  border-radius: 10px;
+  text-align: center;
+  color: #758276;
+}
+
+.empty-state > .material-symbols-outlined {
+  font-size: 35px;
+  color: #94a187;
+}
+
+.empty-state strong {
+  font-size: 13px;
+}
+
+.empty-state p {
+  margin: 0;
+  font-size: 11px;
+}
+
+.form-preview {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 14px;
+  max-width: 760px;
+  margin-top: 20px;
+}
+
+.form-preview label {
+  align-self: end;
+  color: #647368;
+  font-size: 11px;
+}
+
+.form-preview input,
+.form-preview select,
+.form-preview textarea {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 10px 11px;
+  border: 1px solid #e1e5da;
+  border-radius: 7px;
+  outline: none;
+  background: #fff;
+  color: #34483a;
+  font: inherit;
+  font-size: 12px;
+}
+
+.form-preview input:focus,
+.form-preview select:focus,
+.form-preview textarea:focus {
+  border-color: #8a9b7c;
+  box-shadow: 0 0 0 2px #eaf0e5;
+}
+
+.form-preview textarea,
+.form-preview .primary-button {
+  grid-column: 1 / -1;
+}
+
+.primary-button {
+  justify-self: start;
+  border: 0;
+  border-radius: 7px;
+  background: #3e6348;
+  color: #fff;
+  padding: 10px 18px;
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.primary-button:hover {
+  background: #2f5139;
+}
+
+.upload-panel {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  padding: 28px;
+  border: 1px dashed #cbd4c3;
+  border-radius: 10px;
+  text-align: center;
+  color: #657667;
+}
+
+.upload-panel > .material-symbols-outlined {
+  font-size: 35px;
+  color: #81936d;
+}
+
+.upload-panel strong {
+  font-size: 13px;
+}
+
+.upload-panel p {
+  font-size: 11px;
+  color: #8b968d;
+}
+
+.upload-panel input {
+  max-width: 100%;
+  font-size: 11px;
+}
+
+.account-notice {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 16px;
+  padding: 12px;
+  border: 1px solid #dfe7d6;
+  border-radius: 8px;
+  background: #f4f7ef;
+  color: #52694f;
+  font-size: 11px;
+  line-height: 1.8;
+}
+
+.account-notice button {
+  margin-right: auto;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+@media (max-width: 850px) {
+  .account-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .account-menu {
+    position: static;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .menu-caption,
+  .menu-divider {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 560px) {
+  .account-page {
+    padding: 12px;
+  }
+
+  .account-heading {
+    align-items: flex-start;
+  }
+
+  .account-heading h1 {
+    font-size: 19px;
+  }
+
+  .account-content {
+    padding: 15px;
+  }
+
+  .overview-grid,
+  .form-preview {
+    grid-template-columns: 1fr;
+  }
+
+  .form-preview textarea,
+  .form-preview .primary-button {
+    grid-column: auto;
+  }
+
+  .device-card {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .device-actions {
+    width: 100%;
+    padding-right: 60px;
+  }
+}
+
+
+====================================================================================================
+FILE: pages\account-workspace.page.html
+SIZE: 15873 bytes
+====================================================================================================
+<div class="account-page" dir="rtl">
+  <header class="account-heading">
+    <div>
+      <div class="account-eyebrow">IGD / ACCOUNT CENTER</div>
+      <h1>{{ currentInfo().title }}</h1>
+      <p>{{ currentInfo().description }}</p>
+    </div>
+    <a class="back-link" routerLink="/">
+      <span class="material-symbols-outlined">arrow_forward</span>
+      بازگشت به فضای کار
+    </a>
+  </header>
+
+  <div class="account-layout">
+    <aside class="account-menu">
+      <div class="menu-caption">مدیریت حساب</div>
+      @for (item of navigation; track item.path) {
+        <a
+          class="menu-link"
+          [routerLink]="item.path"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: item.exact === true }">
+          <span class="material-symbols-outlined">{{ item.icon }}</span>
+          <span>{{ item.label }}</span>
+          <span class="material-symbols-outlined menu-arrow">chevron_left</span>
+        </a>
+      }
+
+      <div class="menu-divider"></div>
+      <div class="menu-caption">دسترسی حساب</div>
+      <a class="menu-link" routerLink="/account/login" routerLinkActive="active">
+        <span class="material-symbols-outlined">login</span>
+        <span>ورود</span>
+      </a>
+      <a class="menu-link" routerLink="/account/register" routerLinkActive="active">
+        <span class="material-symbols-outlined">person_add</span>
+        <span>ثبت‌نام</span>
+      </a>
+      <a class="menu-link" routerLink="/account/recover-password" routerLinkActive="active">
+        <span class="material-symbols-outlined">lock_reset</span>
+        <span>بازیابی رمز</span>
+      </a>
+    </aside>
+
+    <main class="account-content">
+      @if (notice()) {
+        <div class="account-notice">
+          <span class="material-symbols-outlined">info</span>
+          <span>{{ notice() }}</span>
+          <button type="button" (click)="notice.set('')" aria-label="بستن">×</button>
+        </div>
+      }
+
+      @switch (section()) {
+        @case ('overview') {
+          <section class="content-section">
+            <div class="section-title">
+              <div>
+                <h2>وضعیت حساب کاربری</h2>
+                <p>از این قسمت به بخش‌های مختلف حساب خود دسترسی دارید.</p>
+              </div>
+              <span class="material-symbols-outlined section-symbol">account_circle</span>
+            </div>
+
+            <div class="overview-grid">
+              <a class="overview-card" routerLink="/account/profile">
+                <span class="material-symbols-outlined">person</span>
+                <strong>اطلاعات شخصی</strong>
+                <small>مشاهده مشخصات پایه</small>
+              </a>
+              <a class="overview-card" routerLink="/account/verification">
+                <span class="material-symbols-outlined">verified_user</span>
+                <strong>احراز هویت</strong>
+                <small>مدارک و اطلاعات هویتی</small>
+              </a>
+              <a class="overview-card" routerLink="/account/devices">
+                <span class="material-symbols-outlined">devices</span>
+                <strong>دستگاه‌های من</strong>
+                <small>مدیریت دستگاه‌های متصل</small>
+              </a>
+              <a class="overview-card" routerLink="/account/security">
+                <span class="material-symbols-outlined">shield_lock</span>
+                <strong>امنیت حساب</strong>
+                <small>تنظیمات امنیتی</small>
+              </a>
+            </div>
+
+            <div class="info-panel">
+              <span class="material-symbols-outlined">info</span>
+              <div>
+                <strong>محیط پیش‌نمایش فرانت‌اند</strong>
+                <p>اطلاعات این نسخه نمایشی است و هنوز به سرویس حساب کاربری متصل نشده است. عملیات حساس پس از اتصال API فعال می‌شوند.</p>
+              </div>
+            </div>
+          </section>
+        }
+
+        @case ('devices') {
+          <section class="content-section">
+            <div class="section-title">
+              <div>
+                <h2>دستگاه‌های متصل</h2>
+                <p>فهرست زیر داده نمونه است و از سرور دریافت نشده است.</p>
+              </div>
+              <span class="material-symbols-outlined section-symbol">devices</span>
+            </div>
+
+            <div class="device-toolbar">
+              <div>
+                <strong>{{ devices().length }} دستگاه</strong>
+                <span>در فهرست نمایشی</span>
+              </div>
+              <span class="demo-tag">پیش‌نمایش محلی</span>
+            </div>
+
+            @if (devices().length === 0) {
+              <div class="empty-state">
+                <span class="material-symbols-outlined">devices_off</span>
+                <strong>دستگاهی در فهرست وجود ندارد</strong>
+                <p>فهرست دستگاه‌های نمونه خالی شده است.</p>
+              </div>
+            } @else {
+              <div class="device-list">
+                @for (device of devices(); track device.id) {
+                  <article class="device-card">
+                    <div class="device-icon">
+                      <span class="material-symbols-outlined">{{ device.type }}</span>
+                    </div>
+                    <div class="device-details">
+                      <div class="device-name-row">
+                        <strong>{{ device.name }}</strong>
+                        @if (device.current) {
+                          <span class="current-tag">دستگاه جاری نمونه</span>
+                        }
+                      </div>
+                      <span>{{ device.browser }}</span>
+                      <span>{{ device.location }}</span>
+                      <small>{{ device.lastSeen }}</small>
+                    </div>
+                    <div class="device-actions">
+                      <button
+                        type="button"
+                        class="remove-button"
+                        (click)="removeDevice(device.id)">
+                        <span class="material-symbols-outlined">delete</span>
+                        حذف از فهرست
+                      </button>
+                    </div>
+                  </article>
+                }
+              </div>
+            }
+
+            <div class="info-panel">
+              <span class="material-symbols-outlined">warning</span>
+              <div>
+                <strong>توجه درباره امنیت</strong>
+                <p>حذف دستگاه در این نسخه فقط فهرست محلی را تغییر می‌دهد. لغو واقعی دسترسی دستگاه باید پس از اتصال به API احراز هویت انجام شود.</p>
+              </div>
+            </div>
+          </section>
+        }
+
+        @case ('profile') {
+          <section class="content-section">
+            <h2>اطلاعات شخصی</h2>
+            <p class="section-intro">مشخصات هویتی حساب در این بخش نمایش و مدیریت خواهد شد.</p>
+            <div class="form-preview">
+              <label>نام</label><input type="text" placeholder="نام" />
+              <label>نام خانوادگی</label><input type="text" placeholder="نام خانوادگی" />
+              <label>کد ملی</label><input type="text" inputmode="numeric" placeholder="کد ملی" />
+              <label>تاریخ تولد</label><input type="date" />
+              <label>نام پدر</label><input type="text" placeholder="نام پدر" />
+              <label>کد پستی</label><input type="text" placeholder="کد پستی" />
+              <label>نشانی</label><textarea rows="3" placeholder="نشانی محل سکونت"></textarea>
+              <button type="button" class="primary-button" (click)="showLocalNotice('فرم اطلاعات شخصی آماده اتصال به API است؛ هنوز اطلاعاتی ارسال نشده است.')">ذخیره پیش‌نویس نمایشی</button>
+            </div>
+          </section>
+        }
+
+        @case ('legal-entity') {
+          <section class="content-section">
+            <h2>اطلاعات حقوقی</h2>
+            <p class="section-intro">این بخش برای اطلاعات شرکت‌ها و اشخاص حقوقی در نظر گرفته شده است.</p>
+            <div class="form-preview">
+              <label>نام حقوقی</label><input type="text" placeholder="نام ثبت‌شده شرکت" />
+              <label>شناسه ملی</label><input type="text" placeholder="شناسه ملی" />
+              <label>شماره ثبت</label><input type="text" placeholder="شماره ثبت" />
+              <label>کد اقتصادی</label><input type="text" placeholder="کد اقتصادی" />
+              <label>نوع شخصیت حقوقی</label>
+              <select><option>انتخاب نوع شخصیت حقوقی</option><option>شرکت سهامی خاص</option><option>شرکت با مسئولیت محدود</option><option>سایر</option></select>
+              <button type="button" class="primary-button" (click)="showLocalNotice('اطلاعات حقوقی فقط در پیش‌نمایش فرم وارد شده و ارسال نشده است.')">ذخیره پیش‌نویس نمایشی</button>
+            </div>
+          </section>
+        }
+
+        @case ('contacts') {
+          <section class="content-section">
+            <h2>راه‌های ارتباطی</h2>
+            <p class="section-intro">مدیریت شماره تلفن و نشانی ایمیل در این بخش انجام خواهد شد.</p>
+            <div class="form-preview">
+              <label>شماره تلفن همراه</label><input type="tel" placeholder="09xxxxxxxxx" />
+              <label>نشانی ایمیل</label><input type="email" placeholder="name@example.com" />
+              <button type="button" class="primary-button" (click)="showLocalNotice('فرم راه‌های ارتباطی آماده اتصال به سرویس حساب من است.')">ثبت پیش‌نویس</button>
+            </div>
+          </section>
+        }
+
+        @case ('verification') {
+          <section class="content-section">
+            <h2>احراز هویت</h2>
+            <p class="section-intro">مدارک و اطلاعات موردنیاز برای احراز هویت در این قسمت مدیریت می‌شوند.</p>
+            <div class="upload-panel">
+              <span class="material-symbols-outlined">upload_file</span>
+              <strong>انتخاب مدرک هویتی</strong>
+              <p>انتخاب فایل در این نسخه صرفاً نمایشی است و بارگذاری واقعی انجام نمی‌شود.</p>
+              <input type="file" accept=".pdf,.jpg,.jpeg,.png" />
+            </div>
+            <div class="info-panel">
+              <span class="material-symbols-outlined">pending</span>
+              <div><strong>وضعیت اتصال</strong><p>برای ثبت درخواست و پیگیری نتیجه، اتصال سرویس احراز هویت لازم است.</p></div>
+            </div>
+          </section>
+        }
+
+        @case ('security') {
+          <section class="content-section">
+            <h2>امنیت حساب</h2>
+            <p class="section-intro">فرم تغییر رمز عبور در انتظار اتصال به API امنیت حساب است.</p>
+            <div class="form-preview">
+              <label>رمز عبور فعلی</label><input type="password" autocomplete="current-password" />
+              <label>رمز عبور جدید</label><input type="password" autocomplete="new-password" />
+              <label>تکرار رمز عبور جدید</label><input type="password" autocomplete="new-password" />
+              <button type="button" class="primary-button" (click)="showLocalNotice('تغییر رمز عبور تا زمان اتصال API غیرفعال است. هیچ رمزی ذخیره یا ارسال نشد.')">بررسی فرم</button>
+            </div>
+          </section>
+        }
+
+        @case ('sessions') {
+          <section class="content-section">
+            <h2>نشست‌های فعال</h2>
+            <p class="section-intro">در نسخه متصل، نشست‌های معتبر از سرویس احراز هویت دریافت می‌شوند.</p>
+            <div class="empty-state">
+              <span class="material-symbols-outlined">history</span>
+              <strong>اطلاعات نشست‌ها هنوز متصل نشده است</strong>
+              <p>در این نسخه هیچ نشست واقعی نمایش داده نمی‌شود.</p>
+            </div>
+          </section>
+        }
+
+        @case ('permissions') {
+          <section class="content-section">
+            <h2>نقش و دسترسی‌ها</h2>
+            <p class="section-intro">نمایش اطلاعات دسترسی پس از اتصال به سرویس حساب من تکمیل می‌شود.</p>
+            <div class="info-panel">
+              <span class="material-symbols-outlined">admin_panel_settings</span>
+              <div><strong>مرجع نهایی مجوزها</strong><p>کنترل مجوز عملیات باید در سمت سرور انجام شود. این صفحه در حال حاضر صرفاً محل نمایش اطلاعات خواهد بود.</p></div>
+            </div>
+          </section>
+        }
+
+        @case ('login') {
+          <section class="content-section">
+            <h2>ورود به حساب</h2>
+            <div class="form-preview">
+              <label>شماره همراه یا شناسه کاربری</label><input type="text" autocomplete="username" />
+              <label>رمز عبور</label><input type="password" autocomplete="current-password" />
+              <button type="button" class="primary-button" (click)="showLocalNotice('فرم ورود آماده اتصال است؛ ورود واقعی هنوز انجام نمی‌شود.')">ادامه</button>
+            </div>
+          </section>
+        }
+
+        @case ('register') {
+          <section class="content-section">
+            <h2>ایجاد حساب کاربری</h2>
+            <div class="form-preview">
+              <label>نام</label><input type="text" />
+              <label>نام خانوادگی</label><input type="text" />
+              <label>کد ملی</label><input type="text" />
+              <label>شماره همراه</label><input type="tel" />
+              <label>رمز عبور</label><input type="password" autocomplete="new-password" />
+              <button type="button" class="primary-button" (click)="showLocalNotice('فرم ثبت‌نام آماده اتصال است؛ حسابی ایجاد نشده است.')">ادامه ثبت‌نام</button>
+            </div>
+          </section>
+        }
+
+        @case ('recover-password') {
+          <section class="content-section">
+            <h2>بازیابی رمز عبور</h2>
+            <div class="form-preview">
+              <label>شماره همراه یا شناسه کاربری</label><input type="text" />
+              <button type="button" class="primary-button" (click)="showLocalNotice('فرم بازیابی آماده اتصال است؛ پیامکی ارسال نشده است.')">درخواست بازیابی</button>
+            </div>
+          </section>
+        }
+      }
+    </main>
+  </div>
+</div>
+
+
+====================================================================================================
+FILE: pages\account-workspace.page.ts
+SIZE: 24843 bytes
+====================================================================================================
+import {
+  Component,
+  OnDestroy,
+  OnInit
+} from '@angular/core';
+
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import {
+  ActivatedRoute,
+  RouterLink
+} from '@angular/router';
+import { Subscription } from 'rxjs';
+
+interface AccountNavigationItem {
+  title: string;
+  path: string;
+  icon: string;
+}
+
+@Component({
+  selector: 'igd-account-workspace',
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule,
+    RouterLink
+  ],
+  template: `
+    <main class="account-page" dir="rtl">
+
+      <header class="page-header">
+        <div>
+          <div class="eyebrow">IGD / حساب کاربری</div>
+          <h1>{{ title }}</h1>
+          <p>{{ description }}</p>
+        </div>
+
+        <a class="back-link" routerLink="/account">
+          <span class="material-symbols-outlined">arrow_forward</span>
+          نمای کلی حساب
+        </a>
+      </header>
+
+      <div class="account-layout">
+
+        <aside class="account-navigation">
+          <div class="navigation-heading">مدیریت حساب</div>
+
+          <a
+            *ngFor="let item of navigation"
+            class="navigation-item"
+            [routerLink]="item.path"
+            [class.active]="section === item.path.split('/').pop() || (section === 'overview' && item.path === '/account')"
+          >
+            <span class="material-symbols-outlined">{{ item.icon }}</span>
+            <span>{{ item.title }}</span>
+          </a>
+        </aside>
+
+        <section class="account-content">
+
+          <!-- OVERVIEW -->
+          <ng-container *ngIf="section === 'overview'">
+            <div class="welcome-panel">
+              <div>
+                <span class="eyebrow">فضای شخصی شما</span>
+                <h2>مدیریت حساب کاربری</h2>
+                <p>
+                  اطلاعات هویتی، امنیت و راه‌های ارتباطی حساب خود را
+                  از این بخش مدیریت کنید.
+                </p>
+              </div>
+              <span class="material-symbols-outlined welcome-icon">account_circle</span>
+            </div>
+
+            <div class="overview-grid">
+              <a class="overview-card" routerLink="/account/profile">
+                <span class="material-symbols-outlined">person</span>
+                <strong>اطلاعات حساب</strong>
+                <small>مشاهده و تکمیل مشخصات پایه</small>
+                <span class="card-arrow">←</span>
+              </a>
+
+              <a class="overview-card" routerLink="/account/verification">
+                <span class="material-symbols-outlined">verified_user</span>
+                <strong>احراز هویت</strong>
+                <small>وضعیت و پیگیری درخواست‌ها</small>
+                <span class="card-arrow">←</span>
+              </a>
+
+              <a class="overview-card" routerLink="/account/security">
+                <span class="material-symbols-outlined">shield</span>
+                <strong>امنیت حساب</strong>
+                <small>تنظیمات امنیتی و رمز عبور</small>
+                <span class="card-arrow">←</span>
+              </a>
+
+              <a class="overview-card" routerLink="/account/devices">
+                <span class="material-symbols-outlined">devices</span>
+                <strong>دستگاه‌ها</strong>
+                <small>مدیریت دستگاه‌های متصل</small>
+                <span class="card-arrow">←</span>
+              </a>
+
+              <a class="overview-card" routerLink="/account/contacts">
+                <span class="material-symbols-outlined">contact_mail</span>
+                <strong>راه‌های ارتباطی</strong>
+                <small>تلفن و نشانی ایمیل</small>
+                <span class="card-arrow">←</span>
+              </a>
+
+              <a class="overview-card" routerLink="/account/permissions">
+                <span class="material-symbols-outlined">admin_panel_settings</span>
+                <strong>دسترسی‌ها</strong>
+                <small>مشاهده مجوزهای حساب</small>
+                <span class="card-arrow">←</span>
+              </a>
+            </div>
+          </ng-container>
+
+          <!-- PROFILE -->
+          <ng-container *ngIf="section === 'profile'">
+            <div class="section-card">
+              <h2>اطلاعات پایه</h2>
+              <p class="muted">
+                این فرم در حال حاضر محلی است و هنوز به API متصل نشده است.
+              </p>
+
+              <div class="form-grid">
+                <label>
+                  نام
+                  <input [(ngModel)]="profile.firstName" name="firstName">
+                </label>
+
+                <label>
+                  نام خانوادگی
+                  <input [(ngModel)]="profile.lastName" name="lastName">
+                </label>
+
+                <label>
+                  کد ملی
+                  <input [(ngModel)]="profile.nationalCode" name="nationalCode" maxlength="10">
+                </label>
+
+                <label>
+                  تاریخ تولد
+                  <input type="text" [(ngModel)]="profile.birthDate" name="birthDate" placeholder="مثلاً ۱۳۷۰/۰۱/۰۱">
+                </label>
+              </div>
+
+              <button class="primary-button" (click)="showLocalNotice()">
+                ذخیره تغییرات
+              </button>
+              <p class="notice" *ngIf="notice">{{ notice }}</p>
+            </div>
+          </ng-container>
+
+          <!-- LEGAL ENTITY -->
+          <ng-container *ngIf="section === 'legal-entity'">
+            <div class="section-card">
+              <h2>مشخصات شخصیت حقوقی</h2>
+              <p class="muted">
+                اطلاعات شرکت یا سازمان را تکمیل کنید.
+              </p>
+
+              <div class="form-grid">
+                <label>
+                  نام شخصیت حقوقی
+                  <input [(ngModel)]="legal.name" name="legalName">
+                </label>
+
+                <label>
+                  شناسه ملی
+                  <input [(ngModel)]="legal.nationalId" name="legalId">
+                </label>
+
+                <label>
+                  شماره ثبت
+                  <input [(ngModel)]="legal.registrationNumber" name="registrationNumber">
+                </label>
+
+                <label>
+                  سمت نماینده
+                  <input [(ngModel)]="legal.representativeRole" name="representativeRole">
+                </label>
+              </div>
+
+              <button class="primary-button" (click)="showLocalNotice()">
+                ذخیره اطلاعات
+              </button>
+              <p class="notice" *ngIf="notice">{{ notice }}</p>
+            </div>
+          </ng-container>
+
+          <!-- CONTACTS -->
+          <ng-container *ngIf="section === 'contacts'">
+            <div class="section-card">
+              <h2>راه‌های ارتباطی</h2>
+
+              <div class="form-grid">
+                <label>
+                  شماره تلفن همراه
+                  <input [(ngModel)]="contacts.phone" name="phone">
+                </label>
+
+                <label>
+                  نشانی ایمیل
+                  <input type="email" [(ngModel)]="contacts.email" name="email">
+                </label>
+              </div>
+
+              <div class="info-strip">
+                تغییر شماره تلفن و ایمیل ممکن است نیازمند تأیید هویت باشد.
+              </div>
+
+              <button class="primary-button" (click)="showLocalNotice()">
+                ثبت تغییرات
+              </button>
+              <p class="notice" *ngIf="notice">{{ notice }}</p>
+            </div>
+          </ng-container>
+
+          <!-- VERIFICATION -->
+          <ng-container *ngIf="section === 'verification'">
+            <div class="section-card">
+              <h2>وضعیت احراز هویت</h2>
+
+              <div class="status-row">
+                <span class="status-dot"></span>
+                <div>
+                  <strong>وضعیت از سرور دریافت نشده است</strong>
+                  <p class="muted">
+                    برای مشاهده وضعیت واقعی، اتصال سرویس احراز هویت باید برقرار شود.
+                  </p>
+                </div>
+              </div>
+
+              <div class="info-strip">
+                درخواست آزمایشی یا نتیجه ساختگی در این صفحه ثبت نمی‌شود.
+                پس از اتصال API، امکان ثبت و پیگیری درخواست فعال خواهد شد.
+              </div>
+            </div>
+          </ng-container>
+
+          <!-- SECURITY -->
+          <ng-container *ngIf="section === 'security'">
+            <div class="section-card">
+              <h2>امنیت حساب</h2>
+
+              <div class="security-option">
+                <div>
+                  <strong>تغییر رمز عبور</strong>
+                  <p class="muted">تغییر رمز از طریق سرویس احراز هویت انجام می‌شود.</p>
+                </div>
+                <a routerLink="/account/recover-password" class="secondary-button">
+                  بازیابی رمز
+                </a>
+              </div>
+
+              <div class="security-option">
+                <div>
+                  <strong>دستگاه‌های متصل</strong>
+                  <p class="muted">مشاهده و مدیریت دستگاه‌های حساب</p>
+                </div>
+                <a routerLink="/account/devices" class="secondary-button">
+                  مشاهده دستگاه‌ها
+                </a>
+              </div>
+            </div>
+          </ng-container>
+
+          <!-- DEVICES -->
+          <ng-container *ngIf="section === 'devices'">
+            <div class="section-card">
+              <h2>دستگاه‌های متصل</h2>
+
+              <div class="info-strip">
+                فهرست واقعی دستگاه‌ها پس از اتصال API نمایش داده می‌شود.
+                اطلاعات زیر نمونه نمایشی است.
+              </div>
+
+              <div class="device-row" *ngFor="let device of demoDevices">
+                <span class="material-symbols-outlined device-icon">
+                  {{ device.icon }}
+                </span>
+                <div class="device-details">
+                  <strong>{{ device.name }}</strong>
+                  <small>{{ device.detail }}</small>
+                  <small>{{ device.status }}</small>
+                </div>
+                <span class="sample-label">نمونه</span>
+              </div>
+
+              <button class="secondary-button" (click)="showLocalNotice()">
+                مدیریت دستگاه‌ها پس از اتصال سرویس فعال می‌شود
+              </button>
+              <p class="notice" *ngIf="notice">{{ notice }}</p>
+            </div>
+          </ng-container>
+
+          <!-- SESSIONS -->
+          <ng-container *ngIf="section === 'sessions'">
+            <div class="section-card">
+              <h2>نشست‌های حساب</h2>
+              <div class="empty-state">
+                <span class="material-symbols-outlined">history</span>
+                <strong>اطلاعات نشست‌ها هنوز دریافت نشده است</strong>
+                <p>
+                  برای نمایش نشست‌های فعال، قرارداد API مربوط به نشست‌ها
+                  باید در بک‌اند مشخص و متصل شود.
+                </p>
+              </div>
+            </div>
+          </ng-container>
+
+          <!-- PERMISSIONS -->
+          <ng-container *ngIf="section === 'permissions'">
+            <div class="section-card">
+              <h2>دسترسی‌ها و مجوزها</h2>
+              <div class="info-strip">
+                مرجع نهایی مجوزها سرویس احراز هویت و مجوزدهی بک‌اند است.
+                در این صفحه هیچ مجوزی به‌صورت محلی اعطا نمی‌شود.
+              </div>
+              <div class="empty-state">
+                <span class="material-symbols-outlined">admin_panel_settings</span>
+                <strong>مجوزها هنوز از سرور دریافت نشده‌اند</strong>
+                <p>پس از اتصال API، فهرست مجوزهای معتبر نمایش داده می‌شود.</p>
+              </div>
+            </div>
+          </ng-container>
+
+          <!-- LOGIN -->
+          <ng-container *ngIf="section === 'login'">
+            <div class="section-card narrow-card">
+              <h2>ورود به حساب</h2>
+              <label>
+                کد ملی یا شناسه کاربری
+                <input [(ngModel)]="login.identifier" name="loginIdentifier">
+              </label>
+              <label>
+                رمز عبور
+                <input type="password" [(ngModel)]="login.password" name="loginPassword">
+              </label>
+              <button class="primary-button" (click)="showApiNotice()">
+                ورود
+              </button>
+              <a routerLink="/account/recover-password">بازیابی رمز عبور</a>
+              <p class="notice" *ngIf="notice">{{ notice }}</p>
+            </div>
+          </ng-container>
+
+          <!-- REGISTER -->
+          <ng-container *ngIf="section === 'register'">
+            <div class="section-card narrow-card">
+              <h2>ایجاد حساب کاربری</h2>
+              <label>
+                کد ملی
+                <input [(ngModel)]="register.nationalCode" name="registerNationalCode" maxlength="10">
+              </label>
+              <label>
+                شماره تلفن همراه
+                <input [(ngModel)]="register.phone" name="registerPhone">
+              </label>
+              <label>
+                رمز عبور
+                <input type="password" [(ngModel)]="register.password" name="registerPassword">
+              </label>
+              <button class="primary-button" (click)="showApiNotice()">
+                ثبت‌نام
+              </button>
+              <p class="notice" *ngIf="notice">{{ notice }}</p>
+            </div>
+          </ng-container>
+
+          <!-- RECOVER PASSWORD -->
+          <ng-container *ngIf="section === 'recover-password'">
+            <div class="section-card narrow-card">
+              <h2>بازیابی رمز عبور</h2>
+              <p class="muted">
+                برای بازیابی رمز، شناسه حساب را وارد کنید.
+              </p>
+              <label>
+                کد ملی یا شناسه حساب
+                <input [(ngModel)]="recovery.identifier" name="recoveryIdentifier">
+              </label>
+              <button class="primary-button" (click)="showApiNotice()">
+                درخواست بازیابی
+              </button>
+              <p class="notice" *ngIf="notice">{{ notice }}</p>
+            </div>
+          </ng-container>
+
+        </section>
+      </div>
+    </main>
+  `,
+  styles: [`
+    :host {
+      display: block;
+      color: var(--igd-text, #26352b);
+      font-family: inherit;
+    }
+
+    .account-page {
+      width: 100%;
+      padding: 26px;
+      box-sizing: border-box;
+    }
+
+    .page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 26px;
+    }
+
+    .eyebrow {
+      display: block;
+      color: #77866f;
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 25px;
+      font-weight: 750;
+    }
+
+    .page-header p,
+    .muted {
+      color: #778178;
+      font-size: 13px;
+      line-height: 1.9;
+    }
+
+    .back-link,
+    .secondary-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 1px solid #dce4d9;
+      border-radius: 10px;
+      padding: 10px 14px;
+      color: #435c42;
+      text-decoration: none;
+      background: #fff;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .account-layout {
+      display: grid;
+      grid-template-columns: 225px minmax(0, 1fr);
+      gap: 20px;
+      align-items: start;
+    }
+
+    .account-navigation,
+    .section-card {
+      background: #fff;
+      border: 1px solid #e7ebe5;
+      border-radius: 15px;
+      padding: 17px;
+    }
+
+    .navigation-heading {
+      font-size: 12px;
+      color: #899286;
+      padding: 4px 9px 13px;
+    }
+
+    .navigation-item {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 11px 10px;
+      margin: 3px 0;
+      color: #59665b;
+      border-radius: 9px;
+      text-decoration: none;
+      font-size: 13px;
+      transition: background .15s ease;
+    }
+
+    .navigation-item .material-symbols-outlined {
+      font-size: 20px;
+    }
+
+    .navigation-item:hover,
+    .navigation-item.active {
+      color: #315c3d;
+      background: #edf3eb;
+    }
+
+    .account-content {
+      min-width: 0;
+    }
+
+    .welcome-panel {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 25px;
+      border-radius: 15px;
+      background: linear-gradient(120deg, #edf3e9, #f8f5e9);
+      margin-bottom: 18px;
+    }
+
+    .welcome-panel h2 {
+      font-size: 20px;
+      margin: 0 0 8px;
+    }
+
+    .welcome-panel p {
+      color: #68766b;
+      font-size: 13px;
+      line-height: 1.9;
+    }
+
+    .welcome-icon {
+      font-size: 65px;
+      color: #66805d;
+    }
+
+    .overview-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 13px;
+    }
+
+    .overview-card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 9px;
+      min-height: 125px;
+      padding: 19px;
+      background: #fff;
+      border: 1px solid #e7ebe5;
+      border-radius: 13px;
+      color: #34483a;
+      text-decoration: none;
+      transition: border-color .15s, transform .15s;
+    }
+
+    .overview-card:hover {
+      border-color: #9caf94;
+      transform: translateY(-2px);
+    }
+
+    .overview-card > .material-symbols-outlined {
+      color: #68805d;
+      font-size: 24px;
+    }
+
+    .overview-card strong {
+      font-size: 14px;
+    }
+
+    .overview-card small {
+      color: #849084;
+      font-size: 12px;
+    }
+
+    .card-arrow {
+      position: absolute;
+      left: 17px;
+      bottom: 18px;
+      color: #849084;
+    }
+
+    .section-card h2 {
+      font-size: 17px;
+      margin: 0 0 12px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 17px;
+      margin: 20px 0;
+    }
+
+    label {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      color: #526054;
+      font-size: 13px;
+      margin-bottom: 17px;
+    }
+
+    input {
+      width: 100%;
+      min-height: 42px;
+      box-sizing: border-box;
+      border: 1px solid #dfe5dd;
+      border-radius: 9px;
+      padding: 9px 12px;
+      outline: none;
+      background: #fff;
+      color: #29382d;
+      font: inherit;
+    }
+
+    input:focus {
+      border-color: #809b75;
+      box-shadow: 0 0 0 3px #809b751c;
+    }
+
+    .primary-button {
+      border: 0;
+      border-radius: 9px;
+      padding: 11px 20px;
+      color: #fff;
+      background: #426b49;
+      cursor: pointer;
+      font: inherit;
+      font-size: 13px;
+    }
+
+    .primary-button:hover {
+      background: #34583b;
+    }
+
+    .notice {
+      margin-top: 13px;
+      color: #607b52;
+      font-size: 12px;
+    }
+
+    .info-strip {
+      padding: 13px 15px;
+      margin: 16px 0;
+      border-radius: 9px;
+      background: #f5f5ec;
+      color: #77734f;
+      font-size: 12px;
+      line-height: 1.9;
+    }
+
+    .status-row,
+    .security-option,
+    .device-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 17px 0;
+      border-bottom: 1px solid #edf0eb;
+    }
+
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      flex: 0 0 10px;
+      border-radius: 50%;
+      background: #b8a66b;
+    }
+
+    .security-option {
+      justify-content: space-between;
+    }
+
+    .security-option p {
+      margin-bottom: 0;
+    }
+
+    .device-icon {
+      font-size: 28px;
+      color: #6c8565;
+    }
+
+    .device-details {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      flex: 1;
+    }
+
+    .device-details strong {
+      font-size: 13px;
+    }
+
+    .device-details small {
+      color: #879087;
+      font-size: 11px;
+    }
+
+    .sample-label {
+      font-size: 10px;
+      color: #8c8156;
+      background: #f5f1df;
+      padding: 5px 8px;
+      border-radius: 6px;
+    }
+
+    .empty-state {
+      padding: 35px 15px;
+      text-align: center;
+      color: #748074;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .empty-state .material-symbols-outlined {
+      font-size: 40px;
+      color: #9aa995;
+    }
+
+    .empty-state strong {
+      color: #526052;
+      font-size: 14px;
+    }
+
+    .empty-state p {
+      max-width: 470px;
+      font-size: 12px;
+      line-height: 2;
+    }
+
+    .narrow-card {
+      max-width: 520px;
+    }
+
+    .narrow-card > a {
+      display: inline-block;
+      margin: 15px 0;
+      color: #52754f;
+      font-size: 12px;
+    }
+
+    @media (max-width: 850px) {
+      .account-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .account-navigation {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 3px;
+      }
+
+      .navigation-heading {
+        grid-column: 1 / -1;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .account-page {
+        padding: 14px;
+      }
+
+      .page-header {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .overview-grid,
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .welcome-icon {
+        display: none;
+      }
+    }
+  `]
+})
+export class AccountWorkspacePage implements OnInit, OnDestroy {
+  section = 'overview';
+  title = 'حساب من';
+  description = '';
+  notice = '';
+
+  private routeSubscription?: Subscription;
+
+  navigation: AccountNavigationItem[] = [
+    { title: 'نمای کلی', path: '/account', icon: 'dashboard' },
+    { title: 'اطلاعات حساب', path: '/account/profile', icon: 'person' },
+    { title: 'شخصیت حقوقی', path: '/account/legal-entity', icon: 'business' },
+    { title: 'راه‌های ارتباطی', path: '/account/contacts', icon: 'contact_mail' },
+    { title: 'احراز هویت', path: '/account/verification', icon: 'verified_user' },
+    { title: 'امنیت حساب', path: '/account/security', icon: 'shield' },
+    { title: 'دستگاه‌ها', path: '/account/devices', icon: 'devices' },
+    { title: 'نشست‌ها', path: '/account/sessions', icon: 'history' },
+    { title: 'دسترسی‌ها', path: '/account/permissions', icon: 'admin_panel_settings' }
+  ];
+
+  profile = {
+    firstName: '',
+    lastName: '',
+    nationalCode: '',
+    birthDate: ''
+  };
+
+  legal = {
+    name: '',
+    nationalId: '',
+    registrationNumber: '',
+    representativeRole: ''
+  };
+
+  contacts = {
+    phone: '',
+    email: ''
+  };
+
+  login = {
+    identifier: '',
+    password: ''
+  };
+
+  register = {
+    nationalCode: '',
+    phone: '',
+    password: ''
+  };
+
+  recovery = {
+    identifier: ''
+  };
+
+  demoDevices = [
+    {
+      name: 'مرورگر فعلی',
+      detail: 'دستگاه فعلی کاربر',
+      status: 'اطلاعات نمونه؛ تأیید نشده از سرور',
+      icon: 'laptop'
+    }
+  ];
+
+  constructor(private route: ActivatedRoute) {}
+
+  ngOnInit(): void {
+    this.routeSubscription = this.route.data.subscribe(data => {
+      this.section = data['section'] || 'overview';
+      this.title = data['title'] || 'حساب من';
+      this.description = data['description'] || '';
+      this.notice = '';
+    });
+  }
+
+  showLocalNotice(): void {
+    this.notice = 'این تغییر فعلاً فقط در رابط کاربری است و به سرور ارسال نشده است.';
+  }
+
+  showApiNotice(): void {
+    this.notice = 'اتصال این عملیات به API هنوز انجام نشده است؛ هیچ درخواست جعلی ارسال نشد.';
+  }
+
+  ngOnDestroy(): void {
+    this.routeSubscription?.unsubscribe();
+  }
+}
+
+
+====================================================================================================
+FILE: pages\contacts\account-contacts.page.ts
+SIZE: 239 bytes
+====================================================================================================
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'igd-account-contacts-page',
+  standalone: true,
+  templateUrl: './account-page.html',
+  styleUrl: './account-page.css',
+})
+export class AccountContactsPage {}
+
+
+====================================================================================================
+FILE: pages\contacts\account-page.css
+SIZE: 929 bytes
+====================================================================================================
+:host {
+  display: block;
+  min-width: 0;
+  width: 100%;
+}
+
+.account-page {
+  width: 100%;
+  min-width: 0;
+  padding: 1.25rem;
+  box-sizing: border-box;
+  color: inherit;
+}
+
+.account-page__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.account-page__header h1 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.8;
+}
+
+.account-page__header p {
+  margin: 0.35rem 0 0;
+  color: var(--muted-foreground, #777);
+  font-size: 0.875rem;
+  line-height: 1.8;
+}
+
+.account-page__content {
+  min-height: 8rem;
+  padding: 1rem;
+  border: 1px solid var(--border, #e5e5e5);
+  border-radius: 0.75rem;
+  background: var(--card, transparent);
+  box-sizing: border-box;
+}
+
+.account-page__content p {
+  margin: 0;
+  color: var(--muted-foreground, #777);
+  font-size: 0.875rem;
+  line-height: 2;
+}
+
+
+====================================================================================================
+FILE: pages\contacts\account-page.html
+SIZE: 546 bytes
+====================================================================================================
+<main class="account-page">
+  <header class="account-page__header">
+    <div>
+      <h1>راه‌های ارتباطی</h1>
+      <p>مدیریت اطلاعات تماس و راه‌های ارتباطی حساب.</p>
+    </div>
+  </header>
+
+  <section
+    class="account-page__content"
+    aria-label="محتوای صفحه"
+  >
+    <p>
+      اطلاعات این بخش پس از اتصال به سرویس مربوط و تأیید قرارداد API
+      نمایش داده خواهد شد.
+    </p>
+  </section>
+</main>
+
+
+====================================================================================================
+FILE: pages\devices\account-devices.page.ts
+SIZE: 237 bytes
+====================================================================================================
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'igd-account-devices-page',
+  standalone: true,
+  templateUrl: './account-page.html',
+  styleUrl: './account-page.css',
+})
+export class AccountDevicesPage {}
+
+
+====================================================================================================
+FILE: pages\devices\account-page.css
+SIZE: 929 bytes
+====================================================================================================
+:host {
+  display: block;
+  min-width: 0;
+  width: 100%;
+}
+
+.account-page {
+  width: 100%;
+  min-width: 0;
+  padding: 1.25rem;
+  box-sizing: border-box;
+  color: inherit;
+}
+
+.account-page__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.account-page__header h1 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.8;
+}
+
+.account-page__header p {
+  margin: 0.35rem 0 0;
+  color: var(--muted-foreground, #777);
+  font-size: 0.875rem;
+  line-height: 1.8;
+}
+
+.account-page__content {
+  min-height: 8rem;
+  padding: 1rem;
+  border: 1px solid var(--border, #e5e5e5);
+  border-radius: 0.75rem;
+  background: var(--card, transparent);
+  box-sizing: border-box;
+}
+
+.account-page__content p {
+  margin: 0;
+  color: var(--muted-foreground, #777);
+  font-size: 0.875rem;
+  line-height: 2;
+}
+
+
+====================================================================================================
+FILE: pages\devices\account-page.html
+SIZE: 548 bytes
+====================================================================================================
+<main class="account-page">
+  <header class="account-page__header">
+    <div>
+      <h1>دستگاه‌های متصل</h1>
+      <p>مشاهده دستگاه‌های ثبت‌شده برای حساب کاربری.</p>
+    </div>
+  </header>
+
+  <section
+    class="account-page__content"
+    aria-label="محتوای صفحه"
+  >
+    <p>
+      اطلاعات این بخش پس از اتصال به سرویس مربوط و تأیید قرارداد API
+      نمایش داده خواهد شد.
+    </p>
+  </section>
+</main>
+
+
+====================================================================================================
+FILE: pages\legal-entity\account-legal-entity.page.ts
+SIZE: 246 bytes
+====================================================================================================
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'igd-account-legal-entity-page',
+  standalone: true,
+  templateUrl: './account-page.html',
+  styleUrl: './account-page.css',
+})
+export class AccountLegalEntityPage {}
+
+
+====================================================================================================
+FILE: pages\legal-entity\account-page.css
+SIZE: 929 bytes
+====================================================================================================
+:host {
+  display: block;
+  min-width: 0;
+  width: 100%;
+}
+
+.account-page {
+  width: 100%;
+  min-width: 0;
+  padding: 1.25rem;
+  box-sizing: border-box;
+  color: inherit;
+}
+
+.account-page__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.account-page__header h1 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.8;
+}
+
+.account-page__header p {
+  margin: 0.35rem 0 0;
+  color: var(--muted-foreground, #777);
+  font-size: 0.875rem;
+  line-height: 1.8;
+}
+
+.account-page__content {
+  min-height: 8rem;
+  padding: 1rem;
+  border: 1px solid var(--border, #e5e5e5);
+  border-radius: 0.75rem;
+  background: var(--card, transparent);
+  box-sizing: border-box;
+}
+
+.account-page__content p {
+  margin: 0;
+  color: var(--muted-foreground, #777);
+  font-size: 0.875rem;
+  line-height: 2;
+}
+
+
+====================================================================================================
+FILE: pages\legal-entity\account-page.html
+SIZE: 539 bytes
+====================================================================================================
+<main class="account-page">
+  <header class="account-page__header">
+    <div>
+      <h1>اطلاعات حقوقی</h1>
+      <p>اطلاعات مربوط به شخصیت حقوقی و مشخصات ثبتی.</p>
+    </div>
+  </header>
+
+  <section
+    class="account-page__content"
+    aria-label="محتوای صفحه"
+  >
+    <p>
+      اطلاعات این بخش پس از اتصال به سرویس مربوط و تأیید قرارداد API
+      نمایش داده خواهد شد.
+    </p>
+  </section>
+</main>
+
+
+====================================================================================================
+FILE: pages\overview\account-overview.page.ts
+SIZE: 239 bytes
+====================================================================================================
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'igd-account-overview-page',
+  standalone: true,
+  templateUrl: './account-page.html',
+  styleUrl: './account-page.css',
+})
+export class AccountOverviewPage {}
+
+
+====================================================================================================
+FILE: pages\overview\account-page.css
+SIZE: 929 bytes
+====================================================================================================
+:host {
+  display: block;
+  min-width: 0;
+  width: 100%;
+}
+
+.account-page {
+  width: 100%;
+  min-width: 0;
+  padding: 1.25rem;
+  box-sizing: border-box;
+  color: inherit;
+}
+
+.account-page__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.account-page__header h1 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.8;
+}
+
+.account-page__header p {
+  margin: 0.35rem 0 0;
+  color: var(--muted-foreground, #777);
+  font-size: 0.875rem;
+  line-height: 1.8;
+}
+
+.account-page__content {
+  min-height: 8rem;
+  padding: 1rem;
+  border: 1px solid var(--border, #e5e5e5);
+  border-radius: 0.75rem;
+  background: var(--card, transparent);
+  box-sizing: border-box;
+}
+
+.account-page__content p {
+  margin: 0;
+  color: var(--muted-foreground, #777);
+  font-size: 0.875rem;
+  line-height: 2;
+}
+
+
+====================================================================================================
+FILE: pages\overview\account-page.html
+SIZE: 516 bytes
+====================================================================================================
+<main class="account-page">
+  <header class="account-page__header">
+    <div>
+      <h1>حساب من</h1>
+      <p>نمای کلی اطلاعات و وضعیت حساب کاربری.</p>
+    </div>
+  </header>
+
+  <section
+    class="account-page__content"
+    aria-label="محتوای صفحه"
+  >
+    <p>
+      اطلاعات این بخش پس از اتصال به سرویس مربوط و تأیید قرارداد API
+      نمایش داده خواهد شد.
+    </p>
+  </section>
+</main>
+
+
+====================================================================================================
+FILE: pages\permissions\account-page.css
+SIZE: 929 bytes
+====================================================================================================
+:host {
+  display: block;
+  min-width: 0;
+  width: 100%;
+}
+
+.account-page {
+  width: 100%;
+  min-width: 0;
+  padding: 1.25rem;
+  box-sizing: border-box;
+  color: inherit;
+}
+
+.account-page__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.account-page__header h1 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.8;
+}
+
+.account-page__header p {
+  margin: 0.35rem 0 0;
+  color: var(--muted-foreground, #777);
+  font-size: 0.875rem;
+  line-height: 1.8;
+}
+
+.account-page__content {
+  min-height: 8rem;
+  padding: 1rem;
+  border: 1px solid var(--border, #e5e5e5);
+  border-radius: 0.75rem;
+  background: var(--card, transparent);
+  box-sizing: border-box;
+}
+
+.account-page__content p {
+  margin: 0;
+  color: var(--muted-foreground, #777);
+  font-size: 0.875rem;
+  line-height: 2;
+}
+
+
+====================================================================================================
+FILE: pages\permissions\account-page.html
+SIZE: 536 bytes
+====================================================================================================
+<main class="account-page">
+  <header class="account-page__header">
+    <div>
+      <h1>مجوزهای دسترسی</h1>
+      <p>مشاهده اطلاعات مجوزها و سطح دسترسی حساب.</p>
+    </div>
+  </header>
+
+  <section
+    class="account-page__content"
+    aria-label="محتوای صفحه"
+  >
+    <p>
+      اطلاعات این بخش پس از اتصال به سرویس مربوط و تأیید قرارداد API
+      نمایش داده خواهد شد.
+    </p>
+  </section>
+</main>
+
+
+====================================================================================================
+FILE: pages\permissions\account-permissions.page.ts
+SIZE: 245 bytes
+====================================================================================================
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'igd-account-permissions-page',
+  standalone: true,
+  templateUrl: './account-page.html',
+  styleUrl: './account-page.css',
+})
+export class AccountPermissionsPage {}
+
+
+====================================================================================================
+FILE: pages\profile\account-page.css
+SIZE: 929 bytes
+====================================================================================================
+:host {
+  display: block;
+  min-width: 0;
+  width: 100%;
+}
+
+.account-page {
+  width: 100%;
+  min-width: 0;
+  padding: 1.25rem;
+  box-sizing: border-box;
+  color: inherit;
+}
+
+.account-page__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.account-page__header h1 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.8;
+}
+
+.account-page__header p {
+  margin: 0.35rem 0 0;
+  color: var(--muted-foreground, #777);
+  font-size: 0.875rem;
+  line-height: 1.8;
+}
+
+.account-page__content {
+  min-height: 8rem;
+  padding: 1rem;
+  border: 1px solid var(--border, #e5e5e5);
+  border-radius: 0.75rem;
+  background: var(--card, transparent);
+  box-sizing: border-box;
+}
+
+.account-page__content p {
+  margin: 0;
+  color: var(--muted-foreground, #777);
+  font-size: 0.875rem;
+  line-height: 2;
+}
+
+
+====================================================================================================
+FILE: pages\profile\account-page.html
+SIZE: 534 bytes
+====================================================================================================
+<main class="account-page">
+  <header class="account-page__header">
+    <div>
+      <h1>اطلاعات حساب</h1>
+      <p>مشاهده و مدیریت اطلاعات پایه حساب کاربری.</p>
+    </div>
+  </header>
+
+  <section
+    class="account-page__content"
+    aria-label="محتوای صفحه"
+  >
+    <p>
+      اطلاعات این بخش پس از اتصال به سرویس مربوط و تأیید قرارداد API
+      نمایش داده خواهد شد.
+    </p>
+  </section>
+</main>
+
+
+====================================================================================================
+FILE: pages\profile\account-profile.page.ts
+SIZE: 237 bytes
+====================================================================================================
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'igd-account-profile-page',
+  standalone: true,
+  templateUrl: './account-page.html',
+  styleUrl: './account-page.css',
+})
+export class AccountProfilePage {}
+
+
+====================================================================================================
+FILE: pages\security\account-page.css
+SIZE: 929 bytes
+====================================================================================================
+:host {
+  display: block;
+  min-width: 0;
+  width: 100%;
+}
+
+.account-page {
+  width: 100%;
+  min-width: 0;
+  padding: 1.25rem;
+  box-sizing: border-box;
+  color: inherit;
+}
+
+.account-page__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.account-page__header h1 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.8;
+}
+
+.account-page__header p {
+  margin: 0.35rem 0 0;
+  color: var(--muted-foreground, #777);
+  font-size: 0.875rem;
+  line-height: 1.8;
+}
+
+.account-page__content {
+  min-height: 8rem;
+  padding: 1rem;
+  border: 1px solid var(--border, #e5e5e5);
+  border-radius: 0.75rem;
+  background: var(--card, transparent);
+  box-sizing: border-box;
+}
+
+.account-page__content p {
+  margin: 0;
+  color: var(--muted-foreground, #777);
+  font-size: 0.875rem;
+  line-height: 2;
+}
+
+
+====================================================================================================
+FILE: pages\security\account-page.html
+SIZE: 530 bytes
+====================================================================================================
+<main class="account-page">
+  <header class="account-page__header">
+    <div>
+      <h1>امنیت حساب</h1>
+      <p>مدیریت تنظیمات و وضعیت امنیت حساب کاربری.</p>
+    </div>
+  </header>
+
+  <section
+    class="account-page__content"
+    aria-label="محتوای صفحه"
+  >
+    <p>
+      اطلاعات این بخش پس از اتصال به سرویس مربوط و تأیید قرارداد API
+      نمایش داده خواهد شد.
+    </p>
+  </section>
+</main>
+
+
+====================================================================================================
+FILE: pages\security\account-security.page.ts
+SIZE: 239 bytes
+====================================================================================================
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'igd-account-security-page',
+  standalone: true,
+  templateUrl: './account-page.html',
+  styleUrl: './account-page.css',
+})
+export class AccountSecurityPage {}
+
+
+====================================================================================================
+FILE: pages\sessions\account-page.css
+SIZE: 929 bytes
+====================================================================================================
+:host {
+  display: block;
+  min-width: 0;
+  width: 100%;
+}
+
+.account-page {
+  width: 100%;
+  min-width: 0;
+  padding: 1.25rem;
+  box-sizing: border-box;
+  color: inherit;
+}
+
+.account-page__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.account-page__header h1 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.8;
+}
+
+.account-page__header p {
+  margin: 0.35rem 0 0;
+  color: var(--muted-foreground, #777);
+  font-size: 0.875rem;
+  line-height: 1.8;
+}
+
+.account-page__content {
+  min-height: 8rem;
+  padding: 1rem;
+  border: 1px solid var(--border, #e5e5e5);
+  border-radius: 0.75rem;
+  background: var(--card, transparent);
+  box-sizing: border-box;
+}
+
+.account-page__content p {
+  margin: 0;
+  color: var(--muted-foreground, #777);
+  font-size: 0.875rem;
+  line-height: 2;
+}
+
+
+====================================================================================================
+FILE: pages\sessions\account-page.html
+SIZE: 544 bytes
+====================================================================================================
+<main class="account-page">
+  <header class="account-page__header">
+    <div>
+      <h1>نشست‌های کاربری</h1>
+      <p>فضای مدیریت نشست‌ها و ورودهای حساب کاربری.</p>
+    </div>
+  </header>
+
+  <section
+    class="account-page__content"
+    aria-label="محتوای صفحه"
+  >
+    <p>
+      اطلاعات این بخش پس از اتصال به سرویس مربوط و تأیید قرارداد API
+      نمایش داده خواهد شد.
+    </p>
+  </section>
+</main>
+
+
+====================================================================================================
+FILE: pages\sessions\account-sessions.page.ts
+SIZE: 239 bytes
+====================================================================================================
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'igd-account-sessions-page',
+  standalone: true,
+  templateUrl: './account-page.html',
+  styleUrl: './account-page.css',
+})
+export class AccountSessionsPage {}
+
+
+====================================================================================================
+FILE: pages\verification\account-page.css
+SIZE: 929 bytes
+====================================================================================================
+:host {
+  display: block;
+  min-width: 0;
+  width: 100%;
+}
+
+.account-page {
+  width: 100%;
+  min-width: 0;
+  padding: 1.25rem;
+  box-sizing: border-box;
+  color: inherit;
+}
+
+.account-page__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.account-page__header h1 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.8;
+}
+
+.account-page__header p {
+  margin: 0.35rem 0 0;
+  color: var(--muted-foreground, #777);
+  font-size: 0.875rem;
+  line-height: 1.8;
+}
+
+.account-page__content {
+  min-height: 8rem;
+  padding: 1rem;
+  border: 1px solid var(--border, #e5e5e5);
+  border-radius: 0.75rem;
+  background: var(--card, transparent);
+  box-sizing: border-box;
+}
+
+.account-page__content p {
+  margin: 0;
+  color: var(--muted-foreground, #777);
+  font-size: 0.875rem;
+  line-height: 2;
+}
+
+
+====================================================================================================
+FILE: pages\verification\account-page.html
+SIZE: 534 bytes
+====================================================================================================
+<main class="account-page">
+  <header class="account-page__header">
+    <div>
+      <h1>احراز هویت</h1>
+      <p>مشاهده وضعیت و پیگیری فرایندهای احراز هویت.</p>
+    </div>
+  </header>
+
+  <section
+    class="account-page__content"
+    aria-label="محتوای صفحه"
+  >
+    <p>
+      اطلاعات این بخش پس از اتصال به سرویس مربوط و تأیید قرارداد API
+      نمایش داده خواهد شد.
+    </p>
+  </section>
+</main>
+
+
+====================================================================================================
+FILE: pages\verification\account-verification.page.ts
+SIZE: 247 bytes
+====================================================================================================
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'igd-account-verification-page',
+  standalone: true,
+  templateUrl: './account-page.html',
+  styleUrl: './account-page.css',
+})
+export class AccountVerificationPage {}
+
+
+====================================================================================================
+FILE: README.md
+SIZE: 1580 bytes
+====================================================================================================
+# IGD Account Frontend
+
+This directory contains the Account frontend feature.
+
+## Structure
+
+- `account.routes.ts`: Account feature routes.
+- `models/`: Shared technical types.
+- `services/`: Account API communication.
+- `pages/overview/`: Account overview.
+- `pages/profile/`: Basic account profile.
+- `pages/legal-entity/`: Legal entity information.
+- `pages/contacts/`: Phone and email information.
+- `pages/verification/`: Verification status.
+- `pages/security/`: Security settings.
+- `pages/devices/`: Registered devices.
+- `pages/sessions/`: User session interface.
+- `pages/permissions/`: Authorization information.
+
+## API integration
+
+The API service uses the existing runtime configuration and Angular HttpClient.
+
+The service currently contains GET operations for routes observed in the
+Account backend server routing.
+
+The existence of a route does not prove its complete request/response
+contract or authorization behavior. Concrete DTOs, user identity resolution,
+session behavior and authorization requirements must be verified before
+connecting pages to live data.
+
+No mock backend data is included.
+
+## Deliberately not implemented
+
+- Token storage.
+- Authentication interceptor.
+- Automatic current-user ID resolution.
+- Password and authentication request payloads.
+- Verification submission payloads.
+- Device revocation commands.
+- Session listing or revocation operations.
+- Profile, phone, email or legal-entity mutation commands.
+
+These require verified backend contracts and a confirmed authentication flow.
+
+
+====================================================================================================
+FILE: services\account-api.service.ts
+SIZE: 3181 bytes
+====================================================================================================
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+import { RUNTIME_CONFIG } from '../../../core/config/runtime-config';
+
+/**
+ * Account API access layer.
+ *
+ * Important:
+ * - Uses the existing HttpClient provider.
+ * - Uses the existing runtime API base URL.
+ * - Does not implement token storage or authentication interceptors.
+ * - Does not assume undocumented request or response DTOs.
+ * - User identifiers are supplied by the caller.
+ */
+@Injectable({
+  providedIn: 'root',
+})
+export class AccountApiService {
+  private readonly http = inject(HttpClient);
+
+  private readonly apiRoot =
+    `${RUNTIME_CONFIG.apiBaseUrl.replace(/\/+$/, '')}/api/v1`;
+
+  private endpoint(path: string): string {
+    return `${this.apiRoot}${path}`;
+  }
+
+  /**
+   * GET /api/v1/auth/authorization/me
+   *
+   * Returns the current authorization information.
+   * The concrete response schema must be verified against the backend.
+   */
+  getCurrentAuthorization<T = unknown>(): Observable<T> {
+    return this.http.get<T>(
+      this.endpoint('/auth/authorization/me'),
+    );
+  }
+
+  /**
+   * GET /api/v1/auth/devices
+   *
+   * Lists registered devices.
+   * The concrete response schema must be verified against the backend.
+   */
+  getDevices<T = unknown>(): Observable<T> {
+    return this.http.get<T>(
+      this.endpoint('/auth/devices'),
+    );
+  }
+
+  /**
+   * GET /api/v1/users/{id}
+   */
+  getUser<T = unknown>(userId: string): Observable<T> {
+    return this.http.get<T>(
+      this.endpoint(`/users/${encodeURIComponent(userId)}`),
+    );
+  }
+
+  /**
+   * GET /api/v1/users/{id}/profile
+   */
+  getUserProfile<T = unknown>(userId: string): Observable<T> {
+    return this.http.get<T>(
+      this.endpoint(
+        `/users/${encodeURIComponent(userId)}/profile`,
+      ),
+    );
+  }
+
+  /**
+   * GET /api/v1/users/{id}/phones
+   */
+  getUserPhones<T = unknown>(userId: string): Observable<T> {
+    return this.http.get<T>(
+      this.endpoint(
+        `/users/${encodeURIComponent(userId)}/phones`,
+      ),
+    );
+  }
+
+  /**
+   * GET /api/v1/users/{id}/emails
+   */
+  getUserEmails<T = unknown>(userId: string): Observable<T> {
+    return this.http.get<T>(
+      this.endpoint(
+        `/users/${encodeURIComponent(userId)}/emails`,
+      ),
+    );
+  }
+
+  /**
+   * GET /api/v1/users/{id}/legal-entity
+   */
+  getLegalEntity<T = unknown>(userId: string): Observable<T> {
+    return this.http.get<T>(
+      this.endpoint(
+        `/users/${encodeURIComponent(userId)}/legal-entity`,
+      ),
+    );
+  }
+
+  /**
+   * GET /api/v1/verifications/{id}
+   */
+  getVerification<T = unknown>(verificationId: string): Observable<T> {
+    return this.http.get<T>(
+      this.endpoint(
+        `/verifications/${encodeURIComponent(verificationId)}`,
+      ),
+    );
+  }
+  /**
+   * POST /api/v1/auth/logout
+   * Ends the current authenticated session on the server.
+   */
+  logout(): Observable<void> {
+    return this.http.post<void>(
+      this.endpoint('/auth/logout'),
+      {},
+    );
+  }
+}
+
+
+====================================================================================================
+FILE: services\account-demo.store.ts
+SIZE: 6451 bytes
+====================================================================================================
+import { Injectable, signal } from '@angular/core';
+
+import {
+  AccountProfile,
+  AccountLegalEntity,
+  AccountContact,
+  AccountDevice,
+  AccountSession,
+  AccountPermission,
+  LocalVerificationDocument,
+} from '../models/account.models';
+
+/**
+ * Temporary frontend-only state.
+ *
+ * This store is intentionally in-memory.
+ * It does not authenticate users, persist credentials,
+ * or claim that remote operations have succeeded.
+ *
+ * Replace this implementation with the verified Account API
+ * adapter when backend contracts are ready.
+ */
+@Injectable({
+  providedIn: 'root',
+})
+export class AccountDemoStore {
+  readonly profile = signal<AccountProfile>({
+    firstName: '',
+    lastName: '',
+    nationalId: '',
+    birthDate: '',
+    fatherName: '',
+    address: '',
+    postalCode: '',
+  });
+
+  readonly legalEntity = signal<AccountLegalEntity>({
+    legalName: '',
+    nationalId: '',
+    registrationNumber: '',
+    economicCode: '',
+    legalType: '',
+    registrationDate: '',
+  });
+
+  readonly phones = signal<AccountContact[]>([]);
+  readonly emails = signal<AccountContact[]>([]);
+
+  readonly documents = signal<LocalVerificationDocument[]>([]);
+
+  readonly devices = signal<AccountDevice[]>([
+    {
+      id: 'device-demo-1',
+      name: 'دستگاه فعلی',
+      browser: 'مرورگر فعلی',
+      lastSeen: 'این نشست نمایشی',
+      active: true,
+      trusted: true,
+    },
+    {
+      id: 'device-demo-2',
+      name: 'دستگاه نمونه دوم',
+      browser: 'Chrome / Windows',
+      lastSeen: 'اطلاعات آزمایشی',
+      active: true,
+      trusted: false,
+    },
+  ]);
+
+  readonly sessions = signal<AccountSession[]>([
+    {
+      id: 'session-demo-1',
+      device: 'دستگاه فعلی',
+      location: 'نشست نمایشی',
+      createdAt: 'اطلاعات آزمایشی',
+      lastActivity: 'اکنون',
+      current: true,
+      active: true,
+    },
+    {
+      id: 'session-demo-2',
+      device: 'دستگاه نمونه دوم',
+      location: 'موقعیت ثبت نشده',
+      createdAt: 'اطلاعات آزمایشی',
+      lastActivity: 'اطلاعات آزمایشی',
+      current: false,
+      active: true,
+    },
+  ]);
+
+  readonly permissions = signal<AccountPermission[]>([
+    {
+      code: 'user.read',
+      name: 'مشاهده اطلاعات کاربر',
+      description: 'مشاهده اطلاعات پایه حساب کاربری',
+      category: 'حساب کاربری',
+    },
+    {
+      code: 'user.update',
+      name: 'ویرایش اطلاعات کاربر',
+      description: 'ویرایش اطلاعات مجاز حساب',
+      category: 'حساب کاربری',
+    },
+    {
+      code: 'profile.read',
+      name: 'مشاهده مشخصات',
+      description: 'مشاهده اطلاعات تکمیلی پروفایل',
+      category: 'پروفایل',
+    },
+    {
+      code: 'profile.update',
+      name: 'ویرایش مشخصات',
+      description: 'ویرایش اطلاعات تکمیلی پروفایل',
+      category: 'پروفایل',
+    },
+    {
+      code: 'verification.read',
+      name: 'مشاهده احراز هویت',
+      description: 'مشاهده وضعیت درخواست‌های احراز هویت',
+      category: 'احراز هویت',
+    },
+    {
+      code: 'verification.request',
+      name: 'درخواست احراز هویت',
+      description: 'ثبت درخواست احراز هویت',
+      category: 'احراز هویت',
+    },
+    {
+      code: 'market.read',
+      name: 'مشاهده بازار',
+      description: 'دسترسی مشاهده‌ای به بازار',
+      category: 'بازار',
+    },
+    {
+      code: 'order.create',
+      name: 'ایجاد سفارش',
+      description: 'مجوز ایجاد سفارش در محدوده مجاز',
+      category: 'بازار',
+    },
+  ]);
+
+  private sequence = 0;
+
+  private createId(prefix: string): string {
+    this.sequence += 1;
+    return `${prefix}-${Date.now()}-${this.sequence}`;
+  }
+
+  updateProfile(value: AccountProfile): void {
+    this.profile.set({ ...value });
+  }
+
+  updateLegalEntity(value: AccountLegalEntity): void {
+    this.legalEntity.set({ ...value });
+  }
+
+  addPhone(value: string): void {
+    const items = this.phones();
+    this.phones.set([
+      ...items,
+      {
+        id: this.createId('phone'),
+        value,
+        primary: items.length === 0,
+        verified: false,
+      },
+    ]);
+  }
+
+  removePhone(id: string): void {
+    const remaining = this.phones().filter(item => item.id !== id);
+    if (remaining.length > 0 && !remaining.some(item => item.primary)) {
+      remaining[0].primary = true;
+    }
+    this.phones.set([...remaining]);
+  }
+
+  setPrimaryPhone(id: string): void {
+    this.phones.update(items =>
+      items.map(item => ({ ...item, primary: item.id === id })),
+    );
+  }
+
+  addEmail(value: string): void {
+    const items = this.emails();
+    this.emails.set([
+      ...items,
+      {
+        id: this.createId('email'),
+        value,
+        primary: items.length === 0,
+        verified: false,
+      },
+    ]);
+  }
+
+  removeEmail(id: string): void {
+    const remaining = this.emails().filter(item => item.id !== id);
+    if (remaining.length > 0 && !remaining.some(item => item.primary)) {
+      remaining[0].primary = true;
+    }
+    this.emails.set([...remaining]);
+  }
+
+  setPrimaryEmail(id: string): void {
+    this.emails.update(items =>
+      items.map(item => ({ ...item, primary: item.id === id })),
+    );
+  }
+
+  addDocument(type: string, fileName: string): void {
+    this.documents.update(items => [
+      ...items,
+      {
+        id: this.createId('document'),
+        type,
+        fileName,
+        selectedAt: new Date().toLocaleString('fa-IR'),
+        state: 'local_only',
+      },
+    ]);
+  }
+
+  removeDocument(id: string): void {
+    this.documents.update(items => items.filter(item => item.id !== id));
+  }
+
+  revokeDevice(id: string): void {
+    this.devices.update(items =>
+      items.map(item =>
+        item.id === id ? { ...item, active: false } : item,
+      ),
+    );
+  }
+
+  endSession(id: string): void {
+    this.sessions.update(items =>
+      items.map(item =>
+        item.id === id ? { ...item, active: false } : item,
+      ),
+    );
+  }
+
+  endOtherSessions(): void {
+    this.sessions.update(items =>
+      items.map(item =>
+        item.current ? item : { ...item, active: false },
+      ),
+    );
+  }
+}
