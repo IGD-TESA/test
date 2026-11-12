@@ -1,0 +1,2066 @@
+IGD GENERAL MARKET SOURCE EXPORT
+DATE: 2026-11-12 04:30:18
+REPOSITORY: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform
+
+
+========== BEGIN: IGD-front/app/src/app/features/general-market/general-market.ts ==========
+import { Component, Input, OnInit } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatDividerModule } from '@angular/material/divider';
+
+import {
+  BrnResizableGroup,
+  BrnResizableHandle,
+  BrnResizablePanel,
+} from '@spartan-ng/brain/resizable';
+
+@Component({
+  selector: 'igd-terminal-dock-panel',
+  standalone: true,
+  imports: [
+    MatButtonModule,
+    MatIconModule,
+    MatTabsModule,
+    MatDividerModule,
+  ],
+  template: `
+    <section class="terminal-panel dock-terminal-panel">
+
+      @switch (kind) {
+
+        @case ('market-watch') {
+          <div class="panel-heading">
+            <div class="panel-title">
+              <mat-icon>monitoring</mat-icon>
+              <strong>دیده‌بان بازار کلی</strong>
+            </div>
+            <div class="panel-actions">
+              <span class="panel-caption">فهرست بازارها و عرضه‌ها</span>
+              <button mat-icon-button aria-label="تنظیمات دیده‌بان">
+                <mat-icon>tune</mat-icon>
+              </button>
+            </div>
+          </div>
+
+          <div class="market-filter-bar">
+            <button mat-button class="filter-active">همه بازارها</button>
+            <button mat-button>کالا</button>
+            <button mat-button>املاک</button>
+            <button mat-button>سایر دارایی‌ها</button>
+            <span class="filter-spacer"></span>
+            <button mat-icon-button aria-label="جست‌وجوی بازار">
+              <mat-icon>search</mat-icon>
+            </button>
+            <button mat-icon-button aria-label="فیلتر بازار">
+              <mat-icon>filter_list</mat-icon>
+            </button>
+          </div>
+
+          <div class="table-scroll">
+            <table class="terminal-table market-table">
+              <thead>
+                <tr>
+                  <th>نام عرضه / دارایی</th>
+                  <th>بازار</th>
+                  <th>قیمت</th>
+                  <th>تغییرات</th>
+                  <th>حجم</th>
+                  <th>وضعیت</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td colspan="6" class="empty-table">
+                    <mat-icon>table_chart</mat-icon>
+                    <span>اطلاعات عرضه‌ها پس از اتصال سرویس بازار نمایش داده می‌شود.</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <footer class="panel-footer">
+            <span>دیده‌بان بازار</span>
+            <span>آماده اتصال به سرویس کاتالوگ و عرضه‌ها</span>
+          </footer>
+        }
+
+        @case ('portfolio') {
+          <div class="panel-heading">
+            <div class="panel-title">
+              <mat-icon>account_balance_wallet</mat-icon>
+              <strong>پرتفوی دارایی‌ها</strong>
+            </div>
+            <button mat-button class="text-action">
+              مشاهده همه دارایی‌ها
+              <mat-icon>chevron_left</mat-icon>
+            </button>
+          </div>
+
+          <div class="portfolio-summary">
+            <div class="summary-cell">
+              <span>ارزش کل دارایی‌ها</span>
+              <strong>—</strong>
+            </div>
+            <div class="summary-cell">
+              <span>سود و زیان کل</span>
+              <strong>—</strong>
+            </div>
+            <div class="summary-cell">
+              <span>موقعیت‌های فعال</span>
+              <strong>—</strong>
+            </div>
+          </div>
+
+          <div class="table-scroll">
+            <table class="terminal-table">
+              <thead>
+                <tr>
+                  <th>دارایی</th>
+                  <th>مقدار</th>
+                  <th>ارزش</th>
+                  <th>وضعیت</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td colspan="4" class="empty-table">
+                    اطلاعات پرتفوی از سرویس دارایی‌ها دریافت خواهد شد.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        }
+
+        @case ('instrument-details') {
+          <div class="panel-heading compact-heading">
+            <div class="panel-title">
+              <mat-icon>info</mat-icon>
+              <strong>اطلاعات نماد</strong>
+            </div>
+          </div>
+
+          <div class="panel-body details-content">
+            <div class="instrument-identity">
+              <div class="instrument-placeholder">—</div>
+              <strong>نمادی انتخاب نشده</strong>
+              <span>جزئیات دارایی انتخابی</span>
+            </div>
+
+            <mat-divider></mat-divider>
+
+            <div class="detail-row">
+              <span>آخرین قیمت</span>
+              <strong>—</strong>
+            </div>
+            <div class="detail-row">
+              <span>تغییرات</span>
+              <strong>—</strong>
+            </div>
+            <div class="detail-row">
+              <span>حجم عرضه</span>
+              <strong>—</strong>
+            </div>
+            <div class="detail-row">
+              <span>وضعیت عرضه</span>
+              <strong>—</strong>
+            </div>
+
+            <mat-divider></mat-divider>
+
+            <div class="detail-section-title">اطلاعات تکمیلی</div>
+            <button mat-button class="detail-link">مشخصات دارایی</button>
+            <button mat-button class="detail-link">قراردادها و تعهدات</button>
+            <button mat-button class="detail-link">سوابق و رویدادها</button>
+          </div>
+        }
+
+        @case ('instrument-chart') {
+          <div class="panel-heading">
+            <div class="panel-title">
+              <mat-icon>show_chart</mat-icon>
+              <strong>نمودار و روند دارایی</strong>
+            </div>
+            <span class="panel-caption">نمایش پس از اتصال داده‌های بازار</span>
+          </div>
+
+          <div class="chart-placeholder">
+            <mat-icon>monitoring</mat-icon>
+            <strong>نمودار دارایی انتخابی</strong>
+            <span>داده‌ای برای ترسیم نمودار دریافت نشده است.</span>
+          </div>
+        }
+
+        @case ('orderbook') {
+          <div class="panel-heading compact-heading">
+            <div class="panel-title">
+              <mat-icon>swap_vert</mat-icon>
+              <strong>دفتر سفارش</strong>
+            </div>
+          </div>
+
+          <div class="panel-body">
+            <div class="orderbook-instrument">
+              <span>نماد انتخابی</span>
+              <strong>—</strong>
+            </div>
+
+            <div class="order-side sell-side">
+              <div class="order-side-heading">
+                <span>فروش</span>
+                <span>قیمت</span>
+                <span>مقدار</span>
+              </div>
+              <div class="order-empty">سفارشی وجود ندارد</div>
+            </div>
+
+            <div class="order-spread">
+              <span>قیمت میانی</span>
+              <strong>—</strong>
+            </div>
+
+            <div class="order-side buy-side">
+              <div class="order-side-heading">
+                <span>خرید</span>
+                <span>قیمت</span>
+                <span>مقدار</span>
+              </div>
+              <div class="order-empty">سفارشی وجود ندارد</div>
+            </div>
+
+            <div class="orderbook-legend">
+              <span class="legend-sell">فروش</span>
+              <span class="legend-buy">خرید</span>
+            </div>
+          </div>
+        }
+
+        @case ('activity') {
+          <div class="panel-heading activity-heading">
+            <div class="panel-title">
+              <mat-icon>view_list</mat-icon>
+              <strong>فضای کاری و سوابق</strong>
+            </div>
+            <span class="panel-caption">وضعیت مستقل سفارش، معامله و تسویه</span>
+          </div>
+
+          <mat-tab-group
+            class="terminal-tabs"
+            animationDuration="0ms"
+            [disableRipple]="true">
+
+            <mat-tab label="سفارشات فعال">
+              <div class="tab-empty">
+                سفارش‌های فعال پس از اتصال سرویس سفارش‌ها نمایش داده می‌شوند.
+              </div>
+            </mat-tab>
+
+            <mat-tab label="تاریخچه سفارشات">
+              <div class="tab-empty">تاریخچه سفارش‌ها</div>
+            </mat-tab>
+
+            <mat-tab label="معاملات">
+              <div class="tab-empty">سوابق معاملات</div>
+            </mat-tab>
+
+            <mat-tab label="اجرای معامله">
+              <div class="tab-empty">مراحل اجرای معامله</div>
+            </mat-tab>
+
+            <mat-tab label="وضعیت تسویه">
+              <div class="tab-empty">وضعیت و سوابق تسویه</div>
+            </mat-tab>
+          </mat-tab-group>
+        }
+
+      }
+    </section>
+  `,
+  styles: [`
+    :host {
+      display: flex;
+      min-width: 0;
+      min-height: 0;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .dock-terminal-panel {
+      width: 100%;
+      height: 100%;
+    }
+
+    .chart-placeholder {
+      flex: 1;
+      min-height: 120px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: var(--terminal-muted, #777b72);
+      background:
+        linear-gradient(#e9e6dc 1px, transparent 1px),
+        linear-gradient(90deg, #e9e6dc 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+
+    .chart-placeholder mat-icon {
+      font-size: 34px;
+      width: 34px;
+      height: 34px;
+      color: var(--terminal-olive, #77764b);
+    }
+
+    .chart-placeholder strong {
+      color: var(--terminal-green, #183d32);
+    }
+  `],
+})
+export class TerminalDockPanelComponent {
+  @Input() kind = '';
+}
+
+
+
+@Component({
+  selector: 'igd-general-market',
+  standalone: true,
+  imports: [
+    MatButtonModule,
+    MatIconModule,
+    BrnResizableGroup,
+    BrnResizablePanel,
+    BrnResizableHandle,
+  ],
+  templateUrl: './general-market.html',
+  styleUrl: './general-market.css',
+})
+export class GeneralMarketPage implements OnInit {
+
+  activeTool = 'market';
+
+  // Root order in RTL:
+  // 1. Order book (right)
+  // 2. Instrument details (middle)
+  // 3. Market column (left)
+
+  rootLayout: number[] = [22, 34, 44];
+
+  // Market column: watch above portfolio
+  marketLayout: number[] = [62, 38];
+
+  // Center column: details above chart
+  centerLayout: number[] = [43, 57];
+
+  showOrderBook = false;
+  showActivity = false;
+
+  private readonly layoutStorageKey =
+    'igd.general-market.layouts.v2';
+
+  private readonly lastLayoutStorageKey =
+    'igd.general-market.last-layout.v2';
+
+  ngOnInit(): void {
+    this.restoreLastLayout();
+  }
+
+  // ----------------------------------------------------------
+  // LAYOUT EVENTS
+  // ----------------------------------------------------------
+
+  onRootLayoutChange(layout: number[]): void {
+    if (!Array.isArray(layout) || layout.length < 2) return;
+
+    this.rootLayout = [...layout];
+    this.persistLastLayout();
+  }
+
+  onMarketLayoutChange(layout: number[]): void {
+    if (!Array.isArray(layout) || layout.length !== 2) return;
+
+    this.marketLayout = [...layout];
+    this.persistLastLayout();
+  }
+
+  onCenterLayoutChange(layout: number[]): void {
+    const expected = this.showActivity ? 3 : 2;
+
+    if (!Array.isArray(layout) || layout.length !== expected) return;
+
+    this.centerLayout = [...layout];
+    this.persistLastLayout();
+  }
+
+  // ----------------------------------------------------------
+  // PRESETS
+  // ----------------------------------------------------------
+
+  applyPreset(
+    preset: 'default' | 'trading' | 'analysis' | 'history'
+  ): void {
+
+    switch (preset) {
+
+      case 'default':
+        this.showOrderBook = false;
+        this.showActivity = false;
+        this.rootLayout = [44, 56];
+        this.marketLayout = [62, 38];
+        this.centerLayout = [43, 57];
+        break;
+
+      case 'trading':
+        this.showOrderBook = true;
+        this.showActivity = false;
+        this.rootLayout = [22, 34, 44];
+        this.marketLayout = [65, 35];
+        this.centerLayout = [38, 62];
+        break;
+
+      case 'analysis':
+        this.showOrderBook = false;
+        this.showActivity = false;
+        this.rootLayout = [42, 58];
+        this.marketLayout = [55, 45];
+        this.centerLayout = [30, 70];
+        break;
+
+      case 'history':
+        this.showOrderBook = true;
+        this.showActivity = true;
+        this.rootLayout = [20, 34, 46];
+        this.marketLayout = [58, 42];
+        this.centerLayout = [28, 37, 35];
+        break;
+    }
+
+    this.persistLastLayout();
+  }
+
+  // ----------------------------------------------------------
+  // PANEL VISIBILITY
+  // ----------------------------------------------------------
+
+  toggleOrderBook(): void {
+
+    this.showOrderBook = !this.showOrderBook;
+
+    this.rootLayout = this.showOrderBook
+      ? [22, 34, 44]
+      : [44, 56];
+
+    this.persistLastLayout();
+  }
+
+  toggleActivity(): void {
+
+    this.showActivity = !this.showActivity;
+
+    this.centerLayout = this.showActivity
+      ? [30, 40, 30]
+      : [43, 57];
+
+    this.persistLastLayout();
+  }
+
+  // ----------------------------------------------------------
+  // NAMED LAYOUTS
+  // ----------------------------------------------------------
+
+  saveNamedLayout(): void {
+
+    const name = window.prompt('نام چیدمان را وارد کنید:');
+
+    if (!name || !name.trim()) return;
+
+    try {
+
+      const layouts = this.readNamedLayouts();
+
+      layouts[name.trim()] = this.getLayoutSnapshot();
+
+      localStorage.setItem(
+        this.layoutStorageKey,
+        JSON.stringify(layouts)
+      );
+
+    } catch {
+
+      window.alert(
+        'ذخیره چیدمان انجام نشد. فضای ذخیره‌سازی مرورگر را بررسی کنید.'
+      );
+    }
+  }
+
+  loadNamedLayout(): void {
+
+    const layouts = this.readNamedLayouts();
+    const names = Object.keys(layouts);
+
+    if (names.length === 0) {
+      window.alert('هنوز چیدمان اختصاصی ذخیره نشده است.');
+      return;
+    }
+
+    const selected = window.prompt(
+      'نام چیدمان موردنظر را دقیقاً وارد کنید:\n\n' +
+      names.join('\n')
+    );
+
+    if (!selected || !layouts[selected]) return;
+
+    try {
+
+      this.applyLayoutSnapshot(layouts[selected]);
+      this.persistLastLayout();
+
+    } catch {
+
+      window.alert('بازیابی چیدمان انتخاب‌شده ناموفق بود.');
+    }
+  }
+
+  private getLayoutSnapshot(): Record<string, unknown> {
+
+    return {
+      version: 2,
+      rootLayout: [...this.rootLayout],
+      marketLayout: [...this.marketLayout],
+      centerLayout: [...this.centerLayout],
+      showOrderBook: this.showOrderBook,
+      showActivity: this.showActivity,
+    };
+  }
+
+  private applyLayoutSnapshot(snapshot: any): void {
+
+    if (!snapshot || snapshot.version !== 2) {
+      throw new Error('Unsupported layout version.');
+    }
+
+    if (
+      !Array.isArray(snapshot.marketLayout) ||
+      snapshot.marketLayout.length !== 2
+    ) {
+      throw new Error('Invalid market layout.');
+    }
+
+    if (
+      !Array.isArray(snapshot.centerLayout) ||
+      snapshot.centerLayout.length !==
+        (snapshot.showActivity ? 3 : 2)
+    ) {
+      throw new Error('Invalid center layout.');
+    }
+
+    if (
+      !Array.isArray(snapshot.rootLayout) ||
+      snapshot.rootLayout.length !==
+        (snapshot.showOrderBook ? 3 : 2)
+    ) {
+      throw new Error('Invalid root layout.');
+    }
+
+    this.showOrderBook = Boolean(snapshot.showOrderBook);
+    this.showActivity = Boolean(snapshot.showActivity);
+
+    this.rootLayout = [...snapshot.rootLayout];
+    this.marketLayout = [...snapshot.marketLayout];
+    this.centerLayout = [...snapshot.centerLayout];
+  }
+
+  private readNamedLayouts(): Record<string, any> {
+
+    try {
+
+      const raw = localStorage.getItem(this.layoutStorageKey);
+
+      if (!raw) return {};
+
+      const parsed = JSON.parse(raw);
+
+      return parsed && typeof parsed === 'object'
+        ? parsed
+        : {};
+
+    } catch {
+
+      return {};
+    }
+  }
+
+  // ----------------------------------------------------------
+  // LAST LAYOUT PERSISTENCE
+  // ----------------------------------------------------------
+
+  private persistLastLayout(): void {
+
+    try {
+
+      localStorage.setItem(
+        this.lastLayoutStorageKey,
+        JSON.stringify(this.getLayoutSnapshot())
+      );
+
+    } catch {
+      // Workspace remains usable if storage is unavailable.
+    }
+  }
+
+  private restoreLastLayout(): void {
+
+    try {
+
+      const raw = localStorage.getItem(this.lastLayoutStorageKey);
+
+      if (!raw) {
+        this.applyPreset('default');
+        return;
+      }
+
+      this.applyLayoutSnapshot(JSON.parse(raw));
+
+    } catch {
+
+      this.applyPreset('default');
+    }
+  }
+
+  resetLayout(): void {
+    this.applyPreset('default');
+  }
+
+  // ----------------------------------------------------------
+  // VERTICAL TOOLBAR ACTIONS
+  // ----------------------------------------------------------
+
+  selectTool(tool: string): void {
+
+    this.activeTool = tool;
+
+    if (tool === 'history' && !this.showActivity) {
+      this.toggleActivity();
+    }
+  }
+}
+========== END: IGD-front/app/src/app/features/general-market/general-market.ts ==========
+
+========== BEGIN: IGD-front/app/src/app/features/general-market/general-market.html ==========
+<div class="trading-terminal" dir="rtl">
+
+<header class="terminal-header">
+
+    <div class="header-brand">
+      <div class="brand-symbol">
+        <mat-icon>account_balance</mat-icon>
+      </div>
+      <div class="brand-text">
+        <strong>IGD</strong>
+        <span>سامانه مدیریت دارایی‌های واقعی</span>
+      </div>
+    </div>
+
+    <nav class="header-navigation">
+      <button mat-button class="nav-item active">بازار کلی</button>
+      <button mat-button class="nav-item">دارایی‌های من</button>
+      <button mat-button class="nav-item">قراردادها</button>
+      <button mat-button class="nav-item">خدمات</button>
+      <button mat-button class="nav-item">تسویه</button>
+    </nav>
+
+    <div class="header-actions">
+      <button mat-icon-button aria-label="جست‌وجو">
+        <mat-icon>search</mat-icon>
+      </button>
+      <button mat-icon-button aria-label="اعلان‌ها">
+        <mat-icon>notifications_none</mat-icon>
+      </button>
+      <span class="market-status">
+        <span class="status-dot"></span>
+        وضعیت بازار
+      </span>
+    </div>
+
+  </header>
+
+  <main class="workspace">
+
+    <section class="dock-region">
+
+      <div class="workspace-controls">
+
+        <div class="workspace-control-group">
+          <button mat-button (click)="applyPreset('default')">
+            <mat-icon>dashboard</mat-icon>
+            پیش‌فرض
+          </button>
+
+          <button mat-button (click)="applyPreset('trading')">
+            <mat-icon>candlestick_chart</mat-icon>
+            معاملاتی
+          </button>
+
+          <button mat-button (click)="applyPreset('analysis')">
+            <mat-icon>analytics</mat-icon>
+            تحلیلی
+          </button>
+
+          <button mat-button (click)="applyPreset('history')">
+            <mat-icon>history</mat-icon>
+            سوابق
+          </button>
+        </div>
+
+        <div class="workspace-control-group">
+          <button mat-button (click)="toggleOrderBook()">
+            <mat-icon>swap_vert</mat-icon>
+            دفتر سفارش
+          </button>
+
+          <button mat-button (click)="toggleActivity()">
+            <mat-icon>view_list</mat-icon>
+            فضای سوابق
+          </button>
+
+          <button mat-button (click)="saveNamedLayout()">
+            <mat-icon>save</mat-icon>
+            ذخیره چیدمان
+          </button>
+
+          <button mat-button (click)="loadNamedLayout()">
+            <mat-icon>folder_open</mat-icon>
+            بازیابی چیدمان
+          </button>
+
+          <button mat-button (click)="resetLayout()">
+            <mat-icon>restart_alt</mat-icon>
+            بازگشت به پیش‌فرض
+          </button>
+        </div>
+
+      </div>
+
+      <div class="resizable-host">
+
+        <brn-resizable-group
+          class="workspace-resizable-root"
+          direction="horizontal"
+          [layout]="rootLayout"
+          (layoutChange)="onRootLayoutChange($event)">
+
+          @if (showOrderBook) {
+            <brn-resizable-panel
+              id="igd-orderbook"
+              [defaultSize]="22"
+              [minSize]="14">
+
+              <igd-terminal-dock-panel
+                class="resizable-terminal-panel"
+                kind="orderbook">
+              </igd-terminal-dock-panel>
+
+            </brn-resizable-panel>
+
+            <brn-resizable-handle withHandle />
+          }
+
+          <brn-resizable-panel
+            id="igd-instrument-column"
+            [defaultSize]="34"
+            [minSize]="22">
+
+            <brn-resizable-group
+              class="workspace-resizable-vertical"
+              direction="vertical"
+              [layout]="centerLayout"
+              (layoutChange)="onCenterLayoutChange($event)">
+
+              <brn-resizable-panel
+                id="igd-instrument-details"
+                [defaultSize]="43"
+                [minSize]="20">
+
+                <igd-terminal-dock-panel
+                  class="resizable-terminal-panel"
+                  kind="instrument-details">
+                </igd-terminal-dock-panel>
+
+              </brn-resizable-panel>
+
+              <brn-resizable-handle withHandle />
+
+              <brn-resizable-panel
+                id="igd-instrument-chart"
+                [defaultSize]="57"
+                [minSize]="20">
+
+                <igd-terminal-dock-panel
+                  class="resizable-terminal-panel"
+                  kind="instrument-chart">
+                </igd-terminal-dock-panel>
+
+              </brn-resizable-panel>
+
+              @if (showActivity) {
+                <brn-resizable-handle withHandle />
+
+                <brn-resizable-panel
+                  id="igd-activity"
+                  [defaultSize]="30"
+                  [minSize]="15">
+
+                  <igd-terminal-dock-panel
+                    class="resizable-terminal-panel"
+                    kind="activity">
+                  </igd-terminal-dock-panel>
+
+                </brn-resizable-panel>
+              }
+
+            </brn-resizable-group>
+
+          </brn-resizable-panel>
+
+          <brn-resizable-handle withHandle />
+
+          <brn-resizable-panel
+            id="igd-market-column"
+            [defaultSize]="44"
+            [minSize]="25">
+
+            <brn-resizable-group
+              class="workspace-resizable-vertical"
+              direction="vertical"
+              [layout]="marketLayout"
+              (layoutChange)="onMarketLayoutChange($event)">
+
+              <brn-resizable-panel
+                id="igd-market-watch"
+                [defaultSize]="62"
+                [minSize]="20">
+
+                <igd-terminal-dock-panel
+                  class="resizable-terminal-panel"
+                  kind="market-watch">
+                </igd-terminal-dock-panel>
+
+              </brn-resizable-panel>
+
+              <brn-resizable-handle withHandle />
+
+              <brn-resizable-panel
+                id="igd-portfolio"
+                [defaultSize]="38"
+                [minSize]="18">
+
+                <igd-terminal-dock-panel
+                  class="resizable-terminal-panel"
+                  kind="portfolio">
+                </igd-terminal-dock-panel>
+
+              </brn-resizable-panel>
+
+            </brn-resizable-group>
+
+          </brn-resizable-panel>
+
+        </brn-resizable-group>
+
+      </div>
+
+    </section>
+
+    <!-- VERTICAL TOOLBAR - PROTECTED: KEEP UNCHANGED -->
+    <aside class="terminal-toolbar">
+
+      <button mat-icon-button
+        [class.selected]="activeTool === 'market'"
+        (click)="selectTool('market')"
+        aria-label="بازار کلی">
+        <mat-icon>candlestick_chart</mat-icon>
+      </button>
+
+      <button mat-icon-button
+        [class.selected]="activeTool === 'assets'"
+        (click)="selectTool('assets')"
+        aria-label="دارایی‌های من">
+        <mat-icon>account_balance_wallet</mat-icon>
+      </button>
+
+      <button mat-icon-button
+        [class.selected]="activeTool === 'orders'"
+        (click)="selectTool('orders')"
+        aria-label="سفارش‌ها">
+        <mat-icon>receipt_long</mat-icon>
+      </button>
+
+      <button mat-icon-button
+        [class.selected]="activeTool === 'contracts'"
+        (click)="selectTool('contracts')"
+        aria-label="قراردادها">
+        <mat-icon>description</mat-icon>
+      </button>
+
+      <button mat-icon-button
+        [class.selected]="activeTool === 'services'"
+        (click)="selectTool('services')"
+        aria-label="خدمات">
+        <mat-icon>local_shipping</mat-icon>
+      </button>
+
+      <button mat-icon-button
+        [class.selected]="activeTool === 'history'"
+        (click)="selectTool('history')"
+        aria-label="فضای کاری و سوابق"
+        title="فضای کاری و سوابق">
+        <mat-icon>history</mat-icon>
+      </button>
+
+      <div class="toolbar-spacer"></div>
+
+      <button mat-icon-button
+        [class.selected]="activeTool === 'notifications'"
+        (click)="selectTool('notifications')"
+        aria-label="اعلان‌ها">
+        <mat-icon>notifications</mat-icon>
+      </button>
+
+      <button mat-icon-button
+        [class.selected]="activeTool === 'account'"
+        (click)="selectTool('account')"
+        aria-label="حساب کاربری">
+        <mat-icon>person</mat-icon>
+      </button>
+
+    </aside>
+
+  </main>
+
+<footer class="asset-status-bar">
+
+    <div class="asset-status-item">
+      <span>وضعیت حساب</span>
+      <strong>—</strong>
+    </div>
+
+    <div class="asset-status-item user-status">
+      <span>نام کاربر</span>
+      <strong>حساب کاربری</strong>
+    </div>
+
+    <div class="asset-status-item">
+      <span>قدرت خرید</span>
+      <strong>—</strong>
+    </div>
+
+    <div class="asset-status-item">
+      <span>ارزش پرتفوی</span>
+      <strong>—</strong>
+    </div>
+
+    <div class="asset-status-item">
+      <span>سود و زیان روزانه</span>
+      <strong>—</strong>
+    </div>
+
+    <div class="asset-status-item">
+      <span>سود و زیان کل</span>
+      <strong>—</strong>
+    </div>
+
+    <div class="asset-status-item">
+      <span>موجودی رزروشده</span>
+      <strong>—</strong>
+    </div>
+
+  </footer>
+
+</div>
+========== END: IGD-front/app/src/app/features/general-market/general-market.html ==========
+
+========== BEGIN: IGD-front/app/src/app/features/general-market/general-market.css ==========
+:host {
+  display: block;
+  min-height: 100dvh;
+  color: var(--mat-sys-on-surface, #26352d);
+  font-family: inherit;
+}
+
+.trading-terminal {
+  --terminal-green: #183d32;
+  --terminal-green-light: #285846;
+  --terminal-olive: #77764b;
+  --terminal-gold: #b69a5b;
+  --terminal-cream: #f4f0e5;
+  --terminal-border: #d9d4c6;
+  --terminal-muted: #777b72;
+  --terminal-panel: #fffefa;
+  --terminal-background: #eae7dc;
+
+  min-height: 100dvh;
+  height: 100dvh;
+  display: grid;
+  grid-template-rows: 52px minmax(0, 1fr) 54px;
+  gap: 5px;
+  padding: 5px;
+  overflow: hidden;
+  background: var(--terminal-background);
+  direction: rtl;
+  font-size: 12px;
+}
+
+/* HEADER */
+
+.terminal-header {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 0 12px;
+  background: var(--terminal-green);
+  color: #fff;
+  border: 1px solid #102e25;
+  box-shadow: 0 1px 3px #0002;
+}
+
+.header-brand,
+.header-navigation,
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.brand-symbol {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  color: var(--terminal-gold);
+  border: 1px solid #ffffff35;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  white-space: nowrap;
+}
+
+.brand-text strong {
+  font-size: 16px;
+  letter-spacing: 1px;
+}
+
+.brand-text span {
+  color: #d1d9d1;
+  font-size: 9px;
+}
+
+.header-navigation {
+  height: 100%;
+}
+
+.nav-item {
+  height: 100%;
+  color: #e8eee8 !important;
+  border-radius: 0 !important;
+  font-size: 11px;
+}
+
+.nav-item.active {
+  color: #fff !important;
+  border-bottom: 2px solid var(--terminal-gold);
+}
+
+.header-actions {
+  white-space: nowrap;
+}
+
+.header-actions button {
+  color: #fff;
+}
+
+.market-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  color: #d8e1d8;
+}
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #9dbb76;
+}
+
+/* MAIN GRID - MIRRORED */
+
+.workspace {
+  direction: rtl;
+  min-height: 0;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 143px minmax(0, 2fr) minmax(165px, 1fr) minmax(190px, 1.15fr);
+  grid-template-areas: "tools market details orderbook";
+  gap: 5px;
+  overflow: hidden;
+}
+
+.terminal-panel {
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--terminal-panel);
+  border: 1px solid var(--terminal-border);
+  box-shadow: 0 1px 2px #00000008;
+}
+
+.main-market-column {
+  grid-area: market;
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: minmax(0, 1.3fr) minmax(150px, 0.85fr);
+  gap: 5px;
+}
+
+.market-watch,
+.portfolio-panel {
+  min-height: 0;
+}
+
+/* PANEL HEADINGS */
+
+.panel-heading {
+  flex: 0 0 36px;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 0 10px;
+  background: #f0eee4;
+  border-bottom: 1px solid var(--terminal-border);
+}
+
+.panel-title {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--terminal-green);
+  white-space: nowrap;
+}
+
+.panel-title mat-icon {
+  width: 17px;
+  height: 17px;
+  font-size: 17px;
+}
+
+.panel-title strong {
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.panel-actions {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.panel-caption {
+  color: var(--terminal-muted);
+  font-size: 10px;
+}
+
+.panel-heading button {
+  width: 30px;
+  height: 30px;
+}
+
+.compact-heading {
+  padding: 0 5px;
+}
+
+/* MARKET WATCH */
+
+.market-filter-bar {
+  flex: 0 0 36px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 7px;
+  border-bottom: 1px solid var(--terminal-border);
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.market-filter-bar button {
+  min-width: 0;
+  padding: 0 8px;
+  font-size: 10px;
+}
+
+.market-filter-bar .filter-active {
+  color: var(--terminal-green);
+  background: #e5e9df;
+}
+
+.filter-spacer {
+  flex: 1;
+}
+
+.table-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}
+
+.terminal-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: auto;
+  font-size: 11px;
+  text-align: right;
+}
+
+.terminal-table thead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.terminal-table th {
+  height: 30px;
+  padding: 0 10px;
+  background: #f7f5ee;
+  color: #565e55;
+  font-weight: 600;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--terminal-border);
+}
+
+.terminal-table td {
+  height: 34px;
+  padding: 5px 10px;
+  border-bottom: 1px solid #ece9df;
+}
+
+.empty-table {
+  height: 90px !important;
+  text-align: center;
+  color: var(--terminal-muted);
+}
+
+.empty-table mat-icon {
+  display: block;
+  margin: 0 auto 5px;
+  color: #aaa795;
+}
+
+.panel-footer {
+  flex: 0 0 25px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 9px;
+  color: var(--terminal-muted);
+  font-size: 9px;
+  border-top: 1px solid #ece9df;
+}
+
+/* PORTFOLIO */
+
+.portfolio-summary {
+  flex: 0 0 53px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--terminal-border);
+}
+
+.summary-cell {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 5px 12px;
+  border-left: 1px solid #e9e5da;
+}
+
+.summary-cell span {
+  color: var(--terminal-muted);
+  font-size: 10px;
+}
+
+.summary-cell strong {
+  font-size: 13px;
+  color: var(--terminal-green);
+}
+
+.text-action {
+  color: var(--terminal-green) !important;
+  font-size: 10px;
+}
+
+/* ORDER BOOK */
+
+.orderbook-panel {
+  grid-area: orderbook;
+}
+
+.orderbook-panel .panel-body,
+.details-panel .panel-body {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 8px;
+}
+
+.orderbook-instrument {
+  display: flex;
+  justify-content: space-between;
+  padding: 7px 5px;
+  margin-bottom: 8px;
+  background: #f5f3eb;
+  color: var(--terminal-muted);
+}
+
+.orderbook-instrument strong {
+  color: var(--terminal-green);
+}
+
+.order-side {
+  border: 1px solid var(--terminal-border);
+  margin-bottom: 7px;
+}
+
+.order-side-heading {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  padding: 7px 4px;
+  font-size: 10px;
+  font-weight: 600;
+  text-align: center;
+  background: #f4f1e8;
+}
+
+.sell-side .order-side-heading {
+  color: #a34d43;
+}
+
+.buy-side .order-side-heading {
+  color: #34704e;
+}
+
+.order-empty {
+  min-height: 65px;
+  display: grid;
+  place-items: center;
+  color: var(--terminal-muted);
+  font-size: 10px;
+}
+
+.order-spread {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 5px;
+  margin-bottom: 7px;
+  background: #ece9de;
+  color: var(--terminal-muted);
+}
+
+.order-spread strong {
+  color: var(--terminal-green);
+}
+
+.orderbook-legend {
+  display: flex;
+  justify-content: space-around;
+  font-size: 10px;
+}
+
+.legend-buy {
+  color: #34704e;
+}
+
+.legend-sell {
+  color: #a34d43;
+}
+
+/* DETAILS */
+
+.details-panel {
+  grid-area: details;
+}
+
+.instrument-identity {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 7px;
+  padding: 12px 2px;
+  text-align: center;
+}
+
+.instrument-placeholder {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--terminal-border);
+  background: #f5f3eb;
+  color: var(--terminal-olive);
+  font-size: 20px;
+}
+
+.instrument-identity strong {
+  color: var(--terminal-green);
+  font-size: 11px;
+}
+
+.instrument-identity span {
+  color: var(--terminal-muted);
+  font-size: 9px;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 5px;
+  padding: 9px 2px;
+  border-bottom: 1px solid #ece9df;
+  font-size: 10px;
+}
+
+.detail-row span {
+  color: var(--terminal-muted);
+}
+
+.detail-row strong {
+  color: var(--terminal-green);
+}
+
+.detail-section-title {
+  padding: 11px 2px 5px;
+  color: var(--terminal-green);
+  font-weight: 700;
+}
+
+.detail-link {
+  display: block;
+  width: 100%;
+  text-align: right;
+  font-size: 10px;
+}
+
+/* TOOLBAR */
+
+.terminal-toolbar {
+  grid-area: tools;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 3px;
+  background: var(--terminal-green);
+  border: 1px solid #102e25;
+}
+
+.terminal-toolbar button {
+  flex: 0 0 34px;
+  width: 34px;
+  height: 34px;
+  color: #e6e9df;
+}
+
+.terminal-toolbar button.selected {
+  background: #ffffff20;
+  color: #e5c78b;
+  border-right: 2px solid var(--terminal-gold);
+  border-radius: 0;
+}
+
+.toolbar-spacer {
+  flex: 1;
+}
+
+/* LOWER ACTIVITY WORKSPACE */
+
+.activity-panel {
+  min-height: 0;
+}
+
+.activity-heading {
+  flex-basis: 32px;
+}
+
+.terminal-tabs {
+  min-height: 0;
+  flex: 1;
+}
+
+.terminal-tabs ::ng-deep .mat-mdc-tab-labels {
+  background: #f6f4ed;
+  border-bottom: 1px solid var(--terminal-border);
+}
+
+.terminal-tabs ::ng-deep .mat-mdc-tab {
+  height: 38px;
+  min-width: 110px;
+  font-size: 10px;
+}
+
+.terminal-tabs ::ng-deep .mat-mdc-tab-body-wrapper {
+  flex: 1;
+  min-height: 0;
+}
+
+.tab-empty {
+  min-height: 90px;
+  display: grid;
+  place-items: center;
+  color: var(--terminal-muted);
+  font-size: 11px;
+}
+
+/* BOTTOM ASSET STRIP */
+
+.asset-status-bar {
+  min-width: 0;
+  display: flex;
+  align-items: stretch;
+  background: var(--terminal-green);
+  color: #fff;
+  border: 1px solid #102e25;
+  overflow: hidden;
+}
+
+.asset-status-item {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 3px;
+  padding: 0 12px;
+  border-left: 1px solid #ffffff25;
+  white-space: nowrap;
+}
+
+.asset-status-item span {
+  color: #cbd7cb;
+  font-size: 9px;
+}
+
+.asset-status-item strong {
+  color: #f3ead5;
+  font-size: 11px;
+}
+
+.user-status strong {
+  color: #fff;
+}
+
+/* COLLAPSIBLE PANELS */
+
+.workspace.orderbook-collapsed {
+  grid-template-columns: 143px minmax(0, 2fr) minmax(165px, 1fr) 39px;
+}
+
+.workspace.details-collapsed {
+  grid-template-columns: 143px minmax(0, 2fr) 39px minmax(190px, 1.15fr);
+}
+
+.workspace.orderbook-collapsed.details-collapsed {
+  grid-template-columns: 143px minmax(0, 2fr) 39px 39px;
+}
+
+.workspace.orderbook-collapsed .orderbook-panel .panel-body,
+.workspace.details-collapsed .details-panel .panel-body {
+  display: none;
+}
+
+.workspace.orderbook-collapsed .orderbook-panel .panel-title,
+.workspace.details-collapsed .details-panel .panel-title {
+  display: none;
+}
+
+
+/* HISTORY VIEW - OPENS ONLY FROM THE VERTICAL TOOLBAR */
+
+.workspace.history-mode {
+  grid-template-columns: minmax(0, 1fr) 43px;
+  grid-template-areas: "history tools";
+}
+
+.workspace.history-mode .activity-panel {
+  grid-area: history;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+}
+
+.workspace.history-mode .terminal-tabs {
+  min-height: 0;
+  flex: 1;
+}
+
+.workspace.history-mode .terminal-tabs ::ng-deep .mat-mdc-tab-body-wrapper {
+  flex: 1;
+  min-height: 0;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 1250px) {
+.workspace {
+  grid-template-columns: 140px minmax(0, 2fr) minmax(130px, 1fr) minmax(145px, 1.15fr);
+  }
+
+.workspace.orderbook-collapsed {
+  grid-template-columns: 140px minmax(0, 2fr) minmax(130px, 1fr) 39px;
+  }
+
+.workspace.details-collapsed {
+  grid-template-columns: 140px minmax(0, 2fr) 39px minmax(145px, 1.15fr);
+  }
+
+  .header-navigation {
+    gap: 0;
+  }
+
+  .nav-item {
+    padding: 0 7px;
+  }
+}
+
+@media (max-width: 900px) {
+  .trading-terminal {
+    min-width: 760px;
+    overflow: auto;
+    height: auto;
+    min-height: 100dvh;
+    grid-template-rows: 52px 570px 190px 54px;
+  }
+
+  .header-navigation .nav-item:nth-child(n+4) {
+    display: none;
+  }
+
+.workspace {
+  grid-template-columns: 140px minmax(0, 2fr) minmax(110px, 1fr) minmax(125px, 1.15fr);
+  }
+}
+
+/* ============================================================
+   IGD DOCKVIEW WORKSPACE
+   The original terminal toolbar rules remain untouched.
+   ============================================================ */
+
+.workspace {
+  direction: rtl;
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 43px;
+  grid-template-areas: "dock tools";
+  gap: 5px;
+  overflow: hidden;
+}
+
+.dock-region {
+  grid-area: dock;
+  display: grid;
+  grid-template-rows: 38px minmax(0, 1fr);
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  gap: 4px;
+}
+
+.workspace-controls {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 0 6px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  background: var(--terminal-panel);
+  border: 1px solid var(--terminal-border);
+}
+
+.workspace-control-group {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.workspace-controls button {
+  min-width: 0;
+  height: 32px;
+  padding: 0 8px;
+  color: var(--terminal-green);
+  font-size: 10px;
+}
+
+.workspace-controls button mat-icon {
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+  vertical-align: middle;
+}
+
+.dockview-host {
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+  background: var(--terminal-panel);
+  border: 1px solid var(--terminal-border);
+}
+
+.igd-dockview {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+}
+
+.dockview-host .dv-dockview {
+  width: 100%;
+  height: 100%;
+}
+
+.dock-terminal-panel {
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+}
+
+.dock-terminal-panel .panel-body {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 8px;
+}
+
+.dock-terminal-panel .terminal-tabs {
+  min-height: 0;
+  flex: 1;
+}
+
+.dock-terminal-panel .terminal-tabs ::ng-deep .mat-mdc-tab-body-wrapper {
+  flex: 1;
+  min-height: 0;
+}
+
+.dock-terminal-panel .tab-empty {
+  min-height: 90px;
+  display: grid;
+  place-items: center;
+  color: var(--terminal-muted);
+  font-size: 11px;
+}
+
+.dock-terminal-panel .details-content {
+  overflow: auto;
+}
+
+.dock-terminal-panel .panel-heading {
+  flex-shrink: 0;
+}
+
+.dock-terminal-panel .table-scroll {
+  flex: 1;
+  min-height: 0;
+}
+
+.dock-terminal-panel .portfolio-summary {
+  flex-shrink: 0;
+}
+
+@media (max-width: 1250px) {
+  .workspace-controls {
+    justify-content: flex-start;
+  }
+
+  .workspace-control-group {
+    gap: 0;
+  }
+
+  .workspace-controls button {
+    padding: 0 5px;
+  }
+}
+
+@media (max-width: 900px) {
+  .trading-terminal {
+    min-width: 760px;
+    overflow: auto;
+    height: auto;
+    min-height: 100dvh;
+    grid-template-rows: 52px minmax(570px, 1fr) 54px;
+  }
+
+  .workspace {
+    min-height: 570px;
+  }
+
+  .dock-region {
+    grid-template-rows: 38px minmax(0, 1fr);
+  }
+}
+
+/* ============================================================
+   IGD SPARTAN RESIZABLE WORKSPACE
+   ============================================================ */
+
+.workspace {
+  direction: rtl;
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 43px;
+  grid-template-areas: "dock tools";
+  gap: 5px;
+  overflow: hidden;
+}
+
+.dock-region {
+  grid-area: dock;
+  display: grid;
+  grid-template-rows: 38px minmax(0, 1fr);
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  gap: 4px;
+}
+
+.workspace-controls {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 0 6px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  background: var(--terminal-panel);
+  border: 1px solid var(--terminal-border);
+}
+
+.workspace-control-group {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.workspace-controls button {
+  min-width: 0;
+  height: 32px;
+  padding: 0 8px;
+  color: var(--terminal-green);
+  font-size: 10px;
+}
+
+.workspace-controls button mat-icon {
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+  vertical-align: middle;
+}
+
+.resizable-host {
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+  background: var(--terminal-panel);
+  border: 1px solid var(--terminal-border);
+}
+
+.workspace-resizable-root,
+.workspace-resizable-vertical {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.workspace-resizable-root {
+  direction: rtl;
+  flex-direction: row;
+}
+
+.workspace-resizable-vertical {
+  direction: ltr;
+  flex-direction: column;
+}
+
+brn-resizable-panel {
+  display: flex;
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+brn-resizable-panel > * {
+  min-width: 0;
+  min-height: 0;
+  width: 100%;
+  height: 100%;
+}
+
+brn-resizable-handle {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  flex: 0 0 6px;
+  min-width: 6px;
+  min-height: 6px;
+  align-items: center;
+  justify-content: center;
+  background: #e1ddcf;
+  border: 0;
+  outline: none;
+  cursor: col-resize;
+  transition: background 120ms ease;
+}
+
+brn-resizable-handle:hover,
+brn-resizable-handle:focus-visible {
+  background: var(--terminal-gold);
+}
+
+.workspace-resizable-vertical > brn-resizable-handle {
+  flex-basis: 6px;
+  min-width: 0;
+  min-height: 6px;
+  width: 100%;
+  cursor: row-resize;
+}
+
+brn-resizable-handle > div {
+  width: 28px;
+  height: 3px;
+  border-radius: 3px;
+  background: #aaa58f;
+}
+
+.workspace-resizable-root > brn-resizable-handle > div {
+  width: 3px;
+  height: 28px;
+}
+
+.resizable-terminal-panel {
+  display: flex;
+  min-width: 0;
+  min-height: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.resizable-terminal-panel .terminal-panel {
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+}
+
+.resizable-terminal-panel .panel-body {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 8px;
+}
+
+.resizable-terminal-panel .terminal-tabs {
+  min-height: 0;
+  flex: 1;
+}
+
+.resizable-terminal-panel .terminal-tabs ::ng-deep .mat-mdc-tab-body-wrapper {
+  flex: 1;
+  min-height: 0;
+}
+
+.resizable-terminal-panel .tab-empty {
+  min-height: 90px;
+  display: grid;
+  place-items: center;
+  color: var(--terminal-muted);
+  font-size: 11px;
+}
+
+.resizable-terminal-panel .panel-heading {
+  flex-shrink: 0;
+}
+
+.resizable-terminal-panel .table-scroll {
+  flex: 1;
+  min-height: 0;
+}
+
+.resizable-terminal-panel .portfolio-summary {
+  flex-shrink: 0;
+}
+
+@media (max-width: 1250px) {
+  .workspace-controls {
+    justify-content: flex-start;
+  }
+
+  .workspace-control-group {
+    gap: 0;
+  }
+
+  .workspace-controls button {
+    padding: 0 5px;
+  }
+}
+
+@media (max-width: 900px) {
+  .trading-terminal {
+    min-width: 760px;
+    overflow: auto;
+    height: auto;
+    min-height: 100dvh;
+    grid-template-rows: 52px minmax(570px, 1fr) 54px;
+  }
+
+  .workspace {
+    min-height: 570px;
+  }
+
+  .dock-region {
+    grid-template-rows: 38px minmax(0, 1fr);
+  }
+}
+
+========== END: IGD-front/app/src/app/features/general-market/general-market.css ==========
