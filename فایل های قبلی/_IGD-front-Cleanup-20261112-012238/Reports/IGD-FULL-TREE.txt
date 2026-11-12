@@ -1,0 +1,20 @@
+﻿FULL IGD-FRONT DIRECTORY TREE
+Date: 11/12/2026 00:55:30
+Root: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\IGD-front
+
+IGD-front/
+\--- app
+    \--- src
+        \--- app
+            \--- features
+                \--- account
+                    +--- models
+                    |   \--- account.models.ts
+                    +--- pages
+                    |   +--- account-workspace.page.css
+                    |   +--- account-workspace.page.html
+                    |   \--- account-workspace.page.ts
+                    +--- services
+                    |   \--- account-demo.store.ts
+                    +--- account.routes.ts
+                    \--- README.md

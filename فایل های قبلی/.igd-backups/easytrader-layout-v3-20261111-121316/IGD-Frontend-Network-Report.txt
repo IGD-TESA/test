@@ -1,0 +1,21 @@
+﻿
+Name                    Status HTTP Seconds URL                                                         Error                       
+----                    ------ ---- ------- ---                                                         -----                       
+Node.js Download Server FAILED -      40.02 https://nodejs.org/dist/v24.15.0/node-v24.15.0-win-x64.zip  The operation has timed out.
+Node.js SHA256 Manifest FAILED -      20.01 https://nodejs.org/dist/v24.15.0/SHASUMS256.txt             The operation has timed out.
+NPM Registry            FAILED -      20.02 https://registry.npmjs.org/                                 The operation has timed out.
+Angular CLI             FAILED -      20.02 https://registry.npmjs.org/@angular%2fcli                   The operation has timed out.
+Angular Material        FAILED -         20 https://registry.npmjs.org/@angular%2fmaterial              The operation has timed out.
+Angular CDK             FAILED -      20.01 https://registry.npmjs.org/@angular%2fcdk                   The operation has timed out.
+Spartan Brain           FAILED -         20 https://registry.npmjs.org/@spartan-ng%2fbrain              The operation has timed out.
+Spartan CLI             FAILED -      20.02 https://registry.npmjs.org/@spartan-ng%2fcli                The operation has timed out.
+Tailwind CSS            FAILED -      20.01 https://registry.npmjs.org/tailwindcss                      The operation has timed out.
+Tailwind PostCSS        FAILED -      20.01 https://registry.npmjs.org/@tailwindcss%2fpostcss           The operation has timed out.
+Apache ECharts          FAILED -      20.01 https://registry.npmjs.org/echarts                          The operation has timed out.
+ngx-echarts             FAILED -      20.01 https://registry.npmjs.org/ngx-echarts                      The operation has timed out.
+Vazirmatn Font          FAILED -      20.01 https://registry.npmjs.org/@fontsource-variable%2fvazirmatn The operation has timed out.
+Inter Font              FAILED -      20.02 https://registry.npmjs.org/@fontsource-variable%2finter     The operation has timed out.
+Material Symbols        PASS   200     1.12 https://registry.npmjs.org/material-symbols                                             
+
+
+

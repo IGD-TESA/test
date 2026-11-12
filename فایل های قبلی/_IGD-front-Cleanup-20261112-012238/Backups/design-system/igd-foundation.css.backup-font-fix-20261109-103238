@@ -1,0 +1,68 @@
+@layer theme, base, components, utilities;
+
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/preflight.css" layer(base);
+@import "tailwindcss/utilities.css";
+
+@import "@spartan-ng/brain/hlm-tailwind-preset.css";
+
+@import "@angular/material/prebuilt-themes/azure-blue.css";
+
+@import "@fontsource-variable/vazirmatn";
+@import "@fontsource-variable/inter";
+
+@import "material-symbols/outlined.css";
+
+:root {
+  color-scheme: light;
+
+  --igd-font-fa: "Vazirmatn Variable", sans-serif;
+  --igd-font-en: "Inter Variable", sans-serif;
+
+  --igd-green-950: #172b24;
+  --igd-green-900: #203b30;
+  --igd-green-800: #2b4d3d;
+  --igd-green-700: #3b6650;
+
+  --igd-olive-600: #7b8052;
+  --igd-gold-500: #b99a5b;
+
+  --igd-cream-50: #fbfaf6;
+  --igd-cream-100: #f4f1e8;
+  --igd-cream-200: #e9e4d7;
+
+  --igd-text-primary: #202923;
+  --igd-text-secondary: #6e766f;
+
+  --igd-border: #e5e1d7;
+
+  --igd-radius-sm: 8px;
+  --igd-radius-md: 14px;
+  --igd-radius-lg: 20px;
+}
+
+html,
+body {
+  min-height: 100%;
+  margin: 0;
+  background: var(--igd-cream-50);
+  color: var(--igd-text-primary);
+  font-family: var(--igd-font-fa);
+}
+
+body {
+  direction: rtl;
+  text-align: right;
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+* {
+  box-sizing: border-box;
+}

@@ -1,0 +1,289 @@
+﻿IGD-front
+
+├── app\
+│   ├── .angular\
+│   │   └── cache\
+│   │       └── 22.2.6\
+│   │           └── igd-front\
+│   │               ├── vite\
+│   │               │   ├── deps\
+│   │               │   │   ├── @angular_cdk_bidi.js
+│   │               │   │   ├── @angular_common_http.js
+│   │               │   │   ├── @angular_core.js
+│   │               │   │   ├── @angular_material_button.js
+│   │               │   │   ├── @angular_material_button.js.map
+│   │               │   │   ├── @angular_material_divider.js
+│   │               │   │   ├── @angular_material_divider.js.map
+│   │               │   │   ├── @angular_material_icon.js
+│   │               │   │   ├── @angular_material_icon.js.map
+│   │               │   │   ├── @angular_material_tabs.js
+│   │               │   │   ├── @angular_material_tabs.js.map
+│   │               │   │   ├── @angular_platform-browser.js
+│   │               │   │   ├── @angular_router.js
+│   │               │   │   ├── @angular_router.js.map
+│   │               │   │   ├── _metadata.json
+│   │               │   │   ├── _structural-styles-chunk-DreJsAi_.js
+│   │               │   │   ├── _structural-styles-chunk-DreJsAi_.js.map
+│   │               │   │   ├── bidi-CSfNc4k7.js
+│   │               │   │   ├── bidi-CSfNc4k7.js.map
+│   │               │   │   ├── catchError-CGAzCG_y.js
+│   │               │   │   ├── catchError-CGAzCG_y.js.map
+│   │               │   │   ├── core-hsl8ukWr.js
+│   │               │   │   ├── core-hsl8ukWr.js.map
+│   │               │   │   ├── http-Yo5eIwws.js
+│   │               │   │   ├── http-Yo5eIwws.js.map
+│   │               │   │   ├── isObservable-Bepasph9.js
+│   │               │   │   ├── isObservable-Bepasph9.js.map
+│   │               │   │   ├── package.json
+│   │               │   │   ├── platform-browser-D8nwwU0Q.js
+│   │               │   │   ├── platform-browser-D8nwwU0Q.js.map
+│   │               │   │   ├── private-CanW9Ekb.js
+│   │               │   │   ├── private-CanW9Ekb.js.map
+│   │               │   │   ├── share-Rr8eZZZX.js
+│   │               │   │   ├── share-Rr8eZZZX.js.map
+│   │               │   │   ├── take-DmTvGJfN.js
+│   │               │   │   ├── take-DmTvGJfN.js.map
+│   │               │   │   ├── takeUntil-Cna_bGE4.js
+│   │               │   │   ├── takeUntil-Cna_bGE4.js.map
+│   │               │   │   ├── tap-BKY530Qp.js
+│   │               │   │   └── tap-BKY530Qp.js.map
+│   │               │   └── com.chrome.devtools.json
+│   │               ├── .tsbuildinfo
+│   │               ├── angular-compiler.db
+│   │               └── angular-compiler.db-lock
+│   ├── .vscode\
+│   │   ├── extensions.json
+│   │   ├── launch.json
+│   │   └── tasks.json
+│   ├── node_modules\
+│   ├── public\
+│   │   └── favicon.ico
+│   ├── src\
+│   │   ├── app\
+│   │   │   ├── core\
+│   │   │   │   ├── api\
+│   │   │   │   │   └── clients\
+│   │   │   │   │       └── .gitkeep
+│   │   │   │   ├── auth\
+│   │   │   │   │   └── .gitkeep
+│   │   │   │   ├── authorization\
+│   │   │   │   │   └── .gitkeep
+│   │   │   │   ├── config\
+│   │   │   │   │   ├── .gitkeep
+│   │   │   │   │   └── runtime-config.ts
+│   │   │   │   ├── guards\
+│   │   │   │   │   └── .gitkeep
+│   │   │   │   └── interceptors\
+│   │   │   │       └── .gitkeep
+│   │   │   ├── features\
+│   │   │   │   ├── account\
+│   │   │   │   │   ├── models\
+│   │   │   │   │   │   └── account.models.ts
+│   │   │   │   │   ├── pages\
+│   │   │   │   │   │   ├── contacts\
+│   │   │   │   │   │   │   ├── account-contacts.page.ts
+│   │   │   │   │   │   │   ├── account-page.css
+│   │   │   │   │   │   │   └── account-page.html
+│   │   │   │   │   │   ├── devices\
+│   │   │   │   │   │   │   ├── account-devices.page.ts
+│   │   │   │   │   │   │   ├── account-page.css
+│   │   │   │   │   │   │   └── account-page.html
+│   │   │   │   │   │   ├── legal-entity\
+│   │   │   │   │   │   │   ├── account-legal-entity.page.ts
+│   │   │   │   │   │   │   ├── account-page.css
+│   │   │   │   │   │   │   └── account-page.html
+│   │   │   │   │   │   ├── overview\
+│   │   │   │   │   │   │   ├── account-overview.page.ts
+│   │   │   │   │   │   │   ├── account-page.css
+│   │   │   │   │   │   │   └── account-page.html
+│   │   │   │   │   │   ├── permissions\
+│   │   │   │   │   │   │   ├── account-page.css
+│   │   │   │   │   │   │   ├── account-page.html
+│   │   │   │   │   │   │   └── account-permissions.page.ts
+│   │   │   │   │   │   ├── profile\
+│   │   │   │   │   │   │   ├── account-page.css
+│   │   │   │   │   │   │   ├── account-page.html
+│   │   │   │   │   │   │   └── account-profile.page.ts
+│   │   │   │   │   │   ├── security\
+│   │   │   │   │   │   │   ├── account-page.css
+│   │   │   │   │   │   │   ├── account-page.html
+│   │   │   │   │   │   │   └── account-security.page.ts
+│   │   │   │   │   │   ├── sessions\
+│   │   │   │   │   │   │   ├── account-page.css
+│   │   │   │   │   │   │   ├── account-page.html
+│   │   │   │   │   │   │   └── account-sessions.page.ts
+│   │   │   │   │   │   └── verification\
+│   │   │   │   │   │       ├── account-page.css
+│   │   │   │   │   │       ├── account-page.html
+│   │   │   │   │   │       └── account-verification.page.ts
+│   │   │   │   │   ├── services\
+│   │   │   │   │   │   └── account-api.service.ts
+│   │   │   │   │   ├── .gitkeep
+│   │   │   │   │   ├── account.routes.ts
+│   │   │   │   │   ├── account.routes.ts.backup-20261110-092715
+│   │   │   │   │   └── README.md
+│   │   │   │   ├── contracts\
+│   │   │   │   │   ├── .gitkeep
+│   │   │   │   │   └── contracts.routes.ts
+│   │   │   │   ├── general-market\
+│   │   │   │   │   ├── audit\
+│   │   │   │   │   │   └── .gitkeep
+│   │   │   │   │   ├── catalogue\
+│   │   │   │   │   │   └── .gitkeep
+│   │   │   │   │   ├── commodity\
+│   │   │   │   │   │   └── .gitkeep
+│   │   │   │   │   ├── execution\
+│   │   │   │   │   │   └── .gitkeep
+│   │   │   │   │   ├── markets\
+│   │   │   │   │   │   └── .gitkeep
+│   │   │   │   │   ├── matching\
+│   │   │   │   │   │   └── .gitkeep
+│   │   │   │   │   ├── offer-requests\
+│   │   │   │   │   │   └── .gitkeep
+│   │   │   │   │   ├── offers\
+│   │   │   │   │   │   └── .gitkeep
+│   │   │   │   │   ├── order-book\
+│   │   │   │   │   │   └── .gitkeep
+│   │   │   │   │   ├── orders\
+│   │   │   │   │   │   └── .gitkeep
+│   │   │   │   │   ├── proposals\
+│   │   │   │   │   │   └── .gitkeep
+│   │   │   │   │   ├── real-estate\
+│   │   │   │   │   │   └── .gitkeep
+│   │   │   │   │   ├── regulatory\
+│   │   │   │   │   │   └── .gitkeep
+│   │   │   │   │   ├── trades\
+│   │   │   │   │   │   └── .gitkeep
+│   │   │   │   │   ├── general-market.css
+│   │   │   │   │   ├── general-market.css.backup-history-20261109-104747
+│   │   │   │   │   ├── general-market.css.bak-20261111-112109
+│   │   │   │   │   ├── general-market.html
+│   │   │   │   │   ├── general-market.html.backup-history-20261109-104747
+│   │   │   │   │   ├── general-market.routes.ts
+│   │   │   │   │   └── general-market.ts
+│   │   │   │   ├── my-assets\
+│   │   │   │   │   ├── .gitkeep
+│   │   │   │   │   └── my-assets.routes.ts
+│   │   │   │   ├── notifications\
+│   │   │   │   │   ├── .gitkeep
+│   │   │   │   │   └── notifications.routes.ts
+│   │   │   │   ├── services\
+│   │   │   │   │   ├── .gitkeep
+│   │   │   │   │   └── services.routes.ts
+│   │   │   │   └── settlement\
+│   │   │   │       ├── .gitkeep
+│   │   │   │       └── settlement.routes.ts
+│   │   │   ├── layouts\
+│   │   │   │   ├── auth-layout\
+│   │   │   │   │   └── .gitkeep
+│   │   │   │   └── main-layout\
+│   │   │   │       └── .gitkeep
+│   │   │   ├── shared\
+│   │   │   │   ├── components\
+│   │   │   │   │   └── .gitkeep
+│   │   │   │   ├── directives\
+│   │   │   │   │   └── .gitkeep
+│   │   │   │   ├── models\
+│   │   │   │   │   └── .gitkeep
+│   │   │   │   ├── pages\
+│   │   │   │   │   └── feature-placeholder\
+│   │   │   │   │       ├── feature-placeholder.page.css
+│   │   │   │   │       ├── feature-placeholder.page.html
+│   │   │   │   │       └── feature-placeholder.page.ts
+│   │   │   │   ├── pipes\
+│   │   │   │   │   └── .gitkeep
+│   │   │   │   ├── routing\
+│   │   │   │   │   └── feature-route.factory.ts
+│   │   │   │   └── utils\
+│   │   │   │       └── .gitkeep
+│   │   │   ├── app.config.ts
+│   │   │   ├── app.css
+│   │   │   ├── app.html
+│   │   │   ├── app.routes.ts
+│   │   │   ├── app.spec.ts
+│   │   │   └── app.ts
+│   │   ├── environments\
+│   │   │   ├── .gitkeep
+│   │   │   ├── environment.production.ts
+│   │   │   └── environment.ts
+│   │   ├── index.html
+│   │   ├── main.ts
+│   │   └── styles.css
+│   ├── .editorconfig
+│   ├── .gitignore
+│   ├── .npmrc
+│   ├── .postcssrc.json
+│   ├── .prettierrc
+│   ├── angular.json
+│   ├── angular.json.backup-20261107-101521
+│   ├── package.json
+│   ├── README.md
+│   ├── tsconfig.app.json
+│   ├── tsconfig.json
+│   └── tsconfig.spec.json
+├── assets\
+│   ├── fonts\
+│   │   ├── .gitkeep
+│   │   ├── inter-latin-ext-wght-normal.woff2
+│   │   ├── inter-latin-wght-normal.woff2
+│   │   ├── material-symbols-outlined.woff2
+│   │   ├── vazirmatn-arabic-wght-normal.woff2
+│   │   ├── vazirmatn-latin-ext-wght-normal.woff2
+│   │   └── vazirmatn-latin-wght-normal.woff2
+│   ├── illustrations\
+│   │   └── .gitkeep
+│   └── images\
+│       └── .gitkeep
+├── design-system\
+│   ├── components\
+│   │   └── .gitkeep
+│   ├── icons\
+│   │   └── .gitkeep
+│   ├── patterns\
+│   │   └── .gitkeep
+│   ├── themes\
+│   │   └── .gitkeep
+│   ├── tokens\
+│   │   ├── colors.css
+│   │   └── typography.css
+│   ├── igd-foundation.css
+│   └── igd-foundation.css.backup-font-fix-20261109-103238
+├── docs\
+│   ├── api\
+│   │   └── .gitkeep
+│   ├── architecture\
+│   │   ├── .gitkeep
+│   │   └── FRONTEND-STRUCTURE.txt
+│   ├── design-system\
+│   │   └── .gitkeep
+│   └── frontend\
+│       └── .gitkeep
+├── IGD-front\
+│   └── app\
+│       └── src\
+│           └── app\
+│               └── features\
+│                   └── account\
+│                       ├── models\
+│                       │   └── account.models.ts
+│                       ├── pages\
+│                       │   ├── account-workspace.page.css
+│                       │   ├── account-workspace.page.html
+│                       │   └── account-workspace.page.ts
+│                       ├── services\
+│                       │   └── account-demo.store.ts
+│                       ├── account.routes.ts
+│                       └── README.md
+├── node_modules\
+├── scripts\
+│   ├── Build-IGD-Front.ps1
+│   ├── igd-shell-source-report.txt
+│   ├── Initialize-IGD-Account-Frontend.ps1
+│   ├── market-workspace-history-report.txt
+│   └── Start-IGD-Front.ps1
+├── IGD-Frontend-Configuration-Review.txt
+├── IGD-Frontend-Tree-Report.txt
+├── IGD-front-Full-Tree.txt
+├── IGD-FULL-TREE.txt
+├── installation-manifest.json
+└── دستور اجرای فرانت اند.txt

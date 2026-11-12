@@ -1,0 +1,284 @@
+﻿IGD FRONTEND STRUCTURE CLEANUP
+DATE: 2026-11-12 01:22:38
+START PATH: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front
+REPOSITORY: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform
+FRONTEND ROOT: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front
+ANGULAR APP: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app
+NESTED ROOT: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\IGD-front
+QUARANTINE: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\_IGD-front-Cleanup-20261112-012238
+POLICY: No overwrite, no permanent source deletion, no build.
+NODE PATH: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\node_modules
+LINK TYPE: Junction
+TARGET: D:\Program Files\IGD-Frontend\Libraries\IGD-Frontend\node_modules
+NODE PATH: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\node_modules
+LINK TYPE: Junction
+TARGET: D:\Program Files\IGD-Frontend\Libraries\IGD-Frontend\node_modules
+app\angular.json : True
+app\package.json : True
+app\tsconfig.json : True
+app\src\main.ts : True
+app\src\styles.css : True
+app\src\app : True
+app\src\app\features\account : True
+app\src\app\features\general-market : True
+design-system\igd-foundation.css : True
+assets : True
+docs : True
+scripts : True
+
+### ACCOUNT ROUTE INTEGRATION ###
+MAIN ROUTES: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\account\account.routes.ts
+[ROUTE DOES NOT REFERENCE ACCOUNT WORKSPACE]
+[ACCOUNT WORKSPACE COMPONENT EXISTS]
+
+### FINAL STRUCTURE ###
+[DIR]  app
+[DIR]  assets
+[DIR]  design-system
+[DIR]  docs
+[DIR]  scripts
+[FILE] IGD-Frontend-Cleanup-20261112-011828.txt
+[FILE] installation-manifest.json
+[FILE] دستور اجرای فرانت اند.txt
+[DIR]  app\.vscode
+[DIR]  app\public
+[DIR]  app\src
+[FILE] app\.editorconfig
+[FILE] app\.gitignore
+[FILE] app\.npmrc
+[FILE] app\.postcssrc.json
+[FILE] app\.prettierrc
+[FILE] app\angular.json
+[FILE] app\package.json
+[FILE] app\README.md
+[FILE] app\tsconfig.app.json
+[FILE] app\tsconfig.json
+[FILE] app\tsconfig.spec.json
+[FILE] app\.vscode\extensions.json
+[FILE] app\.vscode\launch.json
+[FILE] app\.vscode\tasks.json
+[FILE] app\public\favicon.ico
+[DIR]  app\src\app
+[DIR]  app\src\environments
+[FILE] app\src\index.html
+[FILE] app\src\main.ts
+[FILE] app\src\styles.css
+[DIR]  app\src\app\core
+[DIR]  app\src\app\features
+[DIR]  app\src\app\layouts
+[DIR]  app\src\app\shared
+[FILE] app\src\app\app.config.ts
+[FILE] app\src\app\app.css
+[FILE] app\src\app\app.html
+[FILE] app\src\app\app.routes.ts
+[FILE] app\src\app\app.spec.ts
+[FILE] app\src\app\app.ts
+[DIR]  app\src\app\core\api
+[DIR]  app\src\app\core\auth
+[DIR]  app\src\app\core\authorization
+[DIR]  app\src\app\core\config
+[DIR]  app\src\app\core\guards
+[DIR]  app\src\app\core\interceptors
+[DIR]  app\src\app\core\api\clients
+[FILE] app\src\app\core\api\clients\.gitkeep
+[FILE] app\src\app\core\auth\.gitkeep
+[FILE] app\src\app\core\authorization\.gitkeep
+[FILE] app\src\app\core\config\.gitkeep
+[FILE] app\src\app\core\config\runtime-config.ts
+[FILE] app\src\app\core\guards\.gitkeep
+[FILE] app\src\app\core\interceptors\.gitkeep
+[DIR]  app\src\app\features\account
+[DIR]  app\src\app\features\contracts
+[DIR]  app\src\app\features\general-market
+[DIR]  app\src\app\features\my-assets
+[DIR]  app\src\app\features\notifications
+[DIR]  app\src\app\features\services
+[DIR]  app\src\app\features\settlement
+[DIR]  app\src\app\features\account\models
+[DIR]  app\src\app\features\account\pages
+[DIR]  app\src\app\features\account\services
+[FILE] app\src\app\features\account\.gitkeep
+[FILE] app\src\app\features\account\account.routes.ts
+[FILE] app\src\app\features\account\README.md
+[FILE] app\src\app\features\account\models\account.models.ts
+[DIR]  app\src\app\features\account\pages\contacts
+[DIR]  app\src\app\features\account\pages\devices
+[DIR]  app\src\app\features\account\pages\legal-entity
+[DIR]  app\src\app\features\account\pages\overview
+[DIR]  app\src\app\features\account\pages\permissions
+[DIR]  app\src\app\features\account\pages\profile
+[DIR]  app\src\app\features\account\pages\security
+[DIR]  app\src\app\features\account\pages\sessions
+[DIR]  app\src\app\features\account\pages\verification
+[FILE] app\src\app\features\account\pages\account-workspace.page.css
+[FILE] app\src\app\features\account\pages\account-workspace.page.html
+[FILE] app\src\app\features\account\pages\account-workspace.page.ts
+[FILE] app\src\app\features\account\pages\contacts\account-contacts.page.ts
+[FILE] app\src\app\features\account\pages\contacts\account-page.css
+[FILE] app\src\app\features\account\pages\contacts\account-page.html
+[FILE] app\src\app\features\account\pages\devices\account-devices.page.ts
+[FILE] app\src\app\features\account\pages\devices\account-page.css
+[FILE] app\src\app\features\account\pages\devices\account-page.html
+[FILE] app\src\app\features\account\pages\legal-entity\account-legal-entity.page.ts
+[FILE] app\src\app\features\account\pages\legal-entity\account-page.css
+[FILE] app\src\app\features\account\pages\legal-entity\account-page.html
+[FILE] app\src\app\features\account\pages\overview\account-overview.page.ts
+[FILE] app\src\app\features\account\pages\overview\account-page.css
+[FILE] app\src\app\features\account\pages\overview\account-page.html
+[FILE] app\src\app\features\account\pages\permissions\account-page.css
+[FILE] app\src\app\features\account\pages\permissions\account-page.html
+[FILE] app\src\app\features\account\pages\permissions\account-permissions.page.ts
+[FILE] app\src\app\features\account\pages\profile\account-page.css
+[FILE] app\src\app\features\account\pages\profile\account-page.html
+[FILE] app\src\app\features\account\pages\profile\account-profile.page.ts
+[FILE] app\src\app\features\account\pages\security\account-page.css
+[FILE] app\src\app\features\account\pages\security\account-page.html
+[FILE] app\src\app\features\account\pages\security\account-security.page.ts
+[FILE] app\src\app\features\account\pages\sessions\account-page.css
+[FILE] app\src\app\features\account\pages\sessions\account-page.html
+[FILE] app\src\app\features\account\pages\sessions\account-sessions.page.ts
+[FILE] app\src\app\features\account\pages\verification\account-page.css
+[FILE] app\src\app\features\account\pages\verification\account-page.html
+[FILE] app\src\app\features\account\pages\verification\account-verification.page.ts
+[FILE] app\src\app\features\account\services\account-api.service.ts
+[FILE] app\src\app\features\account\services\account-demo.store.ts
+[FILE] app\src\app\features\contracts\.gitkeep
+[FILE] app\src\app\features\contracts\contracts.routes.ts
+[DIR]  app\src\app\features\general-market\audit
+[DIR]  app\src\app\features\general-market\catalogue
+[DIR]  app\src\app\features\general-market\commodity
+[DIR]  app\src\app\features\general-market\execution
+[DIR]  app\src\app\features\general-market\markets
+[DIR]  app\src\app\features\general-market\matching
+[DIR]  app\src\app\features\general-market\offer-requests
+[DIR]  app\src\app\features\general-market\offers
+[DIR]  app\src\app\features\general-market\order-book
+[DIR]  app\src\app\features\general-market\orders
+[DIR]  app\src\app\features\general-market\proposals
+[DIR]  app\src\app\features\general-market\real-estate
+[DIR]  app\src\app\features\general-market\regulatory
+[DIR]  app\src\app\features\general-market\trades
+[FILE] app\src\app\features\general-market\general-market.css
+[FILE] app\src\app\features\general-market\general-market.html
+[FILE] app\src\app\features\general-market\general-market.routes.ts
+[FILE] app\src\app\features\general-market\general-market.ts
+[FILE] app\src\app\features\general-market\audit\.gitkeep
+[FILE] app\src\app\features\general-market\catalogue\.gitkeep
+[FILE] app\src\app\features\general-market\commodity\.gitkeep
+[FILE] app\src\app\features\general-market\execution\.gitkeep
+[FILE] app\src\app\features\general-market\markets\.gitkeep
+[FILE] app\src\app\features\general-market\matching\.gitkeep
+[FILE] app\src\app\features\general-market\offer-requests\.gitkeep
+[FILE] app\src\app\features\general-market\offers\.gitkeep
+[FILE] app\src\app\features\general-market\order-book\.gitkeep
+[FILE] app\src\app\features\general-market\orders\.gitkeep
+[FILE] app\src\app\features\general-market\proposals\.gitkeep
+[FILE] app\src\app\features\general-market\real-estate\.gitkeep
+[FILE] app\src\app\features\general-market\regulatory\.gitkeep
+[FILE] app\src\app\features\general-market\trades\.gitkeep
+[FILE] app\src\app\features\my-assets\.gitkeep
+[FILE] app\src\app\features\my-assets\my-assets.routes.ts
+[FILE] app\src\app\features\notifications\.gitkeep
+[FILE] app\src\app\features\notifications\notifications.routes.ts
+[FILE] app\src\app\features\services\.gitkeep
+[FILE] app\src\app\features\services\services.routes.ts
+[FILE] app\src\app\features\settlement\.gitkeep
+[FILE] app\src\app\features\settlement\settlement.routes.ts
+[DIR]  app\src\app\layouts\auth-layout
+[DIR]  app\src\app\layouts\main-layout
+[FILE] app\src\app\layouts\auth-layout\.gitkeep
+[FILE] app\src\app\layouts\main-layout\.gitkeep
+[DIR]  app\src\app\shared\components
+[DIR]  app\src\app\shared\directives
+[DIR]  app\src\app\shared\models
+[DIR]  app\src\app\shared\pages
+[DIR]  app\src\app\shared\pipes
+[DIR]  app\src\app\shared\routing
+[DIR]  app\src\app\shared\utils
+[FILE] app\src\app\shared\components\.gitkeep
+[FILE] app\src\app\shared\directives\.gitkeep
+[FILE] app\src\app\shared\models\.gitkeep
+[DIR]  app\src\app\shared\pages\feature-placeholder
+[FILE] app\src\app\shared\pages\feature-placeholder\feature-placeholder.page.css
+[FILE] app\src\app\shared\pages\feature-placeholder\feature-placeholder.page.html
+[FILE] app\src\app\shared\pages\feature-placeholder\feature-placeholder.page.ts
+[FILE] app\src\app\shared\pipes\.gitkeep
+[FILE] app\src\app\shared\routing\feature-route.factory.ts
+[FILE] app\src\app\shared\utils\.gitkeep
+[FILE] app\src\environments\.gitkeep
+[FILE] app\src\environments\environment.production.ts
+[FILE] app\src\environments\environment.ts
+[DIR]  assets\fonts
+[DIR]  assets\illustrations
+[DIR]  assets\images
+[FILE] assets\fonts\.gitkeep
+[FILE] assets\fonts\inter-latin-ext-wght-normal.woff2
+[FILE] assets\fonts\inter-latin-wght-normal.woff2
+[FILE] assets\fonts\material-symbols-outlined.woff2
+[FILE] assets\fonts\vazirmatn-arabic-wght-normal.woff2
+[FILE] assets\fonts\vazirmatn-latin-ext-wght-normal.woff2
+[FILE] assets\fonts\vazirmatn-latin-wght-normal.woff2
+[FILE] assets\illustrations\.gitkeep
+[FILE] assets\images\.gitkeep
+[DIR]  design-system\components
+[DIR]  design-system\icons
+[DIR]  design-system\patterns
+[DIR]  design-system\themes
+[DIR]  design-system\tokens
+[FILE] design-system\igd-foundation.css
+[FILE] design-system\components\.gitkeep
+[FILE] design-system\icons\.gitkeep
+[FILE] design-system\patterns\.gitkeep
+[FILE] design-system\themes\.gitkeep
+[FILE] design-system\tokens\colors.css
+[FILE] design-system\tokens\typography.css
+[DIR]  docs\api
+[DIR]  docs\architecture
+[DIR]  docs\design-system
+[DIR]  docs\frontend
+[FILE] docs\api\.gitkeep
+[FILE] docs\architecture\.gitkeep
+[FILE] docs\architecture\FRONTEND-STRUCTURE.txt
+[FILE] docs\design-system\.gitkeep
+[FILE] docs\frontend\.gitkeep
+[FILE] scripts\Build-IGD-Front.ps1
+[FILE] scripts\igd-shell-source-report.txt
+[FILE] scripts\Initialize-IGD-Account-Frontend.ps1
+[FILE] scripts\market-workspace-history-report.txt
+[FILE] scripts\Start-IGD-Front.ps1
+
+### ACTIONS ###
+[OK] Transferred unique account file: pages\account-workspace.page.ts
+[OK] Transferred unique account file: pages\account-workspace.page.html
+[OK] Transferred unique account file: pages\account-workspace.page.css
+[OK] Transferred unique account file: services\account-demo.store.ts
+[OK] Archived: app\angular.json.backup-20261107-101521
+[OK] Archived: app\src\app\features\account\account.routes.ts.backup-20261110-092715
+[OK] Archived: app\src\app\features\general-market\general-market.css.backup-history-20261109-104747
+[OK] Archived: app\src\app\features\general-market\general-market.css.bak-20261111-112109
+[OK] Archived: app\src\app\features\general-market\general-market.html.backup-history-20261109-104747
+[OK] Archived: design-system\igd-foundation.css.backup-font-fix-20261109-103238
+[OK] Archived: .angular
+[OK] Angular generated cache archived.
+[OK] Archived: IGD-front-Full-Tree.txt
+[OK] Archived: IGD-FULL-TREE.txt
+[OK] Archived: IGD-Frontend-Tree-Report.txt
+[OK] Archived: IGD-Frontend-Configuration-Review.txt
+[OK] Nested duplicate frontend moved completely into quarantine.
+[OK] Dependency link preserved: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\node_modules
+[OK] Dependency link preserved: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\node_modules
+[OK] D: dependency directory verified.
+
+### WARNINGS ###
+[WARNING] Account route integration requires a separate code review.
+
+### FINAL STATUS ###
+FRONTEND ROOT: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front
+MAIN APP EXISTS: True
+MAIN ACCOUNT EXISTS: True
+NESTED FRONTEND EXISTS: False
+ANGULAR CACHE EXISTS: False
+D DRIVE DEPENDENCIES EXIST: True
+QUARANTINE: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\_IGD-front-Cleanup-20261112-012238
+ACTION COUNT: 20
+WARNING COUNT: 1

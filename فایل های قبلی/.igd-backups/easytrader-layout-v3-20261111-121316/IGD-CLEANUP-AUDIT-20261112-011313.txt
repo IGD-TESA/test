@@ -1,0 +1,561 @@
+﻿IGD FRONTEND - CLEANUP AND STRUCTURE AUDIT
+Generated: 2026-11-12 01:13:13
+Project: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform
+Frontend: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front
+MODE: READ ONLY - NO FILES OR DIRECTORIES MODIFIED OR DELETED
+
+
+==========================================================================================
+01 - COMPLETE FRONTEND DIRECTORY AND FILE TREE
+==========================================================================================
+All visible and hidden entries are included. Reparse-point targets are not traversed.
+IGD-front\
+├── app\
+│   ├── .angular\
+│   │   └── cache\
+│   │       └── 22.2.6\
+│   │           └── igd-front\
+│   │               ├── vite\
+│   │               │   ├── deps\
+│   │               │   │   ├── @angular_cdk_bidi.js
+│   │               │   │   ├── @angular_common_http.js
+│   │               │   │   ├── @angular_core.js
+│   │               │   │   ├── @angular_material_button.js
+│   │               │   │   ├── @angular_material_button.js.map
+│   │               │   │   ├── @angular_material_divider.js
+│   │               │   │   ├── @angular_material_divider.js.map
+│   │               │   │   ├── @angular_material_icon.js
+│   │               │   │   ├── @angular_material_icon.js.map
+│   │               │   │   ├── @angular_material_tabs.js
+│   │               │   │   ├── @angular_material_tabs.js.map
+│   │               │   │   ├── @angular_platform-browser.js
+│   │               │   │   ├── @angular_router.js
+│   │               │   │   ├── @angular_router.js.map
+│   │               │   │   ├── _metadata.json
+│   │               │   │   ├── _structural-styles-chunk-DreJsAi_.js
+│   │               │   │   ├── _structural-styles-chunk-DreJsAi_.js.map
+│   │               │   │   ├── bidi-CSfNc4k7.js
+│   │               │   │   ├── bidi-CSfNc4k7.js.map
+│   │               │   │   ├── catchError-CGAzCG_y.js
+│   │               │   │   ├── catchError-CGAzCG_y.js.map
+│   │               │   │   ├── core-hsl8ukWr.js
+│   │               │   │   ├── core-hsl8ukWr.js.map
+│   │               │   │   ├── http-Yo5eIwws.js
+│   │               │   │   ├── http-Yo5eIwws.js.map
+│   │               │   │   ├── isObservable-Bepasph9.js
+│   │               │   │   ├── isObservable-Bepasph9.js.map
+│   │               │   │   ├── package.json
+│   │               │   │   ├── platform-browser-D8nwwU0Q.js
+│   │               │   │   ├── platform-browser-D8nwwU0Q.js.map
+│   │               │   │   ├── private-CanW9Ekb.js
+│   │               │   │   ├── private-CanW9Ekb.js.map
+│   │               │   │   ├── share-Rr8eZZZX.js
+│   │               │   │   ├── share-Rr8eZZZX.js.map
+│   │               │   │   ├── take-DmTvGJfN.js
+│   │               │   │   ├── take-DmTvGJfN.js.map
+│   │               │   │   ├── takeUntil-Cna_bGE4.js
+│   │               │   │   ├── takeUntil-Cna_bGE4.js.map
+│   │               │   │   ├── tap-BKY530Qp.js
+│   │               │   │   └── tap-BKY530Qp.js.map
+│   │               │   └── com.chrome.devtools.json
+│   │               ├── .tsbuildinfo
+│   │               ├── angular-compiler.db
+│   │               └── angular-compiler.db-lock
+│   ├── .vscode\
+│   │   ├── extensions.json
+│   │   ├── launch.json
+│   │   └── tasks.json
+│   ├── node_modules\
+│   │   [LINK NOT TRAVERSED]
+│   ├── public\
+│   │   └── favicon.ico
+│   ├── src\
+│   │   ├── app\
+│   │   │   ├── core\
+│   │   │   │   ├── api\
+│   │   │   │   │   └── clients\
+│   │   │   │   │       └── .gitkeep
+│   │   │   │   ├── auth\
+│   │   │   │   │   └── .gitkeep
+│   │   │   │   ├── authorization\
+│   │   │   │   │   └── .gitkeep
+│   │   │   │   ├── config\
+│   │   │   │   │   ├── .gitkeep
+│   │   │   │   │   └── runtime-config.ts
+│   │   │   │   ├── guards\
+│   │   │   │   │   └── .gitkeep
+│   │   │   │   └── interceptors\
+│   │   │   │       └── .gitkeep
+│   │   │   ├── features\
+│   │   │   │   ├── account\
+│   │   │   │   │   ├── models\
+│   │   │   │   │   │   └── account.models.ts
+│   │   │   │   │   ├── pages\
+│   │   │   │   │   │   ├── contacts\
+│   │   │   │   │   │   │   ├── account-contacts.page.ts
+│   │   │   │   │   │   │   ├── account-page.css
+│   │   │   │   │   │   │   └── account-page.html
+│   │   │   │   │   │   ├── devices\
+│   │   │   │   │   │   │   ├── account-devices.page.ts
+│   │   │   │   │   │   │   ├── account-page.css
+│   │   │   │   │   │   │   └── account-page.html
+│   │   │   │   │   │   ├── legal-entity\
+│   │   │   │   │   │   │   ├── account-legal-entity.page.ts
+│   │   │   │   │   │   │   ├── account-page.css
+│   │   │   │   │   │   │   └── account-page.html
+│   │   │   │   │   │   ├── overview\
+│   │   │   │   │   │   │   ├── account-overview.page.ts
+│   │   │   │   │   │   │   ├── account-page.css
+│   │   │   │   │   │   │   └── account-page.html
+│   │   │   │   │   │   ├── permissions\
+│   │   │   │   │   │   │   ├── account-page.css
+│   │   │   │   │   │   │   ├── account-page.html
+│   │   │   │   │   │   │   └── account-permissions.page.ts
+│   │   │   │   │   │   ├── profile\
+│   │   │   │   │   │   │   ├── account-page.css
+│   │   │   │   │   │   │   ├── account-page.html
+│   │   │   │   │   │   │   └── account-profile.page.ts
+│   │   │   │   │   │   ├── security\
+│   │   │   │   │   │   │   ├── account-page.css
+│   │   │   │   │   │   │   ├── account-page.html
+│   │   │   │   │   │   │   └── account-security.page.ts
+│   │   │   │   │   │   ├── sessions\
+│   │   │   │   │   │   │   ├── account-page.css
+│   │   │   │   │   │   │   ├── account-page.html
+│   │   │   │   │   │   │   └── account-sessions.page.ts
+│   │   │   │   │   │   └── verification\
+│   │   │   │   │   │       ├── account-page.css
+│   │   │   │   │   │       ├── account-page.html
+│   │   │   │   │   │       └── account-verification.page.ts
+│   │   │   │   │   ├── services\
+│   │   │   │   │   │   └── account-api.service.ts
+│   │   │   │   │   ├── .gitkeep
+│   │   │   │   │   ├── account.routes.ts
+│   │   │   │   │   ├── account.routes.ts.backup-20261110-092715
+│   │   │   │   │   └── README.md
+│   │   │   │   ├── contracts\
+│   │   │   │   │   ├── .gitkeep
+│   │   │   │   │   └── contracts.routes.ts
+│   │   │   │   ├── general-market\
+│   │   │   │   │   ├── audit\
+│   │   │   │   │   │   └── .gitkeep
+│   │   │   │   │   ├── catalogue\
+│   │   │   │   │   │   └── .gitkeep
+│   │   │   │   │   ├── commodity\
+│   │   │   │   │   │   └── .gitkeep
+│   │   │   │   │   ├── execution\
+│   │   │   │   │   │   └── .gitkeep
+│   │   │   │   │   ├── markets\
+│   │   │   │   │   │   └── .gitkeep
+│   │   │   │   │   ├── matching\
+│   │   │   │   │   │   └── .gitkeep
+│   │   │   │   │   ├── offer-requests\
+│   │   │   │   │   │   └── .gitkeep
+│   │   │   │   │   ├── offers\
+│   │   │   │   │   │   └── .gitkeep
+│   │   │   │   │   ├── order-book\
+│   │   │   │   │   │   └── .gitkeep
+│   │   │   │   │   ├── orders\
+│   │   │   │   │   │   └── .gitkeep
+│   │   │   │   │   ├── proposals\
+│   │   │   │   │   │   └── .gitkeep
+│   │   │   │   │   ├── real-estate\
+│   │   │   │   │   │   └── .gitkeep
+│   │   │   │   │   ├── regulatory\
+│   │   │   │   │   │   └── .gitkeep
+│   │   │   │   │   ├── trades\
+│   │   │   │   │   │   └── .gitkeep
+│   │   │   │   │   ├── general-market.css
+│   │   │   │   │   ├── general-market.css.backup-history-20261109-104747
+│   │   │   │   │   ├── general-market.css.bak-20261111-112109
+│   │   │   │   │   ├── general-market.html
+│   │   │   │   │   ├── general-market.html.backup-history-20261109-104747
+│   │   │   │   │   ├── general-market.routes.ts
+│   │   │   │   │   └── general-market.ts
+│   │   │   │   ├── my-assets\
+│   │   │   │   │   ├── .gitkeep
+│   │   │   │   │   └── my-assets.routes.ts
+│   │   │   │   ├── notifications\
+│   │   │   │   │   ├── .gitkeep
+│   │   │   │   │   └── notifications.routes.ts
+│   │   │   │   ├── services\
+│   │   │   │   │   ├── .gitkeep
+│   │   │   │   │   └── services.routes.ts
+│   │   │   │   └── settlement\
+│   │   │   │       ├── .gitkeep
+│   │   │   │       └── settlement.routes.ts
+│   │   │   ├── layouts\
+│   │   │   │   ├── auth-layout\
+│   │   │   │   │   └── .gitkeep
+│   │   │   │   └── main-layout\
+│   │   │   │       └── .gitkeep
+│   │   │   ├── shared\
+│   │   │   │   ├── components\
+│   │   │   │   │   └── .gitkeep
+│   │   │   │   ├── directives\
+│   │   │   │   │   └── .gitkeep
+│   │   │   │   ├── models\
+│   │   │   │   │   └── .gitkeep
+│   │   │   │   ├── pages\
+│   │   │   │   │   └── feature-placeholder\
+│   │   │   │   │       ├── feature-placeholder.page.css
+│   │   │   │   │       ├── feature-placeholder.page.html
+│   │   │   │   │       └── feature-placeholder.page.ts
+│   │   │   │   ├── pipes\
+│   │   │   │   │   └── .gitkeep
+│   │   │   │   ├── routing\
+│   │   │   │   │   └── feature-route.factory.ts
+│   │   │   │   └── utils\
+│   │   │   │       └── .gitkeep
+│   │   │   ├── app.config.ts
+│   │   │   ├── app.css
+│   │   │   ├── app.html
+│   │   │   ├── app.routes.ts
+│   │   │   ├── app.spec.ts
+│   │   │   └── app.ts
+│   │   ├── environments\
+│   │   │   ├── .gitkeep
+│   │   │   ├── environment.production.ts
+│   │   │   └── environment.ts
+│   │   ├── index.html
+│   │   ├── main.ts
+│   │   └── styles.css
+│   ├── .editorconfig
+│   ├── .gitignore
+│   ├── .npmrc
+│   ├── .postcssrc.json
+│   ├── .prettierrc
+│   ├── angular.json
+│   ├── angular.json.backup-20261107-101521
+│   ├── package.json
+│   ├── README.md
+│   ├── tsconfig.app.json
+│   ├── tsconfig.json
+│   └── tsconfig.spec.json
+├── assets\
+│   ├── fonts\
+│   │   ├── .gitkeep
+│   │   ├── inter-latin-ext-wght-normal.woff2
+│   │   ├── inter-latin-wght-normal.woff2
+│   │   ├── material-symbols-outlined.woff2
+│   │   ├── vazirmatn-arabic-wght-normal.woff2
+│   │   ├── vazirmatn-latin-ext-wght-normal.woff2
+│   │   └── vazirmatn-latin-wght-normal.woff2
+│   ├── illustrations\
+│   │   └── .gitkeep
+│   └── images\
+│       └── .gitkeep
+├── design-system\
+│   ├── components\
+│   │   └── .gitkeep
+│   ├── icons\
+│   │   └── .gitkeep
+│   ├── patterns\
+│   │   └── .gitkeep
+│   ├── themes\
+│   │   └── .gitkeep
+│   ├── tokens\
+│   │   ├── colors.css
+│   │   └── typography.css
+│   ├── igd-foundation.css
+│   └── igd-foundation.css.backup-font-fix-20261109-103238
+├── docs\
+│   ├── api\
+│   │   └── .gitkeep
+│   ├── architecture\
+│   │   ├── .gitkeep
+│   │   └── FRONTEND-STRUCTURE.txt
+│   ├── design-system\
+│   │   └── .gitkeep
+│   └── frontend\
+│       └── .gitkeep
+├── IGD-front\
+│   └── app\
+│       └── src\
+│           └── app\
+│               └── features\
+│                   └── account\
+│                       ├── models\
+│                       │   └── account.models.ts
+│                       ├── pages\
+│                       │   ├── account-workspace.page.css
+│                       │   ├── account-workspace.page.html
+│                       │   └── account-workspace.page.ts
+│                       ├── services\
+│                       │   └── account-demo.store.ts
+│                       ├── account.routes.ts
+│                       └── README.md
+├── node_modules\
+│   [LINK NOT TRAVERSED]
+├── scripts\
+│   ├── Build-IGD-Front.ps1
+│   ├── igd-shell-source-report.txt
+│   ├── Initialize-IGD-Account-Frontend.ps1
+│   ├── market-workspace-history-report.txt
+│   └── Start-IGD-Front.ps1
+├── IGD-Frontend-Configuration-Review.txt
+├── IGD-Frontend-Tree-Report.txt
+├── IGD-front-Full-Tree.txt
+├── IGD-FULL-TREE.txt
+├── installation-manifest.json
+└── دستور اجرای فرانت اند.txt
+
+==========================================================================================
+02 - NESTED IGD-FRONT STRUCTURE AUDIT
+==========================================================================================
+FOUND: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\IGD-front
+Nested app exists: True
+Nested account exists: True
+Main account exists: True
+
+ACCOUNT FILE COMPARISON
+FILE: account.routes.ts
+  RESULT: DIFFERENT CONTENT
+  MAIN:   E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\account\account.routes.ts
+  NESTED: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\IGD-front\app\src\app\features\account\account.routes.ts
+  MAIN SHA256:   A608AAADEFD1D80841A4EFC6616EEAF721AB5EDF2C6430AEA8B5A893E5BEC563
+  NESTED SHA256: 2542477BAE97117ACF6037DB5AC7678C30F78E75613E23DC9914C0522FC2D019
+FILE: README.md
+  RESULT: DIFFERENT CONTENT
+  MAIN:   E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\account\README.md
+  NESTED: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\IGD-front\app\src\app\features\account\README.md
+  MAIN SHA256:   159560E9D8FEB9B010DE68C5DFBAE6712DF1802B2380BE775EE7FB48B48225F5
+  NESTED SHA256: FC3A97E676F4FA33191D59DAE3FAA0EE1FFB71E8ABF4FC8B7CDF201F52EC8983
+FILE: models\account.models.ts
+  RESULT: DIFFERENT CONTENT
+  MAIN:   E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\account\models\account.models.ts
+  NESTED: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\IGD-front\app\src\app\features\account\models\account.models.ts
+  MAIN SHA256:   6F1D727A7AF1F7CFB4BDD625BC97D4985556BA8F43489C8A9D5A2661A6438155
+  NESTED SHA256: D50B4DFC28A24F72FB4709A8D176FD87C76E4303CA7610B697CB69E2AC4B7951
+FILE: pages\account-workspace.page.css
+  RESULT: FILE EXISTS ONLY IN NESTED STRUCTURE
+  NESTED: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\IGD-front\app\src\app\features\account\pages\account-workspace.page.css
+FILE: pages\account-workspace.page.html
+  RESULT: FILE EXISTS ONLY IN NESTED STRUCTURE
+  NESTED: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\IGD-front\app\src\app\features\account\pages\account-workspace.page.html
+FILE: pages\account-workspace.page.ts
+  RESULT: FILE EXISTS ONLY IN NESTED STRUCTURE
+  NESTED: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\IGD-front\app\src\app\features\account\pages\account-workspace.page.ts
+FILE: services\account-demo.store.ts
+  RESULT: FILE EXISTS ONLY IN NESTED STRUCTURE
+  NESTED: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\IGD-front\app\src\app\features\account\services\account-demo.store.ts
+MAIN-ONLY ACCOUNT FILE: .gitkeep
+MAIN-ONLY ACCOUNT FILE: account.routes.ts.backup-20261110-092715
+MAIN-ONLY ACCOUNT FILE: pages\contacts\account-contacts.page.ts
+MAIN-ONLY ACCOUNT FILE: pages\contacts\account-page.css
+MAIN-ONLY ACCOUNT FILE: pages\contacts\account-page.html
+MAIN-ONLY ACCOUNT FILE: pages\devices\account-devices.page.ts
+MAIN-ONLY ACCOUNT FILE: pages\devices\account-page.css
+MAIN-ONLY ACCOUNT FILE: pages\devices\account-page.html
+MAIN-ONLY ACCOUNT FILE: pages\legal-entity\account-legal-entity.page.ts
+MAIN-ONLY ACCOUNT FILE: pages\legal-entity\account-page.css
+MAIN-ONLY ACCOUNT FILE: pages\legal-entity\account-page.html
+MAIN-ONLY ACCOUNT FILE: pages\overview\account-overview.page.ts
+MAIN-ONLY ACCOUNT FILE: pages\overview\account-page.css
+MAIN-ONLY ACCOUNT FILE: pages\overview\account-page.html
+MAIN-ONLY ACCOUNT FILE: pages\permissions\account-page.css
+MAIN-ONLY ACCOUNT FILE: pages\permissions\account-page.html
+MAIN-ONLY ACCOUNT FILE: pages\permissions\account-permissions.page.ts
+MAIN-ONLY ACCOUNT FILE: pages\profile\account-page.css
+MAIN-ONLY ACCOUNT FILE: pages\profile\account-page.html
+MAIN-ONLY ACCOUNT FILE: pages\profile\account-profile.page.ts
+MAIN-ONLY ACCOUNT FILE: pages\security\account-page.css
+MAIN-ONLY ACCOUNT FILE: pages\security\account-page.html
+MAIN-ONLY ACCOUNT FILE: pages\security\account-security.page.ts
+MAIN-ONLY ACCOUNT FILE: pages\sessions\account-page.css
+MAIN-ONLY ACCOUNT FILE: pages\sessions\account-page.html
+MAIN-ONLY ACCOUNT FILE: pages\sessions\account-sessions.page.ts
+MAIN-ONLY ACCOUNT FILE: pages\verification\account-page.css
+MAIN-ONLY ACCOUNT FILE: pages\verification\account-page.html
+MAIN-ONLY ACCOUNT FILE: pages\verification\account-verification.page.ts
+MAIN-ONLY ACCOUNT FILE: services\account-api.service.ts
+
+NESTED STRUCTURE FILE INVENTORY
+└── app\
+    └── src\
+        └── app\
+            └── features\
+                └── account\
+                    ├── models\
+                    │   └── account.models.ts
+                    ├── pages\
+                    │   ├── account-workspace.page.css
+                    │   ├── account-workspace.page.html
+                    │   └── account-workspace.page.ts
+                    ├── services\
+                    │   └── account-demo.store.ts
+                    ├── account.routes.ts
+                    └── README.md
+
+==========================================================================================
+03 - BACKUP AND OLD VERSION FILES
+==========================================================================================
+FILE: app\angular.json.backup-20261107-101521
+SHA256: 89D6DDF08E2517121AFC3820B27A373D6019E700CA9431D1A0988E5DC411306F
+FILE: app\src\app\features\account\account.routes.ts.backup-20261110-092715
+SHA256: 5DE5167262F5F168C942E85CFBFAFA271AE3D613C539B5D214C1EBACC7579FAD
+FILE: app\src\app\features\general-market\general-market.css.backup-history-20261109-104747
+SHA256: 1E18B4A74E1DE255085454D8829715BC164EF66EEC087A4D99FB02A2110672C2
+FILE: app\src\app\features\general-market\general-market.css.bak-20261111-112109
+SHA256: B25C939D5A119940EBCB1175CD58FE275C6FDCE2B3266CA5B088D3060F0974E7
+FILE: app\src\app\features\general-market\general-market.html.backup-history-20261109-104747
+SHA256: 37170C46F09BED9F2FB947AE41F3414FE3652F5E2E68F80FC2ADF4A1419AB812
+FILE: design-system\igd-foundation.css.backup-font-fix-20261109-103238
+SHA256: 35849B84B29EFC52FEFFAC3005FC52E2C6CD03016A9B1841C3147680F2224D36
+
+==========================================================================================
+04 - NODE_MODULES AND DIRECTORY LINK AUDIT
+==========================================================================================
+PATH: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\node_modules
+  STATUS: EXISTS
+  LinkType=Junction | Target=D:\Program Files\IGD-Frontend\Libraries\IGD-Frontend\node_modules
+  FullName: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\node_modules
+  Attributes: Directory, ReparsePoint
+PATH: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\node_modules
+  STATUS: EXISTS
+  LinkType=Junction | Target=D:\Program Files\IGD-Frontend\Libraries\IGD-Frontend\node_modules
+  FullName: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\node_modules
+  Attributes: Directory, ReparsePoint
+PATH: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\node_modules
+  STATUS: NOT FOUND
+PATH: D:\Program Files\IGD-Frontend\Libraries\IGD-Frontend\node_modules
+  STATUS: EXISTS
+  LinkType=Normal | Target=-
+  FullName: D:\Program Files\IGD-Frontend\Libraries\IGD-Frontend\node_modules
+  Attributes: Directory
+
+ALL REPARSE POINTS UNDER FRONTEND
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\node_modules | LinkType=Junction | Target=D:\Program Files\IGD-Frontend\Libraries\IGD-Frontend\node_modules
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\node_modules | LinkType=Junction | Target=D:\Program Files\IGD-Frontend\Libraries\IGD-Frontend\node_modules
+
+==========================================================================================
+05 - ANGULAR AND NPM CONFIGURATION FILES
+==========================================================================================
+CONFIG DIRECTORY: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front
+CONFIG DIRECTORY: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app
+  FOUND: package.json
+  SHA256: 2BA6F89285FF3434390E25F8EF48BF632951943183141847E0A65EC92C919347
+  package name: igd-front
+  package version: 0.0.0
+  scripts: ng, start, build, watch, test
+  dependencies count: 16
+  devDependencies count: 11
+  FOUND: angular.json
+  SHA256: A6613503D874E61F6D03D59EF011D2A2684993B3888731720BDF9935F1A5540D
+  Angular projects: igd-front
+  default project: 
+  FOUND: tsconfig.json
+  SHA256: A4810E927E51717B4811DE61A9C61C7A903ABBCB2862BAA6AADC781CBF6F9ED0
+  FOUND: tsconfig.app.json
+  SHA256: EF0951130D6161F26968E606A4A5B7FA0B72D282E638BCA68364FA154F9B7966
+  FOUND: tsconfig.spec.json
+  SHA256: 9B0620ADCB42EF8500DEEE34709D053FEDF51B673321F744EE28436735C98FD8
+  FOUND: .npmrc
+  SHA256: 4ABD8A60D3E60B753087FE1BAD9994AF5F8CEA806C2D04D8D9D1CADC96F43B93
+  FOUND: .postcssrc.json
+  SHA256: 706A68C60FDE523E72F0D01859203F3B6EE7D9046BF7E340F194CC5FC88638ED
+  FOUND: .gitignore
+  SHA256: AE6D22F040C44292C421A5C0715E28B9330B8C26D9F2BF08C7935374C6147967
+CONFIG DIRECTORY: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\IGD-front
+CONFIG DIRECTORY: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\IGD-front\app
+
+==========================================================================================
+06 - GENERATED, CACHE AND BUILD DIRECTORIES
+==========================================================================================
+DIRECTORY: app\.angular
+  Link: LinkType=Normal | Target=-
+DIRECTORY: app\.angular\cache
+  Link: LinkType=Normal | Target=-
+
+==========================================================================================
+07 - REPORTS, TREE FILES AND DOCUMENTS
+==========================================================================================
+FILE: IGD-front-Full-Tree.txt
+SHA256: 66774F4D7B617A0EC61CB184DC35B8DD148B1DC7A97CC7A9A57948077A15F6E7
+FILE: IGD-Frontend-Configuration-Review.txt
+SHA256: DC6638505076FCB881C48D91AE37BDA55D05A1F2C18D5ACAA37048F5048F388A
+FILE: IGD-Frontend-Tree-Report.txt
+SHA256: 8A72D0B4EB194C3AF3C2B41B4E739F15346CCBFE81537959E0FEDD6983A52031
+FILE: IGD-FULL-TREE.txt
+SHA256: 8ED4D61DF7C6FA7400B5BA76C55B997712BA2B5304956EE7D1D0F0DD5483F960
+FILE: installation-manifest.json
+SHA256: DEB2CC778999880A319ADFDB313B2326CDFCF266014A5CCFAA43784AD9839DE5
+FILE: app\src\app\features\general-market\general-market.css.backup-history-20261109-104747
+SHA256: 1E18B4A74E1DE255085454D8829715BC164EF66EEC087A4D99FB02A2110672C2
+FILE: app\src\app\features\general-market\general-market.html.backup-history-20261109-104747
+SHA256: 37170C46F09BED9F2FB947AE41F3414FE3652F5E2E68F80FC2ADF4A1419AB812
+FILE: docs\architecture\FRONTEND-STRUCTURE.txt
+SHA256: 0C2CFAF19A8527576F4CD1085258CE78A7AA4E68D8A632DEFC876A4CC5526C9E
+FILE: scripts\igd-shell-source-report.txt
+SHA256: BF7624A2EB2F7444E9F8BB5584239E25CFF006097CC19CB8C54142F42BD47C1B
+FILE: scripts\market-workspace-history-report.txt
+SHA256: 7864DE6992CAAC0FAA6658ECA18BA7FFF60B77063D8A35E6D898990CD6D03234
+
+==========================================================================================
+08 - IDENTICAL FILE CONTENTS IN IMPORTANT PROJECT AREAS
+==========================================================================================
+AREA: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\account
+  IDENTICAL SHA256: 6A007AB895B376F19D4E6FD1B882C1452C713CCAC0811ADAD79AAC1660F1964A
+    E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\account\pages\contacts\account-page.css
+    E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\account\pages\devices\account-page.css
+    E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\account\pages\legal-entity\account-page.css
+    E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\account\pages\overview\account-page.css
+    E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\account\pages\permissions\account-page.css
+    E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\account\pages\profile\account-page.css
+    E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\account\pages\security\account-page.css
+    E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\account\pages\sessions\account-page.css
+    E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\account\pages\verification\account-page.css
+AREA: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market
+  IDENTICAL SHA256: E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855
+    E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\audit\.gitkeep
+    E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\catalogue\.gitkeep
+    E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\commodity\.gitkeep
+    E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\execution\.gitkeep
+    E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\markets\.gitkeep
+    E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\matching\.gitkeep
+    E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\offer-requests\.gitkeep
+    E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\offers\.gitkeep
+    E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\order-book\.gitkeep
+    E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\orders\.gitkeep
+    E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\proposals\.gitkeep
+    E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\real-estate\.gitkeep
+    E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\regulatory\.gitkeep
+    E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\trades\.gitkeep
+AREA: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\design-system
+  IDENTICAL SHA256: E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855
+    E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\design-system\components\.gitkeep
+    E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\design-system\icons\.gitkeep
+    E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\design-system\patterns\.gitkeep
+    E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\design-system\themes\.gitkeep
+
+==========================================================================================
+09 - FRONTEND ROOT INVENTORY
+==========================================================================================
+app | DIRECTORY | LinkType=Normal | Target=-
+assets | DIRECTORY | LinkType=Normal | Target=-
+design-system | DIRECTORY | LinkType=Normal | Target=-
+docs | DIRECTORY | LinkType=Normal | Target=-
+IGD-front | DIRECTORY | LinkType=Normal | Target=-
+node_modules | DIRECTORY | LinkType=Junction | Target=D:\Program Files\IGD-Frontend\Libraries\IGD-Frontend\node_modules
+scripts | DIRECTORY | LinkType=Normal | Target=-
+IGD-Frontend-Configuration-Review.txt | FILE | LinkType=Normal | Target=-
+IGD-Frontend-Tree-Report.txt | FILE | LinkType=Normal | Target=-
+IGD-front-Full-Tree.txt | FILE | LinkType=Normal | Target=-
+IGD-FULL-TREE.txt | FILE | LinkType=Normal | Target=-
+installation-manifest.json | FILE | LinkType=Normal | Target=-
+دستور اجرای فرانت اند.txt | FILE | LinkType=Normal | Target=-
+
+==========================================================================================
+10 - AUDIT SUMMARY
+==========================================================================================
+Nested IGD-front exists: True
+Main app exists: True
+Main account module exists: True
+Nested account module exists: True
+Backup candidates: 6
+Generated/cache directories: 2
+Report/document candidates: 10
+Reparse points: 2
+
+IMPORTANT: This report is diagnostic only.
+No files were deleted, moved, renamed, or modified.

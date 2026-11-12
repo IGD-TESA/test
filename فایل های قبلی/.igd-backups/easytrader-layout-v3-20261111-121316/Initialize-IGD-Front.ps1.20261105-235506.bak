@@ -1,0 +1,1464 @@
+﻿#requires -Version 5.1
+#requires -RunAsAdministrator
+
+[CmdletBinding()]
+param(
+    [switch]$SkipBuild
+)
+
+# IGD_CLEAN_PROGRESS_MODE
+Set-PSDebug -Off
+$DebugPreference       = 'SilentlyContinue'
+$VerbosePreference     = 'SilentlyContinue'
+$InformationPreference = 'SilentlyContinue'
+$WarningPreference     = 'SilentlyContinue'
+$ProgressPreference   = 'Continue'
+$ErrorActionPreference = 'Stop'
+
+# Suppress ordinary console messages.
+# Write-Progress remains available for graphical progress.
+function Write-Host {
+    param(
+        [Parameter(ValueFromRemainingArguments = $true)]
+        [object[]]$Object,
+        [switch]$NoNewline,
+        [string]$Separator,
+        [string]$ForegroundColor,
+        [string]$BackgroundColor
+    )
+}
+
+
+
+Set-StrictMode -Version Latest
+$ErrorActionPreference = "Stop"
+
+# ============================================================
+# IGD FRONTEND - CONTROLLED INSTALLATION
+# Windows PowerShell 5.1+
+#
+# E: Project source code and project configuration
+# D: All runtimes, tools, dependencies, caches and downloads
+#
+# Stack:
+# Angular 22
+# TypeScript
+# Angular Material / CDK
+# Spartan UI
+# Tailwind CSS 4
+# ECharts / ngx-echarts
+# Vazirmatn / Inter
+# Material Symbols
+#
+# Registry:
+# Novin Cloud internal npm mirror
+# ============================================================
+
+# ------------------------------------------------------------
+# 01. ROOT PATHS
+# ------------------------------------------------------------
+
+$ProjectRoot = [IO.Path]::GetFullPath($PSScriptRoot)
+
+$FrontRoot = Join-Path $ProjectRoot "IGD-front"
+$AppRoot   = Join-Path $FrontRoot "app"
+
+$InstallRoot = "D:\Program Files\IGD-Frontend"
+
+$ToolsRoot = Join-Path $InstallRoot "Tools"
+$RuntimesRoot = Join-Path $InstallRoot "Runtimes"
+$LibrariesRoot = Join-Path $InstallRoot "Libraries"
+$CacheRoot = Join-Path $InstallRoot "PackageCaches"
+$DownloadsRoot = Join-Path $InstallRoot "Downloads"
+$LogsRoot = Join-Path $InstallRoot "Logs"
+$BackupsRoot = Join-Path $InstallRoot "Backups"
+
+$NodeVersion = "24.15.0"
+$NodeFolder = "node-v$NodeVersion-win-x64"
+
+$NodeRoot = Join-Path $RuntimesRoot "NodeJS\$NodeFolder"
+$NodeExe = Join-Path $NodeRoot "node.exe"
+$NpmCli = Join-Path $NodeRoot "node_modules\npm\bin\npm-cli.js"
+
+$AngularCliRoot = Join-Path $ToolsRoot "AngularCLI"
+$AngularCliPackage = Join-Path $AngularCliRoot "node_modules\@angular\cli\package.json"
+$AngularCliJs = Join-Path $AngularCliRoot "node_modules\@angular\cli\bin\ng.js"
+
+$ProjectRuntime = Join-Path $LibrariesRoot "IGD-Frontend"
+$RuntimeModules = Join-Path $ProjectRuntime "node_modules"
+$RuntimePackageJson = Join-Path $ProjectRuntime "package.json"
+
+$NpmCache = Join-Path $CacheRoot "npm"
+$TempRoot = Join-Path $CacheRoot "temp"
+
+$NodeArchiveName = "$NodeFolder.zip"
+$NodeArchive = Join-Path $DownloadsRoot $NodeArchiveName
+$NodeChecksumFile = Join-Path $DownloadsRoot "SHASUMS256.txt"
+
+$NpmRegistry = "https://mirror.novin.cloud/artifactory/api/npm/npm/"
+
+$NodeArchiveUrls = @(
+    "https://mirror.novin.cloud/artifactory/nodejs/$NodeVersion/$NodeArchiveName"
+)
+
+$NodeChecksumUrls = @(
+    "https://mirror.novin.cloud/artifactory/nodejs/SHASUMS256.txt"
+)
+
+$Timestamp = Get-Date -Format "yyyyMMdd-HHmmss"
+$LogFile = Join-Path $LogsRoot "Initialize-IGD-Front-$Timestamp.log"
+
+# ------------------------------------------------------------
+# 02. BASIC FUNCTIONS
+# ------------------------------------------------------------
+
+function Write-Log {
+    param(
+        [string]$Message,
+        [ValidateSet("INFO","WARN","ERROR","SUCCESS")]
+        [string]$Level = "INFO"
+    )
+
+    $Line = "[{0}] [{1}] {2}" -f (
+        Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+    ), $Level, $Message
+
+    Write-Host $Line
+
+    if (Test-Path -LiteralPath $LogsRoot) {
+        Add-Content -LiteralPath $LogFile -Value $Line -Encoding UTF8
+    }
+}
+
+function Stop-Setup {
+    param([string]$Message)
+
+    Write-Log $Message "ERROR"
+    throw $Message
+}
+
+function Ensure-Directory {
+    param([string]$Path)
+
+    if (-not (Test-Path -LiteralPath $Path -PathType Container)) {
+        New-Item -ItemType Directory -Path $Path -Force |
+            Out-Null
+    }
+}
+
+function Set-JsonProperty {
+    param(
+        [Parameter(Mandatory)]$Object,
+        [Parameter(Mandatory)][string]$Name,
+        [Parameter(Mandatory)]$Value
+    )
+
+    $Existing = $Object.PSObject.Properties[$Name]
+
+    if ($null -ne $Existing) {
+        $Object.$Name = $Value
+    }
+    else {
+        $Object | Add-Member `
+            -MemberType NoteProperty `
+            -Name $Name `
+            -Value $Value
+    }
+}
+
+function Invoke-Node {
+    param(
+        [string[]]$Arguments,
+        [string]$WorkingDirectory = $ProjectRoot
+    )
+
+    Push-Location -LiteralPath $WorkingDirectory
+
+    try {
+        & $NodeExe @Arguments
+
+        $Code = $LASTEXITCODE
+
+        if ($Code -ne 0) {
+            Stop-Setup "Node command failed. Exit code: $Code"
+        }
+    }
+    finally {
+        Pop-Location
+    }
+}
+
+function Invoke-Npm {
+    param(
+        [string[]]$Arguments,
+        [string]$WorkingDirectory = $ProjectRoot
+    )
+
+    $FullArguments = @(
+        $NpmCli
+    ) + $Arguments
+
+    Invoke-Node `
+        -Arguments $FullArguments `
+        -WorkingDirectory $WorkingDirectory
+}
+
+function Download-InternalFile {
+    param(
+        [string[]]$Urls,
+        [string]$Destination
+    )
+
+    foreach ($Url in $Urls) {
+
+        Write-Log "Trying internal mirror: $Url"
+
+        try {
+            Invoke-WebRequest `
+                -Uri $Url `
+                -OutFile $Destination `
+                -UseBasicParsing `
+                -TimeoutSec 240
+
+            if (
+                (Test-Path -LiteralPath $Destination -PathType Leaf) -and
+                (Get-Item -LiteralPath $Destination).Length -gt 0
+            ) {
+                Write-Log "Download successful: $Url" "SUCCESS"
+                return $Url
+            }
+        }
+        catch {
+            Write-Log "Download failed: $($_.Exception.Message)" "WARN"
+        }
+    }
+
+    Stop-Setup "All configured internal mirror downloads failed."
+}
+
+function Get-NodeChecksum {
+    param(
+        [string]$ManifestPath,
+        [string]$FileName
+    )
+
+    $EscapedName = [regex]::Escape($FileName)
+
+    foreach ($Line in (Get-Content -LiteralPath $ManifestPath)) {
+
+        if (
+            $Line -match (
+                "^\s*([a-fA-F0-9]{64})\s+\*?" +
+                $EscapedName +
+                "\s*$"
+            )
+        ) {
+            return $Matches[1].ToLowerInvariant()
+        }
+    }
+
+    Stop-Setup "Node.js SHA256 checksum was not found in manifest."
+}
+
+function Test-PathOnD {
+    param([string]$Path)
+
+    $FullPath = [IO.Path]::GetFullPath($Path)
+
+    if (-not $FullPath.StartsWith(
+        "D:\",
+        [StringComparison]::OrdinalIgnoreCase
+    )) {
+        Stop-Setup "Installation path is outside D: $FullPath"
+    }
+}
+
+# ------------------------------------------------------------
+# 03. VALIDATE PROJECT ROOT AND DRIVE
+# ------------------------------------------------------------
+
+if (-not (Test-Path -LiteralPath "D:\")) {
+    Stop-Setup "Drive D: is not available."
+}
+
+$RootMarkers = @(
+    (Join-Path $ProjectRoot "general-market-backend"),
+    (Join-Path $ProjectRoot "account-backend")
+)
+
+$RootValid = $false
+
+foreach ($Marker in $RootMarkers) {
+    if (Test-Path -LiteralPath $Marker -PathType Container) {
+        $RootValid = $true
+        break
+    }
+}
+
+if (-not $RootValid) {
+    Stop-Setup "The script must be executed from the repository root."
+}
+
+# ------------------------------------------------------------
+# 04. CREATE INSTALLATION DIRECTORIES ON D:
+# ------------------------------------------------------------
+
+$Directories = @(
+    $InstallRoot,
+    $ToolsRoot,
+    $RuntimesRoot,
+    $LibrariesRoot,
+    $CacheRoot,
+    $DownloadsRoot,
+    $LogsRoot,
+    $BackupsRoot,
+    $AngularCliRoot,
+    $ProjectRuntime,
+    $NpmCache,
+    $TempRoot
+)
+
+foreach ($Directory in $Directories) {
+    Ensure-Directory $Directory
+}
+
+# ------------------------------------------------------------
+# 05. TRANSCRIPT AND ENVIRONMENT ISOLATION
+# ------------------------------------------------------------
+
+$TranscriptStarted = $false
+
+try {
+
+    # ============================================================
+# VISIBLE EXECUTION AND DIAGNOSTICS MODE
+# ============================================================
+
+$ProgressPreference    = "Continue"
+$VerbosePreference     = "Continue"
+$InformationPreference = "Continue"
+$DebugPreference       = "Continue"
+$WarningPreference     = "Continue"
+
+Write-Host ""
+Write-Host "============================================================" -ForegroundColor Cyan
+Write-Host " IGD FRONTEND - FULL EXECUTION VISIBILITY ENABLED" -ForegroundColor Cyan
+Write-Host "============================================================" -ForegroundColor Cyan
+Write-Host "[VISIBLE] PowerShell statement tracing enabled." -ForegroundColor Green
+Write-Host "[VISIBLE] Download progress enabled where supported." -ForegroundColor Green
+Write-Host "[VISIBLE] Verbose and diagnostic output enabled." -ForegroundColor Green
+Write-Host "[VISIBLE] Warnings and informational messages enabled." -ForegroundColor Green
+Write-Host "============================================================" -ForegroundColor Cyan
+
+$TranscriptFile = Join-Path $LogsRoot "Initialize-IGD-Front-$Timestamp.transcript.log"
+try {
+    Start-Transcript -Path $TranscriptFile -Append -ErrorAction Stop | Out-Null
+}
+catch {
+    Write-Warning "Transcript could not be started: $($_.Exception.Message)"
+}
+    $TranscriptStarted = $true
+
+    Write-Log "IGD Frontend initialization started."
+    Write-Log "Project source: $FrontRoot"
+    Write-Log "Installation root: $InstallRoot"
+
+    $env:TEMP = $TempRoot
+    $env:TMP = $TempRoot
+
+    $env:NPM_CONFIG_CACHE = $NpmCache
+    $env:NPM_CONFIG_REGISTRY = $NpmRegistry
+
+    $env:NPM_CONFIG_FUND = "false"
+    $env:NPM_CONFIG_AUDIT = "false"
+    $env:NPM_CONFIG_UPDATE_NOTIFIER = "false"
+
+    $env:NPM_CONFIG_FETCH_RETRIES = "3"
+    $env:NPM_CONFIG_FETCH_TIMEOUT = "180000"
+
+    # --------------------------------------------------------
+    # 06. INSTALL PORTABLE NODE.JS
+    # --------------------------------------------------------
+
+    if (-not (Test-Path -LiteralPath $NodeExe -PathType Leaf)) {
+
+        Write-Log "Node.js $NodeVersion installation required."
+
+        Download-InternalFile `
+            -Urls $NodeArchiveUrls `
+            -Destination $NodeArchive |
+            Out-Null
+
+        Download-InternalFile `
+            -Urls $NodeChecksumUrls `
+            -Destination $NodeChecksumFile |
+            Out-Null
+
+        $ExpectedHash = Get-NodeChecksum `
+            -ManifestPath $NodeChecksumFile `
+            -FileName $NodeArchiveName
+
+        $ActualHash = (
+            Get-FileHash `
+                -LiteralPath $NodeArchive `
+                -Algorithm SHA256
+        ).Hash.ToLowerInvariant()
+
+        if ($ActualHash -ne $ExpectedHash) {
+            Stop-Setup "Node.js archive SHA256 validation failed."
+        }
+
+        Write-Log "Node.js archive SHA256 verified." "SUCCESS"
+
+        $ExtractRoot = Join-Path $TempRoot "node-extract"
+
+        if (Test-Path -LiteralPath $ExtractRoot) {
+            Remove-Item `
+                -LiteralPath $ExtractRoot `
+                -Recurse `
+                -Force
+        }
+
+        Ensure-Directory $ExtractRoot
+
+        Expand-Archive `
+            -LiteralPath $NodeArchive `
+            -DestinationPath $ExtractRoot `
+            -Force
+
+        $ExtractedNode = Join-Path $ExtractRoot $NodeFolder
+
+        if (-not (Test-Path -LiteralPath (
+            Join-Path $ExtractedNode "node.exe"
+        ))) {
+            Stop-Setup "Unexpected Node.js archive structure."
+        }
+
+        $NodeParent = Split-Path -Parent $NodeRoot
+        Ensure-Directory $NodeParent
+
+        if (Test-Path -LiteralPath $NodeRoot) {
+            Stop-Setup "Node.js destination already exists but is incomplete."
+        }
+
+        Move-Item `
+            -LiteralPath $ExtractedNode `
+            -Destination $NodeRoot
+
+        Remove-Item `
+            -LiteralPath $ExtractRoot `
+            -Recurse `
+            -Force
+
+        Write-Log "Node.js installed on D:." "SUCCESS"
+    }
+    else {
+        Write-Log "Existing Node.js installation detected."
+    }
+
+    if (-not (Test-Path -LiteralPath $NpmCli -PathType Leaf)) {
+        Stop-Setup "npm CLI is missing from Node.js distribution."
+    }
+
+    $InstalledNodeVersion = (& $NodeExe --version).Trim()
+
+    if ($LASTEXITCODE -ne 0) {
+        Stop-Setup "Node.js execution failed."
+    }
+
+    if ($InstalledNodeVersion -ne "v$NodeVersion") {
+        Stop-Setup "Unexpected Node.js version: $InstalledNodeVersion"
+    }
+
+    $InstalledNpmVersion = (& $NodeExe $NpmCli --version).Trim()
+
+    if ($LASTEXITCODE -ne 0) {
+        Stop-Setup "npm execution failed."
+    }
+
+    Write-Log "Node.js: $InstalledNodeVersion" "SUCCESS"
+    Write-Log "npm: $InstalledNpmVersion" "SUCCESS"
+
+    # --------------------------------------------------------
+    # 07. INSTALL ANGULAR CLI ON D:
+    # --------------------------------------------------------
+
+    $AngularToolsPackageJson = Join-Path $AngularCliRoot "package.json"
+
+    if (-not (Test-Path -LiteralPath $AngularToolsPackageJson)) {
+
+        $AngularToolsPackage = [ordered]@{
+            name = "igd-angular-cli-tools"
+            version = "1.0.0"
+            private = $true
+            description = "Isolated Angular CLI tools for IGD"
+        }
+
+        $AngularToolsPackage |
+            ConvertTo-Json -Depth 10 |
+            Set-Content `
+                -LiteralPath $AngularToolsPackageJson `
+                -Encoding UTF8
+    }
+
+    if (-not (Test-Path -LiteralPath $AngularCliJs)) {
+
+        Write-Log "Installing Angular CLI 22 on D:"
+
+        Invoke-Npm `
+            -WorkingDirectory $AngularCliRoot `
+            -Arguments @(
+                "install",
+                "@angular/cli@22",
+                "--registry=$NpmRegistry",
+                "--cache=$NpmCache",
+                "--no-audit",
+                "--no-fund"
+            )
+    }
+
+    if (-not (Test-Path -LiteralPath $AngularCliJs -PathType Leaf)) {
+        Stop-Setup "Angular CLI installation is incomplete."
+    }
+
+    $AngularCliVersion = (
+        Get-Content -LiteralPath $AngularCliPackage -Raw |
+        ConvertFrom-Json
+    ).version
+
+    Write-Log "Angular CLI installed: $AngularCliVersion" "SUCCESS"
+
+    # --------------------------------------------------------
+    # 08. CREATE FRONTEND PROJECT DIRECTORIES ON E:
+    # --------------------------------------------------------
+
+    $FrontDirectories = @(
+        $FrontRoot,
+        $AppRoot,
+        (Join-Path $FrontRoot "design-system"),
+        (Join-Path $FrontRoot "design-system\tokens"),
+        (Join-Path $FrontRoot "design-system\themes"),
+        (Join-Path $FrontRoot "design-system\components"),
+        (Join-Path $FrontRoot "design-system\patterns"),
+        (Join-Path $FrontRoot "design-system\icons"),
+        (Join-Path $FrontRoot "assets"),
+        (Join-Path $FrontRoot "assets\fonts"),
+        (Join-Path $FrontRoot "assets\images"),
+        (Join-Path $FrontRoot "assets\illustrations"),
+        (Join-Path $FrontRoot "docs"),
+        (Join-Path $FrontRoot "scripts")
+    )
+
+    foreach ($Directory in $FrontDirectories) {
+        Ensure-Directory $Directory
+    }
+
+    # --------------------------------------------------------
+    # 09. CREATE ANGULAR WORKSPACE IF ABSENT
+    # --------------------------------------------------------
+
+    $AngularJsonPath = Join-Path $AppRoot "angular.json"
+    $PackageJsonPath = Join-Path $AppRoot "package.json"
+
+    $CreatedWorkspace = $false
+
+    if (-not (Test-Path -LiteralPath $AngularJsonPath)) {
+
+        $ExistingFiles = @(
+            Get-ChildItem -LiteralPath $AppRoot -Force
+        )
+
+        if ($ExistingFiles.Count -gt 0) {
+            Stop-Setup (
+                "The app directory is not empty and does not contain " +
+                "angular.json. Existing content has been preserved."
+            )
+        }
+
+        Write-Log "Creating Angular 22 workspace."
+
+        Invoke-Node `
+            -WorkingDirectory $FrontRoot `
+            -Arguments @(
+                $AngularCliJs,
+                "new",
+                "igd-front",
+                "--directory",
+                "app",
+                "--skip-install",
+                "--style",
+                "css",
+                "--routing",
+                "--standalone",
+                "--package-manager",
+                "npm",
+                "--skip-git"
+            )
+
+        $CreatedWorkspace = $true
+    }
+
+    if (
+        -not (Test-Path -LiteralPath $AngularJsonPath) -or
+        -not (Test-Path -LiteralPath $PackageJsonPath)
+    ) {
+        Stop-Setup "Angular workspace validation failed."
+    }
+
+    Write-Log "Angular workspace verified."
+
+    # --------------------------------------------------------
+    # 10. READ PROJECT PACKAGE MANIFEST
+    # --------------------------------------------------------
+
+    $Package = Get-Content `
+        -LiteralPath $PackageJsonPath `
+        -Raw |
+        ConvertFrom-Json
+
+    if ($null -eq $Package.dependencies) {
+        Set-JsonProperty `
+            -Object $Package `
+            -Name "dependencies" `
+            -Value ([PSCustomObject]@{})
+    }
+
+    if ($null -eq $Package.devDependencies) {
+        Set-JsonProperty `
+            -Object $Package `
+            -Name "devDependencies" `
+            -Value ([PSCustomObject]@{})
+    }
+
+    if ($null -eq $Package.scripts) {
+        Set-JsonProperty `
+            -Object $Package `
+            -Name "scripts" `
+            -Value ([PSCustomObject]@{})
+    }
+
+    # --------------------------------------------------------
+    # 11. REQUIRED RUNTIME DEPENDENCIES
+    # --------------------------------------------------------
+
+    $RuntimeDependencies = [ordered]@{
+        "@angular/material" = "^22.0.0"
+        "@angular/cdk" = "^22.0.0"
+        "@spartan-ng/brain" = "latest"
+        "ngx-echarts" = "22.0.0"
+        "echarts" = "latest"
+        "@fontsource-variable/vazirmatn" = "latest"
+        "@fontsource-variable/inter" = "latest"
+        "material-symbols" = "latest"
+    }
+
+    foreach ($Name in $RuntimeDependencies.Keys) {
+
+        Set-JsonProperty `
+            -Object $Package.dependencies `
+            -Name $Name `
+            -Value $RuntimeDependencies[$Name]
+    }
+
+    # --------------------------------------------------------
+    # 12. REQUIRED DEVELOPMENT DEPENDENCIES
+    # --------------------------------------------------------
+
+    $DevelopmentDependencies = [ordered]@{
+        "@spartan-ng/cli" = "latest"
+        "tailwindcss" = "^4.0.0"
+        "@tailwindcss/postcss" = "^4.0.0"
+        "postcss" = "latest"
+    }
+
+    foreach ($Name in $DevelopmentDependencies.Keys) {
+
+        Set-JsonProperty `
+            -Object $Package.devDependencies `
+            -Name $Name `
+            -Value $DevelopmentDependencies[$Name]
+    }
+
+    # --------------------------------------------------------
+    # 13. PROJECT COMMANDS
+    # --------------------------------------------------------
+
+    Set-JsonProperty `
+        -Object $Package.scripts `
+        -Name "start" `
+        -Value "ng serve"
+
+    Set-JsonProperty `
+        -Object $Package.scripts `
+        -Name "build" `
+        -Value "ng build"
+
+    Set-JsonProperty `
+        -Object $Package.scripts `
+        -Name "test" `
+        -Value "ng test"
+
+    $Package |
+        ConvertTo-Json -Depth 100 |
+        Set-Content `
+            -LiteralPath $PackageJsonPath `
+            -Encoding UTF8
+
+    # --------------------------------------------------------
+    # 14. INSTALL ALL PROJECT DEPENDENCIES ON D:
+    # --------------------------------------------------------
+
+    Ensure-Directory $ProjectRuntime
+
+    $RuntimePackageBackup = Join-Path $BackupsRoot (
+        "package-" + $Timestamp + ".json"
+    )
+
+    if (Test-Path -LiteralPath $RuntimePackageJson) {
+
+        Copy-Item `
+            -LiteralPath $RuntimePackageJson `
+            -Destination $RuntimePackageBackup `
+            -Force
+    }
+
+    Copy-Item `
+        -LiteralPath $PackageJsonPath `
+        -Destination $RuntimePackageJson `
+        -Force
+
+    Write-Log "Installing Angular and frontend packages on D:"
+
+    Invoke-Npm `
+        -WorkingDirectory $ProjectRuntime `
+        -Arguments @(
+            "install",
+            "--registry=$NpmRegistry",
+            "--cache=$NpmCache",
+            "--no-audit",
+            "--no-fund",
+            "--prefer-online"
+        )
+
+    if (-not (Test-Path -LiteralPath $RuntimeModules -PathType Container)) {
+        Stop-Setup "Project dependencies were not installed on D:."
+    }
+
+    # --------------------------------------------------------
+    # 15. VERIFY REQUIRED PACKAGES
+    # --------------------------------------------------------
+
+    $RequiredPackages = @(
+        "@angular/core",
+        "@angular/cli",
+        "@angular/material",
+        "@angular/cdk",
+        "@spartan-ng/brain",
+        "@spartan-ng/cli",
+        "tailwindcss",
+        "@tailwindcss/postcss",
+        "postcss",
+        "echarts",
+        "ngx-echarts",
+        "typescript",
+        "material-symbols"
+    )
+
+    foreach ($PackageName in $RequiredPackages) {
+
+        $PackagePath = Join-Path `
+            $RuntimeModules `
+            ($PackageName.Replace("/", "\"))
+
+        $PackageManifest = Join-Path $PackagePath "package.json"
+
+        if (-not (Test-Path -LiteralPath $PackageManifest)) {
+            Stop-Setup "Required package missing: $PackageName"
+        }
+
+        Write-Log "Package verified: $PackageName"
+    }
+
+    # --------------------------------------------------------
+    # 16. PROJECT NODE_MODULES JUNCTION
+    # --------------------------------------------------------
+
+    $ProjectModules = Join-Path $AppRoot "node_modules"
+
+    if (Test-Path -LiteralPath $ProjectModules) {
+
+        $ExistingItem = Get-Item `
+            -LiteralPath $ProjectModules `
+            -Force
+
+        $IsReparsePoint = (
+            ($ExistingItem.Attributes -band
+                [IO.FileAttributes]::ReparsePoint) -ne 0
+        )
+
+        if ($IsReparsePoint) {
+
+            $JunctionInfo = (
+                & fsutil.exe reparsepoint query $ProjectModules 2>&1 |
+                Out-String
+            )
+
+            if ($LASTEXITCODE -ne 0) {
+                Stop-Setup "Unable to inspect existing node_modules junction."
+            }
+
+            $NormalizedInfo = $JunctionInfo.Replace("/", "\")
+            $ExpectedTarget = $RuntimeModules.Replace("/", "\")
+
+            if (
+                $NormalizedInfo.IndexOf(
+                    $ExpectedTarget,
+                    [StringComparison]::OrdinalIgnoreCase
+                ) -lt 0
+            ) {
+                Stop-Setup (
+                    "Existing node_modules junction points to another " +
+                    "location. It was not modified."
+                )
+            }
+
+            Write-Log "Existing dependency junction verified."
+        }
+        else {
+
+            $BackupModules = Join-Path $BackupsRoot (
+                "node_modules-" + $Timestamp
+            )
+
+            Write-Log "Preserving existing node_modules on D: backup."
+
+            Move-Item `
+                -LiteralPath $ProjectModules `
+                -Destination $BackupModules
+        }
+    }
+
+    if (-not (Test-Path -LiteralPath $ProjectModules)) {
+
+        New-Item `
+            -ItemType Junction `
+            -Path $ProjectModules `
+            -Target $RuntimeModules |
+            Out-Null
+
+        Write-Log "Project dependency junction created." "SUCCESS"
+    }
+
+    # --------------------------------------------------------
+    # 17. NPM PROJECT CONFIGURATION
+    # --------------------------------------------------------
+
+    $NpmrcPath = Join-Path $AppRoot ".npmrc"
+
+    $NpmrcContent = @"
+registry=$NpmRegistry
+fund=false
+audit=false
+update-notifier=false
+"@
+
+    Set-Content `
+        -LiteralPath $NpmrcPath `
+        -Value $NpmrcContent `
+        -Encoding UTF8
+
+    # --------------------------------------------------------
+    # 18. TAILWIND POSTCSS CONFIGURATION
+    # --------------------------------------------------------
+
+    $PostCssPath = Join-Path $AppRoot ".postcssrc.json"
+
+    $PostCssContent = @'
+{
+  "plugins": {
+    "@tailwindcss/postcss": {}
+  }
+}
+'@
+
+    Set-Content `
+        -LiteralPath $PostCssPath `
+        -Value $PostCssContent `
+        -Encoding UTF8
+
+    # --------------------------------------------------------
+    # 19. GLOBAL DESIGN SYSTEM CSS
+    # --------------------------------------------------------
+
+    $FoundationCssPath = Join-Path $FrontRoot "design-system\igd-foundation.css"
+
+    $FoundationCss = @'
+@layer theme, base, components, utilities;
+
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/preflight.css" layer(base);
+@import "tailwindcss/utilities.css";
+
+@import "@spartan-ng/brain/hlm-tailwind-preset.css";
+
+@import "@fontsource-variable/vazirmatn";
+@import "@fontsource-variable/inter";
+
+@import "material-symbols/outlined.css";
+
+:root {
+  color-scheme: light;
+
+  --igd-font-fa: "Vazirmatn Variable", sans-serif;
+  --igd-font-en: "Inter Variable", sans-serif;
+
+  --igd-green-950: #172b24;
+  --igd-green-900: #203b30;
+  --igd-green-800: #2b4d3d;
+  --igd-green-700: #3b6650;
+
+  --igd-olive-600: #7b8052;
+  --igd-gold-500: #b99a5b;
+
+  --igd-cream-50: #fbfaf6;
+  --igd-cream-100: #f4f1e8;
+  --igd-cream-200: #e9e4d7;
+
+  --igd-text-primary: #202923;
+  --igd-text-secondary: #6e766f;
+
+  --igd-border: #e5e1d7;
+
+  --igd-radius-sm: 8px;
+  --igd-radius-md: 14px;
+  --igd-radius-lg: 20px;
+}
+
+html,
+body {
+  min-height: 100%;
+  margin: 0;
+  background: var(--igd-cream-50);
+  color: var(--igd-text-primary);
+  font-family: var(--igd-font-fa);
+}
+
+body {
+  direction: rtl;
+  text-align: right;
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+* {
+  box-sizing: border-box;
+}
+'@
+
+    Set-Content `
+        -LiteralPath $FoundationCssPath `
+        -Value $FoundationCss `
+        -Encoding UTF8
+
+    # --------------------------------------------------------
+    # 20. CONNECT FOUNDATION CSS TO ANGULAR
+    # --------------------------------------------------------
+
+    $AngularJson = Get-Content `
+        -LiteralPath $AngularJsonPath `
+        -Raw |
+        ConvertFrom-Json
+
+    $ProjectNames = @($AngularJson.projects.PSObject.Properties.Name)
+
+    if ($ProjectNames.Count -eq 0) {
+        Stop-Setup "No Angular application project was found."
+    }
+
+    $ApplicationProject = $null
+
+    foreach ($Name in $ProjectNames) {
+        $Candidate = $AngularJson.projects.$Name
+
+        if (
+            $Candidate.architect -and
+            $Candidate.architect.build
+        ) {
+            $ApplicationProject = $Candidate
+            break
+        }
+
+        if (
+            $Candidate.targets -and
+            $Candidate.targets.build
+        ) {
+            $ApplicationProject = $Candidate
+            break
+        }
+    }
+
+    if ($null -eq $ApplicationProject) {
+        Stop-Setup "Angular build target was not found."
+    }
+
+    $BuildTarget = $null
+
+    if ($ApplicationProject.architect) {
+        $BuildTarget = $ApplicationProject.architect.build
+    }
+    elseif ($ApplicationProject.targets) {
+        $BuildTarget = $ApplicationProject.targets.build
+    }
+
+    if ($null -eq $BuildTarget.options) {
+        Stop-Setup "Angular build options are missing."
+    }
+
+    if ($null -eq $BuildTarget.options.styles) {
+        Set-JsonProperty `
+            -Object $BuildTarget.options `
+            -Name "styles" `
+            -Value @()
+    }
+
+    $StylesArray = @($BuildTarget.options.styles)
+
+    $FoundationRelative = "../design-system/igd-foundation.css"
+
+    $FoundationAlreadyLinked = $false
+
+    foreach ($Style in $StylesArray) {
+        if (
+            $Style -is [string] -and
+            $Style.Replace("\", "/") -eq $FoundationRelative
+        ) {
+            $FoundationAlreadyLinked = $true
+        }
+    }
+
+    if (-not $FoundationAlreadyLinked) {
+
+        $BuildTarget.options.styles = @(
+            $StylesArray
+        ) + @($FoundationRelative)
+    }
+
+    $AngularJson |
+        ConvertTo-Json -Depth 100 |
+        Set-Content `
+            -LiteralPath $AngularJsonPath `
+            -Encoding UTF8
+
+    # --------------------------------------------------------
+    # 21. CREATE DESIGN TOKENS
+    # --------------------------------------------------------
+
+    $ColorsPath = Join-Path `
+        $FrontRoot `
+        "design-system\tokens\colors.css"
+
+    $ColorsCss = @'
+:root {
+  --igd-color-primary: #203b30;
+  --igd-color-primary-dark: #172b24;
+  --igd-color-primary-soft: #e9f0eb;
+
+  --igd-color-olive: #7b8052;
+  --igd-color-gold: #b99a5b;
+
+  --igd-color-background: #fbfaf6;
+  --igd-color-surface: #ffffff;
+  --igd-color-surface-muted: #f4f1e8;
+
+  --igd-color-text: #202923;
+  --igd-color-text-muted: #6e766f;
+
+  --igd-color-border: #e5e1d7;
+
+  --igd-color-success: #2e7252;
+  --igd-color-warning: #b78332;
+  --igd-color-danger: #a9473e;
+}
+'@
+
+    Set-Content `
+        -LiteralPath $ColorsPath `
+        -Value $ColorsCss `
+        -Encoding UTF8
+
+    $TypographyPath = Join-Path `
+        $FrontRoot `
+        "design-system\tokens\typography.css"
+
+    $TypographyCss = @'
+:root {
+  --igd-font-family-persian: "Vazirmatn Variable", sans-serif;
+  --igd-font-family-latin: "Inter Variable", sans-serif;
+
+  --igd-font-size-xs: 0.75rem;
+  --igd-font-size-sm: 0.875rem;
+  --igd-font-size-md: 1rem;
+  --igd-font-size-lg: 1.125rem;
+  --igd-font-size-xl: 1.375rem;
+  --igd-font-size-2xl: 1.75rem;
+
+  --igd-line-height: 1.8;
+}
+'@
+
+    Set-Content `
+        -LiteralPath $TypographyPath `
+        -Value $TypographyCss `
+        -Encoding UTF8
+
+    # --------------------------------------------------------
+    # 22. CREATE DASHBOARD ONLY FOR A NEW WORKSPACE
+    # --------------------------------------------------------
+
+    if ($CreatedWorkspace) {
+
+        $AppHtmlPath = Join-Path $AppRoot "src\app\app.html"
+
+        if (Test-Path -LiteralPath $AppHtmlPath) {
+
+            $DashboardHtml = @'
+<main class="min-h-screen bg-[var(--igd-cream-50)] text-[var(--igd-text-primary)]">
+  <header class="border-b border-[var(--igd-border)] bg-white">
+    <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
+      <div>
+        <p class="text-xs text-[var(--igd-text-secondary)]">
+          سامانه مدیریت دارایی‌های واقعی
+        </p>
+        <h1 class="mt-1 text-xl font-bold text-[var(--igd-green-950)]">
+          مرکز دارایی‌های من
+        </h1>
+      </div>
+      <div class="rounded-xl bg-[var(--igd-cream-100)] px-4 py-2 text-sm">
+        حساب کاربری
+      </div>
+    </div>
+  </header>
+
+  <div class="mx-auto max-w-7xl px-6 py-8">
+    <section class="mb-8">
+      <p class="text-sm text-[var(--igd-text-secondary)]">
+        نمای کلی فعالیت‌ها
+      </p>
+
+      <h2 class="mt-2 text-2xl font-bold text-[var(--igd-green-950)]">
+        کارتابل اقتصادی شما
+      </h2>
+
+      <p class="mt-2 max-w-2xl text-sm leading-7 text-[var(--igd-text-secondary)]">
+        مدیریت دارایی‌ها، پیگیری قراردادها و دسترسی به عرضه‌ها در یک محیط یکپارچه.
+      </p>
+    </section>
+
+    <section class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <article class="rounded-2xl border border-[var(--igd-border)] bg-white p-5">
+        <p class="text-sm text-[var(--igd-text-secondary)]">دارایی‌های من</p>
+        <p class="mt-4 text-lg font-bold text-[var(--igd-green-900)]">
+          نمای کلی دارایی‌ها
+        </p>
+      </article>
+
+      <article class="rounded-2xl border border-[var(--igd-border)] bg-white p-5">
+        <p class="text-sm text-[var(--igd-text-secondary)]">قراردادهای فعال</p>
+        <p class="mt-4 text-lg font-bold text-[var(--igd-green-900)]">
+          پیگیری قراردادها
+        </p>
+      </article>
+
+      <article class="rounded-2xl border border-[var(--igd-border)] bg-white p-5">
+        <p class="text-sm text-[var(--igd-text-secondary)]">بازار کلی</p>
+        <p class="mt-4 text-lg font-bold text-[var(--igd-green-900)]">
+          مشاهده عرضه‌ها
+        </p>
+      </article>
+
+      <article class="rounded-2xl border border-[var(--igd-border)] bg-white p-5">
+        <p class="text-sm text-[var(--igd-text-secondary)]">خدمات و تحویل</p>
+        <p class="mt-4 text-lg font-bold text-[var(--igd-green-900)]">
+          پیگیری خدمات
+        </p>
+      </article>
+    </section>
+
+    <section class="mt-8 rounded-2xl border border-[var(--igd-border)] bg-white p-6">
+      <h3 class="font-bold text-[var(--igd-green-950)]">
+        فعالیت‌های اخیر
+      </h3>
+
+      <p class="mt-3 text-sm leading-7 text-[var(--igd-text-secondary)]">
+        اطلاعات فعالیت‌ها پس از اتصال به سرویس‌های بک‌اند نمایش داده می‌شود.
+      </p>
+    </section>
+  </div>
+</main>
+'@
+
+            Set-Content `
+                -LiteralPath $AppHtmlPath `
+                -Value $DashboardHtml `
+                -Encoding UTF8
+        }
+    }
+
+    # --------------------------------------------------------
+    # 23. CREATE START SCRIPT
+    # --------------------------------------------------------
+
+    $StartScriptPath = Join-Path `
+        $FrontRoot `
+        "scripts\Start-IGD-Front.ps1"
+
+    $StartScriptContent = @'
+[CmdletBinding()]
+param(
+    [string]$HostAddress = "127.0.0.1",
+    [int]$Port = 4200
+)
+
+Set-StrictMode -Version Latest
+$ErrorActionPreference = "Stop"
+
+$InstallRoot = "D:\Program Files\IGD-Frontend"
+
+$NodeExe = Join-Path $InstallRoot `
+    "Runtimes\node-v24.15.0-win-x64\node.exe"
+
+$NgJs = Join-Path $InstallRoot `
+    "Tools\AngularCLI\node_modules\@angular\cli\bin\ng.js"
+
+$AppRoot = Join-Path (Split-Path -Parent $PSScriptRoot) "app"
+
+$env:TEMP = Join-Path $InstallRoot "PackageCaches\temp"
+$env:TMP = $env:TEMP
+$env:NPM_CONFIG_CACHE = Join-Path $InstallRoot "PackageCaches\npm"
+$env:NPM_CONFIG_REGISTRY = "https://mirror.novin.cloud/artifactory/api/npm/npm/"
+
+if (!(Test-Path -LiteralPath $NodeExe)) {
+    throw "Node.js installation was not found."
+}
+
+if (!(Test-Path -LiteralPath $NgJs)) {
+    throw "Angular CLI installation was not found."
+}
+
+Push-Location $AppRoot
+
+try {
+    & $NodeExe $NgJs serve --host $HostAddress --port $Port
+
+    if ($LASTEXITCODE -ne 0) {
+        throw "Angular development server failed."
+    }
+}
+finally {
+    Pop-Location
+}
+'@
+
+    Set-Content `
+        -LiteralPath $StartScriptPath `
+        -Value $StartScriptContent `
+        -Encoding UTF8
+
+    # --------------------------------------------------------
+    # 24. CREATE BUILD SCRIPT
+    # --------------------------------------------------------
+
+    $BuildScriptPath = Join-Path `
+        $FrontRoot `
+        "scripts\Build-IGD-Front.ps1"
+
+    $BuildScriptContent = @'
+Set-StrictMode -Version Latest
+$ErrorActionPreference = "Stop"
+
+$InstallRoot = "D:\Program Files\IGD-Frontend"
+
+$NodeExe = Join-Path $InstallRoot `
+    "Runtimes\node-v24.15.0-win-x64\node.exe"
+
+$NgJs = Join-Path $InstallRoot `
+    "Tools\AngularCLI\node_modules\@angular\cli\bin\ng.js"
+
+$AppRoot = Join-Path (Split-Path -Parent $PSScriptRoot) "app"
+
+$env:TEMP = Join-Path $InstallRoot "PackageCaches\temp"
+$env:TMP = $env:TEMP
+$env:NPM_CONFIG_CACHE = Join-Path $InstallRoot "PackageCaches\npm"
+$env:NPM_CONFIG_REGISTRY = "https://mirror.novin.cloud/artifactory/api/npm/npm/"
+
+if (!(Test-Path -LiteralPath $NodeExe)) {
+    throw "Node.js installation was not found."
+}
+
+if (!(Test-Path -LiteralPath $NgJs)) {
+    throw "Angular CLI installation was not found."
+}
+
+Push-Location $AppRoot
+
+try {
+    & $NodeExe $NgJs build
+
+    if ($LASTEXITCODE -ne 0) {
+        throw "Angular production build failed."
+    }
+}
+finally {
+    Pop-Location
+}
+'@
+
+    Set-Content `
+        -LiteralPath $BuildScriptPath `
+        -Value $BuildScriptContent `
+        -Encoding UTF8
+
+    # --------------------------------------------------------
+    # 25. INSTALLATION MANIFEST
+    # --------------------------------------------------------
+
+    $Manifest = [ordered]@{
+        projectRoot = $ProjectRoot
+        sourceRoot = $FrontRoot
+        angularWorkspace = $AppRoot
+
+        installationRoot = $InstallRoot
+
+        nodeVersion = $InstalledNodeVersion
+        npmVersion = $InstalledNpmVersion
+        angularCliVersion = $AngularCliVersion
+
+        nodeExecutable = $NodeExe
+        npmExecutable = $NpmCli
+        angularCli = $AngularCliJs
+
+        projectRuntime = $ProjectRuntime
+        dependencyModules = $RuntimeModules
+
+        npmCache = $NpmCache
+        temporaryFiles = $TempRoot
+
+        npmRegistry = $NpmRegistry
+        nodeMirror = $NodeArchiveUrls[0]
+
+        operatingSystemArchitecture = $env:PROCESSOR_ARCHITECTURE
+
+        createdAt = (Get-Date).ToString("o")
+
+        installationPolicy = (
+            "All runtimes, tools, dependencies, caches and downloads " +
+            "are stored on drive D. Drive E contains project source " +
+            "and project configuration."
+        )
+    }
+
+    $ManifestPath = Join-Path `
+        $FrontRoot `
+        "installation-manifest.json"
+
+    $Manifest |
+        ConvertTo-Json -Depth 30 |
+        Set-Content `
+            -LiteralPath $ManifestPath `
+            -Encoding UTF8
+
+    # --------------------------------------------------------
+    # 26. FINAL PATH VALIDATION
+    # --------------------------------------------------------
+
+    $DPaths = @(
+        $NodeExe,
+        $NpmCli,
+        $AngularCliJs,
+        $RuntimePackageJson,
+        $RuntimeModules,
+        $NpmCache,
+        $TempRoot
+    )
+
+    foreach ($Path in $DPaths) {
+        Test-PathOnD $Path
+
+        if (-not (Test-Path -LiteralPath $Path)) {
+            Stop-Setup "Installation path validation failed: $Path"
+        }
+    }
+
+    $NodeModulesLink = Get-Item `
+        -LiteralPath $ProjectModules `
+        -Force
+
+    if (
+        ($NodeModulesLink.Attributes -band
+            [IO.FileAttributes]::ReparsePoint) -eq 0
+    ) {
+        Stop-Setup "Project node_modules is not a junction."
+    }
+
+    # --------------------------------------------------------
+    # 27. FINAL BUILD
+    # --------------------------------------------------------
+
+    if (-not $SkipBuild) {
+
+        Write-Log "Starting production build."
+
+        Invoke-Node `
+            -WorkingDirectory $AppRoot `
+            -Arguments @(
+                $AngularCliJs,
+                "build"
+            )
+
+        Write-Log "Production build completed." "SUCCESS"
+    }
+    else {
+        Write-Log "Production build skipped." "WARN"
+    }
+
+    # --------------------------------------------------------
+    # 28. FINAL REPORT
+    # --------------------------------------------------------
+
+    Write-Log "============================================" "SUCCESS"
+    Write-Log "IGD FRONTEND INITIALIZATION COMPLETED." "SUCCESS"
+    Write-Log "============================================" "SUCCESS"
+
+    Write-Log "SOURCE CODE: $FrontRoot" "SUCCESS"
+    Write-Log "INSTALLATION: $InstallRoot" "SUCCESS"
+    Write-Log "NODE: $NodeRoot" "SUCCESS"
+    Write-Log "ANGULAR CLI: $AngularCliRoot" "SUCCESS"
+    Write-Log "DEPENDENCIES: $RuntimeModules" "SUCCESS"
+    Write-Log "NPM CACHE: $NpmCache" "SUCCESS"
+    Write-Log "LOG: $LogFile" "SUCCESS"
+
+}
+catch {
+
+    Write-Log "INITIALIZATION FAILED." "ERROR"
+    Write-Log $_.Exception.Message "ERROR"
+
+    throw
+}
+finally {
+
+    if ($TranscriptStarted) {
+        try {
+            Stop-Transcript | Out-Null
+        }
+        catch {
+            Write-Warning "Transcript could not be closed cleanly."
+        }
+    }
+}
