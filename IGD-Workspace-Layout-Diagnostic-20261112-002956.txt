@@ -1,0 +1,3973 @@
+﻿IGD FRONTEND - WORKSPACE LAYOUT DIAGNOSTIC
+Generated: 2026-11-12 00:29:57
+Computer: DESKTOP-9OAF91R
+User: SeyedAli Mirjafari
+PowerShell: 5.1.28000.3231
+ProjectRoot: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform
+FrontendRoot: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front
+AppRoot: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app
+ReportPath: D:\Program Files\IGD-Frontend\Reports\IGD-Workspace-Layout-Diagnostic-20261112-002956.txt
+
+====================================================================================================
+1. ANGULAR APPLICATION DIRECTORY STRUCTURE
+====================================================================================================
+TREE ROOT: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app
+[FILE] app.config.ts
+[FILE] app.css
+[FILE] app.html
+[FILE] app.routes.ts
+[FILE] app.spec.ts
+[FILE] app.ts
+[DIR]  core
+  [DIR]  api
+    [DIR]  clients
+      [FILE] .gitkeep
+  [DIR]  auth
+    [FILE] .gitkeep
+  [DIR]  authorization
+    [FILE] .gitkeep
+  [DIR]  config
+    [FILE] .gitkeep
+    [FILE] runtime-config.ts
+  [DIR]  guards
+    [FILE] .gitkeep
+  [DIR]  interceptors
+    [FILE] .gitkeep
+[DIR]  features
+  [DIR]  account
+    [FILE] .gitkeep
+    [FILE] account.routes.ts
+    [FILE] account.routes.ts.backup-20261110-092715
+    [DIR]  models
+      [FILE] account.models.ts
+    [DIR]  pages
+      [DIR]  contacts
+        [FILE] account-contacts.page.ts
+        [FILE] account-page.css
+        [FILE] account-page.html
+      [DIR]  devices
+        [FILE] account-devices.page.ts
+        [FILE] account-page.css
+        [FILE] account-page.html
+      [DIR]  legal-entity
+        [FILE] account-legal-entity.page.ts
+        [FILE] account-page.css
+        [FILE] account-page.html
+      [DIR]  overview
+        [FILE] account-overview.page.ts
+        [FILE] account-page.css
+        [FILE] account-page.html
+      [DIR]  permissions
+        [FILE] account-page.css
+        [FILE] account-page.html
+        [FILE] account-permissions.page.ts
+      [DIR]  profile
+        [FILE] account-page.css
+        [FILE] account-page.html
+        [FILE] account-profile.page.ts
+      [DIR]  security
+        [FILE] account-page.css
+        [FILE] account-page.html
+        [FILE] account-security.page.ts
+      [DIR]  sessions
+        [FILE] account-page.css
+        [FILE] account-page.html
+        [FILE] account-sessions.page.ts
+      [DIR]  verification
+        [FILE] account-page.css
+        [FILE] account-page.html
+        [FILE] account-verification.page.ts
+    [FILE] README.md
+    [DIR]  services
+      [FILE] account-api.service.ts
+  [DIR]  contracts
+    [FILE] .gitkeep
+    [FILE] contracts.routes.ts
+  [DIR]  general-market
+    [DIR]  audit
+      [FILE] .gitkeep
+    [DIR]  catalogue
+      [FILE] .gitkeep
+    [DIR]  commodity
+      [FILE] .gitkeep
+    [DIR]  execution
+      [FILE] .gitkeep
+    [FILE] general-market.css
+    [FILE] general-market.css.backup-history-20261109-104747
+    [FILE] general-market.css.bak-20261111-112109
+    [FILE] general-market.html
+    [FILE] general-market.html.backup-history-20261109-104747
+    [FILE] general-market.routes.ts
+    [FILE] general-market.ts
+    [DIR]  markets
+      [FILE] .gitkeep
+    [DIR]  matching
+      [FILE] .gitkeep
+    [DIR]  offer-requests
+      [FILE] .gitkeep
+    [DIR]  offers
+      [FILE] .gitkeep
+    [DIR]  order-book
+      [FILE] .gitkeep
+    [DIR]  orders
+      [FILE] .gitkeep
+    [DIR]  proposals
+      [FILE] .gitkeep
+    [DIR]  real-estate
+      [FILE] .gitkeep
+    [DIR]  regulatory
+      [FILE] .gitkeep
+    [DIR]  trades
+      [FILE] .gitkeep
+  [DIR]  my-assets
+    [FILE] .gitkeep
+    [FILE] my-assets.routes.ts
+  [DIR]  notifications
+    [FILE] .gitkeep
+    [FILE] notifications.routes.ts
+  [DIR]  services
+    [FILE] .gitkeep
+    [FILE] services.routes.ts
+  [DIR]  settlement
+    [FILE] .gitkeep
+    [FILE] settlement.routes.ts
+[DIR]  layouts
+  [DIR]  auth-layout
+    [FILE] .gitkeep
+  [DIR]  main-layout
+    [FILE] .gitkeep
+[DIR]  shared
+  [DIR]  components
+    [FILE] .gitkeep
+  [DIR]  directives
+    [FILE] .gitkeep
+  [DIR]  models
+    [FILE] .gitkeep
+  [DIR]  pages
+    [DIR]  feature-placeholder
+      [FILE] feature-placeholder.page.css
+      [FILE] feature-placeholder.page.html
+      [FILE] feature-placeholder.page.ts
+  [DIR]  pipes
+    [FILE] .gitkeep
+  [DIR]  routing
+    [FILE] feature-route.factory.ts
+  [DIR]  utils
+    [FILE] .gitkeep
+
+====================================================================================================
+2. FRONTEND TOP LEVEL STRUCTURE
+====================================================================================================
+TREE ROOT: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front
+[DIR]  app
+  [FILE] .editorconfig
+  [FILE] .gitignore
+  [FILE] .npmrc
+  [FILE] .postcssrc.json
+  [FILE] .prettierrc
+  [DIR]  .vscode
+    [FILE] extensions.json
+    [FILE] launch.json
+    [FILE] tasks.json
+  [FILE] angular.json
+  [FILE] angular.json.backup-20261107-101521
+  [FILE] package.json
+  [DIR]  public
+    [FILE] favicon.ico
+  [FILE] README.md
+  [DIR]  src
+    [DIR]  app
+    [DIR]  environments
+    [FILE] index.html
+    [FILE] main.ts
+    [FILE] styles.css
+  [FILE] tsconfig.app.json
+  [FILE] tsconfig.json
+  [FILE] tsconfig.spec.json
+[DIR]  assets
+  [DIR]  fonts
+    [FILE] .gitkeep
+    [FILE] inter-latin-ext-wght-normal.woff2
+    [FILE] inter-latin-wght-normal.woff2
+    [FILE] material-symbols-outlined.woff2
+    [FILE] vazirmatn-arabic-wght-normal.woff2
+    [FILE] vazirmatn-latin-ext-wght-normal.woff2
+    [FILE] vazirmatn-latin-wght-normal.woff2
+  [DIR]  illustrations
+    [FILE] .gitkeep
+  [DIR]  images
+    [FILE] .gitkeep
+[DIR]  design-system
+  [DIR]  components
+    [FILE] .gitkeep
+  [DIR]  icons
+    [FILE] .gitkeep
+  [FILE] igd-foundation.css
+  [FILE] igd-foundation.css.backup-font-fix-20261109-103238
+  [DIR]  patterns
+    [FILE] .gitkeep
+  [DIR]  themes
+    [FILE] .gitkeep
+  [DIR]  tokens
+    [FILE] colors.css
+    [FILE] typography.css
+[DIR]  docs
+  [DIR]  api
+    [FILE] .gitkeep
+  [DIR]  architecture
+    [FILE] .gitkeep
+    [FILE] FRONTEND-STRUCTURE.txt
+  [DIR]  design-system
+    [FILE] .gitkeep
+  [DIR]  frontend
+    [FILE] .gitkeep
+[DIR]  IGD-front
+  [DIR]  app
+    [DIR]  src
+[FILE] IGD-Frontend-Configuration-Review.txt
+[FILE] installation-manifest.json
+[DIR]  scripts
+  [FILE] Build-IGD-Front.ps1
+  [FILE] igd-shell-source-report.txt
+  [FILE] Initialize-IGD-Account-Frontend.ps1
+  [FILE] market-workspace-history-report.txt
+  [FILE] Start-IGD-Front.ps1
+[FILE] دستور اجرای فرانت اند.txt
+
+====================================================================================================
+3. ANGULAR CORE FILES
+====================================================================================================
+
+------------------------------------------------------------------------------------------
+FILE: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.html
+PURPOSE: Main application template
+------------------------------------------------------------------------------------------
+TOTAL LINES: 266
+SHOWING: 1 - 266
+    1: <div class="igd-shell" [class.is-collapsed]="sidebarCollapsed">
+    2: 
+    3:   <aside class="primary-sidebar" aria-label="Ù†Ø§ÙˆØ¨Ø±ÛŒ Ø§ØµÙ„ÛŒ">
+    4:     <div class="brand-area">
+    5:       <div class="brand-mark" aria-hidden="true">
+    6:         <span class="material-symbols-outlined">account_balance</span>
+    7:       </div>
+    8:       <div class="brand-copy">
+    9:         <strong>IGD</strong>
+   10:         <span>Ù…Ø¯ÛŒØ±ÛŒØª Ø¯Ø§Ø±Ø§ÛŒÛŒâ€ŒÙ‡Ø§ÛŒ ÙˆØ§Ù‚Ø¹ÛŒ</span>
+   11:       </div>
+   12:     </div>
+   13: 
+   14:     <div class="sidebar-caption">ÙØ¶Ø§ÛŒ Ú©Ø§Ø±ÛŒ</div>
+   15: 
+   16:     <nav class="primary-navigation">
+   17:       @for (section of sections; track section.id) {
+   18:         <button
+   19:           type="button"
+   20:           class="primary-nav-item"
+   21:           [class.active]="activeSectionId === section.id"
+   22:           [attr.aria-current]="activeSectionId === section.id ? 'page' : null"
+   23:           [title]="sidebarCollapsed ? section.label : ''"
+   24:           (click)="selectSection(section.id)"
+   25:         >
+   26:           <span class="material-symbols-outlined nav-icon">{{ section.icon }}</span>
+   27:           <span class="nav-label">{{ section.label }}</span>
+   28:           <span class="active-indicator"></span>
+   29:         </button>
+   30:       }
+   31:     </nav>
+   32: 
+   33:     <div class="sidebar-bottom">
+   34:       <div class="sidebar-divider"></div>
+   35: 
+   36:       <div class="account-profile-area" [class.menu-open]="accountMenuOpen">
+   37:         <button
+   38:           type="button"
+   39:           class="profile-entry"
+   40:           [attr.aria-expanded]="accountMenuOpen"
+   41:           aria-haspopup="true"
+   42:           aria-label="Ù…Ù†ÙˆÛŒ Ø­Ø³Ø§Ø¨ Ú©Ø§Ø±Ø¨Ø±ÛŒ"
+   43:           (click)="toggleAccountMenu()"
+   44:         >
+   45:           <div class="profile-avatar">
+   46:             <span class="material-symbols-outlined">person</span>
+   47:           </div>
+   48: 
+   49:           <div class="profile-copy">
+   50:             <strong>{{ accountUserName }}</strong>
+   51:             <span>Ø­Ø³Ø§Ø¨ Ú©Ø§Ø±Ø¨Ø±ÛŒ</span>
+   52:           </div>
+   53: 
+   54:           <span class="material-symbols-outlined profile-chevron">
+   55:             {{ accountMenuOpen ? 'expand_more' : 'expand_less' }}
+   56:           </span>
+   57:         </button>
+   58: 
+   59:         @if (accountMenuOpen) {
+   60:           <div class="account-dropdown" role="menu" aria-label="Ú¯Ø²ÛŒÙ†Ù‡â€ŒÙ‡Ø§ÛŒ Ø­Ø³Ø§Ø¨ Ú©Ø§Ø±Ø¨Ø±ÛŒ">
+   61:             <div class="account-dropdown-heading">
+   62:               <div class="dropdown-avatar">
+   63:                 <span class="material-symbols-outlined">person</span>
+   64:               </div>
+   65:               <div class="dropdown-user-copy">
+   66:                 <strong>{{ accountUserName }}</strong>
+   67:                 <span>Ù…Ø¯ÛŒØ±ÛŒØª Ø­Ø³Ø§Ø¨ Ú©Ø§Ø±Ø¨Ø±ÛŒ</span>
+   68:               </div>
+   69:             </div>
+   70: 
+   71:             @for (group of accountMenuGroups; track group.title) {
+   72:               <div class="account-menu-group">
+   73:                 <div class="account-menu-group-title">{{ group.title }}</div>
+   74:                 @for (item of group.items; track item.id) {
+   75:                   <button
+   76:                     type="button"
+   77:                     class="account-menu-item"
+   78:                     [class.danger]="item.danger"
+   79:                     [disabled]="item.id === 'logout' && logoutInProgress"
+   80:                     role="menuitem"
+   81:                     (click)="navigateAccountMenuItem(item.id)"
+   82:                   >
+   83:                     <span class="material-symbols-outlined">{{ item.icon }}</span>
+   84:                     <span>{{ item.id === 'logout' && logoutInProgress ? 'Ø¯Ø± Ø­Ø§Ù„ Ø®Ø±ÙˆØ¬...' : item.label }}</span>
+   85:                   </button>
+   86:                 }
+   87:               </div>
+   88:             }
+   89: 
+   90:             @if (logoutError) {
+   91:               <div class="account-menu-footnote account-menu-error" role="alert">
+   92:                 <span class="material-symbols-outlined">error</span>
+   93:                 <span>{{ logoutError }}</span>
+   94:               </div>
+   95:             }
+   96:             <div class="account-menu-footnote">
+   97:               <span class="material-symbols-outlined">info</span>
+   98:               <span>Ø§Ù…Ú©Ø§Ù†Ø§Øª Ø­Ø³Ø§Ø¨ Ù¾Ø³ Ø§Ø² Ø§ØªØµØ§Ù„ Ø³Ø±ÙˆÛŒØ³ Ù…Ø±Ø¨ÙˆØ·Ù‡ ÙØ¹Ø§Ù„ Ù…ÛŒâ€ŒØ´ÙˆÙ†Ø¯.</span>
+   99:             </div>
+  100:           </div>
+  101:         }
+  102:       </div>
+  103: 
+  104:       <div class="sidebar-version">IGD Platform</div>
+  105:     </div>
+  106:   </aside>
+  107: 
+  108:   <section class="workspace-frame">
+  109: 
+  110:     <aside class="secondary-sidebar" aria-label="Ù†Ø§ÙˆØ¨Ø±ÛŒ Ø¨Ø®Ø´">
+  111:       <div class="secondary-header">
+  112:         <span class="secondary-eyebrow">Ø¨Ø®Ø´ Ø§Ù†ØªØ®Ø§Ø¨â€ŒØ´Ø¯Ù‡</span>
+  113:         <div class="secondary-title">
+  114:           <span class="material-symbols-outlined">{{ activeSection.icon }}</span>
+  115:           <strong>{{ activeSection.label }}</strong>
+  116:         </div>
+  117:       </div>
+  118: 
+  119:       <div class="secondary-divider"></div>
+  120:       <div class="secondary-menu-caption">Ø¯Ø³ØªØ±Ø³ÛŒâ€ŒÙ‡Ø§ÛŒ Ø§ÛŒÙ† Ø¨Ø®Ø´</div>
+  121: 
+  122:       <nav class="secondary-navigation">
+  123:         @for (item of activeSection.items; track item.id) {
+  124:           <button
+  125:             type="button"
+  126:             class="secondary-nav-item"
+  127:             [class.active]="activeItemId === item.id"
+  128:             [attr.aria-current]="activeItemId === item.id ? 'page' : null"
+  129:             (click)="selectItem(item.id)"
+  130:           >
+  131:             <span class="material-symbols-outlined">{{ item.icon }}</span>
+  132:             <span>{{ item.label }}</span>
+  133:             @if (activeItemId === item.id) {
+  134:               <span class="secondary-active-dot"></span>
+  135:             }
+  136:           </button>
+  137:         }
+  138:       </nav>
+  139: 
+  140:       <div class="secondary-footer">
+  141:         <span class="material-symbols-outlined">info</span>
+  142:         <span>Ø³Ø§Ø®ØªØ§Ø± Ø¨Ø®Ø´â€ŒÙ‡Ø§ Ø¯Ø± Ø­Ø§Ù„ ØªÚ©Ù…ÛŒÙ„ Ø§Ø³Øª.</span>
+  143:       </div>
+  144:     </aside>
+  145: 
+  146:     <main class="main-workspace">
+  147:       <header class="topbar">
+  148:         <div class="topbar-start">
+  149:           <button
+  150:             type="button"
+  151:             class="icon-button sidebar-toggle"
+  152:             (click)="toggleSidebar()"
+  153:             [attr.aria-label]="sidebarCollapsed ? 'Ø¨Ø§Ø² Ú©Ø±Ø¯Ù† Ù†ÙˆØ§Ø± Ú©Ù†Ø§Ø±ÛŒ' : 'Ø¬Ù…Ø¹ Ú©Ø±Ø¯Ù† Ù†ÙˆØ§Ø± Ú©Ù†Ø§Ø±ÛŒ'"
+  154:             title="Ø¬Ù…Ø¹â€ŒÚ©Ø±Ø¯Ù† ÛŒØ§ Ø¨Ø§Ø²Ú©Ø±Ø¯Ù† Ù…Ù†ÙˆÛŒ Ø§ØµÙ„ÛŒ"
+  155:           >
+  156:             <span class="material-symbols-outlined">
+  157:               {{ sidebarCollapsed ? 'left_panel_open' : 'left_panel_close' }}
+  158:             </span>
+  159:           </button>
+  160: 
+  161:           <div class="breadcrumb">
+  162:             <span>IGD</span>
+  163:             <span class="material-symbols-outlined">chevron_left</span>
+  164:             <strong>{{ activeSection.label }}</strong>
+  165:             <span class="material-symbols-outlined">chevron_left</span>
+  166:             <span>{{ activeItem.label }}</span>
+  167:           </div>
+  168:         </div>
+  169: 
+  170:         <div class="topbar-end">
+  171:           <div class="environment-label">
+  172:             <span class="status-dot"></span>
+  173:             <span>Ù…Ø­ÛŒØ· Ú©Ø§Ø±Ø¨Ø±ÛŒ</span>
+  174:           </div>
+  175:         </div>
+  176:       </header>
+  177: 
+  178:       <section class="workspace-canvas">
+  179:         <div class="workspace-content">
+  180:           <section class="workspace-home">
+  181:   <div class="workspace-heading">
+  182:     <div>
+  183:       <div class="page-overline">
+  184:         <span class="material-symbols-outlined">space_dashboard</span>
+  185:         <span>ÙØ¶Ø§ÛŒ Ú©Ø§Ø±ÛŒ IGD</span>
+  186:       </div>
+  187:       <h1>ÙˆÛŒØ±Ø§ÛŒØ´ Ù…Ø³ØªÙ‚ÛŒÙ…</h1>
+  188:       <p class="workspace-description">Ù…Ø¯ÛŒØ±ÛŒØª Ùˆ Ù¾ÛŒÚ¯ÛŒØ±ÛŒ Ø¯Ø§Ø±Ø§ÛŒÛŒâ€ŒÙ‡Ø§ Ùˆ ÙØ¹Ø§Ù„ÛŒØªâ€ŒÙ‡Ø§ÛŒ Ø´Ù…Ø§ Ø¯Ø± ÛŒÚ© ÙØ¶Ø§ÛŒ ÛŒÚ©Ù¾Ø§Ø±Ú†Ù‡.</p>
+  189:     </div>
+  190:     <div class="workspace-heading-mark" aria-hidden="true">
+  191:       <span class="material-symbols-outlined">dashboard</span>
+  192:     </div>
+  193:   </div>
+  194: 
+  195:   <div class="workspace-empty">
+  196:     <div class="empty-graphic" aria-hidden="true">
+  197:       <div class="empty-graphic-back"></div>
+  198:       <div class="empty-graphic-front">
+  199:         <span class="material-symbols-outlined">construction</span>
+  200:       </div>
+  201:       <span class="empty-graphic-symbol symbol-one material-symbols-outlined">auto_awesome</span>
+  202:       <span class="empty-graphic-symbol symbol-two material-symbols-outlined">schedule</span>
+  203:       <span class="empty-graphic-symbol symbol-three material-symbols-outlined">widgets</span>
+  204:     </div>
+  205: 
+  206:     <h2>Ø¯Ø± Ø­Ø§Ù„ Ø·Ø±Ø§Ø­ÛŒ Ùˆ ØªÙˆØ³Ø¹Ù‡ Ù‡Ø³ØªÛŒÙ…</h2>
+  207:     <p>Ø§ÛŒÙ† Ø¨Ø®Ø´ Ø¯Ø± Ø­Ø§Ù„ Ø¢Ù…Ø§Ø¯Ù‡â€ŒØ³Ø§Ø²ÛŒ Ø§Ø³Øª Ùˆ Ù‚Ø§Ø¨Ù„ÛŒØªâ€ŒÙ‡Ø§ÛŒ Ø¢Ù† Ù¾Ø³ Ø§Ø² ØªÚ©Ù…ÛŒÙ„ Ø¯Ø± Ø¯Ø³ØªØ±Ø³ Ù‚Ø±Ø§Ø± Ø®ÙˆØ§Ù‡Ù†Ø¯ Ú¯Ø±ÙØª.</p>
+  208: 
+  209:     <div class="empty-state-note">
+  210:       <span class="material-symbols-outlined">info</span>
+  211:       <span>ÙØ¹Ù„Ø§Ù‹ Ù…Ø­ØªÙˆØ§ÛŒÛŒ Ø¨Ø±Ø§ÛŒ Ù†Ù…Ø§ÛŒØ´ Ø¯Ø± Ø§ÛŒÙ† Ø¨Ø®Ø´ ÙˆØ¬ÙˆØ¯ Ù†Ø¯Ø§Ø±Ø¯.</span>
+  212:     </div>
+  213:   </div>
+  214: 
+  215:   <footer class="workspace-footer">
+  216:     <span class="material-symbols-outlined">verified_user</span>
+  217:     <span>Ù¾Ù„ØªÙØ±Ù… Ù…Ø¯ÛŒØ±ÛŒØª Ø¯Ø§Ø±Ø§ÛŒÛŒâ€ŒÙ‡Ø§ÛŒ ÙˆØ§Ù‚Ø¹ÛŒ IGD</span>
+  218:     <span class="footer-separator"></span>
+  219:     <span>Ø¯Ø± Ø­Ø§Ù„ ØªÙˆØ³Ø¹Ù‡</span>
+  220:   </footer>
+  221: </section>
+  222:         </div>
+  223:       </section>
+  224:     </main>
+  225:   </section>
+  226: 
+  227:   <button
+  228:     type="button"
+  229:     class="account-panel-overlay"
+  230:     [class.is-open]="accountPanelOpen"
+  231:     [attr.aria-hidden]="!accountPanelOpen"
+  232:     aria-label="Ø¨Ø³ØªÙ† Ù¾Ù†Ù„ Ø­Ø³Ø§Ø¨ Ú©Ø§Ø±Ø¨Ø±ÛŒ"
+  233:     tabindex="-1"
+  234:     (click)="closeAccountPanel()"
+  235:   ></button>
+  236: 
+  237:   <aside
+  238:     class="account-panel-drawer"
+  239:     [class.is-open]="accountPanelOpen"
+  240:     [attr.aria-hidden]="!accountPanelOpen"
+  241:     aria-label="Ù¾Ù†Ù„ Ø­Ø³Ø§Ø¨ Ú©Ø§Ø±Ø¨Ø±ÛŒ"
+  242:   >
+  243:     <header class="account-panel-header">
+  244:       <div class="account-panel-heading">
+  245:         <span class="material-symbols-outlined">manage_accounts</span>
+  246:         <div>
+  247:           <strong>{{ accountPanelTitle }}</strong>
+  248:           <span>Ù…Ø¯ÛŒØ±ÛŒØª Ø­Ø³Ø§Ø¨ Ú©Ø§Ø±Ø¨Ø±ÛŒ</span>
+  249:         </div>
+  250:       </div>
+  251: 
+  252:       <button
+  253:         type="button"
+  254:         class="account-panel-close"
+  255:         aria-label="Ø¨Ø³ØªÙ† Ù¾Ù†Ù„"
+  256:         (click)="closeAccountPanel()"
+  257:       >
+  258:         <span class="material-symbols-outlined">close</span>
+  259:       </button>
+  260:     </header>
+  261: 
+  262:     <div class="account-panel-body">
+  263:       <router-outlet name="accountPanel"></router-outlet>
+  264:     </div>
+  265:   </aside>
+  266: </div>
+
+------------------------------------------------------------------------------------------
+FILE: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.ts
+PURPOSE: Main application component
+------------------------------------------------------------------------------------------
+TOTAL LINES: 279
+SHOWING: 1 - 279
+    1: import { Component, HostListener, inject } from '@angular/core';
+    2: import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
+    3: 
+    4: import { AccountApiService } from './features/account/services/account-api.service';
+    5: 
+    6: type WorkspaceItem = {
+    7:   id: string;
+    8:   label: string;
+    9:   icon: string;
+   10: };
+   11: 
+   12: type NavigationSection = {
+   13:   id: string;
+   14:   label: string;
+   15:   icon: string;
+   16:   items: WorkspaceItem[];
+   17: };
+   18: 
+   19: type AccountMenuItem = {
+   20:   id: string;
+   21:   label: string;
+   22:   icon: string;
+   23:   danger?: boolean;
+   24: };
+   25: 
+   26: @Component({
+   27:   selector: 'app-root',
+   28:   standalone: true,
+   29:   imports: [RouterOutlet],
+   30:   templateUrl: './app.html',
+   31:   styleUrl: './app.css',
+   32: })
+   33: export class App {
+   34:   private readonly router = inject(Router);
+   35:   private readonly route = inject(ActivatedRoute);
+   36:   private readonly accountApi = inject(AccountApiService);
+   37: 
+   38:   logoutInProgress = false;
+   39:   logoutError = '';
+   40:   accountPanelOpen = false;
+   41:   accountPanelTitle = 'Ø­Ø³Ø§Ø¨ Ù…Ù†';
+   42:   sidebarCollapsed = false;
+   43:   accountMenuOpen = false;
+   44:   activeSectionId = 'overview';
+   45:   activeItemId = 'summary';
+   46: 
+   47:   readonly accountUserName = 'Ø³ÛŒØ¯Ø¹Ù„ÛŒ Ù…ÛŒØ±Ø¬Ø¹ÙØ±ÛŒ';
+   48: 
+   49:   readonly accountMenuGroups: { title: string; items: AccountMenuItem[] }[] = [
+   50:     {
+   51:       title: 'Ø­Ø³Ø§Ø¨ Ú©Ø§Ø±Ø¨Ø±ÛŒ',
+   52:       items: [
+   53:         { id: 'my-account', label: 'Ø­Ø³Ø§Ø¨ Ù…Ù†', icon: 'account_circle' },
+   54:         { id: 'personal-info', label: 'Ø§Ø·Ù„Ø§Ø¹Ø§Øª Ø´Ø®ØµÛŒ', icon: 'person' },
+   55:         { id: 'account-info', label: 'Ø§Ø·Ù„Ø§Ø¹Ø§Øª Ø­Ø³Ø§Ø¨', icon: 'badge' },
+   56:       ],
+   57:     },
+   58:     {
+   59:       title: 'Ø§Ù…Ù†ÛŒØª Ùˆ Ø¯Ø³ØªØ±Ø³ÛŒ',
+   60:       items: [
+   61:         { id: 'security', label: 'Ø§Ù…Ù†ÛŒØª Ùˆ ØªØºÛŒÛŒØ± Ú¯Ø°Ø±ÙˆØ§Ú˜Ù‡', icon: 'lock' },
+   62:         { id: 'devices', label: 'Ø¯Ø³ØªÚ¯Ø§Ù‡â€ŒÙ‡Ø§ÛŒ ÙØ¹Ø§Ù„', icon: 'devices' },
+   63:         { id: 'sessions', label: 'Ù†Ø´Ø³Øªâ€ŒÙ‡Ø§ÛŒ ÙØ¹Ø§Ù„', icon: 'laptop' },
+   64:       ],
+   65:     },
+   66:     {
+   67:       title: 'Ù…Ø¯ÛŒØ±ÛŒØª Ø­Ø³Ø§Ø¨',
+   68:       items: [
+   69:         { id: 'agreements', label: 'Ù‚Ø±Ø§Ø±Ø¯Ø§Ø¯Ù‡Ø§ Ùˆ ØªÙˆØ§ÙÙ‚â€ŒÙ†Ø§Ù…Ù‡â€ŒÙ‡Ø§', icon: 'contract' },
+   70:         { id: 'logout', label: 'Ø®Ø±ÙˆØ¬ Ø§Ø² Ø­Ø³Ø§Ø¨', icon: 'logout', danger: true },
+   71:       ],
+   72:     },
+   73:   ];
+   74: 
+   75:   readonly sections: NavigationSection[] = [
+   76:     {
+   77:       id: 'overview',
+   78:       label: 'Ù†Ù…Ø§ÛŒ Ú©Ù„ÛŒ',
+   79:       icon: 'space_dashboard',
+   80:       items: [
+   81:         { id: 'summary', label: 'Ù†Ù…Ø§ÛŒ Ú©Ù„ÛŒ', icon: 'dashboard' },
+   82:         { id: 'shortcuts', label: 'Ø¯Ø³ØªØ±Ø³ÛŒâ€ŒÙ‡Ø§', icon: 'apps' },
+   83:       ],
+   84:     },
+   85:     {
+   86:       id: 'market',
+   87:       label: 'Ø¨Ø§Ø²Ø§Ø± Ú©Ù„ÛŒ',
+   88:       icon: 'storefront',
+   89:       items: [
+   90:         { id: 'catalogue', label: 'Ú©Ø§ØªØ§Ù„ÙˆÚ¯ Ø¨Ø§Ø²Ø§Ø±', icon: 'category' },
+   91:         { id: 'markets', label: 'Ø¨Ø§Ø²Ø§Ø±Ù‡Ø§', icon: 'store' },
+   92:         { id: 'offers', label: 'Ø¹Ø±Ø¶Ù‡â€ŒÙ‡Ø§', icon: 'inventory_2' },
+   93:         { id: 'offer-requests', label: 'Ø¯Ø±Ø®ÙˆØ§Ø³Øªâ€ŒÙ‡Ø§ÛŒ Ø¹Ø±Ø¶Ù‡', icon: 'request_quote' },
+   94:         { id: 'proposals', label: 'Ù¾ÛŒØ´Ù†Ù‡Ø§Ø¯Ù‡Ø§', icon: 'handshake' },
+   95:         { id: 'orders', label: 'Ø³ÙØ§Ø±Ø´â€ŒÙ‡Ø§', icon: 'receipt_long' },
+   96:         { id: 'order-book', label: 'Ø¯ÙØªØ± Ø³ÙØ§Ø±Ø´', icon: 'book' },
+   97:         { id: 'matching', label: 'ØªØ·Ø¨ÛŒÙ‚', icon: 'compare_arrows' },
+   98:         { id: 'trades', label: 'Ù…Ø¹Ø§Ù…Ù„Ø§Øª', icon: 'swap_horiz' },
+   99:         { id: 'execution', label: 'Ø§Ø¬Ø±Ø§ÛŒ Ù…Ø¹Ø§Ù…Ù„Ù‡', icon: 'task_alt' },
+  100:         { id: 'commodity', label: 'Ø¨Ø§Ø²Ø§Ø± Ú©Ø§Ù„Ø§', icon: 'inventory' },
+  101:         { id: 'real-estate', label: 'Ø§Ù…Ù„Ø§Ú© Ùˆ Ø¯Ø§Ø±Ø§ÛŒÛŒâ€ŒÙ‡Ø§', icon: 'domain' },
+  102:         { id: 'regulatory', label: 'Ø§Ù…ÙˆØ± Ù‚Ø§Ù†ÙˆÙ†ÛŒ Ùˆ Ù†Ø¸Ø§Ø±ØªÛŒ', icon: 'gavel' },
+  103:         { id: 'audit', label: 'Ù…Ù…ÛŒØ²ÛŒ Ø¨Ø§Ø²Ø§Ø±', icon: 'fact_check' },
+  104:       ],
+  105:     },
+  106:     {
+  107:       id: 'assets',
+  108:       label: 'Ø¯Ø§Ø±Ø§ÛŒÛŒâ€ŒÙ‡Ø§ÛŒ Ù…Ù†',
+  109:       icon: 'account_balance_wallet',
+  110:       items: [
+  111:         { id: 'assets-summary', label: 'Ù†Ù…Ø§ÛŒ Ú©Ù„ÛŒ Ø¯Ø§Ø±Ø§ÛŒÛŒâ€ŒÙ‡Ø§', icon: 'wallet' },
+  112:         { id: 'holdings', label: 'Ø¯Ø§Ø±Ø§ÛŒÛŒâ€ŒÙ‡Ø§', icon: 'inventory' },
+  113:         { id: 'positions', label: 'Ù…ÙˆÙ‚Ø¹ÛŒØªâ€ŒÙ‡Ø§', icon: 'layers' },
+  114:         { id: 'reservations', label: 'Ø±Ø²Ø±ÙˆÙ‡Ø§', icon: 'lock_clock' },
+  115:         { id: 'purchasing-power', label: 'ØªÙˆØ§Ù† Ø®Ø±ÛŒØ¯', icon: 'account_balance' },
+  116:       ],
+  117:     },
+  118:     {
+  119:       id: 'contracts',
+  120:       label: 'Ù‚Ø±Ø§Ø±Ø¯Ø§Ø¯Ù‡Ø§',
+  121:       icon: 'description',
+  122:       items: [
+  123:         { id: 'contracts-summary', label: 'Ù†Ù…Ø§ÛŒ Ú©Ù„ÛŒ Ù‚Ø±Ø§Ø±Ø¯Ø§Ø¯Ù‡Ø§', icon: 'article' },
+  124:       ],
+  125:     },
+  126:     {
+  127:       id: 'services',
+  128:       label: 'Ø®Ø¯Ù…Ø§Øª',
+  129:       icon: 'handyman',
+  130:       items: [
+  131:         { id: 'services-summary', label: 'Ù†Ù…Ø§ÛŒ Ú©Ù„ÛŒ Ø®Ø¯Ù…Ø§Øª', icon: 'design_services' },
+  132:         { id: 'transport', label: 'Ø­Ù…Ù„â€ŒÙˆÙ†Ù‚Ù„', icon: 'local_shipping' },
+  133:         { id: 'storage', label: 'Ø§Ù†Ø¨Ø§Ø±Ø¯Ø§Ø±ÛŒ', icon: 'warehouse' },
+  134:         { id: 'insurance', label: 'Ø¨ÛŒÙ…Ù‡', icon: 'shield' },
+  135:         { id: 'inspection', label: 'Ø¨Ø§Ø²Ø±Ø³ÛŒ', icon: 'fact_check' },
+  136:         { id: 'installation', label: 'Ù†ØµØ¨', icon: 'build' },
+  137:         { id: 'delivery', label: 'ØªØ­ÙˆÛŒÙ„', icon: 'inventory' },
+  138:       ],
+  139:     },
+  140:     {
+  141:       id: 'settlement',
+  142:       label: 'ØªØ³ÙˆÛŒÙ‡',
+  143:       icon: 'payments',
+  144:       items: [
+  145:         { id: 'settlement-summary', label: 'Ù†Ù…Ø§ÛŒ Ú©Ù„ÛŒ ØªØ³ÙˆÛŒÙ‡', icon: 'account_balance' },
+  146:         { id: 'settlement-status', label: 'ÙˆØ¶Ø¹ÛŒØª ØªØ³ÙˆÛŒÙ‡', icon: 'pending_actions' },
+  147:         { id: 'settlement-history', label: 'ØªØ§Ø±ÛŒØ®Ú†Ù‡ ØªØ³ÙˆÛŒÙ‡', icon: 'history' },
+  148:       ],
+  149:     },
+  150:     {
+  151:       id: 'history',
+  152:       label: 'Ø³ÙˆØ§Ø¨Ù‚',
+  153:       icon: 'history',
+  154:       items: [
+  155:         { id: 'activity', label: 'Ø³ÙˆØ§Ø¨Ù‚ ÙØ¹Ø§Ù„ÛŒØª', icon: 'manage_history' },
+  156:         { id: 'events', label: 'Ø±ÙˆÛŒØ¯Ø§Ø¯Ù‡Ø§', icon: 'event_note' },
+  157:       ],
+  158:     },
+  159:   ];
+  160: 
+  161:   get activeSection(): NavigationSection {
+  162:     return this.sections.find(
+  163:       section => section.id === this.activeSectionId,
+  164:     ) ?? this.sections[0];
+  165:   }
+  166: 
+  167:   get activeItem(): WorkspaceItem {
+  168:     return this.activeSection.items.find(
+  169:       item => item.id === this.activeItemId,
+  170:     ) ?? this.activeSection.items[0];
+  171:   }
+  172: 
+  173:   selectSection(sectionId: string): void {
+  174:     this.activeSectionId = sectionId;
+  175:     this.activeItemId = this.activeSection.items[0]?.id ?? '';
+  176:     this.accountMenuOpen = false;
+  177:   }
+  178: 
+  179:   selectItem(itemId: string): void {
+  180:     this.activeItemId = itemId;
+  181:   }
+  182: 
+  183:   toggleSidebar(): void {
+  184:     this.sidebarCollapsed = !this.sidebarCollapsed;
+  185:     this.accountMenuOpen = false;
+  186:   }
+  187: 
+  188:   toggleAccountMenu(): void {
+  189:     this.accountMenuOpen = !this.accountMenuOpen;
+  190:   }
+  191: 
+  192:   closeAccountMenu(): void {
+  193:     this.accountMenuOpen = false;
+  194:   }
+  195:   navigateAccountMenuItem(itemId: string): void {
+  196:     const destinations: Record<string, string[]> = {
+  197:       'my-account': [],
+  198:       'personal-info': ['profile'],
+  199:       'account-info': ['profile'],
+  200:       'security': ['security'],
+  201:       'devices': ['devices'],
+  202:       'sessions': ['sessions'],
+  203:       'agreements': ['agreements'],
+  204:     };
+  205: 
+  206:     if (itemId === 'logout') {
+  207:       this.logout();
+  208:       return;
+  209:     }
+  210: 
+  211:     const destination = destinations[itemId];
+  212: 
+  213:     if (!destination) {
+  214:       return;
+  215:     }
+  216: 
+  217:     const labels: Record<string, string> = {
+  218:       'my-account': 'Ø­Ø³Ø§Ø¨ Ù…Ù†',
+  219:       'personal-info': 'Ø§Ø·Ù„Ø§Ø¹Ø§Øª Ø´Ø®ØµÛŒ',
+  220:       'account-info': 'Ø§Ø·Ù„Ø§Ø¹Ø§Øª Ø­Ø³Ø§Ø¨',
+  221:       'security': 'Ø§Ù…Ù†ÛŒØª Ùˆ ØªØºÛŒÛŒØ± Ú¯Ø°Ø±ÙˆØ§Ú˜Ù‡',
+  222:       'devices': 'Ø¯Ø³ØªÚ¯Ø§Ù‡â€ŒÙ‡Ø§ÛŒ ÙØ¹Ø§Ù„',
+  223:       'sessions': 'Ù†Ø´Ø³Øªâ€ŒÙ‡Ø§ÛŒ ÙØ¹Ø§Ù„',
+  224:       'agreements': 'Ù‚Ø±Ø§Ø±Ø¯Ø§Ø¯Ù‡Ø§ Ùˆ ØªÙˆØ§ÙÙ‚â€ŒÙ†Ø§Ù…Ù‡â€ŒÙ‡Ø§',
+  225:     };
+  226: 
+  227:     this.accountPanelTitle = labels[itemId] ?? 'Ø­Ø³Ø§Ø¨ Ú©Ø§Ø±Ø¨Ø±ÛŒ';
+  228:     this.accountMenuOpen = false;
+  229:     this.logoutError = '';
+  230:     this.accountPanelOpen = true;
+  231: 
+  232:     void this.router.navigate(
+  233:       [{ outlets: { accountPanel: ['account', ...destination] } }],
+  234:       { relativeTo: this.route.root }
+  235:     );
+  236:   }
+  237: 
+  238:   closeAccountPanel(): void {
+  239:     if (!this.accountPanelOpen) {
+  240:       return;
+  241:     }
+  242: 
+  243:     this.accountPanelOpen = false;
+  244: 
+  245:     void this.router.navigate(
+  246:       [{ outlets: { accountPanel: null } }],
+  247:       { relativeTo: this.route.root }
+  248:     );
+  249:   }
+  250: 
+  251:   @HostListener('document:keydown.escape')
+  252:   onAccountPanelEscape(): void {
+  253:     this.closeAccountPanel();
+  254:   }
+  255: 
+  256:   logout(): void {
+  257:     if (this.logoutInProgress) {
+  258:       return;
+  259:     }
+  260: 
+  261:     this.logoutInProgress = true;
+  262:     this.logoutError = '';
+  263: 
+  264:     this.accountApi.logout().subscribe({
+  265:       next: () => {
+  266:         this.logoutInProgress = false;
+  267:         this.accountMenuOpen = false;
+  268:         this.accountPanelOpen = true;
+  269:         this.accountPanelTitle = 'ÙˆØ±ÙˆØ¯ Ø¨Ù‡ Ø­Ø³Ø§Ø¨';
+  270:         void this.router.navigate([{ outlets: { accountPanel: ['account', 'login'] } }], { relativeTo: this.route.root });
+  271:       },
+  272:       error: () => {
+  273:         this.logoutInProgress = false;
+  274:         this.logoutError =
+  275:           'Ø®Ø±ÙˆØ¬ Ø§Ø² Ø­Ø³Ø§Ø¨ Ø§Ù†Ø¬Ø§Ù… Ù†Ø´Ø¯. Ø§Ø±ØªØ¨Ø§Ø· Ø¨Ø§ Ø³Ø±ÙˆØ± ÛŒØ§ Ø§Ø¹ØªØ¨Ø§Ø± Ù†Ø´Ø³Øª Ø±Ø§ Ø¨Ø±Ø±Ø³ÛŒ Ú©Ù†ÛŒØ¯.';
+  276:       },
+  277:     });
+  278:   }
+  279: }
+
+------------------------------------------------------------------------------------------
+FILE: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css
+PURPOSE: Main application stylesheet
+------------------------------------------------------------------------------------------
+TOTAL LINES: 1261
+SHOWING: 1 - 1261
+    1: :host {
+    2:   display: block;
+    3:   width: 100%;
+    4:   min-height: 100dvh;
+    5: }
+    6: 
+    7: .igd-shell {
+    8:   --sidebar-width: 248px;
+    9:   --secondary-width: 244px;
+   10:   display: grid;
+   11:   grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
+   12:   width: 100%;
+   13:   min-height: 100dvh;
+   14:   background: var(--igd-color-background);
+   15:   color: var(--igd-color-text);
+   16:   transition: grid-template-columns 180ms ease;
+   17: }
+   18: 
+   19: .igd-shell.is-collapsed {
+   20:   --sidebar-width: 76px;
+   21: }
+   22: 
+   23: .primary-sidebar {
+   24:   position: relative;
+   25:   z-index: 3;
+   26:   display: flex;
+   27:   flex-direction: column;
+   28:   min-height: 100dvh;
+   29:   padding: 22px 14px 16px;
+   30:   overflow: hidden;
+   31:   color: #f7f5ec;
+   32:   background: var(--igd-color-primary-dark);
+   33:   border-left: 1px solid rgba(255,255,255,.07);
+   34: }
+   35: 
+   36: .brand-area {
+   37:   display: flex;
+   38:   align-items: center;
+   39:   gap: 12px;
+   40:   min-height: 58px;
+   41:   padding: 0 8px 20px;
+   42:   white-space: nowrap;
+   43: }
+   44: 
+   45: .brand-mark {
+   46:   display: grid;
+   47:   flex: 0 0 42px;
+   48:   width: 42px;
+   49:   height: 42px;
+   50:   place-items: center;
+   51:   color: #f3e7c8;
+   52:   background: rgba(185,154,91,.18);
+   53:   border: 1px solid rgba(185,154,91,.42);
+   54:   border-radius: 13px;
+   55: }
+   56: 
+   57: .brand-mark .material-symbols-outlined {
+   58:   font-size: 25px;
+   59: }
+   60: 
+   61: .brand-copy,
+   62: .profile-copy {
+   63:   display: flex;
+   64:   min-width: 0;
+   65:   flex-direction: column;
+   66: }
+   67: 
+   68: .brand-copy strong {
+   69:   font-family: var(--igd-font-family-latin);
+   70:   font-size: 17px;
+   71:   font-weight: 750;
+   72:   letter-spacing: 1.4px;
+   73: }
+   74: 
+   75: .brand-copy span {
+   76:   margin-top: 2px;
+   77:   color: #c1c9c0;
+   78:   font-size: 10px;
+   79: }
+   80: 
+   81: .sidebar-caption,
+   82: .secondary-menu-caption {
+   83:   padding: 14px 12px 9px;
+   84:   color: #aebbb0;
+   85:   font-size: 10px;
+   86:   font-weight: 600;
+   87:   letter-spacing: .2px;
+   88: }
+   89: 
+   90: .primary-navigation {
+   91:   display: flex;
+   92:   flex-direction: column;
+   93:   gap: 5px;
+   94: }
+   95: 
+   96: .primary-nav-item {
+   97:   position: relative;
+   98:   display: flex;
+   99:   align-items: center;
+  100:   gap: 13px;
+  101:   width: 100%;
+  102:   min-height: 46px;
+  103:   padding: 0 12px;
+  104:   color: #d4dbd3;
+  105:   background: transparent;
+  106:   border: 0;
+  107:   border-radius: 9px;
+  108:   cursor: pointer;
+  109:   text-align: right;
+  110:   white-space: nowrap;
+  111:   transition: background 150ms ease, color 150ms ease;
+  112: }
+  113: 
+  114: .primary-nav-item:hover {
+  115:   color: #fff;
+  116:   background: rgba(255,255,255,.075);
+  117: }
+  118: 
+  119: .primary-nav-item.active {
+  120:   color: #fff;
+  121:   background: rgba(185,154,91,.19);
+  122: }
+  123: 
+  124: .primary-nav-item.active .nav-icon {
+  125:   color: #e3c98f;
+  126:   font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+  127: }
+  128: 
+  129: .nav-icon {
+  130:   flex: 0 0 23px;
+  131:   font-size: 22px;
+  132:   color: #c1cbbf;
+  133: }
+  134: 
+  135: .nav-label {
+  136:   overflow: hidden;
+  137:   font-size: 12px;
+  138:   font-weight: 500;
+  139:   text-overflow: ellipsis;
+  140: }
+  141: 
+  142: .active-indicator {
+  143:   position: absolute;
+  144:   top: 10px;
+  145:   right: -14px;
+  146:   width: 3px;
+  147:   height: 26px;
+  148:   background: #c9ad72;
+  149:   border-radius: 3px 0 0 3px;
+  150:   opacity: 0;
+  151: }
+  152: 
+  153: .primary-nav-item.active .active-indicator {
+  154:   opacity: 1;
+  155: }
+  156: 
+  157: .sidebar-bottom {
+  158:   margin-top: auto;
+  159: }
+  160: 
+  161: .sidebar-divider {
+  162:   height: 1px;
+  163:   margin: 14px 4px;
+  164:   background: rgba(255,255,255,.13);
+  165: }
+  166: 
+  167: .sidebar-support {
+  168:   display: flex;
+  169:   align-items: center;
+  170:   gap: 13px;
+  171:   min-height: 42px;
+  172:   padding: 0 12px;
+  173:   color: #c1cbbf;
+  174:   font-size: 12px;
+  175: }
+  176: 
+  177: .sidebar-support .material-symbols-outlined {
+  178:   font-size: 21px;
+  179: }
+  180: 
+  181: .sidebar-version {
+  182:   padding: 14px 12px 0;
+  183:   color: #8f9e91;
+  184:   font-family: var(--igd-font-family-latin);
+  185:   font-size: 9px;
+  186:   letter-spacing: .7px;
+  187: }
+  188: 
+  189: .workspace-frame {
+  190:   display: grid;
+  191:   grid-template-columns: var(--secondary-width) minmax(0, 1fr);
+  192:   min-width: 0;
+  193:   min-height: 100dvh;
+  194:   padding: 12px 12px 12px 0;
+  195:   background: var(--igd-color-background);
+  196: }
+  197: 
+  198: .secondary-sidebar {
+  199:   display: flex;
+  200:   min-width: 0;
+  201:   flex-direction: column;
+  202:   padding: 22px 14px 16px;
+  203:   overflow: hidden;
+  204:   background: #f3f1e9;
+  205:   border: 1px solid #e7e3d8;
+  206:   border-left: 0;
+  207:   border-radius: 0 15px 15px 0;
+  208: }
+  209: 
+  210: .secondary-header {
+  211:   padding: 0 8px 15px;
+  212: }
+  213: 
+  214: .secondary-eyebrow {
+  215:   color: var(--igd-color-text-muted);
+  216:   font-size: 10px;
+  217: }
+  218: 
+  219: .secondary-title {
+  220:   display: flex;
+  221:   align-items: center;
+  222:   gap: 9px;
+  223:   margin-top: 9px;
+  224:   color: var(--igd-color-primary);
+  225: }
+  226: 
+  227: .secondary-title .material-symbols-outlined {
+  228:   font-size: 22px;
+  229: }
+  230: 
+  231: .secondary-title strong {
+  232:   font-size: 14px;
+  233:   font-weight: 700;
+  234: }
+  235: 
+  236: .secondary-divider {
+  237:   height: 1px;
+  238:   background: #e1ddd1;
+  239: }
+  240: 
+  241: .secondary-menu-caption {
+  242:   padding: 17px 9px 9px;
+  243:   color: #81877d;
+  244: }
+  245: 
+  246: .secondary-navigation {
+  247:   display: flex;
+  248:   flex-direction: column;
+  249:   gap: 3px;
+  250:   overflow-y: auto;
+  251: }
+  252: 
+  253: .secondary-nav-item {
+  254:   display: flex;
+  255:   align-items: center;
+  256:   gap: 10px;
+  257:   width: 100%;
+  258:   min-height: 40px;
+  259:   padding: 0 10px;
+  260:   color: #59645a;
+  261:   background: transparent;
+  262:   border: 0;
+  263:   border-radius: 7px;
+  264:   cursor: pointer;
+  265:   text-align: right;
+  266:   transition: background 150ms ease, color 150ms ease;
+  267: }
+  268: 
+  269: .secondary-nav-item:hover {
+  270:   color: var(--igd-color-primary);
+  271:   background: rgba(32,59,48,.055);
+  272: }
+  273: 
+  274: .secondary-nav-item.active {
+  275:   color: var(--igd-color-primary);
+  276:   background: #e4e9df;
+  277:   font-weight: 700;
+  278: }
+  279: 
+  280: .secondary-nav-item > .material-symbols-outlined {
+  281:   flex: 0 0 20px;
+  282:   font-size: 19px;
+  283:   color: #788477;
+  284: }
+  285: 
+  286: .secondary-nav-item.active > .material-symbols-outlined {
+  287:   color: var(--igd-color-primary);
+  288:   font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+  289: }
+  290: 
+  291: .secondary-nav-item > span:nth-child(2) {
+  292:   min-width: 0;
+  293:   overflow: hidden;
+  294:   font-size: 11px;
+  295:   text-overflow: ellipsis;
+  296:   white-space: nowrap;
+  297: }
+  298: 
+  299: .secondary-active-dot {
+  300:   width: 6px;
+  301:   height: 6px;
+  302:   margin-right: auto;
+  303:   background: var(--igd-color-olive);
+  304:   border-radius: 50%;
+  305: }
+  306: 
+  307: .secondary-footer {
+  308:   display: flex;
+  309:   align-items: flex-start;
+  310:   gap: 7px;
+  311:   margin-top: auto;
+  312:   padding: 13px 7px 2px;
+  313:   color: #858b80;
+  314:   font-size: 9px;
+  315:   line-height: 1.8;
+  316: }
+  317: 
+  318: .secondary-footer .material-symbols-outlined {
+  319:   flex: 0 0 16px;
+  320:   font-size: 16px;
+  321: }
+  322: 
+  323: .main-workspace {
+  324:   display: flex;
+  325:   min-width: 0;
+  326:   min-height: calc(100dvh - 24px);
+  327:   flex-direction: column;
+  328:   overflow: hidden;
+  329:   background: #fff;
+  330:   border: 1px solid #e9e6dd;
+  331:   border-radius: 15px 0 0 15px;
+  332: }
+  333: 
+  334: .topbar {
+  335:   display: flex;
+  336:   align-items: center;
+  337:   justify-content: space-between;
+  338:   gap: 16px;
+  339:   min-height: 66px;
+  340:   padding: 0 24px;
+  341:   background: #fff;
+  342:   border-bottom: 1px solid #eeece6;
+  343: }
+  344: 
+  345: .topbar-start,
+  346: .topbar-end,
+  347: .breadcrumb,
+  348: .environment-label,
+  349: .profile-entry {
+  350:   display: flex;
+  351:   align-items: center;
+  352: }
+  353: 
+  354: .topbar-start {
+  355:   min-width: 0;
+  356:   gap: 15px;
+  357: }
+  358: 
+  359: .icon-button {
+  360:   display: grid;
+  361:   flex: 0 0 36px;
+  362:   width: 36px;
+  363:   height: 36px;
+  364:   place-items: center;
+  365:   color: #566357;
+  366:   background: transparent;
+  367:   border: 1px solid #e7e7df;
+  368:   border-radius: 9px;
+  369:   cursor: pointer;
+  370:   transition: background 150ms ease, border-color 150ms ease;
+  371: }
+  372: 
+  373: .icon-button:hover {
+  374:   background: #f3f5f0;
+  375:   border-color: #d5ddd3;
+  376: }
+  377: 
+  378: .icon-button .material-symbols-outlined {
+  379:   font-size: 21px;
+  380: }
+  381: 
+  382: .breadcrumb {
+  383:   min-width: 0;
+  384:   gap: 7px;
+  385:   color: #8a9087;
+  386:   font-size: 11px;
+  387:   white-space: nowrap;
+  388: }
+  389: 
+  390: .breadcrumb .material-symbols-outlined {
+  391:   font-size: 15px;
+  392:   color: #a8ada5;
+  393: }
+  394: 
+  395: .breadcrumb strong {
+  396:   color: #38473b;
+  397:   font-weight: 700;
+  398: }
+  399: 
+  400: .topbar-end {
+  401:   flex: 0 0 auto;
+  402:   gap: 16px;
+  403: }
+  404: 
+  405: .environment-label {
+  406:   gap: 7px;
+  407:   color: #6f786e;
+  408:   font-size: 10px;
+  409: }
+  410: 
+  411: .status-dot {
+  412:   width: 7px;
+  413:   height: 7px;
+  414:   background: #6b9874;
+  415:   border-radius: 50%;
+  416:   box-shadow: 0 0 0 3px #eaf2e9;
+  417: }
+  418: 
+  419: .topbar-divider {
+  420:   width: 1px;
+  421:   height: 27px;
+  422:   background: #e9e7df;
+  423: }
+  424: 
+  425: .profile-entry {
+  426:   gap: 9px;
+  427: }
+  428: 
+  429: .profile-avatar {
+  430:   display: grid;
+  431:   width: 35px;
+  432:   height: 35px;
+  433:   place-items: center;
+  434:   color: var(--igd-color-primary);
+  435:   background: #eaf0e9;
+  436:   border: 1px solid #dce6db;
+  437:   border-radius: 50%;
+  438: }
+  439: 
+  440: .profile-avatar .material-symbols-outlined {
+  441:   font-size: 20px;
+  442: }
+  443: 
+  444: .profile-copy {
+  445:   gap: 2px;
+  446: }
+  447: 
+  448: .profile-copy strong {
+  449:   color: #354238;
+  450:   font-size: 10px;
+  451:   font-weight: 700;
+  452: }
+  453: 
+  454: .profile-copy span {
+  455:   color: #8b9188;
+  456:   font-size: 9px;
+  457: }
+  458: 
+  459: .workspace-canvas {
+  460:   flex: 1;
+  461:   min-height: 0;
+  462:   padding: 30px 34px 18px;
+  463:   overflow: auto;
+  464:   background:
+  465:     radial-gradient(ellipse at 88% 8%, rgba(232,237,226,.35), transparent 33%),
+  466:     #fff;
+  467: }
+  468: 
+  469: .workspace-content {
+  470:   display: flex;
+  471:   min-height: 100%;
+  472:   flex-direction: column;
+  473:   max-width: 1400px;
+  474:   margin-inline: auto;
+  475: }
+  476: 
+  477: .workspace-heading {
+  478:   display: flex;
+  479:   align-items: center;
+  480:   justify-content: space-between;
+  481:   gap: 20px;
+  482:   padding-bottom: 24px;
+  483:   border-bottom: 1px solid #efeee8;
+  484: }
+  485: 
+  486: .page-overline {
+  487:   display: flex;
+  488:   align-items: center;
+  489:   gap: 7px;
+  490:   color: var(--igd-color-olive);
+  491:   font-size: 10px;
+  492:   font-weight: 700;
+  493: }
+  494: 
+  495: .page-overline .material-symbols-outlined {
+  496:   font-size: 17px;
+  497: }
+  498: 
+  499: .workspace-heading h1 {
+  500:   margin: 8px 0 4px;
+  501:   color: #26382d;
+  502:   font-size: 23px;
+  503:   font-weight: 750;
+  504:   line-height: 1.5;
+  505: }
+  506: 
+  507: .workspace-description {
+  508:   margin: 0;
+  509:   color: #899087;
+  510:   font-size: 11px;
+  511: }
+  512: 
+  513: .workspace-heading-mark {
+  514:   display: grid;
+  515:   flex: 0 0 49px;
+  516:   width: 49px;
+  517:   height: 49px;
+  518:   place-items: center;
+  519:   color: #7c876e;
+  520:   background: #f0f2e9;
+  521:   border: 1px solid #e6e9dd;
+  522:   border-radius: 14px;
+  523: }
+  524: 
+  525: .workspace-heading-mark .material-symbols-outlined {
+  526:   font-size: 25px;
+  527: }
+  528: 
+  529: .workspace-empty {
+  530:   display: flex;
+  531:   flex: 1;
+  532:   min-height: 440px;
+  533:   flex-direction: column;
+  534:   align-items: center;
+  535:   justify-content: center;
+  536:   padding: 35px 18px;
+  537:   text-align: center;
+  538: }
+  539: 
+  540: .empty-graphic {
+  541:   position: relative;
+  542:   display: grid;
+  543:   width: 150px;
+  544:   height: 130px;
+  545:   place-items: center;
+  546:   margin-bottom: 20px;
+  547: }
+  548: 
+  549: .empty-graphic-back {
+  550:   position: absolute;
+  551:   width: 108px;
+  552:   height: 108px;
+  553:   background: #f2f3ec;
+  554:   border: 1px solid #e7e9de;
+  555:   border-radius: 32px;
+  556:   transform: rotate(12deg);
+  557: }
+  558: 
+  559: .empty-graphic-front {
+  560:   position: relative;
+  561:   display: grid;
+  562:   width: 84px;
+  563:   height: 84px;
+  564:   place-items: center;
+  565:   color: #526c56;
+  566:   background: #e5ece3;
+  567:   border: 1px solid #d6e1d4;
+  568:   border-radius: 25px;
+  569:   box-shadow: 0 10px 25px rgba(32,59,48,.08);
+  570: }
+  571: 
+  572: .empty-graphic-front .material-symbols-outlined {
+  573:   font-size: 42px;
+  574:   font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 48;
+  575: }
+  576: 
+  577: .empty-graphic-symbol {
+  578:   position: absolute;
+  579:   display: grid;
+  580:   width: 29px;
+  581:   height: 29px;
+  582:   place-items: center;
+  583:   color: #8c7950;
+  584:   background: #f7f2e6;
+  585:   border: 1px solid #e9dfc8;
+  586:   border-radius: 9px;
+  587:   font-size: 17px;
+  588: }
+  589: 
+  590: .symbol-one {
+  591:   top: 1px;
+  592:   right: 9px;
+  593: }
+  594: 
+  595: .symbol-two {
+  596:   bottom: 5px;
+  597:   right: 8px;
+  598: }
+  599: 
+  600: .symbol-three {
+  601:   bottom: 13px;
+  602:   left: 3px;
+  603: }
+  604: 
+  605: .workspace-empty h2 {
+  606:   margin: 0 0 9px;
+  607:   color: #3b4b3d;
+  608:   font-size: 17px;
+  609:   font-weight: 750;
+  610: }
+  611: 
+  612: .workspace-empty > p {
+  613:   max-width: 480px;
+  614:   margin: 0;
+  615:   color: #858d83;
+  616:   font-size: 11px;
+  617:   line-height: 2.1;
+  618: }
+  619: 
+  620: .empty-state-note {
+  621:   display: flex;
+  622:   align-items: center;
+  623:   gap: 7px;
+  624:   margin-top: 20px;
+  625:   padding: 9px 13px;
+  626:   color: #778174;
+  627:   background: #f7f8f4;
+  628:   border: 1px solid #ebeee7;
+  629:   border-radius: 8px;
+  630:   font-size: 9px;
+  631: }
+  632: 
+  633: .empty-state-note .material-symbols-outlined {
+  634:   color: #879477;
+  635:   font-size: 16px;
+  636: }
+  637: 
+  638: .workspace-footer {
+  639:   display: flex;
+  640:   align-items: center;
+  641:   gap: 9px;
+  642:   padding-top: 14px;
+  643:   color: #a0a59d;
+  644:   border-top: 1px solid #f0efe9;
+  645:   font-size: 9px;
+  646: }
+  647: 
+  648: .footer-separator {
+  649:   width: 3px;
+  650:   height: 3px;
+  651:   background: #b9a16d;
+  652:   border-radius: 50%;
+  653: }
+  654: 
+  655: .igd-shell.is-collapsed .brand-area {
+  656:   justify-content: center;
+  657:   padding-inline: 0;
+  658: }
+  659: 
+  660: .igd-shell.is-collapsed .brand-copy,
+  661: .igd-shell.is-collapsed .sidebar-caption,
+  662: .igd-shell.is-collapsed .nav-label,
+  663: .igd-shell.is-collapsed .sidebar-version {
+  664:   display: none;
+  665: }
+  666: 
+  667: .igd-shell.is-collapsed .primary-sidebar {
+  668:   padding-inline: 10px;
+  669: }
+  670: 
+  671: .igd-shell.is-collapsed .primary-nav-item {
+  672:   justify-content: center;
+  673:   padding-inline: 0;
+  674: }
+  675: 
+  676: .igd-shell.is-collapsed .nav-icon {
+  677:   flex-basis: auto;
+  678: }
+  679: 
+  680: .igd-shell.is-collapsed .sidebar-support {
+  681:   justify-content: center;
+  682:   padding-inline: 0;
+  683: }
+  684: 
+  685: .igd-shell.is-collapsed .sidebar-support .nav-label {
+  686:   display: none;
+  687: }
+  688: 
+  689: @media (max-width: 1100px) {
+  690:   .igd-shell {
+  691:     --sidebar-width: 218px;
+  692:     --secondary-width: 215px;
+  693:   }
+  694: 
+  695:   .workspace-canvas {
+  696:     padding-inline: 24px;
+  697:   }
+  698: }
+  699: 
+  700: @media (max-width: 820px) {
+  701:   .igd-shell,
+  702:   .igd-shell.is-collapsed {
+  703:     --sidebar-width: 66px;
+  704:     --secondary-width: 190px;
+  705:   }
+  706: 
+  707:   .primary-sidebar {
+  708:     padding-inline: 8px;
+  709:   }
+  710: 
+  711:   .brand-area {
+  712:     justify-content: center;
+  713:     padding-inline: 0;
+  714:   }
+  715: 
+  716:   .brand-copy,
+  717:   .sidebar-caption,
+  718:   .primary-nav-item .nav-label,
+  719:   .sidebar-version,
+  720:   .sidebar-support .nav-label {
+  721:     display: none;
+  722:   }
+  723: 
+  724:   .primary-nav-item {
+  725:     justify-content: center;
+  726:     padding-inline: 0;
+  727:   }
+  728: 
+  729:   .workspace-frame {
+  730:     padding-block: 7px;
+  731:   }
+  732: 
+  733:   .topbar {
+  734:     min-height: 58px;
+  735:     padding-inline: 13px;
+  736:   }
+  737: 
+  738:   .breadcrumb > span:not(.material-symbols-outlined),
+  739:   .breadcrumb .material-symbols-outlined:nth-of-type(1) {
+  740:     display: none;
+  741:   }
+  742: 
+  743:   .profile-copy,
+  744:   .environment-label,
+  745:   .topbar-divider {
+  746:     display: none;
+  747:   }
+  748: 
+  749:   .workspace-canvas {
+  750:     padding: 22px 17px 14px;
+  751:   }
+  752: }
+  753: 
+  754: @media (max-width: 560px) {
+  755:   .igd-shell,
+  756:   .igd-shell.is-collapsed {
+  757:     --sidebar-width: 58px;
+  758:     --secondary-width: 0px;
+  759:   }
+  760: 
+  761:   .workspace-frame {
+  762:     grid-template-columns: minmax(0, 1fr);
+  763:     padding-right: 0;
+  764:   }
+  765: 
+  766:   .secondary-sidebar {
+  767:     display: none;
+  768:   }
+  769: 
+  770:   .main-workspace {
+  771:     border-radius: 0;
+  772:   }
+  773: 
+  774:   .topbar {
+  775:     gap: 8px;
+  776:   }
+  777: 
+  778:   .topbar-start {
+  779:     gap: 8px;
+  780:   }
+  781: 
+  782:   .breadcrumb {
+  783:     font-size: 10px;
+  784:   }
+  785: 
+  786:   .workspace-heading h1 {
+  787:     font-size: 19px;
+  788:   }
+  789: 
+  790:   .workspace-empty {
+  791:     min-height: 360px;
+  792:   }
+  793: }
+  794: 
+  795: @media (prefers-reduced-motion: reduce) {
+  796:   *,
+  797:   *::before,
+  798:   *::after {
+  799:     scroll-behavior: auto !important;
+  800:     transition-duration: .01ms !important;
+  801:     animation-duration: .01ms !important;
+  802:     animation-iteration-count: 1 !important;
+  803:   }
+  804: }
+  805: 
+  806: /* Account profile: anchored at the bottom of the primary sidebar */
+  807: .account-profile-area {
+  808:   position: relative;
+  809:   margin-top: 4px;
+  810: }
+  811: 
+  812: .profile-entry {
+  813:   display: flex;
+  814:   align-items: center;
+  815:   gap: 10px;
+  816:   width: 100%;
+  817:   min-height: 58px;
+  818:   padding: 7px 9px;
+  819:   color: #f4f2e9;
+  820:   background: rgba(255,255,255,.055);
+  821:   border: 1px solid rgba(255,255,255,.12);
+  822:   border-radius: 10px;
+  823:   cursor: pointer;
+  824:   text-align: right;
+  825:   transition: background 150ms ease, border-color 150ms ease;
+  826: }
+  827: 
+  828: .profile-entry:hover,
+  829: .account-profile-area.menu-open .profile-entry {
+  830:   background: rgba(255,255,255,.11);
+  831:   border-color: rgba(201,173,114,.42);
+  832: }
+  833: 
+  834: .profile-entry .profile-avatar {
+  835:   flex: 0 0 36px;
+  836:   width: 36px;
+  837:   height: 36px;
+  838:   color: #f1e6ca;
+  839:   background: rgba(185,154,91,.2);
+  840:   border: 1px solid rgba(201,173,114,.35);
+  841: }
+  842: 
+  843: .profile-entry .profile-copy {
+  844:   flex: 1;
+  845:   min-width: 0;
+  846:   gap: 3px;
+  847: }
+  848: 
+  849: .profile-entry .profile-copy strong {
+  850:   overflow: hidden;
+  851:   color: #fff;
+  852:   font-size: 11px;
+  853:   font-weight: 650;
+  854:   text-overflow: ellipsis;
+  855:   white-space: nowrap;
+  856: }
+  857: 
+  858: .profile-entry .profile-copy span {
+  859:   color: #b7c2b7;
+  860:   font-size: 9px;
+  861: }
+  862: 
+  863: .profile-chevron {
+  864:   flex: 0 0 18px;
+  865:   color: #c9ad72;
+  866:   font-size: 20px;
+  867: }
+  868: 
+  869: .account-dropdown {
+  870:   position: absolute;
+  871:   z-index: 20;
+  872:   right: 0;
+  873:   bottom: calc(100% + 9px);
+  874:   width: 264px;
+  875:   max-height: min(72vh, 520px);
+  876:   padding: 9px;
+  877:   overflow-y: auto;
+  878:   color: #26372c;
+  879:   background: #fffefa;
+  880:   border: 1px solid #e5e0d3;
+  881:   border-radius: 13px;
+  882:   box-shadow: 0 14px 38px rgba(16,35,25,.22);
+  883:   animation: account-menu-enter 130ms ease-out;
+  884: }
+  885: 
+  886: @keyframes account-menu-enter {
+  887:   from {
+  888:     opacity: 0;
+  889:     transform: translateY(5px);
+  890:   }
+  891:   to {
+  892:     opacity: 1;
+  893:     transform: translateY(0);
+  894:   }
+  895: }
+  896: 
+  897: .account-dropdown-heading {
+  898:   display: flex;
+  899:   align-items: center;
+  900:   gap: 10px;
+  901:   padding: 9px 8px 12px;
+  902: }
+  903: 
+  904: .dropdown-avatar {
+  905:   display: grid;
+  906:   flex: 0 0 38px;
+  907:   width: 38px;
+  908:   height: 38px;
+  909:   place-items: center;
+  910:   color: #284635;
+  911:   background: #e8eee6;
+  912:   border: 1px solid #dce6d9;
+  913:   border-radius: 50%;
+  914: }
+  915: 
+  916: .dropdown-avatar .material-symbols-outlined {
+  917:   font-size: 21px;
+  918: }
+  919: 
+  920: .dropdown-user-copy {
+  921:   display: flex;
+  922:   min-width: 0;
+  923:   flex-direction: column;
+  924:   gap: 4px;
+  925: }
+  926: 
+  927: .dropdown-user-copy strong {
+  928:   overflow: hidden;
+  929:   color: #293b2e;
+  930:   font-size: 11px;
+  931:   text-overflow: ellipsis;
+  932:   white-space: nowrap;
+  933: }
+  934: 
+  935: .dropdown-user-copy span {
+  936:   color: #899086;
+  937:   font-size: 9px;
+  938: }
+  939: 
+  940: .account-menu-group {
+  941:   padding: 7px 0;
+  942:   border-top: 1px solid #eeece4;
+  943: }
+  944: 
+  945: .account-menu-group-title {
+  946:   padding: 2px 9px 6px;
+  947:   color: #92968b;
+  948:   font-size: 9px;
+  949:   font-weight: 650;
+  950: }
+  951: 
+  952: .account-menu-item {
+  953:   display: flex;
+  954:   align-items: center;
+  955:   gap: 10px;
+  956:   min-height: 36px;
+  957:   padding: 0 9px;
+  958:   color: #465448;
+  959:   border-radius: 7px;
+  960:   font-size: 10px;
+  961:   transition: background 120ms ease;
+  962: }
+  963: 
+  964: .account-menu-item:hover {
+  965:   background: #f1f3ed;
+  966: }
+  967: 
+  968: .account-menu-item > .material-symbols-outlined {
+  969:   color: #788777;
+  970:   font-size: 18px;
+  971: }
+  972: 
+  973: .account-menu-item.danger {
+  974:   color: #a4473d;
+  975: }
+  976: 
+  977: .account-menu-item.danger > .material-symbols-outlined {
+  978:   color: #a4473d;
+  979: }
+  980: 
+  981: .account-menu-footnote {
+  982:   display: flex;
+  983:   align-items: flex-start;
+  984:   gap: 6px;
+  985:   padding: 9px 7px 5px;
+  986:   color: #858b80;
+  987:   border-top: 1px solid #eeece4;
+  988:   font-size: 8px;
+  989:   line-height: 1.8;
+  990: }
+  991: 
+  992: .account-menu-footnote .material-symbols-outlined {
+  993:   flex: 0 0 15px;
+  994:   color: #8a987e;
+  995:   font-size: 15px;
+  996: }
+  997: 
+  998: /* Keep the account control visible when the sidebar is collapsed */
+  999: .igd-shell.is-collapsed .profile-entry {
+ 1000:   justify-content: center;
+ 1001:   padding-inline: 0;
+ 1002: }
+ 1003: 
+ 1004: .igd-shell.is-collapsed .profile-entry .profile-copy,
+ 1005: .igd-shell.is-collapsed .profile-entry .profile-chevron {
+ 1006:   display: none;
+ 1007: }
+ 1008: 
+ 1009: .igd-shell.is-collapsed .account-dropdown {
+ 1010:   right: 0;
+ 1011:   width: 264px;
+ 1012: }
+ 1013: 
+ 1014: @media (max-width: 820px) {
+ 1015:   .profile-entry {
+ 1016:     justify-content: center;
+ 1017:     padding-inline: 0;
+ 1018:   }
+ 1019: 
+ 1020:   .profile-entry .profile-copy,
+ 1021:   .profile-entry .profile-chevron {
+ 1022:     display: none;
+ 1023:   }
+ 1024: 
+ 1025:   .account-dropdown {
+ 1026:     right: 0;
+ 1027:     width: 264px;
+ 1028:   }
+ 1029: }
+ 1030: 
+ 1031: /* Account menu navigation controls */
+ 1032: .account-menu-item,
+ 1033: .account-menu-group-title {
+ 1034:   font: inherit;
+ 1035:   text-align: inherit;
+ 1036:   cursor: pointer;
+ 1037: }
+ 1038: 
+ 1039: .account-menu-item {
+ 1040:   width: 100%;
+ 1041:   border: 0;
+ 1042:   background: transparent;
+ 1043: }
+ 1044: 
+ 1045: .account-menu-group-title {
+ 1046:   border: 0;
+ 1047:   background: transparent;
+ 1048:   width: 100%;
+ 1049: }
+ 1050: 
+ 1051: .account-menu-item:focus-visible,
+ 1052: .account-menu-group-title:focus-visible {
+ 1053:   outline: 2px solid var(--primary, #55734b);
+ 1054:   outline-offset: 2px;
+ 1055: }
+ 1056: 
+ 1057: .account-menu-item:disabled {
+ 1058:   cursor: wait;
+ 1059:   opacity: 0.65;
+ 1060: }
+ 1061: 
+ 1062: .account-menu-error {
+ 1063:   color: #b42318;
+ 1064: }
+ 1065: 
+ 1066: .workspace-content > router-outlet {
+ 1067:   display: contents;
+ 1068: }
+ 1069: 
+ 1070: /* ----------------------------------------------------------
+ 1071:    Account side drawer
+ 1072:    Main workspace remains independent from account navigation.
+ 1073:    ---------------------------------------------------------- */
+ 1074: 
+ 1075: .workspace-home {
+ 1076:   display: flex;
+ 1077:   min-height: 100%;
+ 1078:   flex-direction: column;
+ 1079: }
+ 1080: 
+ 1081: .account-panel-overlay {
+ 1082:   position: fixed;
+ 1083:   z-index: 40;
+ 1084:   inset: 0;
+ 1085:   width: 100%;
+ 1086:   height: 100%;
+ 1087:   padding: 0;
+ 1088:   border: 0;
+ 1089:   background: rgba(18, 30, 22, .30);
+ 1090:   opacity: 0;
+ 1091:   visibility: hidden;
+ 1092:   cursor: default;
+ 1093:   transition: opacity 220ms ease, visibility 220ms ease;
+ 1094: }
+ 1095: 
+ 1096: .account-panel-overlay.is-open {
+ 1097:   opacity: 1;
+ 1098:   visibility: visible;
+ 1099: }
+ 1100: 
+ 1101: .account-panel-drawer {
+ 1102:   position: fixed;
+ 1103:   z-index: 41;
+ 1104:   top: 0;
+ 1105:   right: 0;
+ 1106:   display: flex;
+ 1107:   width: 25vw;
+ 1108:   min-width: 320px;
+ 1109:   max-width: 520px;
+ 1110:   height: 100dvh;
+ 1111:   flex-direction: column;
+ 1112:   overflow: hidden;
+ 1113:   color: var(--igd-color-text, #26382d);
+ 1114:   background: #fffefa;
+ 1115:   border-left: 1px solid #e7e3d8;
+ 1116:   box-shadow: -14px 0 42px rgba(16, 35, 25, .14);
+ 1117:   transform: translateX(102%);
+ 1118:   visibility: hidden;
+ 1119:   transition:
+ 1120:     transform 260ms cubic-bezier(.22, 1, .36, 1),
+ 1121:     visibility 260ms ease;
+ 1122:   will-change: transform;
+ 1123: }
+ 1124: 
+ 1125: .account-panel-drawer.is-open {
+ 1126:   transform: translateX(0);
+ 1127:   visibility: visible;
+ 1128: }
+ 1129: 
+ 1130: .account-panel-header {
+ 1131:   display: flex;
+ 1132:   flex: 0 0 auto;
+ 1133:   align-items: center;
+ 1134:   justify-content: space-between;
+ 1135:   gap: 12px;
+ 1136:   min-height: 72px;
+ 1137:   padding: 12px 18px;
+ 1138:   background: #fffefa;
+ 1139:   border-bottom: 1px solid #ece9df;
+ 1140: }
+ 1141: 
+ 1142: .account-panel-heading {
+ 1143:   display: flex;
+ 1144:   min-width: 0;
+ 1145:   align-items: center;
+ 1146:   gap: 11px;
+ 1147: }
+ 1148: 
+ 1149: .account-panel-heading > .material-symbols-outlined {
+ 1150:   display: grid;
+ 1151:   flex: 0 0 38px;
+ 1152:   width: 38px;
+ 1153:   height: 38px;
+ 1154:   place-items: center;
+ 1155:   color: #526c56;
+ 1156:   background: #eaf0e8;
+ 1157:   border: 1px solid #dce6d9;
+ 1158:   border-radius: 11px;
+ 1159:   font-size: 22px;
+ 1160: }
+ 1161: 
+ 1162: .account-panel-heading > div {
+ 1163:   display: flex;
+ 1164:   min-width: 0;
+ 1165:   flex-direction: column;
+ 1166:   gap: 4px;
+ 1167: }
+ 1168: 
+ 1169: .account-panel-heading strong {
+ 1170:   overflow: hidden;
+ 1171:   color: #354238;
+ 1172:   font-size: 13px;
+ 1173:   font-weight: 700;
+ 1174:   text-overflow: ellipsis;
+ 1175:   white-space: nowrap;
+ 1176: }
+ 1177: 
+ 1178: .account-panel-heading span:not(.material-symbols-outlined) {
+ 1179:   color: #899086;
+ 1180:   font-size: 9px;
+ 1181: }
+ 1182: 
+ 1183: .account-panel-close {
+ 1184:   display: grid;
+ 1185:   flex: 0 0 34px;
+ 1186:   width: 34px;
+ 1187:   height: 34px;
+ 1188:   place-items: center;
+ 1189:   color: #657164;
+ 1190:   background: transparent;
+ 1191:   border: 1px solid #e7e7df;
+ 1192:   border-radius: 9px;
+ 1193:   cursor: pointer;
+ 1194:   transition: background 150ms ease, color 150ms ease;
+ 1195: }
+ 1196: 
+ 1197: .account-panel-close:hover {
+ 1198:   color: #26382d;
+ 1199:   background: #f0f3ed;
+ 1200: }
+ 1201: 
+ 1202: .account-panel-body {
+ 1203:   flex: 1;
+ 1204:   min-height: 0;
+ 1205:   padding: 20px;
+ 1206:   overflow: auto;
+ 1207:   overscroll-behavior: contain;
+ 1208: }
+ 1209: 
+ 1210: .account-panel-body > router-outlet {
+ 1211:   display: contents;
+ 1212: }
+ 1213: 
+ 1214: .account-menu-group-title {
+ 1215:   display: block;
+ 1216:   width: 100%;
+ 1217:   padding: 2px 9px 6px;
+ 1218:   color: #92968b;
+ 1219:   font-size: 9px;
+ 1220:   font-weight: 650;
+ 1221:   text-align: right;
+ 1222:   cursor: default;
+ 1223: }
+ 1224: 
+ 1225: .account-menu-item {
+ 1226:   font: inherit;
+ 1227:   text-align: right;
+ 1228:   cursor: pointer;
+ 1229: }
+ 1230: 
+ 1231: .account-menu-item:focus-visible,
+ 1232: .account-panel-close:focus-visible {
+ 1233:   outline: 2px solid #55734b;
+ 1234:   outline-offset: 2px;
+ 1235: }
+ 1236: 
+ 1237: @media (max-width: 820px) {
+ 1238:   .account-panel-drawer {
+ 1239:     width: min(42vw, 460px);
+ 1240:     min-width: 300px;
+ 1241:   }
+ 1242: }
+ 1243: 
+ 1244: @media (max-width: 560px) {
+ 1245:   .account-panel-drawer {
+ 1246:     width: 88vw;
+ 1247:     min-width: 0;
+ 1248:     max-width: 420px;
+ 1249:   }
+ 1250: 
+ 1251:   .account-panel-body {
+ 1252:     padding: 15px;
+ 1253:   }
+ 1254: }
+ 1255: 
+ 1256: @media (prefers-reduced-motion: reduce) {
+ 1257:   .account-panel-drawer,
+ 1258:   .account-panel-overlay {
+ 1259:     transition-duration: .01ms;
+ 1260:   }
+ 1261: }
+
+------------------------------------------------------------------------------------------
+FILE: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\angular.json
+PURPOSE: Angular workspace configuration
+------------------------------------------------------------------------------------------
+TOTAL LINES: 81
+SHOWING: 1 - 81
+    1: {
+    2:   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+    3:   "version": 1,
+    4:   "cli": {
+    5:     "packageManager": "npm",
+    6:     "analytics": false
+    7:   },
+    8:   "newProjectRoot": "projects",
+    9:   "projects": {
+   10:     "igd-front": {
+   11:       "projectType": "application",
+   12:       "schematics": {},
+   13:       "root": "",
+   14:       "sourceRoot": "src",
+   15:       "prefix": "app",
+   16:       "architect": {
+   17:         "build": {
+   18:           "builder": "@angular/build:application",
+   19:           "options": {
+   20:             "browser": "src/main.ts",
+   21:             "tsConfig": "tsconfig.app.json",
+   22:             "assets": [
+   23:               {
+   24:                 "glob": "**/*",
+   25:                 "input": "public"
+   26:               }
+   27:             ],
+   28:             "styles": [
+   29:               "src/styles.css",
+   30:               "../design-system/igd-foundation.css"
+   31:             ]
+   32:           },
+   33:           "configurations": {
+   34:             "production": {
+   35:               "budgets": [
+   36:                 {
+   37:                   "type": "initial",
+   38:                   "maximumWarning": "500kB",
+   39:                   "maximumError": "1MB"
+   40:                 },
+   41:                 {
+   42:                   "type": "anyComponentStyle",
+   43:                   "maximumWarning": "4kB",
+   44:                   "maximumError": "8kB"
+   45:                 }
+   46:               ],
+   47:               "outputHashing": "all",
+   48:               "fileReplacements": [
+   49:                 {
+   50:                   "replace": "src/environments/environment.ts",
+   51:                   "with": "src/environments/environment.production.ts"
+   52:                 }
+   53:               ]
+   54:             },
+   55:             "development": {
+   56:               "optimization": false,
+   57:               "extractLicenses": false,
+   58:               "sourceMap": true
+   59:             }
+   60:           },
+   61:           "defaultConfiguration": "production"
+   62:         },
+   63:         "serve": {
+   64:           "builder": "@angular/build:dev-server",
+   65:           "configurations": {
+   66:             "production": {
+   67:               "buildTarget": "igd-front:build:production"
+   68:             },
+   69:             "development": {
+   70:               "buildTarget": "igd-front:build:development"
+   71:             }
+   72:           },
+   73:           "defaultConfiguration": "development"
+   74:         },
+   75:         "test": {
+   76:           "builder": "@angular/build:unit-test"
+   77:         }
+   78:       }
+   79:     }
+   80:   }
+   81: }
+
+------------------------------------------------------------------------------------------
+FILE: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\package.json
+PURPOSE: Package dependencies
+------------------------------------------------------------------------------------------
+TOTAL LINES: 43
+SHOWING: 1 - 43
+    1: {
+    2:     "name":  "igd-front",
+    3:     "version":  "0.0.0",
+    4:     "scripts":  {
+    5:                     "ng":  "ng",
+    6:                     "start":  "ng serve",
+    7:                     "build":  "ng build",
+    8:                     "watch":  "ng build --watch --configuration development",
+    9:                     "test":  "ng test"
+   10:                 },
+   11:     "private":  true,
+   12:     "dependencies":  {
+   13:                          "@angular/common":  "^22.2.0",
+   14:                          "@angular/compiler":  "^22.2.0",
+   15:                          "@angular/core":  "^22.2.0",
+   16:                          "@angular/forms":  "^22.2.0",
+   17:                          "@angular/platform-browser":  "^22.2.0",
+   18:                          "@angular/router":  "^22.2.0",
+   19:                          "rxjs":  "~7.8.0",
+   20:                          "tslib":  "^2.3.0",
+   21:                          "@angular/material":  "^22.0.0",
+   22:                          "@angular/cdk":  "^22.0.0",
+   23:                          "@spartan-ng/brain":  "latest",
+   24:                          "ngx-echarts":  "22.0.0",
+   25:                          "echarts":  "latest",
+   26:                          "@fontsource-variable/vazirmatn":  "latest",
+   27:                          "@fontsource-variable/inter":  "latest",
+   28:                          "material-symbols":  "latest"
+   29:                      },
+   30:     "devDependencies":  {
+   31:                             "@angular/build":  "^22.2.6",
+   32:                             "@angular/cli":  "^22.2.6",
+   33:                             "@angular/compiler-cli":  "^22.2.0",
+   34:                             "jsdom":  "^30.0.0",
+   35:                             "prettier":  "^3.8.1",
+   36:                             "typescript":  "~6.0.2",
+   37:                             "vitest":  "^5.0.0",
+   38:                             "@spartan-ng/cli":  "latest",
+   39:                             "tailwindcss":  "^4.0.0",
+   40:                             "@tailwindcss/postcss":  "^4.0.0",
+   41:                             "postcss":  "latest"
+   42:                         }
+   43: }
+
+------------------------------------------------------------------------------------------
+FILE: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\tsconfig.json
+PURPOSE: TypeScript configuration
+------------------------------------------------------------------------------------------
+TOTAL LINES: 31
+SHOWING: 1 - 31
+    1: /* To learn more about Typescript configuration file: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html. */
+    2: /* To learn more about Angular compiler options: https://angular.dev/reference/configs/angular-compiler-options. */
+    3: {
+    4:   "compileOnSave": false,
+    5:   "compilerOptions": {
+    6:     "noImplicitOverride": true,
+    7:     "noPropertyAccessFromIndexSignature": true,
+    8:     "noImplicitReturns": true,
+    9:     "noFallthroughCasesInSwitch": true,
+   10:     "skipLibCheck": true,
+   11:     "isolatedModules": true,
+   12:     "experimentalDecorators": true,
+   13:     "importHelpers": true,
+   14:     "target": "ES2022",
+   15:     "module": "preserve"
+   16:   },
+   17:   "angularCompilerOptions": {
+   18:     "enableI18nLegacyMessageIdFormat": false,
+   19:     "strictInjectionParameters": true,
+   20:     "strictInputAccessModifiers": true
+   21:   },
+   22:   "files": [],
+   23:   "references": [
+   24:     {
+   25:       "path": "./tsconfig.app.json"
+   26:     },
+   27:     {
+   28:       "path": "./tsconfig.spec.json"
+   29:     }
+   30:   ]
+   31: }
+
+====================================================================================================
+4. GENERAL MARKET FILE DISCOVERY
+====================================================================================================
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.css | 11415 bytes | 11/11/2026 11:21:09 AM
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.css.backup-history-20261109-104747 | 10809 bytes | 11/9/2026 10:27:07 AM
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.css.bak-20261111-112109 | 11223 bytes | 11/11/2026 10:12:27 AM
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.html | 13257 bytes | 11/9/2026 10:47:49 AM
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.html.backup-history-20261109-104747 | 12744 bytes | 11/9/2026 10:27:07 AM
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.routes.ts | 2351 bytes | 11/9/2026 10:27:07 AM
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.ts | 883 bytes | 11/9/2026 10:28:03 AM
+
+====================================================================================================
+5. GENERAL MARKET COMPONENT SOURCE FILES
+====================================================================================================
+
+------------------------------------------------------------------------------------------
+FILE: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.css
+PURPOSE: General Market source - full content
+------------------------------------------------------------------------------------------
+TOTAL LINES: 682
+SHOWING: 1 - 682
+    1: :host {
+    2:   display: block;
+    3:   min-height: 100dvh;
+    4:   color: var(--mat-sys-on-surface, #26352d);
+    5:   font-family: inherit;
+    6: }
+    7: 
+    8: .trading-terminal {
+    9:   --terminal-green: #183d32;
+   10:   --terminal-green-light: #285846;
+   11:   --terminal-olive: #77764b;
+   12:   --terminal-gold: #b69a5b;
+   13:   --terminal-cream: #f4f0e5;
+   14:   --terminal-border: #d9d4c6;
+   15:   --terminal-muted: #777b72;
+   16:   --terminal-panel: #fffefa;
+   17:   --terminal-background: #eae7dc;
+   18: 
+   19:   min-height: 100dvh;
+   20:   height: 100dvh;
+   21:   display: grid;
+   22:   grid-template-rows: 52px minmax(0, 1fr) 54px;
+   23:   gap: 5px;
+   24:   padding: 5px;
+   25:   overflow: hidden;
+   26:   background: var(--terminal-background);
+   27:   direction: rtl;
+   28:   font-size: 12px;
+   29: }
+   30: 
+   31: /* HEADER */
+   32: 
+   33: .terminal-header {
+   34:   min-width: 0;
+   35:   display: flex;
+   36:   align-items: center;
+   37:   justify-content: space-between;
+   38:   gap: 14px;
+   39:   padding: 0 12px;
+   40:   background: var(--terminal-green);
+   41:   color: #fff;
+   42:   border: 1px solid #102e25;
+   43:   box-shadow: 0 1px 3px #0002;
+   44: }
+   45: 
+   46: .header-brand,
+   47: .header-navigation,
+   48: .header-actions {
+   49:   display: flex;
+   50:   align-items: center;
+   51:   gap: 9px;
+   52: }
+   53: 
+   54: .brand-symbol {
+   55:   width: 34px;
+   56:   height: 34px;
+   57:   display: grid;
+   58:   place-items: center;
+   59:   color: var(--terminal-gold);
+   60:   border: 1px solid #ffffff35;
+   61: }
+   62: 
+   63: .brand-text {
+   64:   display: flex;
+   65:   flex-direction: column;
+   66:   gap: 2px;
+   67:   white-space: nowrap;
+   68: }
+   69: 
+   70: .brand-text strong {
+   71:   font-size: 16px;
+   72:   letter-spacing: 1px;
+   73: }
+   74: 
+   75: .brand-text span {
+   76:   color: #d1d9d1;
+   77:   font-size: 9px;
+   78: }
+   79: 
+   80: .header-navigation {
+   81:   height: 100%;
+   82: }
+   83: 
+   84: .nav-item {
+   85:   height: 100%;
+   86:   color: #e8eee8 !important;
+   87:   border-radius: 0 !important;
+   88:   font-size: 11px;
+   89: }
+   90: 
+   91: .nav-item.active {
+   92:   color: #fff !important;
+   93:   border-bottom: 2px solid var(--terminal-gold);
+   94: }
+   95: 
+   96: .header-actions {
+   97:   white-space: nowrap;
+   98: }
+   99: 
+  100: .header-actions button {
+  101:   color: #fff;
+  102: }
+  103: 
+  104: .market-status {
+  105:   display: flex;
+  106:   align-items: center;
+  107:   gap: 6px;
+  108:   font-size: 10px;
+  109:   color: #d8e1d8;
+  110: }
+  111: 
+  112: .status-dot {
+  113:   width: 7px;
+  114:   height: 7px;
+  115:   border-radius: 50%;
+  116:   background: #9dbb76;
+  117: }
+  118: 
+  119: /* MAIN GRID - MIRRORED */
+  120: 
+  121: .workspace {
+  122:   direction: rtl;
+  123:   min-height: 0;
+  124:   min-width: 0;
+  125:   display: grid;
+  126:   grid-template-columns: 143px minmax(0, 2fr) minmax(165px, 1fr) minmax(190px, 1.15fr);
+  127:   grid-template-areas: "tools market details orderbook";
+  128:   gap: 5px;
+  129:   overflow: hidden;
+  130: }
+  131: 
+  132: .terminal-panel {
+  133:   min-width: 0;
+  134:   min-height: 0;
+  135:   display: flex;
+  136:   flex-direction: column;
+  137:   overflow: hidden;
+  138:   background: var(--terminal-panel);
+  139:   border: 1px solid var(--terminal-border);
+  140:   box-shadow: 0 1px 2px #00000008;
+  141: }
+  142: 
+  143: .main-market-column {
+  144:   grid-area: market;
+  145:   min-width: 0;
+  146:   min-height: 0;
+  147:   display: grid;
+  148:   grid-template-rows: minmax(0, 1.3fr) minmax(150px, 0.85fr);
+  149:   gap: 5px;
+  150: }
+  151: 
+  152: .market-watch,
+  153: .portfolio-panel {
+  154:   min-height: 0;
+  155: }
+  156: 
+  157: /* PANEL HEADINGS */
+  158: 
+  159: .panel-heading {
+  160:   flex: 0 0 36px;
+  161:   min-width: 0;
+  162:   display: flex;
+  163:   align-items: center;
+  164:   justify-content: space-between;
+  165:   gap: 8px;
+  166:   padding: 0 10px;
+  167:   background: #f0eee4;
+  168:   border-bottom: 1px solid var(--terminal-border);
+  169: }
+  170: 
+  171: .panel-title {
+  172:   min-width: 0;
+  173:   display: flex;
+  174:   align-items: center;
+  175:   gap: 7px;
+  176:   color: var(--terminal-green);
+  177:   white-space: nowrap;
+  178: }
+  179: 
+  180: .panel-title mat-icon {
+  181:   width: 17px;
+  182:   height: 17px;
+  183:   font-size: 17px;
+  184: }
+  185: 
+  186: .panel-title strong {
+  187:   font-size: 11px;
+  188:   font-weight: 700;
+  189: }
+  190: 
+  191: .panel-actions {
+  192:   display: flex;
+  193:   align-items: center;
+  194:   gap: 5px;
+  195: }
+  196: 
+  197: .panel-caption {
+  198:   color: var(--terminal-muted);
+  199:   font-size: 10px;
+  200: }
+  201: 
+  202: .panel-heading button {
+  203:   width: 30px;
+  204:   height: 30px;
+  205: }
+  206: 
+  207: .compact-heading {
+  208:   padding: 0 5px;
+  209: }
+  210: 
+  211: /* MARKET WATCH */
+  212: 
+  213: .market-filter-bar {
+  214:   flex: 0 0 36px;
+  215:   display: flex;
+  216:   align-items: center;
+  217:   gap: 4px;
+  218:   padding: 0 7px;
+  219:   border-bottom: 1px solid var(--terminal-border);
+  220:   white-space: nowrap;
+  221:   overflow: hidden;
+  222: }
+  223: 
+  224: .market-filter-bar button {
+  225:   min-width: 0;
+  226:   padding: 0 8px;
+  227:   font-size: 10px;
+  228: }
+  229: 
+  230: .market-filter-bar .filter-active {
+  231:   color: var(--terminal-green);
+  232:   background: #e5e9df;
+  233: }
+  234: 
+  235: .filter-spacer {
+  236:   flex: 1;
+  237: }
+  238: 
+  239: .table-scroll {
+  240:   flex: 1;
+  241:   min-height: 0;
+  242:   overflow: auto;
+  243: }
+  244: 
+  245: .terminal-table {
+  246:   width: 100%;
+  247:   border-collapse: collapse;
+  248:   table-layout: auto;
+  249:   font-size: 11px;
+  250:   text-align: right;
+  251: }
+  252: 
+  253: .terminal-table thead {
+  254:   position: sticky;
+  255:   top: 0;
+  256:   z-index: 1;
+  257: }
+  258: 
+  259: .terminal-table th {
+  260:   height: 30px;
+  261:   padding: 0 10px;
+  262:   background: #f7f5ee;
+  263:   color: #565e55;
+  264:   font-weight: 600;
+  265:   white-space: nowrap;
+  266:   border-bottom: 1px solid var(--terminal-border);
+  267: }
+  268: 
+  269: .terminal-table td {
+  270:   height: 34px;
+  271:   padding: 5px 10px;
+  272:   border-bottom: 1px solid #ece9df;
+  273: }
+  274: 
+  275: .empty-table {
+  276:   height: 90px !important;
+  277:   text-align: center;
+  278:   color: var(--terminal-muted);
+  279: }
+  280: 
+  281: .empty-table mat-icon {
+  282:   display: block;
+  283:   margin: 0 auto 5px;
+  284:   color: #aaa795;
+  285: }
+  286: 
+  287: .panel-footer {
+  288:   flex: 0 0 25px;
+  289:   display: flex;
+  290:   align-items: center;
+  291:   justify-content: space-between;
+  292:   padding: 0 9px;
+  293:   color: var(--terminal-muted);
+  294:   font-size: 9px;
+  295:   border-top: 1px solid #ece9df;
+  296: }
+  297: 
+  298: /* PORTFOLIO */
+  299: 
+  300: .portfolio-summary {
+  301:   flex: 0 0 53px;
+  302:   display: flex;
+  303:   align-items: center;
+  304:   border-bottom: 1px solid var(--terminal-border);
+  305: }
+  306: 
+  307: .summary-cell {
+  308:   flex: 1;
+  309:   min-width: 0;
+  310:   display: flex;
+  311:   flex-direction: column;
+  312:   gap: 5px;
+  313:   padding: 5px 12px;
+  314:   border-left: 1px solid #e9e5da;
+  315: }
+  316: 
+  317: .summary-cell span {
+  318:   color: var(--terminal-muted);
+  319:   font-size: 10px;
+  320: }
+  321: 
+  322: .summary-cell strong {
+  323:   font-size: 13px;
+  324:   color: var(--terminal-green);
+  325: }
+  326: 
+  327: .text-action {
+  328:   color: var(--terminal-green) !important;
+  329:   font-size: 10px;
+  330: }
+  331: 
+  332: /* ORDER BOOK */
+  333: 
+  334: .orderbook-panel {
+  335:   grid-area: orderbook;
+  336: }
+  337: 
+  338: .orderbook-panel .panel-body,
+  339: .details-panel .panel-body {
+  340:   flex: 1;
+  341:   min-height: 0;
+  342:   overflow: auto;
+  343:   padding: 8px;
+  344: }
+  345: 
+  346: .orderbook-instrument {
+  347:   display: flex;
+  348:   justify-content: space-between;
+  349:   padding: 7px 5px;
+  350:   margin-bottom: 8px;
+  351:   background: #f5f3eb;
+  352:   color: var(--terminal-muted);
+  353: }
+  354: 
+  355: .orderbook-instrument strong {
+  356:   color: var(--terminal-green);
+  357: }
+  358: 
+  359: .order-side {
+  360:   border: 1px solid var(--terminal-border);
+  361:   margin-bottom: 7px;
+  362: }
+  363: 
+  364: .order-side-heading {
+  365:   display: grid;
+  366:   grid-template-columns: 1fr 1fr 1fr;
+  367:   padding: 7px 4px;
+  368:   font-size: 10px;
+  369:   font-weight: 600;
+  370:   text-align: center;
+  371:   background: #f4f1e8;
+  372: }
+  373: 
+  374: .sell-side .order-side-heading {
+  375:   color: #a34d43;
+  376: }
+  377: 
+  378: .buy-side .order-side-heading {
+  379:   color: #34704e;
+  380: }
+  381: 
+  382: .order-empty {
+  383:   min-height: 65px;
+  384:   display: grid;
+  385:   place-items: center;
+  386:   color: var(--terminal-muted);
+  387:   font-size: 10px;
+  388: }
+  389: 
+  390: .order-spread {
+  391:   display: flex;
+  392:   align-items: center;
+  393:   justify-content: space-between;
+  394:   padding: 8px 5px;
+  395:   margin-bottom: 7px;
+  396:   background: #ece9de;
+  397:   color: var(--terminal-muted);
+  398: }
+  399: 
+  400: .order-spread strong {
+  401:   color: var(--terminal-green);
+  402: }
+  403: 
+  404: .orderbook-legend {
+  405:   display: flex;
+  406:   justify-content: space-around;
+  407:   font-size: 10px;
+  408: }
+  409: 
+  410: .legend-buy {
+  411:   color: #34704e;
+  412: }
+  413: 
+  414: .legend-sell {
+  415:   color: #a34d43;
+  416: }
+  417: 
+  418: /* DETAILS */
+  419: 
+  420: .details-panel {
+  421:   grid-area: details;
+  422: }
+  423: 
+  424: .instrument-identity {
+  425:   display: flex;
+  426:   align-items: center;
+  427:   flex-direction: column;
+  428:   gap: 7px;
+  429:   padding: 12px 2px;
+  430:   text-align: center;
+  431: }
+  432: 
+  433: .instrument-placeholder {
+  434:   width: 38px;
+  435:   height: 38px;
+  436:   display: grid;
+  437:   place-items: center;
+  438:   border: 1px solid var(--terminal-border);
+  439:   background: #f5f3eb;
+  440:   color: var(--terminal-olive);
+  441:   font-size: 20px;
+  442: }
+  443: 
+  444: .instrument-identity strong {
+  445:   color: var(--terminal-green);
+  446:   font-size: 11px;
+  447: }
+  448: 
+  449: .instrument-identity span {
+  450:   color: var(--terminal-muted);
+  451:   font-size: 9px;
+  452: }
+  453: 
+  454: .detail-row {
+  455:   display: flex;
+  456:   justify-content: space-between;
+  457:   gap: 5px;
+  458:   padding: 9px 2px;
+  459:   border-bottom: 1px solid #ece9df;
+  460:   font-size: 10px;
+  461: }
+  462: 
+  463: .detail-row span {
+  464:   color: var(--terminal-muted);
+  465: }
+  466: 
+  467: .detail-row strong {
+  468:   color: var(--terminal-green);
+  469: }
+  470: 
+  471: .detail-section-title {
+  472:   padding: 11px 2px 5px;
+  473:   color: var(--terminal-green);
+  474:   font-weight: 700;
+  475: }
+  476: 
+  477: .detail-link {
+  478:   display: block;
+  479:   width: 100%;
+  480:   text-align: right;
+  481:   font-size: 10px;
+  482: }
+  483: 
+  484: /* TOOLBAR */
+  485: 
+  486: .terminal-toolbar {
+  487:   grid-area: tools;
+  488:   min-height: 0;
+  489:   display: flex;
+  490:   flex-direction: column;
+  491:   align-items: center;
+  492:   gap: 7px;
+  493:   padding: 8px 3px;
+  494:   background: var(--terminal-green);
+  495:   border: 1px solid #102e25;
+  496: }
+  497: 
+  498: .terminal-toolbar button {
+  499:   flex: 0 0 34px;
+  500:   width: 34px;
+  501:   height: 34px;
+  502:   color: #e6e9df;
+  503: }
+  504: 
+  505: .terminal-toolbar button.selected {
+  506:   background: #ffffff20;
+  507:   color: #e5c78b;
+  508:   border-right: 2px solid var(--terminal-gold);
+  509:   border-radius: 0;
+  510: }
+  511: 
+  512: .toolbar-spacer {
+  513:   flex: 1;
+  514: }
+  515: 
+  516: /* LOWER ACTIVITY WORKSPACE */
+  517: 
+  518: .activity-panel {
+  519:   min-height: 0;
+  520: }
+  521: 
+  522: .activity-heading {
+  523:   flex-basis: 32px;
+  524: }
+  525: 
+  526: .terminal-tabs {
+  527:   min-height: 0;
+  528:   flex: 1;
+  529: }
+  530: 
+  531: .terminal-tabs ::ng-deep .mat-mdc-tab-labels {
+  532:   background: #f6f4ed;
+  533:   border-bottom: 1px solid var(--terminal-border);
+  534: }
+  535: 
+  536: .terminal-tabs ::ng-deep .mat-mdc-tab {
+  537:   height: 38px;
+  538:   min-width: 110px;
+  539:   font-size: 10px;
+  540: }
+  541: 
+  542: .terminal-tabs ::ng-deep .mat-mdc-tab-body-wrapper {
+  543:   flex: 1;
+  544:   min-height: 0;
+  545: }
+  546: 
+  547: .tab-empty {
+  548:   min-height: 90px;
+  549:   display: grid;
+  550:   place-items: center;
+  551:   color: var(--terminal-muted);
+  552:   font-size: 11px;
+  553: }
+  554: 
+  555: /* BOTTOM ASSET STRIP */
+  556: 
+  557: .asset-status-bar {
+  558:   min-width: 0;
+  559:   display: flex;
+  560:   align-items: stretch;
+  561:   background: var(--terminal-green);
+  562:   color: #fff;
+  563:   border: 1px solid #102e25;
+  564:   overflow: hidden;
+  565: }
+  566: 
+  567: .asset-status-item {
+  568:   flex: 1;
+  569:   min-width: 0;
+  570:   display: flex;
+  571:   flex-direction: column;
+  572:   justify-content: center;
+  573:   gap: 3px;
+  574:   padding: 0 12px;
+  575:   border-left: 1px solid #ffffff25;
+  576:   white-space: nowrap;
+  577: }
+  578: 
+  579: .asset-status-item span {
+  580:   color: #cbd7cb;
+  581:   font-size: 9px;
+  582: }
+  583: 
+  584: .asset-status-item strong {
+  585:   color: #f3ead5;
+  586:   font-size: 11px;
+  587: }
+  588: 
+  589: .user-status strong {
+  590:   color: #fff;
+  591: }
+  592: 
+  593: /* COLLAPSIBLE PANELS */
+  594: 
+  595: .workspace.orderbook-collapsed {
+  596:   grid-template-columns: 143px minmax(0, 2fr) minmax(165px, 1fr) 39px;
+  597: }
+  598: 
+  599: .workspace.details-collapsed {
+  600:   grid-template-columns: 143px minmax(0, 2fr) 39px minmax(190px, 1.15fr);
+  601: }
+  602: 
+  603: .workspace.orderbook-collapsed.details-collapsed {
+  604:   grid-template-columns: 143px minmax(0, 2fr) 39px 39px;
+  605: }
+  606: 
+  607: .workspace.orderbook-collapsed .orderbook-panel .panel-body,
+  608: .workspace.details-collapsed .details-panel .panel-body {
+  609:   display: none;
+  610: }
+  611: 
+  612: .workspace.orderbook-collapsed .orderbook-panel .panel-title,
+  613: .workspace.details-collapsed .details-panel .panel-title {
+  614:   display: none;
+  615: }
+  616: 
+  617: 
+  618: /* HISTORY VIEW - OPENS ONLY FROM THE VERTICAL TOOLBAR */
+  619: 
+  620: .workspace.history-mode {
+  621:   grid-template-columns: minmax(0, 1fr) 43px;
+  622:   grid-template-areas: "history tools";
+  623: }
+  624: 
+  625: .workspace.history-mode .activity-panel {
+  626:   grid-area: history;
+  627:   min-width: 0;
+  628:   min-height: 0;
+  629:   height: 100%;
+  630: }
+  631: 
+  632: .workspace.history-mode .terminal-tabs {
+  633:   min-height: 0;
+  634:   flex: 1;
+  635: }
+  636: 
+  637: .workspace.history-mode .terminal-tabs ::ng-deep .mat-mdc-tab-body-wrapper {
+  638:   flex: 1;
+  639:   min-height: 0;
+  640: }
+  641: 
+  642: /* RESPONSIVE */
+  643: 
+  644: @media (max-width: 1250px) {
+  645: .workspace {
+  646:   grid-template-columns: 140px minmax(0, 2fr) minmax(130px, 1fr) minmax(145px, 1.15fr);
+  647:   }
+  648: 
+  649: .workspace.orderbook-collapsed {
+  650:   grid-template-columns: 140px minmax(0, 2fr) minmax(130px, 1fr) 39px;
+  651:   }
+  652: 
+  653: .workspace.details-collapsed {
+  654:   grid-template-columns: 140px minmax(0, 2fr) 39px minmax(145px, 1.15fr);
+  655:   }
+  656: 
+  657:   .header-navigation {
+  658:     gap: 0;
+  659:   }
+  660: 
+  661:   .nav-item {
+  662:     padding: 0 7px;
+  663:   }
+  664: }
+  665: 
+  666: @media (max-width: 900px) {
+  667:   .trading-terminal {
+  668:     min-width: 760px;
+  669:     overflow: auto;
+  670:     height: auto;
+  671:     min-height: 100dvh;
+  672:     grid-template-rows: 52px 570px 190px 54px;
+  673:   }
+  674: 
+  675:   .header-navigation .nav-item:nth-child(n+4) {
+  676:     display: none;
+  677:   }
+  678: 
+  679: .workspace {
+  680:   grid-template-columns: 140px minmax(0, 2fr) minmax(110px, 1fr) minmax(125px, 1.15fr);
+  681:   }
+  682: }
+
+------------------------------------------------------------------------------------------
+FILE: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.html
+PURPOSE: General Market source - full content
+------------------------------------------------------------------------------------------
+TOTAL LINES: 441
+SHOWING: 1 - 441
+    1: <div class="trading-terminal" dir="rtl">
+    2: 
+    3:   <!-- TOP NAVIGATION -->
+    4:   <header class="terminal-header">
+    5: 
+    6:     <div class="header-brand">
+    7:       <div class="brand-symbol">
+    8:         <mat-icon>account_balance</mat-icon>
+    9:       </div>
+   10:       <div class="brand-text">
+   11:         <strong>IGD</strong>
+   12:         <span>Ø³Ø§Ù…Ø§Ù†Ù‡ Ù…Ø¯ÛŒØ±ÛŒØª Ø¯Ø§Ø±Ø§ÛŒÛŒâ€ŒÙ‡Ø§ÛŒ ÙˆØ§Ù‚Ø¹ÛŒ</span>
+   13:       </div>
+   14:     </div>
+   15: 
+   16:     <nav class="header-navigation">
+   17:       <button mat-button class="nav-item active">Ø¨Ø§Ø²Ø§Ø± Ú©Ù„ÛŒ</button>
+   18:       <button mat-button class="nav-item">Ø¯Ø§Ø±Ø§ÛŒÛŒâ€ŒÙ‡Ø§ÛŒ Ù…Ù†</button>
+   19:       <button mat-button class="nav-item">Ù‚Ø±Ø§Ø±Ø¯Ø§Ø¯Ù‡Ø§</button>
+   20:       <button mat-button class="nav-item">Ø®Ø¯Ù…Ø§Øª</button>
+   21:       <button mat-button class="nav-item">ØªØ³ÙˆÛŒÙ‡</button>
+   22:     </nav>
+   23: 
+   24:     <div class="header-actions">
+   25:       <button mat-icon-button aria-label="Ø¬Ø³Øªâ€ŒÙˆØ¬Ùˆ">
+   26:         <mat-icon>search</mat-icon>
+   27:       </button>
+   28:       <button mat-icon-button aria-label="Ø§Ø¹Ù„Ø§Ù†â€ŒÙ‡Ø§">
+   29:         <mat-icon>notifications_none</mat-icon>
+   30:       </button>
+   31:       <span class="market-status">
+   32:         <span class="status-dot"></span>
+   33:         ÙˆØ¶Ø¹ÛŒØª Ø¨Ø§Ø²Ø§Ø±
+   34:       </span>
+   35:     </div>
+   36: 
+   37:   </header>
+   38: 
+   39:   <!-- MAIN WORKSPACE -->
+   40:   <main class="workspace" [class.history-mode]="activeTool === 'history'"
+   41:     [class.orderbook-collapsed]="orderBookCollapsed"
+   42:     [class.details-collapsed]="detailsCollapsed">
+   43: 
+   44:     @if (activeTool !== 'history') {
+   45:     <!-- MARKET WATCH + PORTFOLIO -->
+   46:     <section class="main-market-column">
+   47: 
+   48:       <section class="terminal-panel market-watch">
+   49: 
+   50:         <div class="panel-heading">
+   51:           <div class="panel-title">
+   52:             <mat-icon>monitoring</mat-icon>
+   53:             <strong>Ø¯ÛŒØ¯Ù‡â€ŒØ¨Ø§Ù† Ø¨Ø§Ø²Ø§Ø± Ú©Ù„ÛŒ</strong>
+   54:           </div>
+   55: 
+   56:           <div class="panel-actions">
+   57:             <span class="panel-caption">ÙÙ‡Ø±Ø³Øª Ø¨Ø§Ø²Ø§Ø±Ù‡Ø§ Ùˆ Ø¹Ø±Ø¶Ù‡â€ŒÙ‡Ø§</span>
+   58:             <button mat-icon-button aria-label="ØªÙ†Ø¸ÛŒÙ…Ø§Øª Ø¯ÛŒØ¯Ù‡â€ŒØ¨Ø§Ù†">
+   59:               <mat-icon>tune</mat-icon>
+   60:             </button>
+   61:           </div>
+   62:         </div>
+   63: 
+   64:         <div class="market-filter-bar">
+   65:           <button mat-button class="filter-active">Ù‡Ù…Ù‡ Ø¨Ø§Ø²Ø§Ø±Ù‡Ø§</button>
+   66:           <button mat-button>Ú©Ø§Ù„Ø§</button>
+   67:           <button mat-button>Ø§Ù…Ù„Ø§Ú©</button>
+   68:           <button mat-button>Ø³Ø§ÛŒØ± Ø¯Ø§Ø±Ø§ÛŒÛŒâ€ŒÙ‡Ø§</button>
+   69: 
+   70:           <span class="filter-spacer"></span>
+   71: 
+   72:           <button mat-icon-button aria-label="Ø¬Ø³Øªâ€ŒÙˆØ¬ÙˆÛŒ Ø¨Ø§Ø²Ø§Ø±">
+   73:             <mat-icon>search</mat-icon>
+   74:           </button>
+   75:           <button mat-icon-button aria-label="ÙÛŒÙ„ØªØ± Ø¨Ø§Ø²Ø§Ø±">
+   76:             <mat-icon>filter_list</mat-icon>
+   77:           </button>
+   78:         </div>
+   79: 
+   80:         <div class="table-scroll">
+   81:           <table class="terminal-table market-table">
+   82:             <thead>
+   83:               <tr>
+   84:                 <th>Ù†Ø§Ù… Ø¹Ø±Ø¶Ù‡ / Ø¯Ø§Ø±Ø§ÛŒÛŒ</th>
+   85:                 <th>Ø¨Ø§Ø²Ø§Ø±</th>
+   86:                 <th>Ù‚ÛŒÙ…Øª</th>
+   87:                 <th>ØªØºÛŒÛŒØ±Ø§Øª</th>
+   88:                 <th>Ø­Ø¬Ù…</th>
+   89:                 <th>ÙˆØ¶Ø¹ÛŒØª</th>
+   90:               </tr>
+   91:             </thead>
+   92:             <tbody>
+   93:               <tr>
+   94:                 <td colspan="6" class="empty-table">
+   95:                   <mat-icon>table_chart</mat-icon>
+   96:                   <span>Ø§Ø·Ù„Ø§Ø¹Ø§Øª Ø¹Ø±Ø¶Ù‡â€ŒÙ‡Ø§ Ù¾Ø³ Ø§Ø² Ø§ØªØµØ§Ù„ Ø³Ø±ÙˆÛŒØ³ Ø¨Ø§Ø²Ø§Ø± Ù†Ù…Ø§ÛŒØ´ Ø¯Ø§Ø¯Ù‡ Ù…ÛŒâ€ŒØ´ÙˆØ¯.</span>
+   97:                 </td>
+   98:               </tr>
+   99:             </tbody>
+  100:           </table>
+  101:         </div>
+  102: 
+  103:         <footer class="panel-footer">
+  104:           <span>Ø¯ÛŒØ¯Ù‡â€ŒØ¨Ø§Ù† Ø¨Ø§Ø²Ø§Ø±</span>
+  105:           <span>Ø¢Ù…Ø§Ø¯Ù‡ Ø§ØªØµØ§Ù„ Ø¨Ù‡ Ø³Ø±ÙˆÛŒØ³ Ú©Ø§ØªØ§Ù„ÙˆÚ¯ Ùˆ Ø¹Ø±Ø¶Ù‡â€ŒÙ‡Ø§</span>
+  106:         </footer>
+  107: 
+  108:       </section>
+  109: 
+  110:       <section class="terminal-panel portfolio-panel">
+  111: 
+  112:         <div class="panel-heading">
+  113:           <div class="panel-title">
+  114:             <mat-icon>account_balance_wallet</mat-icon>
+  115:             <strong>Ø¯Ø§Ø±Ø§ÛŒÛŒâ€ŒÙ‡Ø§ÛŒ Ù…Ù† | Ù¾Ø±ØªÙÙˆÛŒ</strong>
+  116:           </div>
+  117: 
+  118:           <button mat-button class="text-action">
+  119:             Ù…Ø´Ø§Ù‡Ø¯Ù‡ Ù‡Ù…Ù‡ Ø¯Ø§Ø±Ø§ÛŒÛŒâ€ŒÙ‡Ø§
+  120:             <mat-icon>chevron_left</mat-icon>
+  121:           </button>
+  122:         </div>
+  123: 
+  124:         <div class="portfolio-summary">
+  125:           <div class="summary-cell">
+  126:             <span>Ø§Ø±Ø²Ø´ Ú©Ù„ Ø¯Ø§Ø±Ø§ÛŒÛŒâ€ŒÙ‡Ø§</span>
+  127:             <strong>â€”</strong>
+  128:           </div>
+  129:           <div class="summary-cell">
+  130:             <span>Ø³ÙˆØ¯ Ùˆ Ø²ÛŒØ§Ù† Ú©Ù„</span>
+  131:             <strong>â€”</strong>
+  132:           </div>
+  133:           <div class="summary-cell">
+  134:             <span>Ù…ÙˆÙ‚Ø¹ÛŒØªâ€ŒÙ‡Ø§ÛŒ ÙØ¹Ø§Ù„</span>
+  135:             <strong>â€”</strong>
+  136:           </div>
+  137:         </div>
+  138: 
+  139:         <div class="table-scroll">
+  140:           <table class="terminal-table">
+  141:             <thead>
+  142:               <tr>
+  143:                 <th>Ø¯Ø§Ø±Ø§ÛŒÛŒ</th>
+  144:                 <th>Ù…Ù‚Ø¯Ø§Ø±</th>
+  145:                 <th>Ø§Ø±Ø²Ø´</th>
+  146:                 <th>ÙˆØ¶Ø¹ÛŒØª</th>
+  147:               </tr>
+  148:             </thead>
+  149:             <tbody>
+  150:               <tr>
+  151:                 <td colspan="4" class="empty-table">
+  152:                   Ø§Ø·Ù„Ø§Ø¹Ø§Øª Ù¾Ø±ØªÙÙˆÛŒ Ø§Ø² Ø³Ø±ÙˆÛŒØ³ Ø¯Ø§Ø±Ø§ÛŒÛŒâ€ŒÙ‡Ø§ÛŒ Ù…Ù† Ø¯Ø±ÛŒØ§ÙØª Ø®ÙˆØ§Ù‡Ø¯ Ø´Ø¯.
+  153:                 </td>
+  154:               </tr>
+  155:             </tbody>
+  156:           </table>
+  157:         </div>
+  158: 
+  159:       </section>
+  160: 
+  161:     </section>
+  162: 
+  163:     }
+  164: 
+  165:     @if (activeTool !== 'history') {
+  166:     <!-- ORDER BOOK -->
+  167:     <section class="terminal-panel orderbook-panel">
+  168: 
+  169:       <div class="panel-heading compact-heading">
+  170:         <div class="panel-title">
+  171:           <mat-icon>swap_vert</mat-icon>
+  172:           <strong>Ø¯ÙØªØ± Ø³ÙØ§Ø±Ø´</strong>
+  173:         </div>
+  174: 
+  175:         <button mat-icon-button
+  176:           (click)="toggleOrderBook()"
+  177:           [attr.aria-label]="orderBookCollapsed ? 'Ø¨Ø§Ø²Ú©Ø±Ø¯Ù† Ø¯ÙØªØ± Ø³ÙØ§Ø±Ø´' : 'Ø¬Ù…Ø¹â€ŒÚ©Ø±Ø¯Ù† Ø¯ÙØªØ± Ø³ÙØ§Ø±Ø´'">
+  178:           <mat-icon>{{ orderBookCollapsed ? 'chevron_left' : 'chevron_right' }}</mat-icon>
+  179:         </button>
+  180:       </div>
+  181: 
+  182:       <div class="panel-body">
+  183: 
+  184:         <div class="orderbook-instrument">
+  185:           <span>Ù†Ù…Ø§Ø¯ Ø§Ù†ØªØ®Ø§Ø¨ÛŒ</span>
+  186:           <strong>â€”</strong>
+  187:         </div>
+  188: 
+  189:         <div class="order-side sell-side">
+  190:           <div class="order-side-heading">
+  191:             <span>ÙØ±ÙˆØ´</span>
+  192:             <span>Ù‚ÛŒÙ…Øª</span>
+  193:             <span>Ù…Ù‚Ø¯Ø§Ø±</span>
+  194:           </div>
+  195:           <div class="order-empty">Ø³ÙØ§Ø±Ø´ÛŒ ÙˆØ¬ÙˆØ¯ Ù†Ø¯Ø§Ø±Ø¯</div>
+  196:         </div>
+  197: 
+  198:         <div class="order-spread">
+  199:           <span>Ù‚ÛŒÙ…Øª Ù…ÛŒØ§Ù†ÛŒ</span>
+  200:           <strong>â€”</strong>
+  201:         </div>
+  202: 
+  203:         <div class="order-side buy-side">
+  204:           <div class="order-side-heading">
+  205:             <span>Ø®Ø±ÛŒØ¯</span>
+  206:             <span>Ù‚ÛŒÙ…Øª</span>
+  207:             <span>Ù…Ù‚Ø¯Ø§Ø±</span>
+  208:           </div>
+  209:           <div class="order-empty">Ø³ÙØ§Ø±Ø´ÛŒ ÙˆØ¬ÙˆØ¯ Ù†Ø¯Ø§Ø±Ø¯</div>
+  210:         </div>
+  211: 
+  212:         <div class="orderbook-legend">
+  213:           <span class="legend-sell">ÙØ±ÙˆØ´</span>
+  214:           <span class="legend-buy">Ø®Ø±ÛŒØ¯</span>
+  215:         </div>
+  216: 
+  217:       </div>
+  218:     </section>
+  219: 
+  220:     }
+  221: 
+  222:     @if (activeTool !== 'history') {
+  223:     <!-- INSTRUMENT DETAILS -->
+  224:     <section class="terminal-panel details-panel">
+  225: 
+  226:       <div class="panel-heading compact-heading">
+  227:         <div class="panel-title">
+  228:           <mat-icon>info</mat-icon>
+  229:           <strong>Ø¬Ø²Ø¦ÛŒØ§Øª Ù†Ù…Ø§Ø¯</strong>
+  230:         </div>
+  231: 
+  232:         <button mat-icon-button
+  233:           (click)="toggleDetails()"
+  234:           [attr.aria-label]="detailsCollapsed ? 'Ø¨Ø§Ø²Ú©Ø±Ø¯Ù† Ø¬Ø²Ø¦ÛŒØ§Øª' : 'Ø¬Ù…Ø¹â€ŒÚ©Ø±Ø¯Ù† Ø¬Ø²Ø¦ÛŒØ§Øª'">
+  235:           <mat-icon>{{ detailsCollapsed ? 'chevron_left' : 'chevron_right' }}</mat-icon>
+  236:         </button>
+  237:       </div>
+  238: 
+  239:       <div class="panel-body details-content">
+  240: 
+  241:         <div class="instrument-identity">
+  242:           <div class="instrument-placeholder">â€”</div>
+  243:           <strong>Ù†Ù…Ø§Ø¯ÛŒ Ø§Ù†ØªØ®Ø§Ø¨ Ù†Ø´Ø¯Ù‡</strong>
+  244:           <span>Ø¬Ø²Ø¦ÛŒØ§Øª Ø¯Ø§Ø±Ø§ÛŒÛŒ Ø§Ù†ØªØ®Ø§Ø¨ÛŒ</span>
+  245:         </div>
+  246: 
+  247:         <mat-divider></mat-divider>
+  248: 
+  249:         <div class="detail-row">
+  250:           <span>Ø¢Ø®Ø±ÛŒÙ† Ù‚ÛŒÙ…Øª</span>
+  251:           <strong>â€”</strong>
+  252:         </div>
+  253:         <div class="detail-row">
+  254:           <span>ØªØºÛŒÛŒØ±Ø§Øª</span>
+  255:           <strong>â€”</strong>
+  256:         </div>
+  257:         <div class="detail-row">
+  258:           <span>Ø­Ø¬Ù… Ø¹Ø±Ø¶Ù‡</span>
+  259:           <strong>â€”</strong>
+  260:         </div>
+  261:         <div class="detail-row">
+  262:           <span>ÙˆØ¶Ø¹ÛŒØª Ø¹Ø±Ø¶Ù‡</span>
+  263:           <strong>â€”</strong>
+  264:         </div>
+  265: 
+  266:         <mat-divider></mat-divider>
+  267: 
+  268:         <div class="detail-section-title">Ø§Ø·Ù„Ø§Ø¹Ø§Øª ØªÚ©Ù…ÛŒÙ„ÛŒ</div>
+  269:         <button mat-button class="detail-link">
+  270:           Ù…Ø´Ø®ØµØ§Øª Ø¯Ø§Ø±Ø§ÛŒÛŒ
+  271:         </button>
+  272:         <button mat-button class="detail-link">
+  273:           Ù‚Ø±Ø§Ø±Ø¯Ø§Ø¯Ù‡Ø§ Ùˆ ØªØ¹Ù‡Ø¯Ø§Øª
+  274:         </button>
+  275:         <button mat-button class="detail-link">
+  276:           Ø³ÙˆØ§Ø¨Ù‚ Ùˆ Ø±ÙˆÛŒØ¯Ø§Ø¯Ù‡Ø§
+  277:         </button>
+  278: 
+  279:       </div>
+  280:     </section>
+  281: 
+  282:     @if (activeTool === 'history') {
+  283:   <!-- ACTIVITY WORKSPACE -->
+  284:   <section class="terminal-panel activity-panel">
+  285: 
+  286:     <div class="panel-heading activity-heading">
+  287:       <div class="panel-title">
+  288:         <mat-icon>view_list</mat-icon>
+  289:         <strong>ÙØ¶Ø§ÛŒ Ú©Ø§Ø±ÛŒ Ùˆ Ø³ÙˆØ§Ø¨Ù‚</strong>
+  290:       </div>
+  291:       <span class="panel-caption">ÙˆØ¶Ø¹ÛŒØª Ù…Ø³ØªÙ‚Ù„ Ø³ÙØ§Ø±Ø´ØŒ Ù…Ø¹Ø§Ù…Ù„Ù‡ Ùˆ ØªØ³ÙˆÛŒÙ‡</span>
+  292:     </div>
+  293: 
+  294:     <mat-tab-group
+  295:       class="terminal-tabs"
+  296:       animationDuration="0ms"
+  297:       [disableRipple]="true">
+  298: 
+  299:       <mat-tab label="Ø³ÙØ§Ø±Ø´Ø§Øª ÙØ¹Ø§Ù„">
+  300:         <div class="tab-empty">
+  301:           Ø³ÙØ§Ø±Ø´â€ŒÙ‡Ø§ÛŒ ÙØ¹Ø§Ù„ Ù¾Ø³ Ø§Ø² Ø§ØªØµØ§Ù„ Ø³Ø±ÙˆÛŒØ³ Ø³ÙØ§Ø±Ø´â€ŒÙ‡Ø§ Ù†Ù…Ø§ÛŒØ´ Ø¯Ø§Ø¯Ù‡ Ù…ÛŒâ€ŒØ´ÙˆÙ†Ø¯.
+  302:         </div>
+  303:       </mat-tab>
+  304: 
+  305:       <mat-tab label="ØªØ§Ø±ÛŒØ®Ú†Ù‡ Ø³ÙØ§Ø±Ø´Ø§Øª">
+  306:         <div class="tab-empty">
+  307:           ØªØ§Ø±ÛŒØ®Ú†Ù‡ Ø³ÙØ§Ø±Ø´â€ŒÙ‡Ø§
+  308:         </div>
+  309:       </mat-tab>
+  310: 
+  311:       <mat-tab label="Ù…Ø¹Ø§Ù…Ù„Ø§Øª">
+  312:         <div class="tab-empty">
+  313:           Ø³ÙˆØ§Ø¨Ù‚ Ù…Ø¹Ø§Ù…Ù„Ø§Øª
+  314:         </div>
+  315:       </mat-tab>
+  316: 
+  317:       <mat-tab label="Ø§Ø¬Ø±Ø§ÛŒ Ù…Ø¹Ø§Ù…Ù„Ù‡">
+  318:         <div class="tab-empty">
+  319:           Ù…Ø±Ø§Ø­Ù„ Ø§Ø¬Ø±Ø§ÛŒ Ù…Ø¹Ø§Ù…Ù„Ù‡
+  320:         </div>
+  321:       </mat-tab>
+  322: 
+  323:       <mat-tab label="ÙˆØ¶Ø¹ÛŒØª ØªØ³ÙˆÛŒÙ‡">
+  324:         <div class="tab-empty">
+  325:           ÙˆØ¶Ø¹ÛŒØª Ùˆ Ø³ÙˆØ§Ø¨Ù‚ ØªØ³ÙˆÛŒÙ‡
+  326:         </div>
+  327:       </mat-tab>
+  328: 
+  329:     </mat-tab-group>
+  330: 
+  331:   </section>
+  332:     }
+  333: 
+  334:     }
+  335: 
+  336:     <!-- VERTICAL TOOLBAR -->
+  337:     <aside class="terminal-toolbar">
+  338: 
+  339:       <button mat-icon-button
+  340:         [class.selected]="activeTool === 'market'"
+  341:         (click)="selectTool('market')"
+  342:         aria-label="Ø¨Ø§Ø²Ø§Ø± Ú©Ù„ÛŒ">
+  343:         <mat-icon>candlestick_chart</mat-icon>
+  344:       </button>
+  345: 
+  346:       <button mat-icon-button
+  347:         [class.selected]="activeTool === 'assets'"
+  348:         (click)="selectTool('assets')"
+  349:         aria-label="Ø¯Ø§Ø±Ø§ÛŒÛŒâ€ŒÙ‡Ø§ÛŒ Ù…Ù†">
+  350:         <mat-icon>account_balance_wallet</mat-icon>
+  351:       </button>
+  352: 
+  353:       <button mat-icon-button
+  354:         [class.selected]="activeTool === 'orders'"
+  355:         (click)="selectTool('orders')"
+  356:         aria-label="Ø³ÙØ§Ø±Ø´â€ŒÙ‡Ø§">
+  357:         <mat-icon>receipt_long</mat-icon>
+  358:       </button>
+  359: 
+  360:       <button mat-icon-button
+  361:         [class.selected]="activeTool === 'contracts'"
+  362:         (click)="selectTool('contracts')"
+  363:         aria-label="Ù‚Ø±Ø§Ø±Ø¯Ø§Ø¯Ù‡Ø§">
+  364:         <mat-icon>description</mat-icon>
+  365:       </button>
+  366: 
+  367:       <button mat-icon-button
+  368:         [class.selected]="activeTool === 'services'"
+  369:         (click)="selectTool('services')"
+  370:         aria-label="Ø®Ø¯Ù…Ø§Øª">
+  371:         <mat-icon>local_shipping</mat-icon>
+  372:       </button>
+  373: 
+  374:       <button mat-icon-button
+  375:         [class.selected]="activeTool === 'history'"
+  376:         (click)="selectTool('history')"
+  377:         aria-label="ÙØ¶Ø§ÛŒ Ú©Ø§Ø±ÛŒ Ùˆ Ø³ÙˆØ§Ø¨Ù‚"
+  378:         title="ÙØ¶Ø§ÛŒ Ú©Ø§Ø±ÛŒ Ùˆ Ø³ÙˆØ§Ø¨Ù‚">
+  379:         <mat-icon>history</mat-icon>
+  380:       </button>
+  381:       <div class="toolbar-spacer"></div>
+  382: 
+  383:       <button mat-icon-button
+  384:         [class.selected]="activeTool === 'notifications'"
+  385:         (click)="selectTool('notifications')"
+  386:         aria-label="Ø§Ø¹Ù„Ø§Ù†â€ŒÙ‡Ø§">
+  387:         <mat-icon>notifications</mat-icon>
+  388:       </button>
+  389: 
+  390:       <button mat-icon-button
+  391:         [class.selected]="activeTool === 'account'"
+  392:         (click)="selectTool('account')"
+  393:         aria-label="Ø­Ø³Ø§Ø¨ Ú©Ø§Ø±Ø¨Ø±ÛŒ">
+  394:         <mat-icon>person</mat-icon>
+  395:       </button>
+  396: 
+  397:     </aside>
+  398: 
+  399:   </main>
+  400: 
+  401:   <!-- BOTTOM ASSET STRIP -->
+  402:   <footer class="asset-status-bar">
+  403: 
+  404:     <div class="asset-status-item">
+  405:       <span>ÙˆØ¶Ø¹ÛŒØª Ø­Ø³Ø§Ø¨</span>
+  406:       <strong>â€”</strong>
+  407:     </div>
+  408: 
+  409:     <div class="asset-status-item user-status">
+  410:       <span>Ù†Ø§Ù… Ú©Ø§Ø±Ø¨Ø±</span>
+  411:       <strong>Ø­Ø³Ø§Ø¨ Ú©Ø§Ø±Ø¨Ø±ÛŒ</strong>
+  412:     </div>
+  413: 
+  414:     <div class="asset-status-item">
+  415:       <span>Ù‚Ø¯Ø±Øª Ø®Ø±ÛŒØ¯</span>
+  416:       <strong>â€”</strong>
+  417:     </div>
+  418: 
+  419:     <div class="asset-status-item">
+  420:       <span>Ø§Ø±Ø²Ø´ Ù¾Ø±ØªÙÙˆÛŒ</span>
+  421:       <strong>â€”</strong>
+  422:     </div>
+  423: 
+  424:     <div class="asset-status-item">
+  425:       <span>Ø³ÙˆØ¯ Ùˆ Ø²ÛŒØ§Ù† Ø±ÙˆØ²Ø§Ù†Ù‡</span>
+  426:       <strong>â€”</strong>
+  427:     </div>
+  428: 
+  429:     <div class="asset-status-item">
+  430:       <span>Ø³ÙˆØ¯ Ùˆ Ø²ÛŒØ§Ù† Ú©Ù„</span>
+  431:       <strong>â€”</strong>
+  432:     </div>
+  433: 
+  434:     <div class="asset-status-item">
+  435:       <span>Ù…ÙˆØ¬ÙˆØ¯ÛŒ Ø±Ø²Ø±ÙˆØ´Ø¯Ù‡</span>
+  436:       <strong>â€”</strong>
+  437:     </div>
+  438: 
+  439:   </footer>
+  440: 
+  441: </div>
+
+------------------------------------------------------------------------------------------
+FILE: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.routes.ts
+PURPOSE: General Market source - full content
+------------------------------------------------------------------------------------------
+TOTAL LINES: 83
+SHOWING: 1 - 83
+    1: import type { Routes } from '@angular/router';
+    2: import { featurePageRoute } from '../../shared/routing/feature-route.factory';
+    3: 
+    4: export const GENERAL_MARKET_ROUTES: Routes = [
+    5:   {
+    6:     path: '',
+    7:     title: 'Ø¨Ø§Ø²Ø§Ø± Ú©Ù„ÛŒ | IGD',
+    8:     loadComponent: () =>
+    9:       import('./general-market').then(
+   10:         (module) => module.GeneralMarketPage,
+   11:       ),
+   12:   },
+   13:   featurePageRoute(
+   14:     'catalogue',
+   15:     'Ú©Ø§ØªØ§Ù„ÙˆÚ¯ Ø¨Ø§Ø²Ø§Ø±',
+   16:     'Ø·Ø¨Ù‚Ù‡â€ŒØ¨Ù†Ø¯ÛŒØŒ Ø¬Ø³Øªâ€ŒÙˆØ¬Ùˆ Ùˆ Ù…Ø´Ø§Ù‡Ø¯Ù‡ Ø¹Ø±Ø¶Ù‡â€ŒÙ‡Ø§.',
+   17:   ),
+   18:   featurePageRoute(
+   19:     'markets',
+   20:     'Ø¨Ø§Ø²Ø§Ø±Ù‡Ø§',
+   21:     'Ù…Ø´Ø§Ù‡Ø¯Ù‡ Ø¨Ø§Ø²Ø§Ø±Ù‡Ø§ Ùˆ ÙˆØ¶Ø¹ÛŒØª ÙØ¹Ø§Ù„ÛŒØª Ø¢Ù†â€ŒÙ‡Ø§.',
+   22:   ),
+   23:   featurePageRoute(
+   24:     'offers',
+   25:     'Ø¹Ø±Ø¶Ù‡â€ŒÙ‡Ø§',
+   26:     'Ù…Ø¯ÛŒØ±ÛŒØª Ùˆ Ù…Ø´Ø§Ù‡Ø¯Ù‡ Ú†Ø±Ø®Ù‡ Ø¹Ù…Ø± Ø¹Ø±Ø¶Ù‡â€ŒÙ‡Ø§.',
+   27:   ),
+   28:   featurePageRoute(
+   29:     'offer-requests',
+   30:     'Ø¯Ø±Ø®ÙˆØ§Ø³Øªâ€ŒÙ‡Ø§ÛŒ Ø¹Ø±Ø¶Ù‡',
+   31:     'Ø«Ø¨Øª Ùˆ Ù¾ÛŒÚ¯ÛŒØ±ÛŒ Ø¯Ø±Ø®ÙˆØ§Ø³Øªâ€ŒÙ‡Ø§ÛŒ Ø¹Ø±Ø¶Ù‡.',
+   32:   ),
+   33:   featurePageRoute(
+   34:     'proposals',
+   35:     'Ù¾ÛŒØ´Ù†Ù‡Ø§Ø¯Ù‡Ø§',
+   36:     'Ø¯Ø±ÛŒØ§ÙØªØŒ Ø¨Ø±Ø±Ø³ÛŒ Ùˆ Ù…Ù‚Ø§ÛŒØ³Ù‡ Ù¾ÛŒØ´Ù†Ù‡Ø§Ø¯Ù‡Ø§.',
+   37:   ),
+   38:   featurePageRoute(
+   39:     'orders',
+   40:     'Ø³ÙØ§Ø±Ø´â€ŒÙ‡Ø§',
+   41:     'Ù…Ø¯ÛŒØ±ÛŒØª Ø³ÙØ§Ø±Ø´â€ŒÙ‡Ø§ÛŒ Ø®Ø±ÛŒØ¯ Ùˆ ÙØ±ÙˆØ´.',
+   42:   ),
+   43:   featurePageRoute(
+   44:     'order-book',
+   45:     'Ø¯ÙØªØ± Ø³ÙØ§Ø±Ø´',
+   46:     'Ù†Ù…Ø§ÛŒØ´ Ø³ÙØ§Ø±Ø´â€ŒÙ‡Ø§ÛŒ Ù…Ø¹ØªØ¨Ø± Ùˆ ÙˆØ¶Ø¹ÛŒØª Ø¢Ù†â€ŒÙ‡Ø§.',
+   47:   ),
+   48:   featurePageRoute(
+   49:     'matching',
+   50:     'ØªØ·Ø¨ÛŒÙ‚',
+   51:     'Ù¾ÛŒÚ¯ÛŒØ±ÛŒ ÙØ±Ø§ÛŒÙ†Ø¯ ØªØ·Ø¨ÛŒÙ‚ Ø³ÙØ§Ø±Ø´â€ŒÙ‡Ø§.',
+   52:   ),
+   53:   featurePageRoute(
+   54:     'trades',
+   55:     'Ù…Ø¹Ø§Ù…Ù„Ø§Øª',
+   56:     'Ù…Ø´Ø§Ù‡Ø¯Ù‡ Ù…Ø¹Ø§Ù…Ù„Ø§Øª Ùˆ ÙˆØ¶Ø¹ÛŒØª Ø¢Ù†â€ŒÙ‡Ø§.',
+   57:   ),
+   58:   featurePageRoute(
+   59:     'execution',
+   60:     'Ø§Ø¬Ø±Ø§ÛŒ Ù…Ø¹Ø§Ù…Ù„Ù‡',
+   61:     'Ù¾ÛŒÚ¯ÛŒØ±ÛŒ Ù…Ø±Ø§Ø­Ù„ Ø§Ø¬Ø±Ø§ÛŒ Ù…Ø¹Ø§Ù…Ù„Ù‡.',
+   62:   ),
+   63:   featurePageRoute(
+   64:     'commodity',
+   65:     'Ø¨Ø§Ø²Ø§Ø± Ú©Ø§Ù„Ø§',
+   66:     'Ú¯Ø±Ø¯Ø´ Ú©Ø§Ø± Ø¹Ø±Ø¶Ù‡ Ùˆ ØªÙ‚Ø§Ø¶Ø§ÛŒ Ú©Ø§Ù„Ø§.',
+   67:   ),
+   68:   featurePageRoute(
+   69:     'real-estate',
+   70:     'Ø§Ù…Ù„Ø§Ú© Ùˆ Ø¯Ø§Ø±Ø§ÛŒÛŒâ€ŒÙ‡Ø§ÛŒ ÙˆØ§Ù‚Ø¹ÛŒ',
+   71:     'Ú¯Ø±Ø¯Ø´ Ú©Ø§Ø± Ø¯Ø§Ø±Ø§ÛŒÛŒâ€ŒÙ‡Ø§ÛŒ ÙˆØ§Ù‚Ø¹ÛŒ Ùˆ Ù…ÙˆÙ‚Ø¹ÛŒØªâ€ŒÙ‡Ø§ÛŒ Ù…Ø±ØªØ¨Ø·.',
+   72:   ),
+   73:   featurePageRoute(
+   74:     'regulatory',
+   75:     'Ø§ØªØµØ§Ù„â€ŒÙ‡Ø§ÛŒ Ù‚Ø§Ù†ÙˆÙ†ÛŒ Ùˆ Ù†Ø¸Ø§Ø±ØªÛŒ',
+   76:     'Ù¾ÛŒÚ¯ÛŒØ±ÛŒ Ø§Ø±ØªØ¨Ø§Ø·Ø§Øª Ù‚Ø§Ù†ÙˆÙ†ÛŒ Ùˆ Ù†ØªØ§ÛŒØ¬ Ø§Ø³ØªØ¹Ù„Ø§Ù…â€ŒÙ‡Ø§.',
+   77:   ),
+   78:   featurePageRoute(
+   79:     'audit',
+   80:     'Ù…Ù…ÛŒØ²ÛŒ Ø¨Ø§Ø²Ø§Ø±',
+   81:     'ØªØ§Ø±ÛŒØ®Ú†Ù‡ Ùˆ Ø±Ø¯Ú¯ÛŒØ±ÛŒ Ø±ÙˆÛŒØ¯Ø§Ø¯Ù‡Ø§ÛŒ Ø¨Ø§Ø²Ø§Ø±.',
+   82:   ),
+   83: ];
+
+------------------------------------------------------------------------------------------
+FILE: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.ts
+PURPOSE: General Market source - full content
+------------------------------------------------------------------------------------------
+TOTAL LINES: 36
+SHOWING: 1 - 36
+    1: import { Component } from '@angular/core';
+    2: import { MatButtonModule } from '@angular/material/button';
+    3: import { MatIconModule } from '@angular/material/icon';
+    4: import { MatTabsModule } from '@angular/material/tabs';
+    5: import { MatDividerModule } from '@angular/material/divider';
+    6: 
+    7: @Component({
+    8:   selector: 'igd-general-market',
+    9:   standalone: true,
+   10:   imports: [
+   11:     MatButtonModule,
+   12:     MatIconModule,
+   13:     MatTabsModule,
+   14:     MatDividerModule,
+   15:   ],
+   16:   templateUrl: './general-market.html',
+   17:   styleUrl: './general-market.css',
+   18: })
+   19: export class GeneralMarketPage {
+   20:   orderBookCollapsed = false;
+   21:   detailsCollapsed = false;
+   22: 
+   23:   activeTool = 'market';
+   24: 
+   25:   toggleOrderBook(): void {
+   26:     this.orderBookCollapsed = !this.orderBookCollapsed;
+   27:   }
+   28: 
+   29:   toggleDetails(): void {
+   30:     this.detailsCollapsed = !this.detailsCollapsed;
+   31:   }
+   32: 
+   33:   selectTool(tool: string): void {
+   34:     this.activeTool = tool;
+   35:   }
+   36: }
+
+====================================================================================================
+6. ANGULAR ROUTING DISCOVERY
+====================================================================================================
+
+SEARCH ROOT: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app
+FILE FILTER: *.ts
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.config.ts | Line 4 | provideRouter,
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.config.ts | Line 17 | provideRouter(
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.routes.ts | Line 2 | import { featurePageRoute } from './shared/routing/feature-route.factory';
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.routes.ts | Line 4 | export const routes: Routes = [
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.routes.ts | Line 6 | path: '',
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.routes.ts | Line 8 | redirectTo: 'market',
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.routes.ts | Line 11 | path: 'market',
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.routes.ts | Line 12 | loadChildren: () =>
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.routes.ts | Line 13 | import('./features/general-market/general-market.routes').then(
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.routes.ts | Line 18 | path: 'assets',
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.routes.ts | Line 19 | loadChildren: () =>
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.routes.ts | Line 25 | path: 'account',
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.routes.ts | Line 27 | loadChildren: () =>
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.routes.ts | Line 33 | path: 'contracts',
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.routes.ts | Line 34 | loadChildren: () =>
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.routes.ts | Line 40 | path: 'services',
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.routes.ts | Line 41 | loadChildren: () =>
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.routes.ts | Line 47 | path: 'settlement',
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.routes.ts | Line 48 | loadChildren: () =>
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.routes.ts | Line 54 | path: 'notifications',
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.routes.ts | Line 55 | loadChildren: () =>
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\account\account.routes.ts | Line 2 | import { featurePageRoute } from '../../shared/routing/feature-route.factory';
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\account\account.routes.ts | Line 4 | export const ACCOUNT_ROUTES: Routes = [
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\account\account.routes.ts | Line 6 | path: '',
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\account\account.routes.ts | Line 8 | loadComponent: () =>
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\account\account.routes.ts | Line 14 | path: 'profile',
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\account\account.routes.ts | Line 16 | loadComponent: () =>
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\account\account.routes.ts | Line 22 | path: 'legal-entity',
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\account\account.routes.ts | Line 24 | loadComponent: () =>
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\account\account.routes.ts | Line 30 | path: 'contacts',
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\account\account.routes.ts | Line 32 | loadComponent: () =>
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\account\account.routes.ts | Line 38 | path: 'verification',
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\account\account.routes.ts | Line 40 | loadComponent: () =>
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\account\account.routes.ts | Line 46 | path: 'security',
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\account\account.routes.ts | Line 48 | loadComponent: () =>
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\account\account.routes.ts | Line 54 | path: 'devices',
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\account\account.routes.ts | Line 56 | loadComponent: () =>
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\account\account.routes.ts | Line 62 | path: 'sessions',
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\account\account.routes.ts | Line 64 | loadComponent: () =>
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\account\account.routes.ts | Line 70 | path: 'permissions',
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\account\account.routes.ts | Line 72 | loadComponent: () =>
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\account\account.routes.ts | Line 78 | path: 'agreements',
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\account\account.routes.ts | Line 79 | loadChildren: () =>
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\account\account.routes.ts | Line 85 | path: 'agreements',
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\account\account.routes.ts | Line 86 | loadChildren: () =>
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\account\account.routes.ts | Line 93 | path: 'agreements',
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\account\account.routes.ts | Line 94 | loadChildren: () =>
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\account\account.routes.ts | Line 100 | path: 'agreements',
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\account\account.routes.ts | Line 101 | loadChildren: () =>
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\account\account.routes.ts | Line 108 | path: 'agreements',
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\account\account.routes.ts | Line 109 | loadChildren: () =>
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\account\account.routes.ts | Line 115 | path: 'agreements',
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\account\account.routes.ts | Line 116 | loadChildren: () =>
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\account\account.routes.ts | Line 122 | path: 'agreements',
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\account\account.routes.ts | Line 123 | loadChildren: () =>
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\account\services\account-api.service.ts | Line 26 | private endpoint(path: string): string {
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\contracts\contracts.routes.ts | Line 2 | import { featurePageRoute } from '../../shared/routing/feature-route.factory';
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\contracts\contracts.routes.ts | Line 4 | export const CONTRACTS_ROUTES: Routes = [
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.routes.ts | Line 2 | import { featurePageRoute } from '../../shared/routing/feature-route.factory';
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.routes.ts | Line 4 | export const GENERAL_MARKET_ROUTES: Routes = [
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.routes.ts | Line 6 | path: '',
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.routes.ts | Line 8 | loadComponent: () =>
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.routes.ts | Line 9 | import('./general-market').then(
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.ts | Line 8 | selector: 'igd-general-market',
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.ts | Line 16 | templateUrl: './general-market.html',
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.ts | Line 17 | styleUrl: './general-market.css',
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\my-assets\my-assets.routes.ts | Line 2 | import { featurePageRoute } from '../../shared/routing/feature-route.factory';
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\my-assets\my-assets.routes.ts | Line 4 | export const MY_ASSETS_ROUTES: Routes = [
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\notifications\notifications.routes.ts | Line 2 | import { featurePageRoute } from '../../shared/routing/feature-route.factory';
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\notifications\notifications.routes.ts | Line 4 | export const NOTIFICATIONS_ROUTES: Routes = [
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\services\services.routes.ts | Line 2 | import { featurePageRoute } from '../../shared/routing/feature-route.factory';
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\services\services.routes.ts | Line 4 | export const SERVICES_ROUTES: Routes = [
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\settlement\settlement.routes.ts | Line 2 | import { featurePageRoute } from '../../shared/routing/feature-route.factory';
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\settlement\settlement.routes.ts | Line 4 | export const SETTLEMENT_ROUTES: Routes = [
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\shared\routing\feature-route.factory.ts | Line 4 | path: string,
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\shared\routing\feature-route.factory.ts | Line 15 | loadComponent: () =>
+TOTAL MATCHES: 76
+
+====================================================================================================
+7. WORKSPACE / PANEL / SPLITTER DISCOVERY
+====================================================================================================
+
+SEARCH ROOT: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app
+FILE FILTER: *.html
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.html | Line 146 | <main class="main-workspace">
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.html | Line 178 | <section class="workspace-canvas">
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.html | Line 179 | <div class="workspace-content">
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.html | Line 180 | <section class="workspace-home">
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.html | Line 45 | <!-- MARKET WATCH + PORTFOLIO -->
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.html | Line 95 | <mat-icon>table_chart</mat-icon>
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.html | Line 110 | <section class="terminal-panel portfolio-panel">
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.html | Line 124 | <div class="portfolio-summary">
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.html | Line 343 | <mat-icon>candlestick_chart</mat-icon>
+TOTAL MATCHES: 9
+
+SEARCH ROOT: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app
+FILE FILTER: *.css
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 11 | grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 16 | transition: grid-template-columns 180ms ease;
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 191 | grid-template-columns: var(--secondary-width) minmax(0, 1fr);
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 323 | .main-workspace {
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 459 | .workspace-canvas {
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 469 | .workspace-content {
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 695 | .workspace-canvas {
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 749 | .workspace-canvas {
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 762 | grid-template-columns: minmax(0, 1fr);
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 770 | .main-workspace {
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 1066 | .workspace-content > router-outlet {
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 1075 | .workspace-home {
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.css | Line 22 | grid-template-rows: 52px minmax(0, 1fr) 54px;
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.css | Line 126 | grid-template-columns: 143px minmax(0, 2fr) minmax(165px, 1fr) minmax(190px, 1.15fr);
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.css | Line 148 | grid-template-rows: minmax(0, 1.3fr) minmax(150px, 0.85fr);
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.css | Line 153 | .portfolio-panel {
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.css | Line 298 | /* PORTFOLIO */
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.css | Line 300 | .portfolio-summary {
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.css | Line 366 | grid-template-columns: 1fr 1fr 1fr;
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.css | Line 596 | grid-template-columns: 143px minmax(0, 2fr) minmax(165px, 1fr) 39px;
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.css | Line 600 | grid-template-columns: 143px minmax(0, 2fr) 39px minmax(190px, 1.15fr);
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.css | Line 604 | grid-template-columns: 143px minmax(0, 2fr) 39px 39px;
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.css | Line 621 | grid-template-columns: minmax(0, 1fr) 43px;
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.css | Line 646 | grid-template-columns: 140px minmax(0, 2fr) minmax(130px, 1fr) minmax(145px, 1.15fr);
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.css | Line 650 | grid-template-columns: 140px minmax(0, 2fr) minmax(130px, 1fr) 39px;
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.css | Line 654 | grid-template-columns: 140px minmax(0, 2fr) 39px minmax(145px, 1.15fr);
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.css | Line 672 | grid-template-rows: 52px 570px 190px 54px;
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.css | Line 680 | grid-template-columns: 140px minmax(0, 2fr) minmax(110px, 1fr) minmax(125px, 1.15fr);
+TOTAL MATCHES: 28
+
+SEARCH ROOT: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app
+FILE FILTER: *.ts
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.routes.ts | Line 13 | import('./features/general-market/general-market.routes').then(
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.routes.ts | Line 9 | import('./general-market').then(
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.ts | Line 8 | selector: 'igd-general-market',
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.ts | Line 16 | templateUrl: './general-market.html',
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.ts | Line 17 | styleUrl: './general-market.css',
+TOTAL MATCHES: 5
+
+====================================================================================================
+8. RIGHT VERTICAL TOOLBAR - PROTECTED STRUCTURE DISCOVERY
+====================================================================================================
+
+SEARCH ROOT: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app
+FILE FILTER: *.html
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.html | Line 1 | <div class="igd-shell" [class.is-collapsed]="sidebarCollapsed">
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.html | Line 3 | <aside class="primary-sidebar" aria-label="ناوبری اصلی">
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.html | Line 14 | <div class="sidebar-caption">فضای کاری</div>
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.html | Line 20 | class="primary-nav-item"
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.html | Line 23 | [title]="sidebarCollapsed ? section.label : ''"
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.html | Line 33 | <div class="sidebar-bottom">
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.html | Line 34 | <div class="sidebar-divider"></div>
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.html | Line 104 | <div class="sidebar-version">IGD Platform</div>
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.html | Line 110 | <aside class="secondary-sidebar" aria-label="ناوبری بخش">
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.html | Line 126 | class="secondary-nav-item"
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.html | Line 151 | class="icon-button sidebar-toggle"
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.html | Line 152 | (click)="toggleSidebar()"
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.html | Line 153 | [attr.aria-label]="sidebarCollapsed ? 'باز کردن نوار کناری' : 'جمع کردن نوار کناری'"
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.html | Line 157 | {{ sidebarCollapsed ? 'left_panel_open' : 'left_panel_close' }}
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.html | Line 17 | <button mat-button class="nav-item active">بازار کلی</button>
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.html | Line 18 | <button mat-button class="nav-item">دارایی‌های من</button>
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.html | Line 19 | <button mat-button class="nav-item">قراردادها</button>
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.html | Line 20 | <button mat-button class="nav-item">خدمات</button>
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.html | Line 21 | <button mat-button class="nav-item">تسویه</button>
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.html | Line 336 | <!-- VERTICAL TOOLBAR -->
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.html | Line 337 | <aside class="terminal-toolbar">
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.html | Line 381 | <div class="toolbar-spacer"></div>
+TOTAL MATCHES: 22
+
+SEARCH ROOT: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app
+FILE FILTER: *.css
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 8 | --sidebar-width: 248px;
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 11 | grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 20 | --sidebar-width: 76px;
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 23 | .primary-sidebar {
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 81 | .sidebar-caption,
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 96 | .primary-nav-item {
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 114 | .primary-nav-item:hover {
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 119 | .primary-nav-item.active {
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 124 | .primary-nav-item.active .nav-icon {
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 143 | position: absolute;
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 145 | right: -14px;
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 153 | .primary-nav-item.active .active-indicator {
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 157 | .sidebar-bottom {
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 161 | .sidebar-divider {
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 167 | .sidebar-support {
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 177 | .sidebar-support .material-symbols-outlined {
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 181 | .sidebar-version {
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 198 | .secondary-sidebar {
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 253 | .secondary-nav-item {
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 269 | .secondary-nav-item:hover {
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 274 | .secondary-nav-item.active {
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 280 | .secondary-nav-item > .material-symbols-outlined {
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 286 | .secondary-nav-item.active > .material-symbols-outlined {
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 291 | .secondary-nav-item > span:nth-child(2) {
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 302 | margin-right: auto;
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 550 | position: absolute;
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 556 | transform: rotate(12deg);
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 578 | position: absolute;
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 592 | right: 9px;
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 597 | right: 8px;
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 661 | .igd-shell.is-collapsed .sidebar-caption,
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 663 | .igd-shell.is-collapsed .sidebar-version {
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 667 | .igd-shell.is-collapsed .primary-sidebar {
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 671 | .igd-shell.is-collapsed .primary-nav-item {
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 680 | .igd-shell.is-collapsed .sidebar-support {
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 685 | .igd-shell.is-collapsed .sidebar-support .nav-label {
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 691 | --sidebar-width: 218px;
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 703 | --sidebar-width: 66px;
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 707 | .primary-sidebar {
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 717 | .sidebar-caption,
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 718 | .primary-nav-item .nav-label,
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 719 | .sidebar-version,
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 720 | .sidebar-support .nav-label {
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 724 | .primary-nav-item {
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 757 | --sidebar-width: 58px;
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 763 | padding-right: 0;
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 766 | .secondary-sidebar {
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 806 | /* Account profile: anchored at the bottom of the primary sidebar */
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 870 | position: absolute;
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 872 | right: 0;
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 889 | transform: translateY(5px);
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 893 | transform: translateY(0);
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 998 | /* Keep the account control visible when the sidebar is collapsed */
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 1010 | right: 0;
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 1026 | right: 0;
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 1082 | position: fixed;
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 1102 | position: fixed;
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 1105 | right: 0;
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 1117 | transform: translateX(102%);
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 1120 | transform 260ms cubic-bezier(.22, 1, .36, 1),
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 1122 | will-change: transform;
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.css | Line 1126 | transform: translateX(0);
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.css | Line 84 | .nav-item {
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.css | Line 91 | .nav-item.active {
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.css | Line 254 | position: sticky;
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.css | Line 484 | /* TOOLBAR */
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.css | Line 486 | .terminal-toolbar {
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.css | Line 498 | .terminal-toolbar button {
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.css | Line 505 | .terminal-toolbar button.selected {
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.css | Line 508 | border-right: 2px solid var(--terminal-gold);
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.css | Line 512 | .toolbar-spacer {
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.css | Line 618 | /* HISTORY VIEW - OPENS ONLY FROM THE VERTICAL TOOLBAR */
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.css | Line 661 | .nav-item {
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.css | Line 675 | .header-navigation .nav-item:nth-child(n+4) {
+TOTAL MATCHES: 74
+
+SEARCH ROOT: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app
+FILE FILTER: *.ts
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.spec.ts | Line 23 | expect(element.querySelector('.primary-sidebar')).toBeTruthy();
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.spec.ts | Line 24 | expect(element.querySelector('.secondary-sidebar')).toBeTruthy();
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.spec.ts | Line 39 | it('should toggle the primary sidebar state', () => {
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.spec.ts | Line 43 | expect(app.sidebarCollapsed).toBe(false);
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.spec.ts | Line 45 | app.toggleSidebar();
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.spec.ts | Line 47 | expect(app.sidebarCollapsed).toBe(true);
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.ts | Line 42 | sidebarCollapsed = false;
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.ts | Line 183 | toggleSidebar(): void {
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.ts | Line 184 | this.sidebarCollapsed = !this.sidebarCollapsed;
+TOTAL MATCHES: 9
+
+====================================================================================================
+9. ROUTING / FEATURE FACTORY / LAYOUT FILES
+====================================================================================================
+
+FILE: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\app.routes.ts
+SIZE: 1636 bytes
+
+FILE: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\account\account.routes.ts
+SIZE: 3768 bytes
+
+FILE: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\account\account.routes.ts.backup-20261110-092715
+
+FILE: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\contracts\contracts.routes.ts
+SIZE: 722 bytes
+
+FILE: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\general-market\general-market.routes.ts
+SIZE: 2351 bytes
+
+FILE: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\my-assets\my-assets.routes.ts
+SIZE: 875 bytes
+
+FILE: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\notifications\notifications.routes.ts
+SIZE: 454 bytes
+
+FILE: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\services\services.routes.ts
+SIZE: 936 bytes
+
+FILE: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\settlement\settlement.routes.ts
+SIZE: 553 bytes
+
+FILE: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\shared\routing\feature-route.factory.ts
+SIZE: 422 bytes
+
+====================================================================================================
+10. PACKAGE AND LIBRARY INFORMATION
+====================================================================================================
+PACKAGE NAME: igd-front
+PACKAGE VERSION: 0.0.0
+
+DEPENDENCIES:
+@angular/cdk = ^22.0.0
+@angular/common = ^22.2.0
+@angular/compiler = ^22.2.0
+@angular/core = ^22.2.0
+@angular/forms = ^22.2.0
+@angular/material = ^22.0.0
+@angular/platform-browser = ^22.2.0
+@angular/router = ^22.2.0
+@fontsource-variable/inter = latest
+@fontsource-variable/vazirmatn = latest
+@spartan-ng/brain = latest
+echarts = latest
+material-symbols = latest
+ngx-echarts = 22.0.0
+rxjs = ~7.8.0
+tslib = ^2.3.0
+
+DEV DEPENDENCIES:
+@angular/build = ^22.2.6
+@angular/cli = ^22.2.6
+@angular/compiler-cli = ^22.2.0
+@spartan-ng/cli = latest
+@tailwindcss/postcss = ^4.0.0
+jsdom = ^30.0.0
+postcss = latest
+prettier = ^3.8.1
+tailwindcss = ^4.0.0
+typescript = ~6.0.2
+vitest = ^5.0.0
+
+SCRIPTS:
+ng = ng
+start = ng serve
+build = ng build
+watch = ng build --watch --configuration development
+test = ng test
+
+====================================================================================================
+11. INSTALLED RESIZABLE / SPLITTER LIBRARIES
+====================================================================================================
+INSTALLED | @angular/cdk | Version: 22.2.6
+INSTALLED | @angular/material | Version: 22.2.6
+NOT FOUND | angular-split
+NOT FOUND | split.js
+NOT FOUND | golden-layout
+NOT FOUND | flexlayout-react
+NOT FOUND | allotment
+NOT FOUND | ngx-split
+NOT FOUND | spartan-ng
+INSTALLED | @spartan-ng/brain | Version: 1.9.0
+
+====================================================================================================
+12. USER SETTINGS AND LAYOUT PERSISTENCE DISCOVERY
+====================================================================================================
+
+SEARCH ROOT: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app
+FILE FILTER: *.ts
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app\features\notifications\notifications.routes.ts | Line 11 | 'preferences',
+TOTAL MATCHES: 1
+
+====================================================================================================
+13. BACKUP FILES RELATED TO WORKSPACE AND GENERAL MARKET
+====================================================================================================
+
+BACKUP ROOT: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\Backups
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\Backups\account-profile-20261110-044609\app.css | 13420 bytes | 11/10/2026 4:41:56 AM
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\Backups\account-profile-20261110-044609\app.html | 6771 bytes | 11/10/2026 4:41:56 AM
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\Backups\account-profile-20261110-044609\app.ts | 4901 bytes | 11/10/2026 4:41:56 AM
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\Backups\material-ui-20261110-044153\app\src\app\app.css | 10476 bytes | 11/10/2026 4:34:51 AM
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\Backups\material-ui-20261110-044153\app\src\app\app.html | 4851 bytes | 11/10/2026 4:34:51 AM
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\Backups\material-ui-20261110-044153\app\src\app\app.ts | 1192 bytes | 11/10/2026 4:34:51 AM
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\Backups\shell-sidebar2-20261110-043449\app\src\app\app.css | 49 bytes | 11/7/2026 10:05:51 AM
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\Backups\shell-sidebar2-20261110-043449\app\src\app\app.html | 17 bytes | 11/7/2026 10:05:51 AM
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\Backups\shell-sidebar2-20261110-043449\app\src\app\app.ts | 252 bytes | 11/7/2026 10:05:51 AM
+
+BACKUP ROOT: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\backups
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\backups\account-profile-20261110-044609\app.css | 13420 bytes | 11/10/2026 4:41:56 AM
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\backups\account-profile-20261110-044609\app.html | 6771 bytes | 11/10/2026 4:41:56 AM
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\backups\account-profile-20261110-044609\app.ts | 4901 bytes | 11/10/2026 4:41:56 AM
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\backups\material-ui-20261110-044153\app\src\app\app.css | 10476 bytes | 11/10/2026 4:34:51 AM
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\backups\material-ui-20261110-044153\app\src\app\app.html | 4851 bytes | 11/10/2026 4:34:51 AM
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\backups\material-ui-20261110-044153\app\src\app\app.ts | 1192 bytes | 11/10/2026 4:34:51 AM
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\backups\shell-sidebar2-20261110-043449\app\src\app\app.css | 49 bytes | 11/7/2026 10:05:51 AM
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\backups\shell-sidebar2-20261110-043449\app\src\app\app.html | 17 bytes | 11/7/2026 10:05:51 AM
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\backups\shell-sidebar2-20261110-043449\app\src\app\app.ts | 252 bytes | 11/7/2026 10:05:51 AM
+
+BACKUP ROOT: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\backups
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\backups\account-drawer-20261110-103917\app.css | 18072 bytes | 11/10/2026 10:15:15 AM
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\backups\account-drawer-20261110-103917\app.html | 7025 bytes | 11/10/2026 10:15:15 AM
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\backups\account-drawer-20261110-103917\app.ts | 8143 bytes | 11/10/2026 10:15:14 AM
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\backups\backup-account-navigation-20261110-101513\app.css | 17436 bytes | 11/10/2026 4:46:11 AM
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\backups\backup-account-navigation-20261110-101513\app.html | 8458 bytes | 11/10/2026 4:46:11 AM
+E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\backups\backup-account-navigation-20261110-101513\app.ts | 6114 bytes | 11/10/2026 4:46:11 AM
+
+BACKUP ROOT: D:\Program Files\IGD-Frontend\Backups
+D:\Program Files\IGD-Frontend\Backups\GeneralMarketLayout\general-market-before-rtl-fix-20261111-101227.css | 11415 bytes | 11/11/2026 10:02:48 AM
+D:\Program Files\IGD-Frontend\Backups\GeneralMarketLayout\general-market-20261111-100248.css | 11423 bytes | 11/11/2026 10:01:16 AM
+D:\Program Files\IGD-Frontend\Backups\GeneralMarketLayout\general-market-20261111-100115.css | 11271 bytes | 11/9/2026 10:47:49 AM
+
+BACKUP ROOT: D:\Program Files\IGD-Frontend\Logs
+D:\Program Files\IGD-Frontend\Logs\Commands-20261106-000925\Angular-workspace-create.stdout.log | 869 bytes | 11/6/2026 12:10:58 AM
+D:\Program Files\IGD-Frontend\Logs\Commands-20261106-000925\Angular-workspace-create.stderr.log | 0 bytes | 11/6/2026 12:10:55 AM
+
+====================================================================================================
+14. GIT STATUS
+====================================================================================================
+GIT BRANCH:
+main
+
+GIT STATUS --SHORT:
+ M IGD-front/app/src/app/app.html
+ M IGD-front/app/src/app/features/general-market/general-market.css
+ M "\333\214\330\250\333\214\330\250"
+?? .igd-backups/
+?? IGD-front/app/src/app/features/general-market/general-market.css.bak-20261111-112109
+
+RECENT COMMITS:
+9b7f772 Update test project
+1e4f835 Update test project
+58a12cc Update platform project
+7c9c873 Update platform project
+b88852b Update platform backend and baseline reports
+
+====================================================================================================
+15. DEVELOPMENT ENVIRONMENT
+====================================================================================================
+NODE VERSION: v26.2.0
+NPM VERSION: 11.13.0
+
+====================================================================================================
+16. DIAGNOSTIC SUMMARY
+====================================================================================================
+Report generated: 2026-11-12 00:30:02
+Project: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform
+Angular app: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app
+Source: E:\شرکت توسعه سبز ایران\پلتفرم\پلتفرم آی جی دی\Real-Asset-Management-Platform\IGD-front\app\src\app
+Discovered General Market files: 4
+No project source files were modified.
+No npm install command was executed.
+No Angular build or test command was executed.
+No development server was started or stopped.
+
