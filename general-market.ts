@@ -1,12 +1,14 @@
-import { Component, Input, Type } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatDividerModule } from '@angular/material/divider';
+
 import {
-  DockviewAngularModule,
-  DockviewReadyEvent,
-} from 'dockview-angular';
+  BrnResizableGroup,
+  BrnResizableHandle,
+  BrnResizablePanel,
+} from '@spartan-ng/brain/resizable';
 
 @Component({
   selector: 'igd-terminal-dock-panel',
@@ -20,7 +22,7 @@ import {
   template: `
     <section class="terminal-panel dock-terminal-panel">
 
-      @switch (api?.params?.kind) {
+      @switch (kind) {
 
         @case ('market-watch') {
           <div class="panel-heading">
@@ -313,8 +315,10 @@ import {
   `],
 })
 export class TerminalDockPanelComponent {
-  @Input() api: any;
+  @Input() kind = '';
 }
+
+
 
 @Component({
   selector: 'igd-general-market',
@@ -322,266 +326,172 @@ export class TerminalDockPanelComponent {
   imports: [
     MatButtonModule,
     MatIconModule,
-    DockviewAngularModule,
+    BrnResizableGroup,
+    BrnResizablePanel,
+    BrnResizableHandle,
   ],
   templateUrl: './general-market.html',
   styleUrl: './general-market.css',
 })
-export class GeneralMarketPage {
+export class GeneralMarketPage implements OnInit {
+
   activeTool = 'market';
 
-  components: Record<string, Type<any>> = {
-    terminalPanel: TerminalDockPanelComponent,
-  };
+  // Root order in RTL:
+  // 1. Order book (right)
+  // 2. Instrument details (middle)
+  // 3. Market column (left)
 
-  private dockApi: any = null;
+  rootLayout: number[] = [22, 34, 44];
 
-  private readonly panelIds = [
-    'market-watch',
-    'portfolio',
-    'instrument-details',
-    'instrument-chart',
-    'orderbook',
-    'activity',
-  ];
+  // Market column: watch above portfolio
+  marketLayout: number[] = [62, 38];
 
-  private readonly layoutStorageKey = 'igd.general-market.layouts.v1';
-  private readonly lastLayoutStorageKey = 'igd.general-market.last-layout.v1';
+  // Center column: details above chart
+  centerLayout: number[] = [43, 57];
 
-  onDockReady(event: DockviewReadyEvent): void {
-    this.dockApi = event.api;
+  showOrderBook = false;
+  showActivity = false;
 
-    let restored = false;
+  private readonly layoutStorageKey =
+    'igd.general-market.layouts.v2';
 
-    try {
-      const saved = localStorage.getItem(this.lastLayoutStorageKey);
+  private readonly lastLayoutStorageKey =
+    'igd.general-market.last-layout.v2';
 
-      if (saved) {
-        this.dockApi.fromJSON(JSON.parse(saved), {
-          reuseExistingPanels: true,
-        });
-        restored = true;
-      }
-    } catch {
-      localStorage.removeItem(this.lastLayoutStorageKey);
-    }
-
-    if (!restored) {
-      this.applyPreset('default');
-    }
-
-    this.dockApi.onDidLayoutChange(() => {
-      this.persistLastLayout();
-    });
+  ngOnInit(): void {
+    this.restoreLastLayout();
   }
 
-  private persistLastLayout(): void {
-    if (!this.dockApi) {
-      return;
-    }
+  // ----------------------------------------------------------
+  // LAYOUT EVENTS
+  // ----------------------------------------------------------
 
-    try {
-      localStorage.setItem(
-        this.lastLayoutStorageKey,
-        JSON.stringify(this.dockApi.toJSON()),
-      );
-    } catch {
-      // Layout remains usable if browser storage is unavailable.
-    }
+  onRootLayoutChange(layout: number[]): void {
+    if (!Array.isArray(layout) || layout.length < 2) return;
+
+    this.rootLayout = [...layout];
+    this.persistLastLayout();
   }
 
-  private removeKnownPanels(): void {
-    if (!this.dockApi) {
-      return;
-    }
+  onMarketLayoutChange(layout: number[]): void {
+    if (!Array.isArray(layout) || layout.length !== 2) return;
 
-    for (const id of this.panelIds) {
-      const panel = this.dockApi.getPanel(id);
-
-      if (panel) {
-        this.dockApi.removePanel(panel);
-      }
-    }
+    this.marketLayout = [...layout];
+    this.persistLastLayout();
   }
 
-  private addPanel(
-    id: string,
-    title: string,
-    kind: string,
-    referencePanel?: string,
-    direction?: 'left' | 'right' | 'above' | 'below',
-  ): void {
-    const options: any = {
-      id,
-      component: 'terminalPanel',
-      title,
-      params: { kind },
-    };
+  onCenterLayoutChange(layout: number[]): void {
+    const expected = this.showActivity ? 3 : 2;
 
-    if (referencePanel && direction) {
-      options.position = {
-        referencePanel,
-        direction,
-      };
-    }
+    if (!Array.isArray(layout) || layout.length !== expected) return;
 
-    this.dockApi.addPanel(options);
+    this.centerLayout = [...layout];
+    this.persistLastLayout();
   }
 
-  private createBaseLayout(
-    includeOrderBook: boolean,
-    includeActivity: boolean,
-  ): void {
-    this.addPanel('market-watch', 'دیده‌بان بازار', 'market-watch');
-
-    this.addPanel(
-      'portfolio',
-      'پرتفوی',
-      'portfolio',
-      'market-watch',
-      'below',
-    );
-
-    this.addPanel(
-      'instrument-details',
-      'اطلاعات نماد',
-      'instrument-details',
-      'market-watch',
-      'right',
-    );
-
-    this.addPanel(
-      'instrument-chart',
-      'نمودار',
-      'instrument-chart',
-      'instrument-details',
-      'below',
-    );
-
-    if (includeOrderBook) {
-      this.addPanel(
-        'orderbook',
-        'دفتر سفارش',
-        'orderbook',
-        'instrument-details',
-        'right',
-      );
-    }
-
-    if (includeActivity) {
-      this.addPanel(
-        'activity',
-        'فضای کاری و سوابق',
-        'activity',
-        includeOrderBook ? 'orderbook' : 'instrument-chart',
-        'below',
-      );
-    }
-  }
+  // ----------------------------------------------------------
+  // PRESETS
+  // ----------------------------------------------------------
 
   applyPreset(
-    preset: 'default' | 'trading' | 'analysis' | 'history',
+    preset: 'default' | 'trading' | 'analysis' | 'history'
   ): void {
-    if (!this.dockApi) {
-      return;
-    }
-
-    this.removeKnownPanels();
 
     switch (preset) {
+
       case 'default':
-        this.createBaseLayout(false, false);
+        this.showOrderBook = false;
+        this.showActivity = false;
+        this.rootLayout = [44, 56];
+        this.marketLayout = [62, 38];
+        this.centerLayout = [43, 57];
         break;
 
       case 'trading':
-        this.createBaseLayout(true, false);
+        this.showOrderBook = true;
+        this.showActivity = false;
+        this.rootLayout = [22, 34, 44];
+        this.marketLayout = [65, 35];
+        this.centerLayout = [38, 62];
         break;
 
       case 'analysis':
-        this.createBaseLayout(false, false);
+        this.showOrderBook = false;
+        this.showActivity = false;
+        this.rootLayout = [42, 58];
+        this.marketLayout = [55, 45];
+        this.centerLayout = [30, 70];
         break;
 
       case 'history':
-        this.createBaseLayout(true, true);
+        this.showOrderBook = true;
+        this.showActivity = true;
+        this.rootLayout = [20, 34, 46];
+        this.marketLayout = [58, 42];
+        this.centerLayout = [28, 37, 35];
         break;
     }
 
     this.persistLastLayout();
   }
 
+  // ----------------------------------------------------------
+  // PANEL VISIBILITY
+  // ----------------------------------------------------------
+
   toggleOrderBook(): void {
-    if (!this.dockApi) {
-      return;
-    }
 
-    const existing = this.dockApi.getPanel('orderbook');
+    this.showOrderBook = !this.showOrderBook;
 
-    if (existing) {
-      this.dockApi.removePanel(existing);
-    } else {
-      this.addPanel(
-        'orderbook',
-        'دفتر سفارش',
-        'orderbook',
-        'instrument-details',
-        'right',
-      );
-    }
+    this.rootLayout = this.showOrderBook
+      ? [22, 34, 44]
+      : [44, 56];
 
     this.persistLastLayout();
   }
 
   toggleActivity(): void {
-    if (!this.dockApi) {
-      return;
-    }
 
-    const existing = this.dockApi.getPanel('activity');
+    this.showActivity = !this.showActivity;
 
-    if (existing) {
-      this.dockApi.removePanel(existing);
-    } else {
-      this.addPanel(
-        'activity',
-        'فضای کاری و سوابق',
-        'activity',
-        'instrument-chart',
-        'below',
-      );
-    }
+    this.centerLayout = this.showActivity
+      ? [30, 40, 30]
+      : [43, 57];
 
     this.persistLastLayout();
   }
 
+  // ----------------------------------------------------------
+  // NAMED LAYOUTS
+  // ----------------------------------------------------------
+
   saveNamedLayout(): void {
-    if (!this.dockApi) {
-      return;
-    }
 
     const name = window.prompt('نام چیدمان را وارد کنید:');
 
-    if (!name || !name.trim()) {
-      return;
-    }
+    if (!name || !name.trim()) return;
 
     try {
+
       const layouts = this.readNamedLayouts();
 
-      layouts[name.trim()] = this.dockApi.toJSON();
+      layouts[name.trim()] = this.getLayoutSnapshot();
 
       localStorage.setItem(
         this.layoutStorageKey,
-        JSON.stringify(layouts),
+        JSON.stringify(layouts)
       );
+
     } catch {
-      window.alert('ذخیره چیدمان انجام نشد. فضای ذخیره‌سازی مرورگر را بررسی کنید.');
+
+      window.alert(
+        'ذخیره چیدمان انجام نشد. فضای ذخیره‌سازی مرورگر را بررسی کنید.'
+      );
     }
   }
 
   loadNamedLayout(): void {
-    if (!this.dockApi) {
-      return;
-    }
 
     const layouts = this.readNamedLayouts();
     const names = Object.keys(layouts);
@@ -593,30 +503,125 @@ export class GeneralMarketPage {
 
     const selected = window.prompt(
       'نام چیدمان موردنظر را دقیقاً وارد کنید:\n\n' +
-      names.join('\n'),
+      names.join('\n')
     );
 
-    if (!selected || !layouts[selected]) {
-      return;
-    }
+    if (!selected || !layouts[selected]) return;
 
     try {
-      this.dockApi.fromJSON(layouts[selected], {
-        reuseExistingPanels: true,
-      });
 
+      this.applyLayoutSnapshot(layouts[selected]);
       this.persistLastLayout();
+
     } catch {
+
       window.alert('بازیابی چیدمان انتخاب‌شده ناموفق بود.');
     }
   }
 
+  private getLayoutSnapshot(): Record<string, unknown> {
+
+    return {
+      version: 2,
+      rootLayout: [...this.rootLayout],
+      marketLayout: [...this.marketLayout],
+      centerLayout: [...this.centerLayout],
+      showOrderBook: this.showOrderBook,
+      showActivity: this.showActivity,
+    };
+  }
+
+  private applyLayoutSnapshot(snapshot: any): void {
+
+    if (!snapshot || snapshot.version !== 2) {
+      throw new Error('Unsupported layout version.');
+    }
+
+    if (
+      !Array.isArray(snapshot.marketLayout) ||
+      snapshot.marketLayout.length !== 2
+    ) {
+      throw new Error('Invalid market layout.');
+    }
+
+    if (
+      !Array.isArray(snapshot.centerLayout) ||
+      snapshot.centerLayout.length !==
+        (snapshot.showActivity ? 3 : 2)
+    ) {
+      throw new Error('Invalid center layout.');
+    }
+
+    if (
+      !Array.isArray(snapshot.rootLayout) ||
+      snapshot.rootLayout.length !==
+        (snapshot.showOrderBook ? 3 : 2)
+    ) {
+      throw new Error('Invalid root layout.');
+    }
+
+    this.showOrderBook = Boolean(snapshot.showOrderBook);
+    this.showActivity = Boolean(snapshot.showActivity);
+
+    this.rootLayout = [...snapshot.rootLayout];
+    this.marketLayout = [...snapshot.marketLayout];
+    this.centerLayout = [...snapshot.centerLayout];
+  }
+
   private readNamedLayouts(): Record<string, any> {
+
     try {
+
       const raw = localStorage.getItem(this.layoutStorageKey);
-      return raw ? JSON.parse(raw) : {};
+
+      if (!raw) return {};
+
+      const parsed = JSON.parse(raw);
+
+      return parsed && typeof parsed === 'object'
+        ? parsed
+        : {};
+
     } catch {
+
       return {};
+    }
+  }
+
+  // ----------------------------------------------------------
+  // LAST LAYOUT PERSISTENCE
+  // ----------------------------------------------------------
+
+  private persistLastLayout(): void {
+
+    try {
+
+      localStorage.setItem(
+        this.lastLayoutStorageKey,
+        JSON.stringify(this.getLayoutSnapshot())
+      );
+
+    } catch {
+      // Workspace remains usable if storage is unavailable.
+    }
+  }
+
+  private restoreLastLayout(): void {
+
+    try {
+
+      const raw = localStorage.getItem(this.lastLayoutStorageKey);
+
+      if (!raw) {
+        this.applyPreset('default');
+        return;
+      }
+
+      this.applyLayoutSnapshot(JSON.parse(raw));
+
+    } catch {
+
+      this.applyPreset('default');
     }
   }
 
@@ -624,15 +629,16 @@ export class GeneralMarketPage {
     this.applyPreset('default');
   }
 
+  // ----------------------------------------------------------
+  // VERTICAL TOOLBAR ACTIONS
+  // ----------------------------------------------------------
+
   selectTool(tool: string): void {
+
     this.activeTool = tool;
 
-    if (tool === 'history') {
-      const existing = this.dockApi?.getPanel('activity');
-
-      if (!existing) {
-        this.toggleActivity();
-      }
+    if (tool === 'history' && !this.showActivity) {
+      this.toggleActivity();
     }
   }
 }

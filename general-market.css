@@ -1,5 +1,3 @@
-﻿@import 'dockview-angular/dist/styles/dockview.css';
-
 :host {
   display: block;
   min-height: 100dvh;
@@ -812,6 +810,238 @@
 }
 
 .dock-terminal-panel .portfolio-summary {
+  flex-shrink: 0;
+}
+
+@media (max-width: 1250px) {
+  .workspace-controls {
+    justify-content: flex-start;
+  }
+
+  .workspace-control-group {
+    gap: 0;
+  }
+
+  .workspace-controls button {
+    padding: 0 5px;
+  }
+}
+
+@media (max-width: 900px) {
+  .trading-terminal {
+    min-width: 760px;
+    overflow: auto;
+    height: auto;
+    min-height: 100dvh;
+    grid-template-rows: 52px minmax(570px, 1fr) 54px;
+  }
+
+  .workspace {
+    min-height: 570px;
+  }
+
+  .dock-region {
+    grid-template-rows: 38px minmax(0, 1fr);
+  }
+}
+
+/* ============================================================
+   IGD SPARTAN RESIZABLE WORKSPACE
+   ============================================================ */
+
+.workspace {
+  direction: rtl;
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 43px;
+  grid-template-areas: "dock tools";
+  gap: 5px;
+  overflow: hidden;
+}
+
+.dock-region {
+  grid-area: dock;
+  display: grid;
+  grid-template-rows: 38px minmax(0, 1fr);
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  gap: 4px;
+}
+
+.workspace-controls {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 0 6px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  background: var(--terminal-panel);
+  border: 1px solid var(--terminal-border);
+}
+
+.workspace-control-group {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.workspace-controls button {
+  min-width: 0;
+  height: 32px;
+  padding: 0 8px;
+  color: var(--terminal-green);
+  font-size: 10px;
+}
+
+.workspace-controls button mat-icon {
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+  vertical-align: middle;
+}
+
+.resizable-host {
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+  background: var(--terminal-panel);
+  border: 1px solid var(--terminal-border);
+}
+
+.workspace-resizable-root,
+.workspace-resizable-vertical {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.workspace-resizable-root {
+  direction: rtl;
+  flex-direction: row;
+}
+
+.workspace-resizable-vertical {
+  direction: ltr;
+  flex-direction: column;
+}
+
+brn-resizable-panel {
+  display: flex;
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+brn-resizable-panel > * {
+  min-width: 0;
+  min-height: 0;
+  width: 100%;
+  height: 100%;
+}
+
+brn-resizable-handle {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  flex: 0 0 6px;
+  min-width: 6px;
+  min-height: 6px;
+  align-items: center;
+  justify-content: center;
+  background: #e1ddcf;
+  border: 0;
+  outline: none;
+  cursor: col-resize;
+  transition: background 120ms ease;
+}
+
+brn-resizable-handle:hover,
+brn-resizable-handle:focus-visible {
+  background: var(--terminal-gold);
+}
+
+.workspace-resizable-vertical > brn-resizable-handle {
+  flex-basis: 6px;
+  min-width: 0;
+  min-height: 6px;
+  width: 100%;
+  cursor: row-resize;
+}
+
+brn-resizable-handle > div {
+  width: 28px;
+  height: 3px;
+  border-radius: 3px;
+  background: #aaa58f;
+}
+
+.workspace-resizable-root > brn-resizable-handle > div {
+  width: 3px;
+  height: 28px;
+}
+
+.resizable-terminal-panel {
+  display: flex;
+  min-width: 0;
+  min-height: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.resizable-terminal-panel .terminal-panel {
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+}
+
+.resizable-terminal-panel .panel-body {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 8px;
+}
+
+.resizable-terminal-panel .terminal-tabs {
+  min-height: 0;
+  flex: 1;
+}
+
+.resizable-terminal-panel .terminal-tabs ::ng-deep .mat-mdc-tab-body-wrapper {
+  flex: 1;
+  min-height: 0;
+}
+
+.resizable-terminal-panel .tab-empty {
+  min-height: 90px;
+  display: grid;
+  place-items: center;
+  color: var(--terminal-muted);
+  font-size: 11px;
+}
+
+.resizable-terminal-panel .panel-heading {
+  flex-shrink: 0;
+}
+
+.resizable-terminal-panel .table-scroll {
+  flex: 1;
+  min-height: 0;
+}
+
+.resizable-terminal-panel .portfolio-summary {
   flex-shrink: 0;
 }
 

@@ -1,6 +1,6 @@
 <div class="trading-terminal" dir="rtl">
 
-  <header class="terminal-header">
+<header class="terminal-header">
 
     <div class="header-brand">
       <div class="brand-symbol">
@@ -92,12 +92,132 @@
 
       </div>
 
-      <div class="dockview-host">
-        <dv-dockview
-          class="igd-dockview"
-          [components]="components"
-          (ready)="onDockReady($event)">
-        </dv-dockview>
+      <div class="resizable-host">
+
+        <brn-resizable-group
+          class="workspace-resizable-root"
+          direction="horizontal"
+          [layout]="rootLayout"
+          (layoutChange)="onRootLayoutChange($event)">
+
+          @if (showOrderBook) {
+            <brn-resizable-panel
+              id="igd-orderbook"
+              [defaultSize]="22"
+              [minSize]="14">
+
+              <igd-terminal-dock-panel
+                class="resizable-terminal-panel"
+                kind="orderbook">
+              </igd-terminal-dock-panel>
+
+            </brn-resizable-panel>
+
+            <brn-resizable-handle withHandle />
+          }
+
+          <brn-resizable-panel
+            id="igd-instrument-column"
+            [defaultSize]="34"
+            [minSize]="22">
+
+            <brn-resizable-group
+              class="workspace-resizable-vertical"
+              direction="vertical"
+              [layout]="centerLayout"
+              (layoutChange)="onCenterLayoutChange($event)">
+
+              <brn-resizable-panel
+                id="igd-instrument-details"
+                [defaultSize]="43"
+                [minSize]="20">
+
+                <igd-terminal-dock-panel
+                  class="resizable-terminal-panel"
+                  kind="instrument-details">
+                </igd-terminal-dock-panel>
+
+              </brn-resizable-panel>
+
+              <brn-resizable-handle withHandle />
+
+              <brn-resizable-panel
+                id="igd-instrument-chart"
+                [defaultSize]="57"
+                [minSize]="20">
+
+                <igd-terminal-dock-panel
+                  class="resizable-terminal-panel"
+                  kind="instrument-chart">
+                </igd-terminal-dock-panel>
+
+              </brn-resizable-panel>
+
+              @if (showActivity) {
+                <brn-resizable-handle withHandle />
+
+                <brn-resizable-panel
+                  id="igd-activity"
+                  [defaultSize]="30"
+                  [minSize]="15">
+
+                  <igd-terminal-dock-panel
+                    class="resizable-terminal-panel"
+                    kind="activity">
+                  </igd-terminal-dock-panel>
+
+                </brn-resizable-panel>
+              }
+
+            </brn-resizable-group>
+
+          </brn-resizable-panel>
+
+          <brn-resizable-handle withHandle />
+
+          <brn-resizable-panel
+            id="igd-market-column"
+            [defaultSize]="44"
+            [minSize]="25">
+
+            <brn-resizable-group
+              class="workspace-resizable-vertical"
+              direction="vertical"
+              [layout]="marketLayout"
+              (layoutChange)="onMarketLayoutChange($event)">
+
+              <brn-resizable-panel
+                id="igd-market-watch"
+                [defaultSize]="62"
+                [minSize]="20">
+
+                <igd-terminal-dock-panel
+                  class="resizable-terminal-panel"
+                  kind="market-watch">
+                </igd-terminal-dock-panel>
+
+              </brn-resizable-panel>
+
+              <brn-resizable-handle withHandle />
+
+              <brn-resizable-panel
+                id="igd-portfolio"
+                [defaultSize]="38"
+                [minSize]="18">
+
+                <igd-terminal-dock-panel
+                  class="resizable-terminal-panel"
+                  kind="portfolio">
+                </igd-terminal-dock-panel>
+
+              </brn-resizable-panel>
+
+            </brn-resizable-group>
+
+          </brn-resizable-panel>
+
+        </brn-resizable-group>
+
       </div>
 
     </section>
@@ -168,7 +288,7 @@
 
   </main>
 
-  <footer class="asset-status-bar">
+<footer class="asset-status-bar">
 
     <div class="asset-status-item">
       <span>وضعیت حساب</span>
