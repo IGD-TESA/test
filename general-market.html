@@ -1,0 +1,210 @@
+<div class="trading-terminal" dir="rtl">
+
+  <header class="terminal-header">
+
+    <div class="header-brand">
+      <div class="brand-symbol">
+        <mat-icon>account_balance</mat-icon>
+      </div>
+      <div class="brand-text">
+        <strong>IGD</strong>
+        <span>سامانه مدیریت دارایی‌های واقعی</span>
+      </div>
+    </div>
+
+    <nav class="header-navigation">
+      <button mat-button class="nav-item active">بازار کلی</button>
+      <button mat-button class="nav-item">دارایی‌های من</button>
+      <button mat-button class="nav-item">قراردادها</button>
+      <button mat-button class="nav-item">خدمات</button>
+      <button mat-button class="nav-item">تسویه</button>
+    </nav>
+
+    <div class="header-actions">
+      <button mat-icon-button aria-label="جست‌وجو">
+        <mat-icon>search</mat-icon>
+      </button>
+      <button mat-icon-button aria-label="اعلان‌ها">
+        <mat-icon>notifications_none</mat-icon>
+      </button>
+      <span class="market-status">
+        <span class="status-dot"></span>
+        وضعیت بازار
+      </span>
+    </div>
+
+  </header>
+
+  <main class="workspace">
+
+    <section class="dock-region">
+
+      <div class="workspace-controls">
+
+        <div class="workspace-control-group">
+          <button mat-button (click)="applyPreset('default')">
+            <mat-icon>dashboard</mat-icon>
+            پیش‌فرض
+          </button>
+
+          <button mat-button (click)="applyPreset('trading')">
+            <mat-icon>candlestick_chart</mat-icon>
+            معاملاتی
+          </button>
+
+          <button mat-button (click)="applyPreset('analysis')">
+            <mat-icon>analytics</mat-icon>
+            تحلیلی
+          </button>
+
+          <button mat-button (click)="applyPreset('history')">
+            <mat-icon>history</mat-icon>
+            سوابق
+          </button>
+        </div>
+
+        <div class="workspace-control-group">
+          <button mat-button (click)="toggleOrderBook()">
+            <mat-icon>swap_vert</mat-icon>
+            دفتر سفارش
+          </button>
+
+          <button mat-button (click)="toggleActivity()">
+            <mat-icon>view_list</mat-icon>
+            فضای سوابق
+          </button>
+
+          <button mat-button (click)="saveNamedLayout()">
+            <mat-icon>save</mat-icon>
+            ذخیره چیدمان
+          </button>
+
+          <button mat-button (click)="loadNamedLayout()">
+            <mat-icon>folder_open</mat-icon>
+            بازیابی چیدمان
+          </button>
+
+          <button mat-button (click)="resetLayout()">
+            <mat-icon>restart_alt</mat-icon>
+            بازگشت به پیش‌فرض
+          </button>
+        </div>
+
+      </div>
+
+      <div class="dockview-host">
+        <dv-dockview
+          class="igd-dockview"
+          [components]="components"
+          (ready)="onDockReady($event)">
+        </dv-dockview>
+      </div>
+
+    </section>
+
+    <!-- VERTICAL TOOLBAR - PROTECTED: KEEP UNCHANGED -->
+    <aside class="terminal-toolbar">
+
+      <button mat-icon-button
+        [class.selected]="activeTool === 'market'"
+        (click)="selectTool('market')"
+        aria-label="بازار کلی">
+        <mat-icon>candlestick_chart</mat-icon>
+      </button>
+
+      <button mat-icon-button
+        [class.selected]="activeTool === 'assets'"
+        (click)="selectTool('assets')"
+        aria-label="دارایی‌های من">
+        <mat-icon>account_balance_wallet</mat-icon>
+      </button>
+
+      <button mat-icon-button
+        [class.selected]="activeTool === 'orders'"
+        (click)="selectTool('orders')"
+        aria-label="سفارش‌ها">
+        <mat-icon>receipt_long</mat-icon>
+      </button>
+
+      <button mat-icon-button
+        [class.selected]="activeTool === 'contracts'"
+        (click)="selectTool('contracts')"
+        aria-label="قراردادها">
+        <mat-icon>description</mat-icon>
+      </button>
+
+      <button mat-icon-button
+        [class.selected]="activeTool === 'services'"
+        (click)="selectTool('services')"
+        aria-label="خدمات">
+        <mat-icon>local_shipping</mat-icon>
+      </button>
+
+      <button mat-icon-button
+        [class.selected]="activeTool === 'history'"
+        (click)="selectTool('history')"
+        aria-label="فضای کاری و سوابق"
+        title="فضای کاری و سوابق">
+        <mat-icon>history</mat-icon>
+      </button>
+
+      <div class="toolbar-spacer"></div>
+
+      <button mat-icon-button
+        [class.selected]="activeTool === 'notifications'"
+        (click)="selectTool('notifications')"
+        aria-label="اعلان‌ها">
+        <mat-icon>notifications</mat-icon>
+      </button>
+
+      <button mat-icon-button
+        [class.selected]="activeTool === 'account'"
+        (click)="selectTool('account')"
+        aria-label="حساب کاربری">
+        <mat-icon>person</mat-icon>
+      </button>
+
+    </aside>
+
+  </main>
+
+  <footer class="asset-status-bar">
+
+    <div class="asset-status-item">
+      <span>وضعیت حساب</span>
+      <strong>—</strong>
+    </div>
+
+    <div class="asset-status-item user-status">
+      <span>نام کاربر</span>
+      <strong>حساب کاربری</strong>
+    </div>
+
+    <div class="asset-status-item">
+      <span>قدرت خرید</span>
+      <strong>—</strong>
+    </div>
+
+    <div class="asset-status-item">
+      <span>ارزش پرتفوی</span>
+      <strong>—</strong>
+    </div>
+
+    <div class="asset-status-item">
+      <span>سود و زیان روزانه</span>
+      <strong>—</strong>
+    </div>
+
+    <div class="asset-status-item">
+      <span>سود و زیان کل</span>
+      <strong>—</strong>
+    </div>
+
+    <div class="asset-status-item">
+      <span>موجودی رزروشده</span>
+      <strong>—</strong>
+    </div>
+
+  </footer>
+
+</div>
